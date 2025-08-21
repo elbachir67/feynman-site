@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Les Matrices | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧮 Mathématiques</span>
+          <span>›</span>
+          <span>Les Matrices</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🔢 Les Matrices</h1>
+      <p class="subtitle">Module 1.2 - Algèbre Linéaire pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Les Matrices</h3>
+        <p>
+          Félicitations ! Vous maîtrisez maintenant les transformations
+          matricielles essentielles pour l'IA.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="vectors.html" class="nav-link" id="prev-link"
+          >← Module précédent : Vecteurs</a
+        >
+        <a href="eigenvalues.html" class="nav-link" id="next-link"
+          >Module suivant : Valeurs propres →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Matrices
+      const moduleConfig = {
+        id: "math-matrices",
+        title: "Les Matrices",
+        category: "Mathématiques",
+        objectives: [
+          "Comprendre les matrices comme tableaux de nombres organisés",
+          "Manipuler les matrices en Python avec NumPy",
+          "Maîtriser le produit matriciel",
+          "Comprendre les transformations linéaires",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Concept fondamental",
+            content: `
+                        <p>Une <strong>matrice</strong> est un tableau rectangulaire de nombres organisés en lignes et colonnes. C'est une extension naturelle des vecteurs qui permet de représenter et manipuler des transformations linéaires.</p>
+                        <p>Une matrice \\(m \\times n\\) (m lignes, n colonnes) s'écrit :</p>
+                        $$A = \\begin{bmatrix} a_{11} & a_{12} & \\cdots & a_{1n} \\\\ a_{21} & a_{22} & \\cdots & a_{2n} \\\\ \\vdots & \\vdots & \\ddots & \\vdots \\\\ a_{m1} & a_{m2} & \\cdots & a_{mn} \\end{bmatrix}$$
+                        <p><strong>Exemples concrets :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Tableau de données</strong> : lignes = observations, colonnes = variables</li>
+                            <li>🖼️ <strong>Image en noir et blanc</strong> : chaque élément = intensité d'un pixel</li>
+                            <li>🔄 <strong>Transformation géométrique</strong> : rotation, mise à l'échelle</li>
+                            <li>⚖️ <strong>Système d'équations</strong> : coefficients organisés en tableau</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie de la machine à transformation",
+            content: `
+                        <p>Imaginez une <strong>machine à transformation</strong> qui prend des ingrédients en entrée et produit des résultats :</p>
+                        <p>🏭 <strong>Entrée</strong> : [farine=3kg, sucre=2kg] → <strong>Machine</strong> → <strong>Sortie</strong> : [gâteaux=5, biscuits=8]</p>
+                        <p>La machine applique des <strong>règles de transformation</strong> :</p>
+                        <ul>
+                            <li>🧁 <strong>1 gâteau</strong> = 1kg farine + 2kg sucre</li>
+                            <li>🍪 <strong>1 biscuit</strong> = 2kg farine + 1kg sucre</li>
+                        </ul>
+                        <p>Cette "recette" peut être représentée par une matrice :</p>
+                        $$\\begin{bmatrix} 1 & 2 \\\\ 2 & 1 \\end{bmatrix}$$
+                        <p><strong>C'est exactement ce que fait une matrice :</strong> elle transforme un vecteur d'entrée en un vecteur de sortie selon des règles précises !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calculs manuels avec les matrices",
+            content: `
+                        <p><strong>Prenons deux matrices 2×2 :</strong></p>
+                        <p>$$A = \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix} \\quad B = \\begin{bmatrix} 5 & 6 \\\\ 7 & 8 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Addition (élément par élément) :</strong></p>
+                        <p>$$A + B = \\begin{bmatrix} 1+5 & 2+6 \\\\ 3+7 & 4+8 \\end{bmatrix} = \\begin{bmatrix} 6 & 8 \\\\ 10 & 12 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Multiplication par un scalaire :</strong></p>
+                        <p>$$3 \\times A = \\begin{bmatrix} 3 \\times 1 & 3 \\times 2 \\\\ 3 \\times 3 & 3 \\times 4 \\end{bmatrix} = \\begin{bmatrix} 3 & 6 \\\\ 9 & 12 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Produit matriciel (plus complexe) :</strong></p>
+                        <p>$$A \\times B = \\begin{bmatrix} 1 \\times 5 + 2 \\times 7 & 1 \\times 6 + 2 \\times 8 \\\\ 3 \\times 5 + 4 \\times 7 & 3 \\times 6 + 4 \\times 8 \\end{bmatrix} = \\begin{bmatrix} 19 & 22 \\\\ 43 & 50 \\end{bmatrix}$$</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Le produit matriciel",
+            content: `
+                        <p>Le <strong>produit matriciel</strong> \\(C = A \\times B\\) est l'opération la plus importante en algèbre linéaire :</p>
+                        <ul>
+                            <li><strong>• Règle de calcul :</strong> $$c_{ij} = \\sum_{k=1}^{n} a_{ik} \\times b_{kj}$$</li>
+                            <li style="margin-top: 0.5rem"><strong>• Condition :</strong> Nombre de colonnes de \\(A\\) = Nombre de lignes de \\(B\\)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Dimensions :</strong> Si \\(A\\) est \\(m \\times n\\) et \\(B\\) est \\(n \\times p\\), alors \\(C\\) est \\(m \\times p\\)</li>
+                        </ul>
+                        <p><strong>🔑 Interprétation :</strong> Le produit matriciel permet de composer des transformations linéaires. C'est l'outil mathématique pour appliquer une transformation représentée par une matrice à un vecteur.</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Transformation d'un vecteur par une matrice",
+            content: `
+                        <p><strong>Appliquons une matrice à un vecteur :</strong></p>
+                        <p>Soit le vecteur $$\\vec{v} = \\begin{bmatrix} 2 \\\\ 1 \\end{bmatrix}$$ et la matrice $$R = \\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Calcul du produit \\(R \\times \\vec{v}\\) :</strong></p>
+                        <p>$$R \\times \\vec{v} = \\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\end{bmatrix} \\times \\begin{bmatrix} 2 \\\\ 1 \\end{bmatrix}$$</p>
+                        
+                        <p>$$= \\begin{bmatrix} 0 \\times 2 + (-1) \\times 1 \\\\ 1 \\times 2 + 0 \\times 1 \\end{bmatrix} = \\begin{bmatrix} -1 \\\\ 2 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔍 Interprétation géométrique :</strong></p>
+                        <ul>
+                            <li><strong>Avant</strong> : point (2, 1) - 2 à droite, 1 vers le haut</li>
+                            <li><strong>Après</strong> : point (-1, 2) - 1 à gauche, 2 vers le haut</li>
+                            <li><strong>Effet</strong> : rotation de 90° dans le sens anti-horaire !</li>
+                        </ul>
+                        
+                        <p><strong>💡 La matrice "encode" la transformation à appliquer !</strong></p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calculs manuels",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Soient les matrices $$A = \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}$$, $$B = \\begin{bmatrix} 5 & 6 \\\\ 7 & 8 \\end{bmatrix}$$ et le vecteur $$\\vec{v} = \\begin{bmatrix} 2 \\\\ 1 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Calculez à la main :</strong></p>
+                        <ol>
+                            <li>$$A + B = ?$$</li>
+                            <li>$$2 \\times A = ?$$</li>
+                            <li>$$A \\times \\vec{v} = ?$$</li>
+                            <li>$$A \\times B = ?$$</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('matrices-exercise-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="matrices-exercise-solution" style="display: none;">
+                        <ol>
+                            <li>$$A + B = \\begin{bmatrix} 1+5 & 2+6 \\\\ 3+7 & 4+8 \\end{bmatrix} = \\begin{bmatrix} 6 & 8 \\\\ 10 & 12 \\end{bmatrix}$$</li>
+                            <li>$$2 \\times A = \\begin{bmatrix} 2 & 4 \\\\ 6 & 8 \\end{bmatrix}$$</li>
+                            <li>$$A \\times \\vec{v} = \\begin{bmatrix} 1 \\times 2 + 2 \\times 1 \\\\ 3 \\times 2 + 4 \\times 1 \\end{bmatrix} = \\begin{bmatrix} 4 \\\\ 10 \\end{bmatrix}$$</li>
+                            <li>$$A \\times B = \\begin{bmatrix} 1 \\times 5 + 2 \\times 7 & 1 \\times 6 + 2 \\times 8 \\\\ 3 \\times 5 + 4 \\times 7 & 3 \\times 6 + 4 \\times 8 \\end{bmatrix} = \\begin{bmatrix} 19 & 22 \\\\ 43 & 50 \\end{bmatrix}$$</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Puissance des matrices",
+            content: `
+                        <p><strong>Les matrices permettent des calculs efficaces et élégants :</strong></p>
+                        <ul>
+                            <li>🎮 <strong>Graphiques 3D</strong> : toutes les transformations (rotation, translation, perspective)</li>
+                            <li>📊 <strong>Analyse de données</strong> : traiter des milliers de variables simultanément</li>
+                            <li>🔧 <strong>Ingénierie</strong> : résoudre des systèmes d'équations complexes</li>
+                            <li>💻 <strong>Informatique</strong> : compression d'images, cryptographie</li>
+                            <li>🤖 <strong>Intelligence artificielle</strong> : calculs parallèles massifs (nous verrons cela plus tard !)</li>
+                        </ul>
+                        <p><strong>💡 Point clé :</strong> Les matrices permettent de représenter des transformations complexes de manière compacte et de les appliquer efficacement à de nombreux vecteurs simultanément.</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Que se passe-t-il quand on multiplie une matrice 3×2 par une matrice 2×4 ?",
+          options: [
+            "A) C'est impossible",
+            "B) On obtient une matrice 3×4",
+            "C) On obtient une matrice 2×2",
+            "D) On obtient une matrice 6×8",
+          ],
+          correct: 1,
+          explanation:
+            "Le produit d'une matrice 3×2 par une matrice 2×4 donne une matrice 3×4. La règle : (m×n) × (n×p) = (m×p). Le nombre de colonnes de la première doit égaler le nombre de lignes de la seconde.",
+        },
+        prevModule: "vectors.html",
+        nextModule: "eigenvalues.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

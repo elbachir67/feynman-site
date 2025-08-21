@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valeurs propres | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧮 Mathématiques</span>
+          <span>›</span>
+          <span>Valeurs propres</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🎯 Valeurs propres et Vecteurs propres</h1>
+      <p class="subtitle">Module 1.3 - Algèbre Linéaire pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Valeurs propres</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant comment l'IA trouve les
+          directions les plus importantes dans les données.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="matrices.html" class="nav-link" id="prev-link"
+          >← Module précédent : Matrices</a
+        >
+        <a href="../python/basics.html" class="nav-link" id="next-link"
+          >Module suivant : Python →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Valeurs propres
+      const moduleConfig = {
+        id: "math-eigenvalues",
+        title: "Valeurs propres et Vecteurs propres",
+        category: "Mathématiques",
+        objectives: [
+          "Comprendre intuitivement les valeurs propres et vecteurs propres",
+          "Découvrir l'importance de ces concepts en mathématiques",
+          "Calculer valeurs et vecteurs propres avec NumPy",
+          "Comprendre les applications pratiques",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Concept fondamental",
+            content: `
+                        <p>Les <strong>valeurs propres</strong> et <strong>vecteurs propres</strong> révèlent les "directions privilégiées" d'une matrice - les directions où elle agit le plus simplement.</p>
+                        <p><strong>🔑 Définition :</strong> Pour une matrice \\(A\\), un vecteur non-nul \\(\\vec{v}\\) est un <em>vecteur propre</em> avec valeur propre \\(\\lambda\\) si :</p>
+                        $$A\\vec{v} = \\lambda\\vec{v}$$
+                        <p><strong>💡 Interprétation :</strong> Quand on applique la matrice \\(A\\) au vecteur propre \\(\\vec{v}\\), le résultat est le même vecteur multiplié par \\(\\lambda\\). <strong>La direction ne change pas, seule la longueur est modifiée !</strong></p>
+                        <p><strong>🌍 Applications dans le monde réel :</strong></p>
+                        <ul>
+                            <li>🏗️ <strong>Ingénierie</strong> : modes de vibration des structures</li>
+                            <li>📊 <strong>Statistiques</strong> : analyse en composantes principales (PCA)</li>
+                            <li>🔍 <strong>Moteurs de recherche</strong> : algorithme PageRank de Google</li>
+                            <li>🎵 <strong>Traitement du signal</strong> : compression audio et image</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie du ressort",
+            content: `
+                        <p>Imaginez un <strong>ressort spécial</strong> que vous étirez dans différentes directions :</p>
+                        <ul>
+                            <li>↔️ <strong>Direction horizontale</strong> : le ressort s'étire facilement (facteur 3)</li>
+                            <li>↕️ <strong>Direction verticale</strong> : le ressort résiste plus (facteur 1.5)</li>
+                            <li>↗️ <strong>Direction diagonale</strong> : comportement complexe (étirement + rotation)</li>
+                        </ul>
+                        <p><strong>🎯 Les directions horizontale et verticale sont "spéciales" :</strong></p>
+                        <ul>
+                            <li>🧭 <strong>Vecteurs propres</strong> = directions naturelles (pas de rotation)</li>
+                            <li>📏 <strong>Valeurs propres</strong> = facteur d'étirement dans chaque direction</li>
+                        </ul>
+                        <p><strong>💡 Point clé :</strong> Chaque matrice a ses propres "directions privilégiées" où elle agit simplement par étirement/compression, sans rotation !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel des valeurs propres",
+            content: `
+                        <p><strong>Prenons une matrice simple :</strong></p>
+                        <p>$$A = \\begin{bmatrix} 3 & 1 \\\\ 0 & 2 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔍 Étape 1 : Recherche des valeurs propres \\(\\lambda\\)</strong></p>
+                        <p>On résout : $$\\det(A - \\lambda I) = 0$$</p>
+                        
+                        <p>$$A - \\lambda I = \\begin{bmatrix} 3-\\lambda & 1 \\\\ 0 & 2-\\lambda \\end{bmatrix}$$</p>
+                        
+                        <p>$$\\det(A - \\lambda I) = (3-\\lambda)(2-\\lambda) - 1 \\times 0 = (3-\\lambda)(2-\\lambda)$$</p>
+                        
+                        <p><strong>Solutions :</strong> \\(\\lambda_1 = 3\\) et \\(\\lambda_2 = 2\\)</p>
+                        
+                        <p><strong>✅ Étape 2 : Vérification pour \\(\\lambda_1 = 3\\)</strong></p>
+                        <p>Si \\(\\vec{v} = \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix}\\), alors :</p>
+                        <p>$$A\\vec{v} = \\begin{bmatrix} 3 & 1 \\\\ 0 & 2 \\end{bmatrix} \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix} = \\begin{bmatrix} 3 \\\\ 0 \\end{bmatrix} = 3 \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix} = 3\\vec{v}$$</p>
+                        
+                        <p><strong>🎉 Parfait !</strong> Le vecteur \\([1, 0]\\) garde sa direction horizontale, mais sa longueur est multipliée par 3.</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Méthode générale de calcul",
+            content: `
+                        <p>Pour trouver les valeurs propres \\(\\lambda\\) d'une matrice \\(A\\), on résout l'<strong>équation caractéristique</strong> :</p>
+                        $$\\det(A - \\lambda I) = 0$$
+                        <p><strong>📋 Méthode étape par étape :</strong></p>
+                        <ul>
+                            <li><strong>1.</strong> Calculer \\(A - \\lambda I\\) où \\(I\\) est la matrice identité</li>
+                            <li><strong>2.</strong> Calculer le déterminant de cette matrice</li>
+                            <li><strong>3.</strong> Résoudre l'équation polynomiale obtenue</li>
+                            <li><strong>4.</strong> Pour chaque \\(\\lambda\\), résoudre \\((A - \\lambda I)\\vec{v} = \\vec{0}\\)</li>
+                        </ul>
+                        <p><strong>🔑 Propriétés importantes :</strong></p>
+                        <ul>
+                            <li>Une matrice \\(n \\times n\\) a au maximum \\(n\\) valeurs propres</li>
+                            <li>Les vecteurs propres peuvent former une base de l'espace</li>
+                            <li>Les valeurs propres révèlent les propriétés fondamentales de la matrice</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : matrice de rotation",
+            content: `
+                        <p><strong>🔄 Analysons une matrice de rotation de 90° :</strong></p>
+                        <p>$$R = \\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Exercice : Trouvons les valeurs propres</strong></p>
+                        <p><strong>Étape 1 :</strong> Calculer \\(R - \\lambda I\\)</p>
+                        <p>$$R - \\lambda I = \\begin{bmatrix} 0-\\lambda & -1 \\\\ 1 & 0-\\lambda \\end{bmatrix} = \\begin{bmatrix} -\\lambda & -1 \\\\ 1 & -\\lambda \\end{bmatrix}$$</p>
+                        
+                        <p><strong>Étape 2 :</strong> Calculer le déterminant</p>
+                        <p>$$\\det(R - \\lambda I) = (-\\lambda)(-\\lambda) - (-1)(1) = \\lambda^2 + 1$$</p>
+                        
+                        <p><strong>Étape 3 :</strong> Résoudre \\(\\lambda^2 + 1 = 0\\)</p>
+                        <p>$$\\lambda^2 = -1 \\Rightarrow \\lambda = \\pm i$$</p>
+                        
+                        <p><strong>🤔 Observation importante :</strong></p>
+                        <p>Les valeurs propres sont <strong>complexes</strong> ! Cela signifie qu'une rotation pure n'a pas de directions privilégiées réelles - elle fait tourner tous les vecteurs.</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calculs manuels",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Soit la matrice $$A = \\begin{bmatrix} 4 & 1 \\\\ 0 & 3 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Calculez à la main :</strong></p>
+                        <ol>
+                            <li>Les valeurs propres \\(\\lambda_1\\) et \\(\\lambda_2\\)</li>
+                            <li>Le vecteur propre correspondant à \\(\\lambda_1 = 4\\)</li>
+                            <li>Vérifiez que \\(A\\vec{v} = \\lambda\\vec{v}\\) pour votre vecteur propre</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('eigenvalues-exercise-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="eigenvalues-exercise-solution" style="display: none;">
+                        <p><strong>1. Calcul des valeurs propres :</strong></p>
+                        <p>$$\\det(A - \\lambda I) = \\det\\begin{bmatrix} 4-\\lambda & 1 \\\\ 0 & 3-\\lambda \\end{bmatrix} = (4-\\lambda)(3-\\lambda) = 0$$</p>
+                        <p>Donc \\(\\lambda_1 = 4\\) et \\(\\lambda_2 = 3\\)</p>
+                        
+                        <p><strong>2. Vecteur propre pour \\(\\lambda_1 = 4\\) :</strong></p>
+                        <p>$$(A - 4I)\\vec{v} = \\vec{0} \\Rightarrow \\begin{bmatrix} 0 & 1 \\\\ 0 & -1 \\end{bmatrix}\\begin{bmatrix} x \\\\ y \\end{bmatrix} = \\begin{bmatrix} 0 \\\\ 0 \\end{bmatrix}$$</p>
+                        <p>Cela donne \\(y = 0\\) et \\(-y = 0\\), donc \\(\\vec{v} = \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix}\\)</p>
+                        
+                        <p><strong>3. Vérification :</strong></p>
+                        <p>$$A\\vec{v} = \\begin{bmatrix} 4 & 1 \\\\ 0 & 3 \\end{bmatrix}\\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix} = \\begin{bmatrix} 4 \\\\ 0 \\end{bmatrix} = 4\\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix} = 4\\vec{v}$$ ✓</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Propriétés importantes",
+            content: `
+                        <p><strong>🔢 Propriétés mathématiques :</strong></p>
+                        <ul>
+                            <li><strong>• Trace :</strong> $$\\text{tr}(A) = \\sum_{i=1}^{n} \\lambda_i$$ (somme des valeurs propres = somme des éléments diagonaux)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Déterminant :</strong> $$\\det(A) = \\prod_{i=1}^{n} \\lambda_i$$ (produit des valeurs propres)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Inversibilité :</strong> \\(A\\) est inversible si et seulement si toutes ses valeurs propres sont non nulles</li>
+                        </ul>
+                        <p><strong>🎯 Types de matrices particulières :</strong></p>
+                        <ul>
+                            <li><strong>• Matrices symétriques :</strong> valeurs propres toujours réelles</li>
+                            <li><strong>• Matrices orthogonales :</strong> valeurs propres de module 1</li>
+                            <li><strong>• Matrices diagonales :</strong> valeurs propres = éléments diagonaux</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Pourquoi les valeurs propres sont-elles importantes ?",
+            content: `
+                        <p><strong>🔍 Les valeurs propres révèlent les "secrets" cachés des matrices :</strong></p>
+                        <ul>
+                            <li>🏗️ <strong>Ingénierie</strong> : modes de vibration des ponts et bâtiments</li>
+                            <li>📊 <strong>Statistiques</strong> : directions de variance maximale dans les données</li>
+                            <li>🔍 <strong>Moteurs de recherche</strong> : PageRank de Google</li>
+                            <li>🎵 <strong>Signal</strong> : analyse spectrale, compression audio</li>
+                            <li>🎨 <strong>Graphiques</strong> : compression d'images</li>
+                        </ul>
+                        <p><strong>💡 Point clé :</strong> Les valeurs propres permettent de comprendre le comportement fondamental d'une transformation et d'identifier ses directions les plus importantes.</p>
+                        <p><strong>🎯 Dans la suite :</strong> Nous verrons comment utiliser ces concepts en programmation pour résoudre des problèmes concrets !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Si une matrice a une valeur propre λ = 3, que se passe-t-il quand on applique la matrice au vecteur propre correspondant ?",
+          options: [
+            "A) Il est divisé par 3",
+            "B) Il est multiplié par 3 (triplé)",
+            "C) Il tourne de 3 degrés",
+            "D) Il devient nul",
+          ],
+          correct: 1,
+          explanation:
+            "Par définition, A⃗v = λ⃗v. Donc avec λ = 3, le vecteur propre est multiplié par 3 (triplé) en longueur mais garde exactement la même direction.",
+        },
+        prevModule: "matrices.html",
+        nextModule: "../python/basics.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

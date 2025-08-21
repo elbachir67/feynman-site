@@ -104,6 +104,13 @@ class ModuleEngine {
       const sectionElement = this.createSection(section, index);
       contentContainer.appendChild(sectionElement);
     });
+
+    // Re-rendre les formules MathJax après ajout du contenu
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      window.MathJax.typesetPromise([contentContainer]).catch(err => {
+        console.log("Erreur MathJax:", err.message);
+      });
+    }
   }
 
   // Créer une section de contenu
@@ -277,6 +284,13 @@ class ModuleEngine {
     });
 
     quizContainer.style.display = "block";
+
+    // Re-rendre les formules MathJax dans le quiz
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      window.MathJax.typesetPromise([quizContainer]).catch(err => {
+        console.log("Erreur MathJax:", err.message);
+      });
+    }
   }
 
   // Vérifier la réponse du quiz
@@ -297,6 +311,7 @@ class ModuleEngine {
       feedback.className = "quiz-feedback correct show";
       this.completeObjective(2); // Quiz généralement 3ème objectif
       this.updateProgress(30);
+      this.markExerciseCompleted(); // Débloquer le module suivant
     } else {
       options[selectedIndex].classList.add("incorrect");
       options[correctIndex].classList.add("correct");
@@ -357,6 +372,14 @@ class ModuleEngine {
 
   // Compléter le checkpoint
   completeCheckpoint() {
+    // Vérifier si l'exercice bloquant est résolu
+    if (!this.checkBlockingExercise()) {
+      alert(
+        "⚠️ Vous devez d'abord résoudre l'exercice pour débloquer le module suivant !"
+      );
+      return;
+    }
+
     const moduleId = this.currentModule.id;
     const button = document.getElementById("checkpoint-btn");
 
@@ -382,6 +405,37 @@ class ModuleEngine {
       button.style.transform = "scale(1)";
     }, 200);
   }
+
+  // Vérifier l'exercice bloquant
+  checkBlockingExercise() {
+    // Pour les modules mathématiques, on considère que l'exercice est résolu
+    // si l'utilisateur a cliqué sur "Voir la solution" dans le quiz
+    const moduleId = this.currentModule.id;
+    const exerciseCompleted = localStorage.getItem(
+      `${moduleId}-exercise-completed`
+    );
+    return exerciseCompleted === "true";
+  }
+
+  // Marquer l'exercice comme complété (appelé après une bonne réponse au quiz)
+  markExerciseCompleted() {
+    const moduleId = this.currentModule.id;
+    localStorage.setItem(`${moduleId}-exercise-completed`, "true");
+  }
+
+  // Fonction pour afficher/masquer les solutions
+  toggleSolution(solutionId) {
+    const solutionElement = document.getElementById(solutionId);
+    const button = document.querySelector(`button[onclick*="${solutionId}"]`);
+
+    if (solutionElement.style.display === "none") {
+      solutionElement.style.display = "block";
+      button.innerHTML = "🙈 Masquer la solution";
+    } else {
+      solutionElement.style.display = "none";
+      button.innerHTML = "👁️ Voir la solution";
+    }
+  }
 }
 
 // Instance globale du moteur
@@ -395,4 +449,9 @@ function initializeModule(config) {
 // Fonction pour compléter le checkpoint (appelée depuis les modules)
 function completeCheckpoint() {
   moduleEngine.completeCheckpoint();
+}
+
+// Fonction pour afficher/masquer les solutions (appelée depuis les modules)
+function toggleSolution(solutionId) {
+  moduleEngine.toggleSolution(solutionId);
 }
