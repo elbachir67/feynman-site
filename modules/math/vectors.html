@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Les Vecteurs | Plateforme d'Apprentissage IA</title>
+    <title>Les Vecteurs | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧮 Mathématiques</span>
+          <span>›</span>
+          <span>Les Vecteurs</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>📐 Les Vecteurs</h1>
+      <p class="subtitle">Module 1.1 - Algèbre Linéaire pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Les Vecteurs</h3>
+        <p>
+          Félicitations ! Vous maîtrisez maintenant les concepts fondamentaux
+          des vecteurs pour l'IA.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="#" class="nav-link disabled" id="prev-link"
+          >← Module précédent</a
+        >
+        <a href="matrices.html" class="nav-link" id="next-link"
+          >Module suivant : Matrices →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Vecteurs
+      const moduleConfig = {
+        id: "math-vectors",
+        title: "Les Vecteurs",
+        category: "Mathématiques",
+        objectives: [
+          "Comprendre intuitivement ce qu'est un vecteur et pourquoi c'est crucial en IA",
+          "Manipuler les vecteurs en Python avec NumPy",
+          "Effectuer des opérations vectorielles (addition, produit scalaire, norme)",
+          "Comprendre l'importance des vecteurs dans les algorithmes d'IA",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Concept fondamental",
+            content: `
+                        <p>Un <strong>vecteur</strong> est un objet mathématique caractérisé par une <strong>magnitude</strong> (longueur) et une <strong>direction</strong>. En IA, les vecteurs sont omniprésents :</p>
+                        <ul>
+                            <li>🖼️ <strong>Images</strong> : chaque pixel devient un nombre dans un vecteur</li>
+                            <li>📝 <strong>Texte</strong> : les mots sont transformés en vecteurs (embeddings)</li>
+                            <li>📊 <strong>Données</strong> : chaque observation est un vecteur de caractéristiques</li>
+                        </ul>
+                        <p>Mathématiquement, un vecteur en dimension \\(n\\) s'écrit : \\(\\vec{v} = \\begin{bmatrix} v_1 \\\\ v_2 \\\\ \\vdots \\\\ v_n \\end{bmatrix}\\)</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "Pourquoi les vecteurs en IA ?",
+            content: `
+                        <p>Imaginez que vous voulez enseigner à un ordinateur à reconnaître des chats dans des photos. Comment faire ?</p>
+                        <p>🎯 <strong>L'astuce</strong> : transformer chaque image en vecteur de nombres !</p>
+                        <ul>
+                            <li>Une image 100×100 pixels = un vecteur de 10,000 nombres</li>
+                            <li>Chaque nombre représente l'intensité d'un pixel</li>
+                            <li>L'IA peut alors "calculer" la similarité entre images</li>
+                        </ul>
+                        <p>C'est exactement comme donner des coordonnées GPS à l'ordinateur : il peut mesurer des "distances" entre concepts !</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Vecteurs en pratique avec NumPy",
+            description:
+              "Créons et manipulons des vecteurs comme le font les algorithmes d'IA :",
+            code: `import numpy as np
+
+# Créer des vecteurs (comme des caractéristiques d'une image)
+image_features = np.array([0.8, 0.2, 0.9, 0.1])  # Exemple : luminosité, contraste, etc.
+text_embedding = np.array([0.5, -0.3, 0.7, 0.2])  # Exemple : représentation d'un mot
+
+print("Caractéristiques image:", image_features)
+print("Embedding de texte:", text_embedding)
+
+# Opérations essentielles en IA
+similarity = np.dot(image_features, text_embedding)  # Similarité cosinus
+magnitude = np.linalg.norm(image_features)  # "Force" du signal
+
+print(f"\\nSimilarité entre image et texte: {similarity:.3f}")
+print(f"Magnitude des caractéristiques: {magnitude:.3f}")
+
+# Addition de vecteurs (fusion d'informations)
+combined_features = image_features + text_embedding
+print(f"\\nCaractéristiques combinées: {combined_features}")`,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Opérations vectorielles essentielles",
+            content: `
+                        <p>Pour deux vecteurs \\(\\vec{u}\\) et \\(\\vec{v}\\) de dimension \\(n\\) :</p>
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                            <p><strong>🔢 Addition :</strong> \\(\\vec{u} + \\vec{v} = \\begin{bmatrix} u_1 + v_1 \\\\ u_2 + v_2 \\\\ \\vdots \\\\ u_n + v_n \\end{bmatrix}\\)</p>
+                            <p><strong>📏 Norme (longueur) :</strong> \\(||\\vec{v}|| = \\sqrt{\\sum_{i=1}^{n} v_i^2}\\)</p>
+                            <p><strong>🎯 Produit scalaire :</strong> \\(\\vec{u} \\cdot \\vec{v} = \\sum_{i=1}^{n} u_i v_i\\)</p>
+                        </div>
+                        <p><strong>💡 En IA :</strong> Le produit scalaire mesure la <em>similarité</em> entre deux vecteurs. Plus il est élevé, plus les vecteurs "pointent dans la même direction" !</p>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Point clé pour l'IA",
+            content: `
+                        <p><strong>Les vecteurs sont la langue universelle de l'IA !</strong></p>
+                        <ul>
+                            <li>🤖 <strong>Machine Learning</strong> : toutes les données deviennent des vecteurs</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : chaque neurone traite des vecteurs</li>
+                            <li>🔍 <strong>Recherche</strong> : Google utilise des vecteurs pour classer les pages</li>
+                            <li>💬 <strong>ChatGPT</strong> : transforme vos mots en vecteurs pour les "comprendre"</li>
+                        </ul>
+                        <p>Maîtriser les vecteurs = comprendre 80% des concepts d'IA !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Dans un système d'IA de reconnaissance d'images, que représente un vecteur de caractéristiques ?",
+          options: [
+            "A) Le nom du fichier image",
+            "B) Une liste de nombres décrivant les propriétés de l'image",
+            "C) La taille de l'image en pixels",
+            "D) Le format de l'image (JPG, PNG, etc.)",
+          ],
+          correct: 1,
+          explanation:
+            "Un vecteur de caractéristiques contient des nombres qui décrivent les propriétés importantes de l'image (couleurs, formes, textures, etc.). C'est ainsi que l'IA \"voit\" et analyse les images !",
+        },
+        prevModule: "#",
+        nextModule: "matrices.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

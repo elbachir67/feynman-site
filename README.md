@@ -1,6 +1,6 @@
 # Document de Spécifications
 
-## Plateforme d'Apprentissage en Ligne
+## IA4Ndada - Plateforme d'Apprentissage en Ligne
 
 **Version:** 1.0  
 **Date:** Janvier 2025  
