@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Algèbre Linéaire - Les Vecteurs | Plateforme d'Apprentissage</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <style>
+      :root {
+        --primary-color: #0056b3;
+        --concept-color: #3498db;
+        --intuition-color: #27ae60;
+        --exemple-color: #e67e22;
+        --math-color: #9b59b6;
+        --warning-color: #e74c3c;
+        --success-color: #2ecc71;
+        --bg-light: #f8f9fa;
+        --text-dark: #2c3e50;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--text-dark);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      /* Navigation */
+      nav {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-breadcrumb {
+        display: flex;
+        gap: 0.5rem;
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .progress-indicator {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .progress-bar {
+        width: 200px;
+        height: 8px;
+        background: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--success-color);
+        transition: width 0.3s ease;
+      }
+
+      /* Container principal */
+      .container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        font-size: 2.5rem;
+      }
+
+      .subtitle {
+        color: #666;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+      }
+
+      /* Objectifs d'apprentissage */
+      .objectives {
+        background: var(--bg-light);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+      }
+
+      .objectives h2 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+      }
+
+      .objectives ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .objectives li {
+        padding: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+      }
+
+      .objectives li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--success-color);
+        font-weight: bold;
+      }
+
+      /* Boîtes thématiques */
+      .box {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid;
+        position: relative;
+        animation: slideIn 0.5s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .box h3 {
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .box.concept {
+        background: rgba(52, 152, 219, 0.1);
+        border-left-color: var(--concept-color);
+      }
+
+      .box.concept h3 {
+        color: var(--concept-color);
+      }
+
+      .box.intuition {
+        background: rgba(39, 174, 96, 0.1);
+        border-left-color: var(--intuition-color);
+      }
+
+      .box.intuition h3 {
+        color: var(--intuition-color);
+      }
+
+      .box.exemple {
+        background: rgba(230, 126, 34, 0.1);
+        border-left-color: var(--exemple-color);
+      }
+
+      .box.exemple h3 {
+        color: var(--exemple-color);
+      }
+
+      .box.mathematique {
+        background: rgba(155, 89, 182, 0.1);
+        border-left-color: var(--math-color);
+      }
+
+      .box.mathematique h3 {
+        color: var(--math-color);
+      }
+
+      /* Code interactif */
+      .code-container {
+        background: #f4f4f4;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .code-editor {
+        width: 100%;
+        min-height: 100px;
+        padding: 1rem;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: vertical;
+        background: white;
+      }
+
+      .code-controls {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .btn {
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-run {
+        background: var(--success-color);
+        color: white;
+      }
+
+      .btn-run:hover {
+        background: #27a15f;
+        transform: translateY(-2px);
+      }
+
+      .btn-copy {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .btn-reset {
+        background: #95a5a6;
+        color: white;
+      }
+
+      .output {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #2c3e50;
+        color: #1abc9c;
+        font-family: "Courier New", monospace;
+        border-radius: 4px;
+        min-height: 50px;
+        white-space: pre-wrap;
+        display: none;
+      }
+
+      .output.show {
+        display: block;
+      }
+
+      /* Quiz interactif */
+      .quiz {
+        background: var(--bg-light);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin: 2rem 0;
+      }
+
+      .quiz-question {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+      }
+
+      .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .quiz-option {
+        padding: 1rem;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .quiz-option:hover {
+        border-color: var(--primary-color);
+        background: rgba(0, 86, 179, 0.05);
+      }
+
+      .quiz-option.selected {
+        border-color: var(--primary-color);
+        background: rgba(0, 86, 179, 0.1);
+      }
+
+      .quiz-option.correct {
+        border-color: var(--success-color);
+        background: rgba(46, 204, 113, 0.1);
+      }
+
+      .quiz-option.incorrect {
+        border-color: var(--warning-color);
+        background: rgba(231, 76, 60, 0.1);
+      }
+
+      .quiz-feedback {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .quiz-feedback.show {
+        display: block;
+      }
+
+      .quiz-feedback.correct {
+        background: rgba(46, 204, 113, 0.1);
+        border-left: 4px solid var(--success-color);
+        color: var(--success-color);
+      }
+
+      .quiz-feedback.incorrect {
+        background: rgba(231, 76, 60, 0.1);
+        border-left: 4px solid var(--warning-color);
+        color: var(--warning-color);
+      }
+
+      /* Checkpoint */
+      .checkpoint {
+        margin: 3rem 0;
+        padding: 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        color: white;
+        text-align: center;
+      }
+
+      .checkpoint h3 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+      }
+
+      .checkpoint-btn {
+        background: white;
+        color: var(--primary-color);
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .checkpoint-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .checkpoint-btn.completed {
+        background: var(--success-color);
+        color: white;
+      }
+
+      /* Loading */
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 1rem;
+        color: #666;
+      }
+
+      .loading.show {
+        display: block;
+      }
+
+      /* Navigation entre modules */
+      .module-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .nav-link {
+        padding: 0.8rem 1.5rem;
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover {
+        background: #004494;
+        transform: translateY(-2px);
+      }
+
+      .nav-link.disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <span>🏠 Accueil</span>
+          <span>›</span>
+          <span>📐 Mathématiques</span>
+          <span>›</span>
+          <span>Algèbre Linéaire</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>📐 Les Vecteurs</h1>
+      <p class="subtitle">Module 0.1 - Algèbre Linéaire</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul>
+          <li>Comprendre intuitivement ce qu'est un vecteur</li>
+          <li>Manipuler les vecteurs en Python avec NumPy</li>
+          <li>Effectuer des opérations de base sur les vecteurs</li>
+          <li>Visualiser des vecteurs dans l'espace</li>
+        </ul>
+      </div>
+
+      <!-- Concept -->
+      <div class="box concept">
+        <h3>💡 Concept fondamental</h3>
+        <p>
+          Un <strong>vecteur</strong> est un objet mathématique caractérisé par
+          une magnitude (longueur) et une direction. En algèbre linéaire, les
+          vecteurs peuvent être représentés comme des listes ordonnées de
+          nombres réels, appelés composantes ou coordonnées.
+        </p>
+        <p>
+          Un vecteur en dimension \(n\) s'écrit : \(\vec{v} = \begin{bmatrix}
+          v_1 \\ v_2 \\ \vdots \\ v_n \end{bmatrix}\)
+        </p>
+      </div>
+
+      <!-- Intuition -->
+      <div class="box intuition">
+        <h3>🧠 Intuition</h3>
+        <p>
+          Imaginez que vous êtes dans une ville organisée en quadrillage
+          parfait. Pour indiquer à un ami comment se rendre d'un point à un
+          autre, vous pourriez dire : "Avance de 3 blocs vers le nord, puis 4
+          blocs vers l'est".
+        </p>
+        <p>
+          Ces instructions contiennent deux informations essentielles : la
+          <strong>direction</strong> (nord, puis est) et la
+          <strong>distance</strong> (3 blocs, puis 4 blocs). C'est exactement ce
+          qu'est un vecteur : une direction et une magnitude !
+        </p>
+      </div>
+
+      <!-- Exemple avec code -->
+      <div class="box exemple">
+        <h3>💻 Exemple pratique</h3>
+        <p>Créons et manipulons des vecteurs avec NumPy :</p>
+        <div class="code-container">
+          <textarea class="code-editor" id="code1">
+import numpy as np
+
+# Création de vecteurs
+v1 = np.array([3, 4])  # Vecteur 2D
+v2 = np.array([1, 2])
+
+# Opérations de base
+addition = v1 + v2
+multiplication = 2 * v1
+norme = np.linalg.norm(v1)  # Longueur du vecteur
+
+print(f"v1 = {v1}")
+print(f"v2 = {v2}")
+print(f"v1 + v2 = {addition}")
+print(f"2 * v1 = {multiplication}")
+print(f"||v1|| = {norme:.2f}")
+
+# Produit scalaire
+dot_product = np.dot(v1, v2)
+print(f"v1 · v2 = {dot_product}")</textarea
+          >
+          <div class="code-controls">
+            <button class="btn btn-run" onclick="runCode('code1', 'output1')">
+              ▶ Exécuter
+            </button>
+            <button class="btn btn-copy" onclick="copyCode('code1')">
+              📋 Copier
+            </button>
+            <button class="btn btn-reset" onclick="resetCode('code1')">
+              ↺ Réinitialiser
+            </button>
+          </div>
+          <div class="loading" id="loading1">⏳ Chargement de Python...</div>
+          <div class="output" id="output1"></div>
+        </div>
+      </div>
+
+      <!-- Formulation mathématique -->
+      <div class="box mathematique">
+        <h3>∑ Formulation mathématique</h3>
+        <p>
+          Pour deux vecteurs \(\vec{u}\) et \(\vec{v}\) de dimension \(n\) :
+        </p>
+        <ul style="list-style: none; padding-left: 0">
+          <li>
+            • <strong>Addition :</strong> \(\vec{u} + \vec{v} = \begin{bmatrix}
+            u_1 + v_1 \\ u_2 + v_2 \\ \vdots \\ u_n + v_n \end{bmatrix}\)
+          </li>
+          <li style="margin-top: 0.5rem">
+            • <strong>Multiplication scalaire :</strong> \(\lambda \vec{v} =
+            \begin{bmatrix} \lambda v_1 \\ \lambda v_2 \\ \vdots \\ \lambda v_n
+            \end{bmatrix}\)
+          </li>
+          <li style="margin-top: 0.5rem">
+            • <strong>Produit scalaire :</strong> \(\vec{u} \cdot \vec{v} =
+            \sum_{i=1}^{n} u_i v_i\)
+          </li>
+          <li style="margin-top: 0.5rem">
+            • <strong>Norme :</strong> \(||\vec{v}|| = \sqrt{\sum_{i=1}^{n}
+            v_i^2}\)
+          </li>
+        </ul>
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz">
+        <div class="quiz-question">
+          📝 Question : Quelle est la norme du vecteur [3, 4] ?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="checkAnswer(this, 'A')">A) 7</div>
+          <div class="quiz-option" onclick="checkAnswer(this, 'B')">B) 5</div>
+          <div class="quiz-option" onclick="checkAnswer(this, 'C')">C) 12</div>
+          <div class="quiz-option" onclick="checkAnswer(this, 'D')">D) 25</div>
+        </div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Module Vecteurs</h3>
+        <p>Félicitations ! Vous avez terminé le module sur les vecteurs.</p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation -->
+      <div class="module-nav">
+        <a href="#" class="nav-link disabled">← Module précédent</a>
+        <a href="#" class="nav-link">Module suivant : Matrices →</a>
+      </div>
+    </div>
+
+    <script>
+      // Initialisation de Pyodide
+      let pyodideReady = false;
+      let pyodide;
+
+      async function initPyodide() {
+        pyodide = await loadPyodide();
+        await pyodide.loadPackage("numpy");
+        pyodideReady = true;
+        console.log("Pyodide prêt !");
+      }
+
+      // Lancer l'initialisation au chargement
+      initPyodide();
+
+      // Fonction pour exécuter le code Python
+      async function runCode(codeId, outputId) {
+        const code = document.getElementById(codeId).value;
+        const output = document.getElementById(outputId);
+        const loading = document.getElementById("loading" + codeId.slice(-1));
+
+        if (!pyodideReady) {
+          loading.classList.add("show");
+          await initPyodide();
+          loading.classList.remove("show");
+        }
+
+        try {
+          // Rediriger stdout
+          pyodide.runPython(`
+                    import sys
+                    from io import StringIO
+                    sys.stdout = StringIO()
+                `);
+
+          // Exécuter le code
+          pyodide.runPython(code);
+
+          // Récupérer la sortie
+          const stdout = pyodide.runPython("sys.stdout.getvalue()");
+          output.textContent = stdout;
+          output.classList.add("show");
+
+          // Mettre à jour la progression
+          updateProgress(25);
+        } catch (error) {
+          output.textContent = "Erreur : " + error.message;
+          output.classList.add("show");
+          output.style.color = "#e74c3c";
+        }
+      }
+
+      // Fonction pour copier le code
+      function copyCode(codeId) {
+        const code = document.getElementById(codeId);
+        code.select();
+        document.execCommand("copy");
+
+        // Feedback visuel
+        event.target.textContent = "✓ Copié !";
+        setTimeout(() => {
+          event.target.textContent = "📋 Copier";
+        }, 2000);
+      }
+
+      // Fonction pour réinitialiser le code
+      function resetCode(codeId) {
+        const originalCode = `import numpy as np
+
+# Création de vecteurs
+v1 = np.array([3, 4])  # Vecteur 2D
+v2 = np.array([1, 2])
+
+# Opérations de base
+addition = v1 + v2
+multiplication = 2 * v1
+norme = np.linalg.norm(v1)  # Longueur du vecteur
+
+print(f"v1 = {v1}")
+print(f"v2 = {v2}")
+print(f"v1 + v2 = {addition}")
+print(f"2 * v1 = {multiplication}")
+print(f"||v1|| = {norme:.2f}")
+
+# Produit scalaire
+dot_product = np.dot(v1, v2)
+print(f"v1 · v2 = {dot_product}")`;
+
+        document.getElementById(codeId).value = originalCode;
+        document
+          .getElementById("output" + codeId.slice(-1))
+          .classList.remove("show");
+      }
+
+      // Fonction pour le quiz
+      function checkAnswer(element, answer) {
+        const options = document.querySelectorAll(".quiz-option");
+        const feedback = document.getElementById("quiz-feedback");
+
+        // Réinitialiser les styles
+        options.forEach(opt => {
+          opt.classList.remove("selected", "correct", "incorrect");
+        });
+
+        element.classList.add("selected");
+
+        if (answer === "B") {
+          element.classList.add("correct");
+          feedback.textContent =
+            "✓ Correct ! La norme est √(3² + 4²) = √(9 + 16) = √25 = 5";
+          feedback.className = "quiz-feedback correct show";
+          updateProgress(25);
+        } else {
+          element.classList.add("incorrect");
+          feedback.textContent =
+            "✗ Incorrect. Rappel : ||v|| = √(x² + y²) pour un vecteur [x, y]";
+          feedback.className = "quiz-feedback incorrect show";
+        }
+      }
+
+      // Gestion de la progression
+      function updateProgress(increment) {
+        let currentProgress = parseInt(localStorage.getItem("progress") || "0");
+        currentProgress = Math.min(currentProgress + increment, 100);
+
+        localStorage.setItem("progress", currentProgress);
+        document.getElementById("progress-fill").style.width =
+          currentProgress + "%";
+        document.getElementById(
+          "progress-text"
+        ).textContent = `Progression: ${currentProgress}%`;
+      }
+
+      // Checkpoint
+      function completeCheckpoint() {
+        const btn = document.getElementById("checkpoint-btn");
+        btn.classList.add("completed");
+        btn.textContent = "✓ Complété";
+        updateProgress(50);
+
+        // Sauvegarder dans localStorage
+        localStorage.setItem("module-vectors-completed", "true");
+      }
+
+      // Charger la progression au démarrage
+      window.onload = function () {
+        const progress = localStorage.getItem("progress") || "0";
+        document.getElementById("progress-fill").style.width = progress + "%";
+        document.getElementById(
+          "progress-text"
+        ).textContent = `Progression: ${progress}%`;
+
+        if (localStorage.getItem("module-vectors-completed") === "true") {
+          const btn = document.getElementById("checkpoint-btn");
+          btn.classList.add("completed");
+          btn.textContent = "✓ Complété";
+        }
+      };
+    </script>
+  </body>
+</html>
