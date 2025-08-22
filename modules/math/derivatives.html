@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Les Dérivées | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧮 Mathématiques</span>
+          <span>›</span>
+          <span>Les Dérivées</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>📈 Les Dérivées</h1>
+      <p class="subtitle">Module 1.4 - Analyse pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Les Dérivées</h3>
+        <p>
+          Félicitations ! Vous maîtrisez maintenant les dérivées, fondement de
+          l'optimisation en IA.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="eigenvalues.html" class="nav-link" id="prev-link"
+          >← Module précédent : Valeurs propres</a
+        >
+        <a href="gradients.html" class="nav-link" id="next-link"
+          >Module suivant : Gradients →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Dérivées
+      const moduleConfig = {
+        id: "math-derivatives",
+        title: "Les Dérivées",
+        category: "Mathématiques",
+        objectives: [
+          "Comprendre intuitivement ce qu'est une dérivée",
+          "Calculer des dérivées simples à la main",
+          "Maîtriser les règles de dérivation",
+          "Comprendre le lien avec l'optimisation en IA",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Concept fondamental",
+            content: `
+                        <p>La <strong>dérivée</strong> d'une fonction mesure à quelle vitesse cette fonction change en un point donné. C'est la <strong>pente de la courbe</strong> en ce point.</p>
+                        <p><strong>🔑 Définition intuitive :</strong></p>
+                        <p>Si on prend deux points très proches sur une courbe et qu'on trace la droite qui les relie, la <strong>pente de cette droite</strong> nous donne la dérivée.</p>
+                        <p>$$\\text{Pente} = \\frac{\\text{Variation verticale}}{\\text{Variation horizontale}} = \\frac{\\Delta y}{\\Delta x}$$</p>
+                        <p><strong>💡 Interprétation :</strong></p>
+                        <ul>
+                            <li>Si \\(f'(x) > 0\\) : la fonction <strong>monte</strong> (pente positive)</li>
+                            <li>Si \\(f'(x) < 0\\) : la fonction <strong>descend</strong> (pente négative)</li>
+                            <li>Si \\(f'(x) = 0\\) : la fonction est <strong>plate</strong> (sommet ou creux)</li>
+                        </ul>
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Optimisation</strong> : trouver les minima des fonctions de coût</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : algorithme de rétropropagation</li>
+                            <li>📊 <strong>Machine Learning</strong> : descente de gradient pour l'apprentissage</li>
+                            <li>💬 <strong>LLMs</strong> : optimisation des paramètres (milliards !)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie de la voiture",
+            content: `
+                        <p>Imaginez que vous conduisez sur une route vallonnée et que vous regardez votre <strong>compteur de vitesse</strong> :</p>
+                        <ul>
+                            <li>🚗 <strong>Position</strong> = fonction \\(f(x)\\) (où vous êtes)</li>
+                            <li>⚡ <strong>Vitesse</strong> = dérivée \\(f'(x)\\) (à quelle vitesse vous bougez)</li>
+                        </ul>
+                        <p><strong>🏔️ Sur une montée :</strong></p>
+                        <ul>
+                            <li>📈 <strong>Vitesse positive</strong> : vous montez (\\(f'(x) > 0\\))</li>
+                            <li>🔺 <strong>Plus c'est raide</strong>, plus la vitesse est grande</li>
+                        </ul>
+                        <p><strong>🏔️ Sur une descente :</strong></p>
+                        <ul>
+                            <li>📉 <strong>Vitesse négative</strong> : vous descendez (\\(f'(x) < 0\\))</li>
+                            <li>🔻 <strong>Plus c'est raide</strong>, plus la vitesse est négative</li>
+                        </ul>
+                        <p><strong>🎯 Au sommet ou au creux :</strong></p>
+                        <ul>
+                            <li>⏸️ <strong>Vitesse nulle</strong> : vous ne montez ni ne descendez (\\(f'(x) = 0\\))</li>
+                        </ul>
+                        <p><strong>💡 C'est exactement ce que fait l'IA :</strong> elle cherche les "creux" (minima) pour optimiser ses performances !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calculs manuels de dérivées",
+            content: `
+                        <p><strong>🔢 Règles de base :</strong></p>
+                        <ul>
+                            <li><strong>Constante :</strong> \\((c)' = 0\\)</li>
+                            <li><strong>Puissance :</strong> \\((x^n)' = n \\cdot x^{n-1}\\)</li>
+                            <li><strong>Somme :</strong> \\((f + g)' = f' + g'\\)</li>
+                            <li><strong>Produit :</strong> \\((f \\cdot g)' = f' \\cdot g + f \\cdot g'\\)</li>
+                        </ul>
+                        
+                        <p><strong>📝 Exemples concrets :</strong></p>
+                        
+                        <p><strong>1. Fonction simple :</strong> \\(f(x) = x^2\\)</p>
+                        <p>$$f'(x) = 2x^{2-1} = 2x$$</p>
+                        
+                        <p><strong>2. Fonction polynomiale :</strong> \\(f(x) = 3x^2 + 2x + 1\\)</p>
+                        <p>$$f'(x) = 3 \\cdot 2x + 2 \\cdot 1 + 0 = 6x + 2$$</p>
+                        
+                        <p><strong>3. Fonction plus complexe :</strong> \\(f(x) = x^3 - 4x^2 + 5x - 2\\)</p>
+                        <p>$$f'(x) = 3x^2 - 8x + 5$$</p>
+                        
+                        <p><strong>🎯 Interprétation :</strong> La dérivée nous dit si la fonction monte (\\(f'(x) > 0\\)) ou descend (\\(f'(x) < 0\\)) en chaque point.</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calculs manuels",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Calculez les dérivées des fonctions suivantes :</p>
+                        
+                        <ol>
+                            <li>\\(f(x) = 5x^3\\)</li>
+                            <li>\\(g(x) = 2x^2 + 3x - 7\\)</li>
+                            <li>\\(h(x) = x^4 - 2x^3 + x\\)</li>
+                            <li>Pour \\(f(x) = x^2\\), calculez \\(f'(2)\\) et interprétez le résultat</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('derivatives-exercise-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="derivatives-exercise-solution" style="display: none;">
+                        <ol>
+                            <li>\\(f'(x) = 5 \\cdot 3x^2 = 15x^2\\)</li>
+                            <li>\\(g'(x) = 2 \\cdot 2x + 3 - 0 = 4x + 3\\)</li>
+                            <li>\\(h'(x) = 4x^3 - 6x^2 + 1\\)</li>
+                            <li>\\(f'(x) = 2x\\), donc \\(f'(2) = 4\\). <br>
+                                <strong>Interprétation :</strong> Au point \\(x = 2\\), la fonction \\(f(x) = x^2\\) croît avec une pente de 4. Si on se déplace légèrement vers la droite, la fonction augmente 4 fois plus vite que le déplacement.</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Règles de dérivation importantes",
+            content: `
+                        <p><strong>📋 Règles essentielles :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Règle de la puissance :</strong> $$\\frac{d}{dx}[x^n] = nx^{n-1}$$</li>
+                            <li style="margin-top: 1rem"><strong>• Règle de la somme :</strong> $$\\frac{d}{dx}[f(x) + g(x)] = f'(x) + g'(x)$$</li>
+                            <li style="margin-top: 1rem"><strong>• Règle du produit :</strong> $$\\frac{d}{dx}[f(x) \\cdot g(x)] = f'(x) \\cdot g(x) + f(x) \\cdot g'(x)$$</li>
+                            <li style="margin-top: 1rem"><strong>• Règle de la chaîne :</strong> $$\\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x)$$</li>
+                        </ul>
+                        <p><strong>🔑 Dérivées usuelles :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li>• \\((\\sin x)' = \\cos x\\)</li>
+                            <li>• \\((\\cos x)' = -\\sin x\\)</li>
+                            <li>• \\((e^x)' = e^x\\)</li>
+                            <li>• \\((\\ln x)' = \\frac{1}{x}\\)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Trouver les extremums",
+            content: `
+                        <p><strong>🎯 Application pratique : optimisation</strong></p>
+                        <p>Pour trouver les <strong>minima et maxima</strong> d'une fonction :</p>
+                        <ol>
+                            <li><strong>Calculer</strong> la dérivée \\(f'(x)\\)</li>
+                            <li><strong>Résoudre</strong> \\(f'(x) = 0\\)</li>
+                            <li><strong>Analyser</strong> le signe de \\(f'(x)\\) autour des solutions</li>
+                        </ol>
+                        
+                        <p><strong>📝 Exemple :</strong> \\(f(x) = x^2 - 4x + 3\\)</p>
+                        <p><strong>Étape 1 :</strong> \\(f'(x) = 2x - 4\\)</p>
+                        <p><strong>Étape 2 :</strong> \\(2x - 4 = 0 \\Rightarrow x = 2\\)</p>
+                        <p><strong>Étape 3 :</strong></p>
+                        <ul>
+                            <li>Pour \\(x < 2\\) : \\(f'(x) < 0\\) (fonction décroissante)</li>
+                            <li>Pour \\(x > 2\\) : \\(f'(x) > 0\\) (fonction croissante)</li>
+                            <li><strong>Conclusion :</strong> \\(x = 2\\) est un minimum</li>
+                        </ul>
+                        <p><strong>🤖 En IA :</strong> C'est exactement ce processus que les algorithmes d'optimisation utilisent pour minimiser les erreurs !</p>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Pourquoi les dérivées sont-elles cruciales en IA ?",
+            content: `
+                        <p><strong>🧠 Les dérivées sont le cœur de l'apprentissage automatique :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Descente de gradient</strong> : algorithme fondamental pour minimiser les erreurs</li>
+                            <li>🧠 <strong>Rétropropagation</strong> : comment les réseaux de neurones apprennent</li>
+                            <li>📊 <strong>Optimisation</strong> : trouver les meilleurs paramètres automatiquement</li>
+                            <li>💬 <strong>LLMs (ChatGPT)</strong> : optimisation de milliards de paramètres</li>
+                            <li>🎨 <strong>IA générative</strong> : amélioration continue des résultats</li>
+                        </ul>
+                        <p><strong>💡 Point clé :</strong> Sans les dérivées, l'IA moderne n'existerait pas ! Elles permettent aux machines d'apprendre automatiquement en "descendant" vers les meilleures solutions.</p>
+                        <p><strong>🔮 Dans la suite :</strong> Nous verrons comment généraliser ce concept aux fonctions de plusieurs variables avec les gradients !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question: "🤔 Quelle est la dérivée de f(x) = 3x² + 2x - 5 ?",
+          options: ["A) 6x + 2", "B) 3x + 2", "C) 6x - 5", "D) 3x² + 2"],
+          correct: 0,
+          explanation:
+            "En appliquant les règles : (3x²)' = 6x, (2x)' = 2, (-5)' = 0. Donc f'(x) = 6x + 2.",
+        },
+        prevModule: "eigenvalues.html",
+        nextModule: "gradients.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>
