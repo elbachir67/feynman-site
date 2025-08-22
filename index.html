@@ -31,7 +31,7 @@
         --ml-color: #ff6b35;
         --dl-color: #e74c3c;
 
-        --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --bg-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
         --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         --hover-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 
@@ -126,178 +126,158 @@
       /* Hero Section */
       .hero {
         text-align: center;
-        padding: 4rem 2rem;
+        padding: 3rem 2rem 2rem;
         color: white;
       }
 
       .hero h1 {
-        font-size: 3.5rem;
+        font-size: 2.8rem;
         font-weight: 700;
         margin-bottom: 1rem;
         text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
       }
 
       .hero p {
-        font-size: 1.3rem;
-        margin-bottom: 2rem;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
         opacity: 0.9;
         max-width: 600px;
         margin-left: auto;
         margin-right: auto;
       }
 
-      .hero-stats {
-        display: flex;
-        justify-content: center;
-        gap: 3rem;
-        margin-top: 2rem;
-      }
-
-      .stat {
-        text-align: center;
-      }
-
-      .stat-number {
-        font-size: 2rem;
-        font-weight: 700;
-        display: block;
-      }
-
-      .stat-label {
-        font-size: 0.9rem;
-        opacity: 0.8;
-      }
-
-      /* Pathways Section */
-      .pathways {
+      /* Modules Section */
+      .modules-section {
         max-width: 1200px;
-        margin: -2rem auto 4rem;
+        margin: 0 auto 4rem;
         padding: 0 2rem;
       }
 
-      .pathways h2 {
-        text-align: center;
-        color: white;
-        font-size: 2.5rem;
-        margin-bottom: 3rem;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      }
-
-      .pathways-grid {
+      .modules-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
       }
 
-      .pathway-card {
+      .module-card {
         background: white;
-        border-radius: 16px;
-        padding: 2rem;
+        border-radius: 12px;
+        padding: 1.5rem;
         box-shadow: var(--card-shadow);
         transition: all 0.3s ease;
         cursor: pointer;
         position: relative;
         overflow: hidden;
+        border-left: 4px solid var(--primary-color);
       }
 
-      .pathway-card:hover {
+      .module-card:hover {
         transform: translateY(-5px);
         box-shadow: var(--hover-shadow);
       }
 
-      .pathway-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: var(--accent-color);
+      .module-card.math {
+        border-left-color: var(--math-color);
+      }
+      .module-card.python {
+        border-left-color: var(--python-color);
+      }
+      .module-card.ml {
+        border-left-color: var(--ml-color);
+      }
+      .module-card.dl {
+        border-left-color: var(--dl-color);
+      }
+      .module-card.llm {
+        border-left-color: #f39c12;
       }
 
-      .pathway-card.math::before {
-        background: var(--math-color);
-      }
-      .pathway-card.python::before {
-        background: var(--python-color);
-      }
-      .pathway-card.beginner::before {
-        background: var(--success-color);
-      }
-
-      .pathway-icon {
-        font-size: 3rem;
+      .module-icon {
+        font-size: 2rem;
         margin-bottom: 1rem;
         display: block;
       }
 
-      .pathway-title {
-        font-size: 1.5rem;
+      .module-title {
+        font-size: 1.3rem;
         font-weight: 600;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
         color: var(--text-dark);
       }
 
-      .pathway-description {
-        color: var(--text-light);
-        margin-bottom: 1.5rem;
-        line-height: 1.6;
-      }
-
-      .pathway-modules {
-        list-style: none;
-        margin-bottom: 1.5rem;
-      }
-
-      .pathway-modules li {
-        padding: 0.3rem 0;
+      .module-count {
         color: var(--text-light);
         font-size: 0.9rem;
+        margin-bottom: 1rem;
       }
 
-      .pathway-modules li::before {
-        content: "→";
-        color: var(--accent-color);
+      .module-list {
+        list-style: none;
+        margin-bottom: 1rem;
+      }
+
+      .module-list li {
+        padding: 0.2rem 0;
+        color: var(--text-light);
+        font-size: 0.85rem;
+      }
+
+      .module-list li::before {
+        content: "•";
+        color: var(--primary-color);
         font-weight: bold;
         margin-right: 0.5rem;
       }
 
-      .pathway-btn {
+      .module-btn {
         width: 100%;
-        padding: 0.8rem;
+        padding: 0.6rem;
         background: var(--primary-color);
         color: white;
         border: none;
-        border-radius: 8px;
-        font-size: 1rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
         font-weight: 500;
         cursor: pointer;
         transition: all 0.3s ease;
       }
 
-      .pathway-btn:hover {
+      .module-btn:hover {
         background: #004494;
         transform: translateY(-2px);
       }
 
-      .pathway-card.math .pathway-btn {
+      .module-card.math .module-btn {
         background: var(--math-color);
       }
-      .pathway-card.python .pathway-btn {
+      .module-card.python .module-btn {
         background: var(--python-color);
       }
-      .pathway-card.beginner .pathway-btn {
-        background: var(--success-color);
+      .module-card.ml .module-btn {
+        background: var(--ml-color);
+      }
+      .module-card.dl .module-btn {
+        background: var(--dl-color);
+      }
+      .module-card.llm .module-btn {
+        background: #f39c12;
       }
 
-      .pathway-card.math .pathway-btn:hover {
+      .module-card.math .module-btn:hover {
         background: #8e44ad;
       }
-      .pathway-card.python .pathway-btn:hover {
+      .module-card.python .module-btn:hover {
         background: #2d5aa0;
       }
-      .pathway-card.beginner .pathway-btn:hover {
-        background: #218838;
+      .module-card.ml .module-btn:hover {
+        background: #e55a2b;
+      }
+      .module-card.dl .module-btn:hover {
+        background: #c0392b;
+      }
+      .module-card.llm .module-btn:hover {
+        background: #e67e22;
       }
 
       /* Learning Map Section */
@@ -491,85 +471,91 @@
 
     <!-- Hero Section -->
     <section class="hero">
-      <h1>De Zéro à l'Intelligence Artificielle</h1>
-      <p>
-        Maîtrisez les mathématiques, la programmation et l'IA avec une approche
-        rigoureuse mais accessible. Des formules expliquées aux applications
-        concrètes.
-      </p>
-
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-number" id="total-modules">25</span>
-          <span class="stat-label">Modules</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number" id="completed-modules">0</span>
-          <span class="stat-label">Complétés</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number" id="estimated-time">~30h</span>
-          <span class="stat-label">Temps estimé</span>
-        </div>
-      </div>
+      <h1>Apprenez l'IA par les Fondements</h1>
+      <p>Mathématiques → Python → Machine Learning → Deep Learning → LLMs</p>
     </section>
 
-    <!-- Pathways Section -->
-    <section class="pathways" id="pathways">
-      <h2>🛤️ Parcours d'apprentissage : Maths → Python → ML → DL → LLM</h2>
-      <div class="pathways-grid">
-        <!-- Parcours Mathématicien -->
-        <div class="pathway-card math" onclick="selectPathway('math')">
-          <span class="pathway-icon">🧮</span>
-          <h3 class="pathway-title">Je maîtrise les mathématiques</h3>
-          <p class="pathway-description">
-            Vous maîtrisez l'algèbre et l'analyse ? Passez directement à Python
-            pour implémenter vos connaissances mathématiques en code pratique.
-          </p>
-          <ul class="pathway-modules">
-            <li>Commencer par : Python & NumPy</li>
-            <li>Puis : Machine Learning</li>
-            <li>Ensuite : Deep Learning</li>
-            <li>Enfin : LLMs et Transformers</li>
-            <li>Durée estimée : ~20h</li>
+    <!-- Modules Section -->
+    <section class="modules-section" id="modules">
+      <div class="modules-grid">
+        <!-- Mathématiques -->
+        <div
+          class="module-card math"
+          onclick="goToModule('modules/math/vectors.html')"
+        >
+          <span class="module-icon">🧮</span>
+          <h3 class="module-title">Mathématiques</h3>
+          <p class="module-count">7 modules</p>
+          <ul class="module-list">
+            <li>Vecteurs et matrices</li>
+            <li>Dérivées et gradients</li>
+            <li>Probabilités et statistiques</li>
           </ul>
-          <button class="pathway-btn">Commencer ce parcours</button>
+          <button class="module-btn">Commencer</button>
         </div>
 
-        <!-- Parcours Programmeur -->
-        <div class="pathway-card python" onclick="selectPathway('python')">
-          <span class="pathway-icon">💻</span>
-          <h3 class="pathway-title">Je maîtrise la programmation</h3>
-          <p class="pathway-description">
-            Vous codez déjà bien ? Commencez par les mathématiques rigoureuses
-            pour comprendre la théorie derrière l'IA que vous implémenterez.
-          </p>
-          <ul class="pathway-modules">
-            <li>Commencer par : Mathématiques</li>
-            <li>Puis : Machine Learning</li>
-            <li>Ensuite : Deep Learning</li>
-            <li>Enfin : LLMs et Transformers</li>
-            <li>Durée estimée : ~25h</li>
+        <!-- Python -->
+        <div
+          class="module-card python"
+          onclick="goToModule('modules/python/basics.html')"
+        >
+          <span class="module-icon">💻</span>
+          <h3 class="module-title">Python</h3>
+          <p class="module-count">5 modules</p>
+          <ul class="module-list">
+            <li>Syntaxe et concepts</li>
+            <li>NumPy, Pandas, Matplotlib</li>
+            <li>Algorithmes et structures</li>
           </ul>
-          <button class="pathway-btn">Commencer ce parcours</button>
+          <button class="module-btn">Commencer</button>
         </div>
 
-        <!-- Parcours Débutant -->
-        <div class="pathway-card beginner" onclick="selectPathway('beginner')">
-          <span class="pathway-icon">🌟</span>
-          <h3 class="pathway-title">Je débute complètement</h3>
-          <p class="pathway-description">
-            Aucun prérequis ? Parfait ! Parcours complet qui vous mène
-            progressivement des bases mathématiques jusqu'aux LLMs modernes.
-          </p>
-          <ul class="pathway-modules">
-            <li>Étape 1 : Mathématiques (vecteurs → stats)</li>
-            <li>Étape 2 : Python & programmation</li>
-            <li>Étape 3 : Machine Learning</li>
-            <li>Étape 4 : Deep Learning</li>
-            <li>Étape 5 : LLMs et IA moderne</li>
+        <!-- Machine Learning -->
+        <div
+          class="module-card ml"
+          onclick="goToModule('modules/ml/introduction.html')"
+        >
+          <span class="module-icon">🤖</span>
+          <h3 class="module-title">Machine Learning</h3>
+          <p class="module-count">5 modules</p>
+          <ul class="module-list">
+            <li>Régression et classification</li>
+            <li>Clustering et validation</li>
+            <li>Optimisation et métriques</li>
           </ul>
-          <button class="pathway-btn">Commencer ce parcours</button>
+          <button class="module-btn">Commencer</button>
+        </div>
+
+        <!-- Deep Learning -->
+        <div
+          class="module-card dl"
+          onclick="goToModule('modules/dl/perceptron.html')"
+        >
+          <span class="module-icon">🧠</span>
+          <h3 class="module-title">Deep Learning</h3>
+          <p class="module-count">5 modules</p>
+          <ul class="module-list">
+            <li>Réseaux de neurones</li>
+            <li>CNN et RNN</li>
+            <li>Backpropagation</li>
+          </ul>
+          <button class="module-btn">Commencer</button>
+        </div>
+
+        <!-- LLMs -->
+        <div
+          class="module-card llm"
+          onclick="goToModule('modules/llm/attention.html')"
+        >
+          <span class="module-icon">💬</span>
+          <h3 class="module-title">LLMs & IA Moderne</h3>
+          <p class="module-count">5 modules</p>
+          <ul class="module-list">
+            <li>Transformers et Attention</li>
+            <li>GPT, BERT, Fine-tuning</li>
+            <li>Prompt Engineering</li>
+          </ul>
+          <button class="module-btn">Commencer</button>
         </div>
       </div>
     </section>
@@ -911,22 +897,12 @@
       });
 
       // Gestion des parcours
-      function selectPathway(pathway) {
-        // Sauvegarder le parcours choisi
-        localStorage.setItem("selectedPathway", pathway);
-
-        // Rediriger vers le premier module selon le parcours
-        const pathwayRoutes = {
-          math: "modules/python/basics.html",
-          python: "modules/math/vectors.html",
-          beginner: "modules/math/vectors.html",
-        };
-
+      function goToModule(url) {
         // Animation de sélection
         const card = event.currentTarget;
         card.style.transform = "scale(0.95)";
         setTimeout(() => {
-          window.location.href = pathwayRoutes[pathway];
+          window.location.href = url;
         }, 200);
       }
 
@@ -992,7 +968,7 @@
       // Animation au scroll
       function animateOnScroll() {
         const cards = document.querySelectorAll(
-          ".pathway-card, .module-category"
+          ".module-card, .module-category"
         );
 
         const observer = new IntersectionObserver(
@@ -1043,16 +1019,11 @@
 
       // Gestion du parcours sélectionné
       window.addEventListener("load", function () {
-        const selectedPathway = localStorage.getItem("selectedPathway");
-        if (selectedPathway) {
-          const card = document.querySelector(
-            `.pathway-card.${selectedPathway}`
-          );
-          if (card) {
-            card.style.border = "2px solid var(--success-color)";
-            card.style.boxShadow = "0 0 20px rgba(40, 167, 69, 0.3)";
-          }
-        }
+        // Animation d'entrée des cartes
+        const cards = document.querySelectorAll(".module-card");
+        cards.forEach((card, index) => {
+          card.style.animationDelay = `${index * 0.1}s`;
+        });
       });
     </script>
   </body>
