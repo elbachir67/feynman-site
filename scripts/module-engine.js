@@ -125,64 +125,40 @@ class ModuleEngine {
       case "warning":
         div.className = `box ${section.type}`;
         div.innerHTML = `
-                    <h3>${section.icon || ""} ${section.title}</h3>
-                    ${section.content}
-                `;
+          <h3>${section.icon || ""} ${section.title}</h3>
+          ${section.content}
+        `;
         break;
 
       case "code":
         div.className = "box exemple";
         div.innerHTML = `
-                    <h3>💻 ${section.title}</h3>
-                    ${
-                      section.description ? `<p>${section.description}</p>` : ""
-                    }
-                    <div class="code-container horizontal">
-                        <div class="code-left-panel">
-                            <div class="code-header">
-                                <span class="code-title">Code Python</span>
-                                <div class="code-controls">
-                                    <button class="btn btn-run" onclick="moduleEngine.runCode('code-${index}', 'output-${index}')">
-                                        ▶ Exécuter
-                                    </button>
-                                    <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-${index}')">
-                                        📋 Copier
-                                    </button>
-                                    <button class="btn btn-reset" onclick="moduleEngine.resetCode('code-${index}', \`${section.code.replace(
-          /`/g,
-          "\\`"
-        )}\`)">
-                                        ↺ Reset
-                                    </button>
-                                    <button class="btn btn-fullscreen" onclick="moduleEngine.toggleFullscreen('code-container-${index}')">
-                                        ⛶ Plein écran
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="code-editor-wrapper">
-                                <div class="line-numbers" id="line-numbers-${index}"></div>
-                                <textarea class="code-editor" id="code-${index}" oninput="moduleEngine.updateLineNumbers('code-${index}', 'line-numbers-${index}')">${
-          section.code
+          <h3>💻 ${section.title}</h3>
+          ${section.description ? `<p>${section.description}</p>` : ""}
+          <div class="code-container">
+            <div class="code-editor-wrapper">
+              <textarea class="code-editor" id="code-${index}" placeholder="# Votre code Python ici...">${
+          section.code || ""
         }</textarea>
-                            </div>
-                        </div>
-                        <div class="code-right-panel">
-                            <div class="output-header">
-                                <span class="output-title">Résultat</span>
-                                <div class="loading" id="loading-${index}" style="color: #6c757d; font-size: 0.8rem;">⏳ Chargement...</div>
-                            </div>
-                            <textarea class="output" id="output-${index}" readonly placeholder="Cliquez sur 'Exécuter' pour voir le résultat..."></textarea>
-                        </div>
-                    </div>
-                `;
-
-        // Initialiser les numéros de ligne après création
-        setTimeout(() => {
-          this.updateLineNumbers(`code-${index}`, `line-numbers-${index}`);
-        }, 100);
+            </div>
+            <div class="code-controls">
+              <button class="btn btn-run" onclick="moduleEngine.runCode('code-${index}', 'output-${index}')">
+                ▶ Exécuter
+              </button>
+              <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-${index}')">
+                📋 Copier
+              </button>
+              <button class="btn btn-reset" onclick="moduleEngine.resetCode('code-${index}', ${index})">
+                ↺ Reset
+              </button>
+            </div>
+            <div class="output-wrapper">
+              <textarea class="output" id="output-${index}" readonly placeholder="Cliquez sur 'Exécuter' pour voir le résultat..."></textarea>
+            </div>
+          </div>
+        `;
         break;
     }
-
     return div;
   }
 
@@ -205,15 +181,16 @@ class ModuleEngine {
 
     // Animation d'exécution
     runButton.innerHTML = "⚡ Exécution...";
+    runButton.disabled = true;
 
     try {
       // Rediriger stdout et stderr
       this.pyodide.runPython(`
-                import sys
-                from io import StringIO
-                sys.stdout = StringIO()
-                sys.stderr = StringIO()
-            `);
+        import sys
+        from io import StringIO
+        sys.stdout = StringIO()
+        sys.stderr = StringIO()
+      `);
 
       // Exécuter le code
       this.pyodide.runPython(code);
@@ -224,18 +201,22 @@ class ModuleEngine {
 
       if (stderr) {
         outputElement.value = "❌ Erreur :\n" + stderr;
+        outputElement.style.color = "#e74c3c";
       } else {
         outputElement.value =
           stdout || "✅ Code exécuté avec succès (pas de sortie)";
+        outputElement.style.color = "#2ecc71";
       }
 
       // Marquer l'objectif correspondant comme complété
       this.completeObjective(1); // Généralement le 2ème objectif concerne la pratique
     } catch (error) {
       outputElement.value = "❌ Erreur Python :\n" + error.message;
+      outputElement.style.color = "#e74c3c";
     } finally {
       // Arrêter l'animation
       runButton.innerHTML = "▶ Exécuter";
+      runButton.disabled = false;
     }
   }
 
@@ -261,16 +242,15 @@ class ModuleEngine {
   }
 
   // Réinitialiser le code
-  resetCode(codeId) {
+  resetCode(codeId, sectionIndex) {
     const codeElement = document.getElementById(codeId);
     const outputElement = document.getElementById(
       codeId.replace("code-", "output-")
     );
 
-    if (codeElement) {
-      // Récupérer le code original depuis l'attribut data
-      const originalCode =
-        codeElement.getAttribute("data-original") || codeElement.defaultValue;
+    if (codeElement && this.currentModule.content[sectionIndex]) {
+      // Récupérer le code original depuis la configuration du module
+      const originalCode = this.currentModule.content[sectionIndex].code || "";
       codeElement.value = originalCode;
     }
 
@@ -278,6 +258,7 @@ class ModuleEngine {
       outputElement.value = "";
       outputElement.placeholder =
         "Cliquez sur 'Exécuter' pour voir le résultat...";
+      outputElement.style.color = "#2ecc71";
     }
   }
 
@@ -447,12 +428,17 @@ class ModuleEngine {
     const solutionElement = document.getElementById(solutionId);
     const button = document.querySelector(`button[onclick*="${solutionId}"]`);
 
-    if (solutionElement.style.display === "none") {
-      solutionElement.style.display = "block";
-      button.innerHTML = "🙈 Masquer la solution";
-    } else {
-      solutionElement.style.display = "none";
-      button.innerHTML = "👁️ Voir la solution";
+    if (solutionElement && button) {
+      if (
+        solutionElement.style.display === "none" ||
+        !solutionElement.style.display
+      ) {
+        solutionElement.style.display = "block";
+        button.innerHTML = "🙈 Masquer la solution";
+      } else {
+        solutionElement.style.display = "none";
+        button.innerHTML = "👁️ Voir la solution";
+      }
     }
   }
 }

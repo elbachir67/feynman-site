@@ -174,69 +174,14 @@ print(f"Moyenne: {average}")</pre>
             content: `
                         <p><strong>🎯 En Python, pas besoin de déclarer les types :</strong></p>
                         
-                        <div class="code-container">
-                            <div class="code-left">
-                                <div class="code-header">
-                                    <div class="code-title">🐍 Code Python</div>
-                                </div>
-                                <textarea class="code-editor" id="code-variables">
-# Python devine automatiquement le type !
-nom = "Alice"              # str (texte)
-age = 25                   # int (entier)
-taille = 1.65             # float (décimal)
-est_etudiant = True       # bool (vrai/faux)
-
-print(f"👋 Salut {nom} !")
-print(f"📊 Tu as {age} ans et mesures {taille}m")
-print(f"🎓 Étudiant : {'Oui' if est_etudiant else 'Non'}")
-
-# Python est dynamique - on peut changer le type !
-age = "vingt-cinq"        # Maintenant c'est du texte
-print(f"🔄 Âge en texte : {age}")
-
-# Types utiles pour l'IA
-precision = 0.95          # Précision d'un modèle
-classes = ["chat", "chien", "oiseau"]  # Liste de classes
-scores = {"chat": 0.8, "chien": 0.9}  # Dictionnaire de scores
-
-print(f"🤖 Modèle avec {precision*100}% de précision")
-print(f"📋 Classes : {classes}")
-print(f"📊 Scores : {scores}")
-                                </textarea>
-                                <div class="code-controls">
-                                    <button class="btn btn-run" onclick="moduleEngine.runCode('code-variables', 'output-variables')">
-                                        ▶ Exécuter
-                                    </button>
-                                    <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-variables')">
-                                        📋 Copier
-                                    </button>
-                                    <button class="btn btn-reset" onclick="moduleEngine.resetCode('code-variables')">
-                                        ↺ Reset
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="code-right">
-                                <div class="output-header">
-                                    <div class="output-title">▶️ Résultat</div>
-                                </div>
-                                <textarea class="output" id="output-variables" readonly></textarea>
-                            </div>
-                        </div>
                     `,
           },
           {
-            type: "exemple",
-            icon: "💻",
+            type: "code",
             title: "Listes : la base des données en IA",
-            content: `
-                        <p><strong>🎯 Les listes Python sont parfaites pour manipuler des données :</strong></p>
-                        
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-title">Manipulation de listes</span>
-                            </div>
-                            <textarea class="code-editor" id="code-listes">
-# Données d'un dataset d'IA
+            description:
+              "Les listes Python sont parfaites pour manipuler des données :",
+            code: `# Données d'un dataset d'IA
 temperatures = [22.5, 25.1, 23.8, 26.2, 24.0]
 villes = ["Paris", "Lyon", "Marseille", "Toulouse", "Nice"]
 
@@ -266,32 +211,14 @@ print(f"Nouvelle température : {temperatures[-1]}°C à {villes[-1]}")
 # Filtrage (très utile en IA)
 temperatures_chaudes = [t for t in temperatures if t > 25]
 print(f"\\n🔥 TEMPÉRATURES > 25°C : {temperatures_chaudes}")
-                            </textarea>
-                            <div class="code-controls">
-                                <button class="btn btn-run" onclick="moduleEngine.runCode('code-listes', 'output-listes')">
-                                    ▶ Exécuter
-                                </button>
-                                <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-listes')">
-                                    📋 Copier
-                                </button>
-                            </div>
-                            <div class="output" id="output-listes"></div>
-                        </div>
-                    `,
+`,
           },
           {
-            type: "exemple",
-            icon: "💻",
+            type: "code",
             title: "Dictionnaires : organiser l'information",
-            content: `
-                        <p><strong>🎯 Les dictionnaires stockent des paires clé-valeur, parfait pour l'IA :</strong></p>
-                        
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-title">Dictionnaires Python</span>
-                            </div>
-                            <textarea class="code-editor" id="code-dicts">
-# Profil utilisateur pour un système de recommandation
+            description:
+              "Les dictionnaires stockent des paires clé-valeur, parfait pour l'IA :",
+            code: `# Profil utilisateur pour un système de recommandation
 utilisateur = {
     "nom": "Alice",
     "age": 28,
@@ -331,32 +258,14 @@ if "abonnement_premium" in utilisateur:
     print("✨ Utilisateur premium")
 else:
     print("👤 Utilisateur standard")
-                            </textarea>
-                            <div class="code-controls">
-                                <button class="btn btn-run" onclick="moduleEngine.runCode('code-dicts', 'output-dicts')">
-                                    ▶ Exécuter
-                                </button>
-                                <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-dicts')">
-                                    📋 Copier
-                                </button>
-                            </div>
-                            <div class="output" id="output-dicts"></div>
-                        </div>
-                    `,
+`,
           },
           {
-            type: "exemple",
-            icon: "💻",
+            type: "code",
             title: "Conditions et boucles : la logique de l'IA",
-            content: `
-                        <p><strong>🎯 Les conditions et boucles permettent de créer une logique intelligente :</strong></p>
-                        
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-title">Logique de programme</span>
-                            </div>
-                            <textarea class="code-editor" id="code-logique">
-# Système de classification simple
+            description:
+              "Les conditions et boucles permettent de créer une logique intelligente :",
+            code: `# Système de classification simple
 def classifier_temperature(temp):
     """Classifie une température selon des seuils"""
     if temp < 0:
@@ -411,32 +320,14 @@ elif moyenne >= 3.0:
     print("👤 Profil spectateur standard")
 else:
     print("🤔 Profil difficile à satisfaire")
-                            </textarea>
-                            <div class="code-controls">
-                                <button class="btn btn-run" onclick="moduleEngine.runCode('code-logique', 'output-logique')">
-                                    ▶ Exécuter
-                                </button>
-                                <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-logique')">
-                                    📋 Copier
-                                </button>
-                            </div>
-                            <div class="output" id="output-logique"></div>
-                        </div>
-                    `,
+`,
           },
           {
-            type: "exemple",
-            icon: "💻",
+            type: "code",
             title: "Fonctions : code modulaire et réutilisable",
-            content: `
-                        <p><strong>🎯 Les fonctions permettent d'organiser le code et de le réutiliser :</strong></p>
-                        
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-title">Fonctions Python</span>
-                            </div>
-                            <textarea class="code-editor" id="code-fonctions">
-def calculer_similarite(utilisateur1, utilisateur2):
+            description:
+              "Les fonctions permettent d'organiser le code et de le réutiliser :",
+            code: `def calculer_similarite(utilisateur1, utilisateur2):
     """
     Calcule la similarité entre deux utilisateurs basée sur leurs genres préférés.
     Plus le score est élevé, plus ils sont similaires.
@@ -495,32 +386,14 @@ nouvel_utilisateur = {"nom": "Eve", "genres": ["Sci-Fi", "Action"]}
 
 # Générer des recommandations
 recommander_films(nouvel_utilisateur, utilisateurs, {})
-                            </textarea>
-                            <div class="code-controls">
-                                <button class="btn btn-run" onclick="moduleEngine.runCode('code-fonctions', 'output-fonctions')">
-                                    ▶ Exécuter
-                                </button>
-                                <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-fonctions')">
-                                    📋 Copier
-                                </button>
-                            </div>
-                            <div class="output" id="output-fonctions"></div>
-                        </div>
-                    `,
+`,
           },
           {
-            type: "exemple",
-            icon: "💻",
+            type: "code",
             title: "List comprehensions : Python élégant",
-            content: `
-                        <p><strong>🎯 Les list comprehensions permettent de créer des listes de manière concise et élégante :</strong></p>
-                        
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-title">List Comprehensions</span>
-                            </div>
-                            <textarea class="code-editor" id="code-comprehensions">
-# Données d'exemple : scores de modèles IA
+            description:
+              "Les list comprehensions permettent de créer des listes de manière concise et élégante :",
+            code: `# Données d'exemple : scores de modèles IA
 scores_bruts = [0.67, 0.89, 0.45, 0.92, 0.78, 0.34, 0.88, 0.56]
 
 print("📊 DONNÉES ORIGINALES")
@@ -566,18 +439,7 @@ for i, (score, classe) in enumerate(zip(scores_bruts, classifications)):
 resultats = {f"modele_{i+1}": score for i, score in enumerate(scores_bruts)}
 print(f"\\n📋 DICTIONNAIRE")
 print(f"Résultats : {resultats}")
-                            </textarea>
-                            <div class="code-controls">
-                                <button class="btn btn-run" onclick="moduleEngine.runCode('code-comprehensions', 'output-comprehensions')">
-                                    ▶ Exécuter
-                                </button>
-                                <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-comprehensions')">
-                                    📋 Copier
-                                </button>
-                            </div>
-                            <div class="output" id="output-comprehensions"></div>
-                        </div>
-                    `,
+`,
           },
           {
             type: "warning",
