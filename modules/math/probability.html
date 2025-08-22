@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Les Probabilités | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧮 Mathématiques</span>
+          <span>›</span>
+          <span>Les Probabilités</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🎲 Les Probabilités</h1>
+      <p class="subtitle">
+        Module 1.6 - Mathématiques de l'incertitude pour l'IA
+      </p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Les Probabilités</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant comment l'IA gère
+          l'incertitude et prend des décisions intelligentes.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="gradients.html" class="nav-link" id="prev-link"
+          >← Module précédent : Gradients</a
+        >
+        <a href="../python/basics.html" class="nav-link" id="next-link"
+          >Module suivant : Python →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Probabilités
+      const moduleConfig = {
+        id: "math-probability",
+        title: "Les Probabilités",
+        category: "Mathématiques",
+        objectives: [
+          "Comprendre les probabilités comme mesure de l'incertitude",
+          "Calculer des probabilités simples",
+          "Maîtriser les règles de base (addition, multiplication)",
+          "Comprendre l'importance en IA et prise de décision",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Concept fondamental",
+            content: `
+                        <p>Les <strong>probabilités</strong> mesurent la <strong>chance qu'un événement se produise</strong>. C'est un nombre entre 0 et 1 qui quantifie notre incertitude.</p>
+                        <p><strong>🔑 Idée simple :</strong></p>
+                        <ul>
+                            <li><strong>Probabilité = 0</strong> → événement impossible (0%)</li>
+                            <li><strong>Probabilité = 0.5</strong> → événement équiprobable (50%)</li>
+                            <li><strong>Probabilité = 1</strong> → événement certain (100%)</li>
+                        </ul>
+                        <p><strong>📐 Notation :</strong></p>
+                        <p>$$P(A) = \\text{probabilité que l'événement A se produise}$$</p>
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Prédictions</strong> : "Il y a 85% de chance que ce soit un chat"</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : sorties probabilistes</li>
+                            <li>💬 <strong>LLMs</strong> : probabilité du prochain mot</li>
+                            <li>🎮 <strong>IA de jeux</strong> : évaluer les coups possibles</li>
+                            <li>🚗 <strong>Voitures autonomes</strong> : gérer l'incertitude sur la route</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie de la météo",
+            content: `
+                        <p>Imaginez que vous regardez la <strong>météo</strong> avant de sortir :</p>
+                        <ul>
+                            <li>☀️ <strong>"0% de chance de pluie"</strong> → vous sortez sans parapluie</li>
+                            <li>🌦️ <strong>"50% de chance de pluie"</strong> → vous hésitez, peut-être un parapluie</li>
+                            <li>🌧️ <strong>"90% de chance de pluie"</strong> → vous prenez définitivement un parapluie</li>
+                        </ul>
+                        <p><strong>🎯 C'est exactement ce que fait l'IA :</strong></p>
+                        <ul>
+                            <li>🤖 <strong>Elle évalue</strong> les probabilités de différents scénarios</li>
+                            <li>🧠 <strong>Elle prend des décisions</strong> basées sur ces probabilités</li>
+                            <li>⚖️ <strong>Elle gère l'incertitude</strong> de manière rationnelle</li>
+                        </ul>
+                        <p><strong>💡 Exemple concret :</strong></p>
+                        <p>Une IA de reconnaissance d'images dit : "Je suis sûr à 95% que c'est un chien, 4% que c'est un chat, 1% que c'est autre chose". Elle choisit "chien" car c'est le plus probable !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calculs de probabilités simples",
+            content: `
+                        <p><strong>🎲 Exemple 1 : Lancer de dé</strong></p>
+                        <p>Un dé a 6 faces. Quelle est la probabilité d'obtenir un 4 ?</p>
+                        <p>$$P(\\text{obtenir 4}) = \\frac{\\text{nombre de cas favorables}}{\\text{nombre de cas possibles}} = \\frac{1}{6} \\approx 0.167$$</p>
+                        
+                        <p><strong>🪙 Exemple 2 : Lancer de pièce</strong></p>
+                        <p>Probabilité d'obtenir "pile" ?</p>
+                        <p>$$P(\\text{pile}) = \\frac{1}{2} = 0.5$$</p>
+                        
+                        <p><strong>🃏 Exemple 3 : Tirage de carte</strong></p>
+                        <p>Dans un jeu de 52 cartes, probabilité de tirer un as ?</p>
+                        <p>$$P(\\text{as}) = \\frac{4}{52} = \\frac{1}{13} \\approx 0.077$$</p>
+                        
+                        <p><strong>🔍 Interprétation :</strong> Plus le nombre est proche de 1, plus l'événement est probable !</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Règles fondamentales",
+            content: `
+                        <p><strong>📋 Règles de base des probabilités :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Règle de l'addition (OU) :</strong> $$P(A \\text{ ou } B) = P(A) + P(B) - P(A \\text{ et } B)$$</li>
+                            <li style="margin-top: 1rem"><strong>• Règle de la multiplication (ET) :</strong> $$P(A \\text{ et } B) = P(A) \\times P(B|A)$$</li>
+                            <li style="margin-top: 1rem"><strong>• Événements indépendants :</strong> $$P(A \\text{ et } B) = P(A) \\times P(B)$$</li>
+                            <li style="margin-top: 1rem"><strong>• Probabilité totale :</strong> $$\\sum_{\\text{tous événements}} P(\\text{événement}) = 1$$</li>
+                        </ul>
+                        <p><strong>🔑 Concepts importants :</strong></p>
+                        <ul>
+                            <li><strong>Événements mutuellement exclusifs</strong> : ne peuvent pas arriver en même temps</li>
+                            <li><strong>Événements indépendants</strong> : l'un n'influence pas l'autre</li>
+                            <li><strong>Probabilité conditionnelle</strong> : P(B|A) = probabilité de B sachant que A s'est produit</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calculs manuels",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Dans une classe de 30 élèves :</p>
+                        <ul>
+                            <li>15 élèves aiment les maths</li>
+                            <li>12 élèves aiment la physique</li>
+                            <li>5 élèves aiment les deux</li>
+                        </ul>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>P(aime les maths) = ?</li>
+                            <li>P(aime la physique) = ?</li>
+                            <li>P(aime les maths ET la physique) = ?</li>
+                            <li>P(aime les maths OU la physique) = ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('probability-exercise-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="probability-exercise-solution" style="display: none;">
+                        <ol>
+                            <li>P(maths) = 15/30 = 0.5 (50%)</li>
+                            <li>P(physique) = 12/30 = 0.4 (40%)</li>
+                            <li>P(maths ET physique) = 5/30 ≈ 0.167 (16.7%)</li>
+                            <li>P(maths OU physique) = P(maths) + P(physique) - P(maths ET physique)<br>
+                                = 0.5 + 0.4 - 0.167 = 0.733 (73.3%)<br>
+                                <strong>Vérification :</strong> 15 + 12 - 5 = 22 élèves, donc 22/30 ≈ 0.733 ✓</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Probabilités conditionnelles",
+            content: `
+                        <p><strong>🎯 Concept clé pour l'IA :</strong></p>
+                        <p>La <strong>probabilité conditionnelle</strong> P(B|A) = "probabilité de B sachant que A s'est produit"</p>
+                        
+                        <p><strong>📝 Exemple médical :</strong></p>
+                        <ul>
+                            <li>P(malade) = 1% (1% de la population est malade)</li>
+                            <li>P(test positif | malade) = 95% (le test détecte 95% des malades)</li>
+                            <li>P(test positif | pas malade) = 5% (5% de faux positifs)</li>
+                        </ul>
+                        
+                        <p><strong>🤔 Question :</strong> Si le test est positif, quelle est la probabilité d'être vraiment malade ?</p>
+                        
+                        <p><strong>🧮 Théorème de Bayes :</strong></p>
+                        <p>$$P(\\text{malade | test positif}) = \\frac{P(\\text{test positif | malade}) \\times P(\\text{malade})}{P(\\text{test positif})}$$</p>
+                        
+                        <p><strong>💡 Résultat surprenant :</strong> Environ 16% seulement ! Pourquoi ? Parce que la maladie est rare (1%), donc la plupart des tests positifs sont des faux positifs.</p>
+                        
+                        <p><strong>🤖 En IA :</strong> C'est exactement ce calcul que font les systèmes de diagnostic automatique !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : probabilités conditionnelles",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Dans une entreprise tech :</p>
+                        <ul>
+                            <li>60% des employés sont développeurs</li>
+                            <li>40% des employés sont designers</li>
+                            <li>80% des développeurs utilisent Python</li>
+                            <li>30% des designers utilisent Python</li>
+                        </ul>
+                        
+                        <p><strong>📝 Questions :</strong></p>
+                        <ol>
+                            <li>Quelle est la probabilité qu'un employé choisi au hasard utilise Python ?</li>
+                            <li>Si on sait qu'un employé utilise Python, quelle est la probabilité qu'il soit développeur ?</li>
+                            <li>Si on sait qu'un employé n'utilise pas Python, quelle est la probabilité qu'il soit designer ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('conditional-probability-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="conditional-probability-solution" style="display: none;">
+                        <ol>
+                            <li><strong>P(Python) :</strong><br>
+                                P(Python) = P(Python|Dev) × P(Dev) + P(Python|Designer) × P(Designer)<br>
+                                = 0.8 × 0.6 + 0.3 × 0.4 = 0.48 + 0.12 = 0.6 (60%)</li>
+                            <li><strong>P(Dev|Python) :</strong><br>
+                                P(Dev|Python) = P(Python|Dev) × P(Dev) / P(Python)<br>
+                                = (0.8 × 0.6) / 0.6 = 0.48 / 0.6 = 0.8 (80%)</li>
+                            <li><strong>P(Designer|¬Python) :</strong><br>
+                                P(¬Python) = 1 - 0.6 = 0.4<br>
+                                P(¬Python|Designer) = 1 - 0.3 = 0.7<br>
+                                P(Designer|¬Python) = (0.7 × 0.4) / 0.4 = 0.7 (70%)</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Pourquoi les probabilités sont-elles cruciales en IA ?",
+            content: `
+                        <p><strong>🧠 Les probabilités permettent à l'IA de gérer l'incertitude :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Prédictions intelligentes</strong> : "85% de chance que ce soit un spam"</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : sorties probabilistes pour chaque classe</li>
+                            <li>💬 <strong>LLMs (ChatGPT)</strong> : probabilité de chaque mot suivant</li>
+                            <li>🎮 <strong>IA de jeux</strong> : évaluer les coups avec incertitude</li>
+                            <li>🚗 <strong>Voitures autonomes</strong> : "90% de chance qu'un piéton traverse"</li>
+                            <li>📊 <strong>Recommandations</strong> : "Vous aimerez probablement ce film"</li>
+                        </ul>
+                        <p><strong>💡 Point clé :</strong> Sans probabilités, l'IA ne pourrait pas prendre de décisions intelligentes dans un monde incertain. Elles permettent de quantifier et gérer l'incertitude de manière rationnelle.</p>
+                        <p><strong>🔮 Prochaine étape :</strong> Nous verrons comment programmer ces concepts en Python pour créer des systèmes intelligents !</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Variables aléatoires et espérance",
+            content: `
+                        <p><strong>🤔 Qu'est-ce qu'une variable aléatoire ?</strong></p>
+                        <p>Une <strong>variable aléatoire</strong> X est une fonction qui associe un nombre à chaque résultat possible d'une expérience. C'est comme une \"machine\" qui transforme des événements en nombres.</p>
+                        
+                        <p><strong>🎯 Exemple concret :</strong></p>
+                        <p>Lancer un dé :</p>
+                        <ul>
+                            <li>🎲 <strong>Événements</strong> : {⚀, ⚁, ⚂, ⚃, ⚄, ⚅}</li>
+                            <li>🔢 <strong>Variable X</strong> : \"nombre de points\" → {1, 2, 3, 4, 5, 6}</li>
+                            <li>📊 <strong>Probabilités</strong> : P(X = k) = 1/6 pour k ∈ {1,2,3,4,5,6}</li>
+                        </ul>
+                        
+                        <p><strong>📐 Espérance mathématique E[X] :</strong></p>
+                        <p>L'<strong>espérance</strong> est la \"valeur moyenne\" qu'on s'attend à obtenir sur le long terme.</p>
+                        <p>$$E[X] = \\sum_{i} x_i \\cdot P(X = x_i)$$</p>
+                        
+                        <p><strong>🔍 Décryptage :</strong></p>
+                        <ul>
+                            <li>\\(x_i\\) = <strong>valeurs possibles</strong> de la variable</li>
+                            <li>\\(P(X = x_i)\\) = <strong>probabilité</strong> de chaque valeur</li>
+                            <li>\\(E[X]\\) = <strong>moyenne pondérée</strong> par les probabilités</li>
+                        </ul>
+                        
+                        <p><strong>📝 Exemple du dé :</strong></p>
+                        <p>$$E[X] = 1 \\times \\frac{1}{6} + 2 \\times \\frac{1}{6} + 3 \\times \\frac{1}{6} + 4 \\times \\frac{1}{6} + 5 \\times \\frac{1}{6} + 6 \\times \\frac{1}{6}$$</p>
+                        <p>$$E[X] = \\frac{1+2+3+4+5+6}{6} = \\frac{21}{6} = 3.5$$</p>
+                        
+                        <p><strong>💡 Interprétation :</strong> En moyenne, on s'attend à obtenir 3.5 points par lancer (même si on ne peut jamais obtenir exactement 3.5 !)</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Variance : mesure de la dispersion",
+            content: `
+                        <p><strong>🤔 Qu'est-ce que la variance ?</strong></p>
+                        <p>La <strong>variance</strong> Var(X) mesure à quel point les valeurs d'une variable aléatoire sont \"dispersées\" autour de leur espérance. C'est la \"variabilité\" des résultats.</p>
+                        
+                        <p><strong>📐 Formule de la variance :</strong></p>
+                        <p>$$\\text{Var}(X) = E[(X - E[X])^2] = E[X^2] - (E[X])^2$$</p>
+                        
+                        <p><strong>🔍 Décryptage :</strong></p>
+                        <ul>
+                            <li>\\((X - E[X])^2\\) = <strong>carré de l'écart</strong> à la moyenne</li>
+                            <li>\\(E[(X - E[X])^2]\\) = <strong>espérance des carrés d'écarts</strong></li>
+                            <li>\\(E[X^2] - (E[X])^2\\) = <strong>formule alternative</strong> (plus pratique)</li>
+                        </ul>
+                        
+                        <p><strong>📊 Écart-type σ :</strong></p>
+                        <p>$$\\sigma = \\sqrt{\\text{Var}(X)}$$</p>
+                        <p>L'écart-type a l'avantage d'être dans la même unité que X.</p>
+                        
+                        <p><strong>📝 Exemple du dé :</strong></p>
+                        <p>On a E[X] = 3.5. Calculons E[X²] :</p>
+                        <p>$$E[X^2] = 1^2 \\times \\frac{1}{6} + 2^2 \\times \\frac{1}{6} + ... + 6^2 \\times \\frac{1}{6} = \\frac{1+4+9+16+25+36}{6} = \\frac{91}{6} ≈ 15.17$$</p>
+                        <p>$$\\text{Var}(X) = 15.17 - (3.5)^2 = 15.17 - 12.25 = 2.92$$</p>
+                        <p>$$\\sigma = \\sqrt{2.92} ≈ 1.71$$</p>
+                        
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Mesure d'incertitude</strong> : variance élevée = prédictions peu fiables</li>
+                            <li>🎯 <strong>Optimisation</strong> : minimiser la variance des erreurs</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : initialisation des poids avec bonne variance</li>
+                        </ul>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Si P(A) = 0.3 et P(B) = 0.4, et que A et B sont indépendants, quelle est P(A et B) ?",
+          options: ["A) 0.7", "B) 0.12", "C) 0.1", "D) 0.35"],
+          correct: 1,
+          explanation:
+            "Pour des événements indépendants : P(A et B) = P(A) × P(B) = 0.3 × 0.4 = 0.12. L'indépendance signifie que l'un n'influence pas l'autre.",
+        },
+        prevModule: "gradients.html",
+        nextModule: "statistics.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

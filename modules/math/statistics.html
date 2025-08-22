@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Les Statistiques | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧮 Mathématiques</span>
+          <span>›</span>
+          <span>Les Statistiques</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>📊 Les Statistiques</h1>
+      <p class="subtitle">Module 1.7 - Analyse de données pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Les Statistiques</h3>
+        <p>
+          Félicitations ! Vous savez maintenant analyser et comprendre les
+          données comme un data scientist.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="probability.html" class="nav-link" id="prev-link"
+          >← Module précédent : Probabilités</a
+        >
+        <a href="../python/basics.html" class="nav-link" id="next-link"
+          >Module suivant : Python →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Statistiques
+      const moduleConfig = {
+        id: "math-statistics",
+        title: "Les Statistiques",
+        category: "Mathématiques",
+        objectives: [
+          "Comprendre les mesures de tendance centrale (moyenne, médiane, mode)",
+          "Maîtriser les mesures de dispersion (variance, écart-type)",
+          "Découvrir les distributions importantes (normale, uniforme)",
+          "Appliquer ces concepts à l'analyse de données pour l'IA",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Concept fondamental",
+            content: `
+                        <p>Les <strong>statistiques</strong> nous permettent de <strong>résumer et comprendre</strong> de grandes quantités de données. C'est l'art de transformer des milliers de nombres en quelques informations utiles.</p>
+                        <p><strong>🔑 Idée simple :</strong></p>
+                        <p>Imaginez que vous avez les notes de 1000 étudiants. Au lieu de regarder les 1000 nombres, les statistiques vous donnent :</p>
+                        <ul>
+                            <li>📊 <strong>Moyenne</strong> : note typique (ex: 14/20)</li>
+                            <li>📈 <strong>Médiane</strong> : note du milieu (50% au-dessus, 50% en-dessous)</li>
+                            <li>📉 <strong>Écart-type</strong> : à quel point les notes varient</li>
+                        </ul>
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Analyse de données</strong> : comprendre les patterns cachés</li>
+                            <li>🧠 <strong>Machine Learning</strong> : normalisation et préparation des données</li>
+                            <li>📈 <strong>Évaluation de modèles</strong> : mesurer les performances</li>
+                            <li>🎯 <strong>Détection d'anomalies</strong> : identifier les valeurs aberrantes</li>
+                            <li>📋 <strong>A/B Testing</strong> : comparer différentes versions d'IA</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie de la classe d'école",
+            content: `
+                        <p>Imaginez que vous êtes <strong>directeur d'école</strong> et que vous voulez comprendre le niveau de vos élèves :</p>
+                        <p><strong>📚 Données brutes :</strong> 30 notes d'élèves</p>
+                        <p>[12, 15, 8, 18, 14, 16, 11, 13, 17, 9, 15, 14, 12, 16, 10, 13, 15, 14, 11, 17, 13, 12, 16, 14, 15, 9, 18, 13, 14, 15]</p>
+                        
+                        <p><strong>🤔 Questions importantes :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>"Quel est le niveau général ?"</strong> → Moyenne</li>
+                            <li>📊 <strong>"Y a-t-il beaucoup de différences ?"</strong> → Écart-type</li>
+                            <li>📈 <strong>"Quelle est la note médiane ?"</strong> → Médiane</li>
+                            <li>🔍 <strong>"Y a-t-il des élèves exceptionnels ?"</strong> → Valeurs extrêmes</li>
+                        </ul>
+                        
+                        <p><strong>💡 C'est exactement ce que fait l'IA :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Elle analyse</strong> des millions de données</li>
+                            <li>🧠 <strong>Elle trouve</strong> les patterns importants</li>
+                            <li>🎯 <strong>Elle prend</strong> des décisions basées sur ces statistiques</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Mesures de tendance centrale",
+            content: `
+                        <p><strong>🎯 Les trois mesures principales :</strong></p>
+                        
+                        <p><strong>📊 1. Moyenne (μ) :</strong></p>
+                        <p>$$\\mu = \\frac{1}{n} \\sum_{i=1}^{n} x_i = \\frac{x_1 + x_2 + ... + x_n}{n}$$</p>
+                        <p><strong>Exemple :</strong> Notes [10, 12, 14, 16, 18] → Moyenne = (10+12+14+16+18)/5 = 14</p>
+                        
+                        <p><strong>📈 2. Médiane :</strong></p>
+                        <p>Valeur du milieu quand on trie les données par ordre croissant</p>
+                        <p><strong>Exemple :</strong> [10, 12, 14, 16, 18] → Médiane = 14 (valeur centrale)</p>
+                        
+                        <p><strong>📉 3. Mode :</strong></p>
+                        <p>Valeur qui apparaît le plus souvent</p>
+                        <p><strong>Exemple :</strong> [10, 12, 14, 14, 14, 16, 18] → Mode = 14 (apparaît 3 fois)</p>
+                        
+                        <p><strong>🔍 Quand utiliser quoi ?</strong></p>
+                        <ul>
+                            <li><strong>Moyenne</strong> : données normalement distribuées</li>
+                            <li><strong>Médiane</strong> : données avec des valeurs extrêmes</li>
+                            <li><strong>Mode</strong> : données catégorielles ou avec pics</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Mesures de dispersion",
+            content: `
+                        <p><strong>🎯 Comment mesurer la "variabilité" des données :</strong></p>
+                        
+                        <p><strong>📏 1. Étendue (Range) :</strong></p>
+                        <p>$$\\text{Étendue} = \\text{Max} - \\text{Min}$$</p>
+                        <p><strong>Exemple :</strong> [10, 12, 14, 16, 18] → Étendue = 18 - 10 = 8</p>
+                        
+                        <p><strong>📊 2. Variance (σ²) :</strong></p>
+                        <p>$$\\sigma^2 = \\frac{1}{n} \\sum_{i=1}^{n} (x_i - \\mu)^2$$</p>
+                        <p><strong>Idée :</strong> Moyenne des carrés des écarts à la moyenne</p>
+                        
+                        <p><strong>📈 3. Écart-type (σ) :</strong></p>
+                        <p>$$\\sigma = \\sqrt{\\sigma^2}$$</p>
+                        <p><strong>Avantage :</strong> Même unité que les données originales</p>
+                        
+                        <p><strong>💡 Interprétation :</strong></p>
+                        <ul>
+                            <li><strong>Écart-type faible</strong> → données concentrées autour de la moyenne</li>
+                            <li><strong>Écart-type élevé</strong> → données très dispersées</li>
+                            <li><strong>Règle des 68-95-99.7</strong> : 68% des données dans ±1σ, 95% dans ±2σ</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calculs manuels",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Voici les âges de 10 employés d'une startup IA :</p>
+                        <p><strong>Données :</strong> [23, 25, 27, 24, 26, 28, 25, 24, 26, 27]</p>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>La moyenne</li>
+                            <li>La médiane</li>
+                            <li>Le mode</li>
+                            <li>L'étendue</li>
+                            <li>La variance</li>
+                            <li>L'écart-type</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('statistics-exercise-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="statistics-exercise-solution" style="display: none;">
+                        <ol>
+                            <li><strong>Moyenne :</strong> (23+25+27+24+26+28+25+24+26+27)/10 = 255/10 = 25.5 ans</li>
+                            <li><strong>Médiane :</strong> Données triées [23,24,24,25,25,26,26,27,27,28] → (25+26)/2 = 25.5 ans</li>
+                            <li><strong>Mode :</strong> 24, 25, 26, 27 (chacun apparaît 2 fois) → distribution multimodale</li>
+                            <li><strong>Étendue :</strong> 28 - 23 = 5 ans</li>
+                            <li><strong>Variance :</strong> 
+                                <br>Écarts à la moyenne : [-2.5, -0.5, 1.5, -1.5, 0.5, 2.5, -0.5, -1.5, 0.5, 1.5]
+                                <br>Carrés : [6.25, 0.25, 2.25, 2.25, 0.25, 6.25, 0.25, 2.25, 0.25, 2.25]
+                                <br>Variance = 22.5/10 = 2.25</li>
+                            <li><strong>Écart-type :</strong> √2.25 = 1.5 ans</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Distribution normale (Gaussienne)",
+            content: `
+                        <p><strong>🤔 Qu'est-ce qu'une "distribution" ?</strong></p>
+                        <p>Une <strong>distribution</strong> décrit comment les valeurs sont réparties dans un ensemble de données. C'est comme un "portrait" de vos données !</p>
+                        
+                        <p><strong>📊 Exemple concret :</strong></p>
+                        <p>Imaginez les tailles de 1000 personnes :</p>
+                        <ul>
+                            <li>🔹 <strong>Peu de gens</strong> très petits (1m50)</li>
+                            <li>🔸 <strong>Beaucoup de gens</strong> de taille moyenne (1m70)</li>
+                            <li>🔹 <strong>Peu de gens</strong> très grands (1m90)</li>
+                        </ul>
+                        
+                        <p><strong>🔔 Distribution normale = "courbe en cloche"</strong></p>
+                        <p>La plupart des valeurs sont au centre, peu aux extrêmes. C'est le pattern le plus fréquent dans la nature !</p>
+                        
+                        <p><strong>📐 Formule mathématique :</strong></p>
+                        <p>$$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{1}{2}\\left(\\frac{x-\\mu}{\\sigma}\\right)^2}$$</p>
+                        
+                        <p><strong>🔍 Décryptage de la formule :</strong></p>
+                        <ul>
+                            <li>\\(\\mu\\) = <strong>moyenne</strong> (centre de la cloche)</li>
+                            <li>\\(\\sigma\\) = <strong>écart-type</strong> (largeur de la cloche)</li>
+                            <li>\\(\\frac{1}{\\sigma\\sqrt{2\\pi}}\\) = <strong>facteur de normalisation</strong> (pour que l'aire totale = 1)</li>
+                            <li>\\(e^{-\\frac{1}{2}\\left(\\frac{x-\\mu}{\\sigma}\\right)^2}\\) = <strong>forme de cloche</strong> (décroissance exponentielle)</li>
+                        </ul>
+                        
+                        <p><strong>💡 Pourquoi "normale" ?</strong></p>
+                        <p>Parce que c'est la distribution la plus "normale" (fréquente) qu'on observe : tailles, poids, notes d'examen, erreurs de mesure...</p>
+                        
+                        <p><strong>🔑 Propriétés importantes :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Forme de cloche</strong> : symétrique autour de la moyenne</li>
+                            <li style="margin-top: 0.5rem"><strong>• Paramètres :</strong> μ (moyenne) et σ (écart-type)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Règle 68-95-99.7 :</strong></li>
+                            <ul style="margin-left: 1rem; margin-top: 0.5rem">
+                                <li>68% des données dans [μ-σ, μ+σ]</li>
+                                <li>95% des données dans [μ-2σ, μ+2σ]</li>
+                                <li>99.7% des données dans [μ-3σ, μ+3σ]</li>
+                            </ul>
+                        </ul>
+                        <p><strong>🤖 Pourquoi importante en IA ?</strong></p>
+                        <ul>
+                            <li><strong>Théorème central limite</strong> : beaucoup de phénomènes suivent cette loi</li>
+                            <li><strong>Initialisation des réseaux</strong> : poids aléatoires gaussiens</li>
+                            <li><strong>Bruit dans les données</strong> : souvent modélisé comme gaussien</li>
+                            <li><strong>Tests statistiques</strong> : base de nombreux tests</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Autres distributions importantes",
+            content: `
+                        <p><strong>🎲 La distribution normale n'est pas la seule ! Voici d'autres distributions cruciales en IA :</strong></p>
+                        
+                        <p><strong>📊 1. Distribution uniforme :</strong></p>
+                        <p>$$f(x) = \\begin{cases} \\frac{1}{b-a} & \\text{si } a \\leq x \\leq b \\\\ 0 & \\text{sinon} \\end{cases}$$</p>
+                        <p><strong>Intuition :</strong> Toutes les valeurs ont la même probabilité (dé équilibré)</p>
+                        
+                        <p><strong>📈 2. Distribution exponentielle :</strong></p>
+                        <p>$$f(x) = \\lambda e^{-\\lambda x} \\text{ pour } x \\geq 0$$</p>
+                        <p><strong>Intuition :</strong> Temps d'attente (ex: temps entre deux emails)</p>
+                        
+                        <p><strong>🎯 3. Distribution de Bernoulli :</strong></p>
+                        <p>$$P(X = 1) = p, \\quad P(X = 0) = 1-p$$</p>
+                        <p><strong>Intuition :</strong> Succès/échec (pile ou face, spam/pas spam)</p>
+                        
+                        <p><strong>📊 4. Distribution binomiale :</strong></p>
+                        <p>$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$</p>
+                        <p><strong>Intuition :</strong> Nombre de succès sur n essais (ex: 7 piles sur 10 lancers)</p>
+                        
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li><strong>Uniforme</strong> : initialisation aléatoire des poids</li>
+                            <li><strong>Exponentielle</strong> : modélisation des temps d'événements</li>
+                            <li><strong>Bernoulli</strong> : classification binaire (oui/non)</li>
+                            <li><strong>Binomiale</strong> : comptage d'événements discrets</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Pourquoi les statistiques sont-elles cruciales en IA ?",
+            content: `
+                        <p><strong>📊 Les statistiques sont le langage de l'IA :</strong></p>
+                        <ul>
+                            <li>📈 <strong>Préparation des données</strong> : normalisation, standardisation</li>
+                            <li>🧠 <strong>Évaluation des modèles</strong> : précision, rappel, F1-score</li>
+                            <li>🎯 <strong>Détection d'anomalies</strong> : identifier les valeurs aberrantes</li>
+                            <li>📊 <strong>A/B Testing</strong> : comparer les performances de différents modèles</li>
+                            <li>🔍 <strong>Analyse exploratoire</strong> : comprendre les données avant modélisation</li>
+                            <li>📋 <strong>Validation statistique</strong> : s'assurer que les résultats sont significatifs</li>
+                        </ul>
+                        <p><strong>💡 Point clé :</strong> Sans statistiques, impossible de comprendre si un modèle d'IA fonctionne vraiment ou s'il a juste eu de la chance !</p>
+                        <p><strong>🔮 Prochaine étape :</strong> Maintenant que nous maîtrisons les mathématiques, passons à Python pour mettre tout cela en pratique !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Si un dataset a une moyenne de 100 et un écart-type de 15, dans quel intervalle se trouvent environ 95% des données (règle 68-95-99.7) ?",
+          options: [
+            "A) [85, 115]",
+            "B) [70, 130]",
+            "C) [55, 145]",
+            "D) [100, 115]",
+          ],
+          correct: 1,
+          explanation:
+            "Selon la règle 68-95-99.7, 95% des données se trouvent dans l'intervalle [μ-2σ, μ+2σ] = [100-2×15, 100+2×15] = [70, 130].",
+        },
+        prevModule: "probability.html",
+        nextModule: "../python/basics.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

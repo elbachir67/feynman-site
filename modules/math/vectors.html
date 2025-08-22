@@ -115,7 +115,7 @@
             title: "Concept fondamental",
             content: `
                         <p>Un <strong>vecteur</strong> est un objet mathématique caractérisé par une <strong>magnitude</strong> (longueur) et une <strong>direction</strong>. En algèbre linéaire, les vecteurs peuvent être représentés comme des listes ordonnées de nombres réels, appelés composantes ou coordonnées.</p>
-                        <p>Un vecteur en dimension \\(n\\) s'écrit : $$\\vec{v} = \\begin{bmatrix} v_1 \\\\ v_2 \\\\ \\vdots \\\\ v_n \\end{bmatrix}$$</p>
+                        <p>Un vecteur, c'est simplement <strong>une liste de nombres</strong> : $$\\vec{v} = \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix}$$</p>
                         <p><strong>Exemples concrets :</strong></p>
                         <ul>
                             <li>📍 <strong>Position</strong> : [3, 4] = 3 unités à droite, 4 unités vers le haut</li>
@@ -229,6 +229,109 @@
                             <li>🔍 <strong>Recherche</strong> : Google trouve des documents similaires grâce aux vecteurs</li>
                         </ul>
                         <p><strong>💡 Point clé :</strong> Les vecteurs permettent de représenter et manipuler mathématiquement des quantités qui ont à la fois une magnitude et une direction.</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Géométrie des vecteurs : angles et orthogonalité",
+            content: `
+                        <p><strong>🤔 Comment mesurer l'angle entre deux vecteurs ?</strong></p>
+                        <p>L'angle entre deux vecteurs révèle s'ils pointent dans des directions similaires ou opposées. C'est crucial pour comprendre les relations dans les données !</p>
+                        
+                        <p><strong>📐 Formule de l'angle :</strong></p>
+                        <p>$$\\cos(\\theta) = \\frac{\\vec{u} \\cdot \\vec{v}}{||\\vec{u}|| \\times ||\\vec{v}||}$$</p>
+                        
+                        <p><strong>🔍 Décryptage de la formule :</strong></p>
+                        <ul>
+                            <li>\\(\\vec{u} \\cdot \\vec{v}\\) = <strong>produit scalaire</strong> (mesure la \"projection\")</li>
+                            <li>\\(||\\vec{u}|| \\times ||\\vec{v}||\\) = <strong>produit des normes</strong> (normalisation)</li>
+                            <li>\\(\\cos(\\theta)\\) = <strong>cosinus de l'angle</strong> entre -1 et 1</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Interprétation intuitive :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• cos(θ) = 1</strong> → θ = 0° → vecteurs identiques</li>
+                            <li><strong>• cos(θ) = 0</strong> → θ = 90° → vecteurs perpendiculaires</li>
+                            <li><strong>• cos(θ) = -1</strong> → θ = 180° → vecteurs opposés</li>
+                        </ul>
+                        
+                        <p><strong>🔑 Orthogonalité :</strong></p>
+                        <p>Deux vecteurs sont <strong>orthogonaux</strong> (perpendiculaires) si \\(\\vec{u} \\cdot \\vec{v} = 0\\)</p>
+                        
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Similarité</strong> : mesurer la ressemblance entre données</li>
+                            <li>🔍 <strong>Recherche</strong> : trouver des documents similaires</li>
+                            <li>🎵 <strong>Recommandations</strong> : \"vos goûts sont à 85% similaires\"</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : optimisation par directions orthogonales</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul d'angles et similarité",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong></p>
+                        <p>Deux utilisateurs ont noté des films (sur 5) :</p>
+                        <ul>
+                            <li>👤 <strong>Alice</strong> : [5, 3, 1, 4, 2] (Action, Comédie, Romance, Sci-Fi, Horreur)</li>
+                            <li>👤 <strong>Bob</strong> : [4, 4, 2, 5, 1]</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Question :</strong> Leurs goûts sont-ils similaires ?</p>
+                        
+                        <p><strong>Étape 1 :</strong> Produit scalaire</p>
+                        <p>$$\\vec{Alice} \\cdot \\vec{Bob} = 5×4 + 3×4 + 1×2 + 4×5 + 2×1 = 20 + 12 + 2 + 20 + 2 = 56$$</p>
+                        
+                        <p><strong>Étape 2 :</strong> Normes</p>
+                        <p>$$||\\vec{Alice}|| = \\sqrt{5^2 + 3^2 + 1^2 + 4^2 + 2^2} = \\sqrt{55} ≈ 7.42$$</p>
+                        <p>$$||\\vec{Bob}|| = \\sqrt{4^2 + 4^2 + 2^2 + 5^2 + 1^2} = \\sqrt{62} ≈ 7.87$$</p>
+                        
+                        <p><strong>Étape 3 :</strong> Similarité cosinus</p>
+                        <p>$$\\cos(\\theta) = \\frac{56}{7.42 × 7.87} ≈ \\frac{56}{58.4} ≈ 0.96$$</p>
+                        
+                        <p><strong>🎉 Résultat :</strong> cos(θ) ≈ 0.96 → θ ≈ 16° → <strong>Goûts très similaires !</strong></p>
+                        
+                        <p><strong>💡 C'est exactement ce que font les systèmes de recommandation !</strong></p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : géométrie vectorielle",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Soient les vecteurs $$\\vec{u} = \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix}$$ et $$\\vec{v} = \\begin{bmatrix} -4 \\\\ 3 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>Le produit scalaire \\(\\vec{u} \\cdot \\vec{v}\\)</li>
+                            <li>Les normes \\(||\\vec{u}||\\) et \\(||\\vec{v}||\\)</li>
+                            <li>L'angle θ entre les deux vecteurs</li>
+                            <li>Ces vecteurs sont-ils orthogonaux ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('vectors-geometry-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="vectors-geometry-solution" style="display: none;">
+                        <ol>
+                            <li><strong>Produit scalaire :</strong><br>
+                                \\(\\vec{u} \\cdot \\vec{v} = 3 × (-4) + 4 × 3 = -12 + 12 = 0\\)</li>
+                            <li><strong>Normes :</strong><br>
+                                \\(||\\vec{u}|| = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = 5\\)<br>
+                                \\(||\\vec{v}|| = \\sqrt{(-4)^2 + 3^2} = \\sqrt{16 + 9} = 5\\)</li>
+                            <li><strong>Angle :</strong><br>
+                                \\(\\cos(\\theta) = \\frac{0}{5 × 5} = 0\\)<br>
+                                Donc θ = 90°</li>
+                            <li><strong>Orthogonalité :</strong><br>
+                                Oui ! Car \\(\\vec{u} \\cdot \\vec{v} = 0\\) → vecteurs perpendiculaires</li>
+                        </ol>
+                        <p><strong>💡 Observation :</strong> Ces vecteurs ont la même longueur (5) et sont perpendiculaires. C'est un cas parfait d'orthogonalité !</p>
+                        </div>
                     `,
           },
         ],

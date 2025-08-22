@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Les Gradients | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧮 Mathématiques</span>
+          <span>›</span>
+          <span>Les Gradients</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🏔️ Les Gradients</h1>
+      <p class="subtitle">Module 1.5 - Analyse multivariable pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Les Gradients</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant comment l'IA trouve
+          automatiquement les meilleures solutions.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="derivatives.html" class="nav-link" id="prev-link"
+          >← Module précédent : Dérivées</a
+        >
+        <a href="probability.html" class="nav-link" id="next-link"
+          >Module suivant : Probabilités →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Gradients
+      const moduleConfig = {
+        id: "math-gradients",
+        title: "Les Gradients",
+        category: "Mathématiques",
+        objectives: [
+          "Comprendre les gradients comme extension des dérivées",
+          "Calculer des gradients de fonctions simples",
+          "Comprendre la descente de gradient",
+          "Voir le lien avec l'apprentissage automatique",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Concept fondamental",
+            content: `
+                        <p>Le <strong>gradient</strong> est l'extension des dérivées aux fonctions de plusieurs variables. Si la dérivée indique la pente d'une courbe, le gradient indique la <strong>direction de la plus forte montée</strong> sur une surface.</p>
+                        <p><strong>🔑 Idée simple :</strong></p>
+                        <p>Imaginez une fonction qui dépend de deux variables : \\(f(x, y)\\). Le gradient nous dit dans quelle direction nous devons nous déplacer pour que la fonction augmente le plus rapidement.</p>
+                        <p><strong>📐 Notation :</strong></p>
+                        <p>$$\\nabla f = \\begin{bmatrix} \\frac{\\partial f}{\\partial x} \\\\ \\frac{\\partial f}{\\partial y} \\end{bmatrix}$$</p>
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Descente de gradient</strong> : algorithme d'optimisation fondamental</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : mise à jour des poids automatique</li>
+                            <li>📊 <strong>Machine Learning</strong> : minimisation des erreurs</li>
+                            <li>💬 <strong>LLMs</strong> : entraînement de modèles géants comme ChatGPT</li>
+                            <li>🎨 <strong>IA générative</strong> : amélioration continue des résultats</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie de la montagne",
+            content: `
+                        <p>Imaginez que vous êtes <strong>perdu dans le brouillard</strong> sur une montagne et que vous voulez atteindre le sommet le plus rapidement possible :</p>
+                        <ul>
+                            <li>🏔️ <strong>La montagne</strong> = fonction \\(f(x, y)\\) (altitude en chaque point)</li>
+                            <li>📍 <strong>Votre position</strong> = point \\((x, y)\\)</li>
+                            <li>🧭 <strong>Le gradient</strong> = direction de la pente la plus raide vers le haut</li>
+                        </ul>
+                        <p><strong>🎯 Stratégie optimale :</strong></p>
+                        <ul>
+                            <li>👀 <strong>Regarder autour de vous</strong> : calculer le gradient</li>
+                            <li>🚶 <strong>Faire un pas</strong> dans la direction du gradient</li>
+                            <li>🔄 <strong>Répéter</strong> jusqu'à atteindre le sommet</li>
+                        </ul>
+                        <p><strong>💡 C'est exactement ce que fait l'IA :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Objectif</strong> : minimiser les erreurs (descendre vers le creux)</li>
+                            <li>🧭 <strong>Gradient</strong> : direction pour réduire l'erreur le plus vite</li>
+                            <li>🔄 <strong>Itération</strong> : amélioration continue automatique</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel de gradients",
+            content: `
+                        <p><strong>Prenons une fonction simple à deux variables :</strong></p>
+                        <p>$$f(x, y) = x^2 + y^2$$</p>
+                        
+                        <p><strong>🔢 Calcul du gradient :</strong></p>
+                        <p><strong>Étape 1 :</strong> Dérivée partielle par rapport à \\(x\\)</p>
+                        <p>$$\\frac{\\partial f}{\\partial x} = \\frac{\\partial}{\\partial x}(x^2 + y^2) = 2x$$</p>
+                        
+                        <p><strong>Étape 2 :</strong> Dérivée partielle par rapport à \\(y\\)</p>
+                        <p>$$\\frac{\\partial f}{\\partial y} = \\frac{\\partial}{\\partial y}(x^2 + y^2) = 2y$$</p>
+                        
+                        <p><strong>Étape 3 :</strong> Assemblage du gradient</p>
+                        <p>$$\\nabla f = \\begin{bmatrix} 2x \\\\ 2y \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📍 Exemple numérique :</strong> Au point \\((3, 4)\\)</p>
+                        <p>$$\\nabla f(3, 4) = \\begin{bmatrix} 2 \\times 3 \\\\ 2 \\times 4 \\end{bmatrix} = \\begin{bmatrix} 6 \\\\ 8 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔍 Interprétation :</strong> Au point \\((3, 4)\\), pour augmenter \\(f\\) le plus rapidement, il faut se déplacer dans la direction \\([6, 8]\\).</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Dérivées partielles",
+            content: `
+                        <p>Les <strong>dérivées partielles</strong> sont les composantes du gradient. Pour une fonction \\(f(x, y)\\) :</p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Dérivée partielle par rapport à \\(x\\) :</strong> $$\\frac{\\partial f}{\\partial x}$$ (on traite \\(y\\) comme une constante)</li>
+                            <li style="margin-top: 1rem"><strong>• Dérivée partielle par rapport à \\(y\\) :</strong> $$\\frac{\\partial f}{\\partial y}$$ (on traite \\(x\\) comme une constante)</li>
+                        </ul>
+                        <p><strong>🔑 Règles de calcul :</strong></p>
+                        <ul>
+                            <li>Mêmes règles que les dérivées ordinaires</li>
+                            <li>On "ignore" les autres variables (les traiter comme des constantes)</li>
+                            <li>Le gradient combine toutes les dérivées partielles</li>
+                        </ul>
+                        <p><strong>📐 Pour une fonction à \\(n\\) variables :</strong></p>
+                        <p>$$\\nabla f = \\begin{bmatrix} \\frac{\\partial f}{\\partial x_1} \\\\ \\frac{\\partial f}{\\partial x_2} \\\\ \\vdots \\\\ \\frac{\\partial f}{\\partial x_n} \\end{bmatrix}$$</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calculs manuels",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Calculez les gradients des fonctions suivantes :</p>
+                        
+                        <ol>
+                            <li>\\(f(x, y) = 3x^2 + 2y\\)</li>
+                            <li>\\(g(x, y) = x^2 + y^2 + xy\\)</li>
+                            <li>\\(h(x, y) = 2x^3 + y^2 - 4xy\\)</li>
+                            <li>Pour \\(f(x, y) = x^2 + y^2\\), calculez \\(\\nabla f(1, 2)\\)</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('gradients-exercise-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="gradients-exercise-solution" style="display: none;">
+                        <ol>
+                            <li>\\(\\nabla f = \\begin{bmatrix} 6x \\\\ 2 \\end{bmatrix}\\)</li>
+                            <li>\\(\\nabla g = \\begin{bmatrix} 2x + y \\\\ 2y + x \\end{bmatrix}\\)</li>
+                            <li>\\(\\nabla h = \\begin{bmatrix} 6x^2 - 4y \\\\ 2y - 4x \\end{bmatrix}\\)</li>
+                            <li>\\(\\nabla f = \\begin{bmatrix} 2x \\\\ 2y \\end{bmatrix}\\), donc \\(\\nabla f(1, 2) = \\begin{bmatrix} 2 \\\\ 4 \\end{bmatrix}\\)<br>
+                                <strong>Interprétation :</strong> Au point \\((1, 2)\\), la direction de plus forte croissance est \\([2, 4]\\).</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "La descente de gradient",
+            content: `
+                        <p><strong>🎯 Algorithme fondamental de l'IA :</strong></p>
+                        <p>Pour <strong>minimiser</strong> une fonction (réduire l'erreur), on utilise la descente de gradient :</p>
+                        
+                        <p><strong>📋 Algorithme :</strong></p>
+                        <ol>
+                            <li><strong>Partir</strong> d'un point initial \\((x_0, y_0)\\)</li>
+                            <li><strong>Calculer</strong> le gradient \\(\\nabla f(x, y)\\)</li>
+                            <li><strong>Se déplacer</strong> dans la direction opposée : \\((x, y) \\leftarrow (x, y) - \\alpha \\nabla f(x, y)\\)</li>
+                            <li><strong>Répéter</strong> jusqu'à convergence</li>
+                        </ol>
+                        
+                        <p><strong>🔑 Paramètres :</strong></p>
+                        <ul>
+                            <li>\\(\\alpha\\) = <strong>taux d'apprentissage</strong> (taille du pas)</li>
+                            <li><strong>Direction opposée</strong> car on veut descendre (minimiser)</li>
+                        </ul>
+                        
+                        <p><strong>📝 Exemple :</strong> Minimiser \\(f(x, y) = x^2 + y^2\\)</p>
+                        <ul>
+                            <li><strong>Gradient :</strong> \\(\\nabla f = \\begin{bmatrix} 2x \\\\ 2y \\end{bmatrix}\\)</li>
+                            <li><strong>Mise à jour :</strong> \\(\\begin{bmatrix} x \\\\ y \\end{bmatrix} \\leftarrow \\begin{bmatrix} x \\\\ y \\end{bmatrix} - \\alpha \\begin{bmatrix} 2x \\\\ 2y \\end{bmatrix}\\)</li>
+                            <li><strong>Résultat :</strong> Convergence vers \\((0, 0)\\) = minimum global</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Pourquoi les gradients sont-ils le cœur de l'IA ?",
+            content: `
+                        <p><strong>🧠 Les gradients permettent l'apprentissage automatique :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Optimisation automatique</strong> : l'IA trouve les meilleures solutions seule</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : mise à jour de millions de paramètres</li>
+                            <li>📊 <strong>Machine Learning</strong> : minimisation des erreurs de prédiction</li>
+                            <li>💬 <strong>LLMs (ChatGPT)</strong> : entraînement sur des milliards de paramètres</li>
+                            <li>🎨 <strong>IA générative</strong> : amélioration continue des créations</li>
+                        </ul>
+                        <p><strong>💡 Point clé :</strong> Sans les gradients, l'IA moderne n'existerait pas ! Ils permettent aux machines d'apprendre automatiquement en "descendant" vers les meilleures solutions.</p>
+                        <p><strong>🔮 Prochaine étape :</strong> Nous verrons comment les probabilités permettent à l'IA de gérer l'incertitude et de prendre des décisions intelligentes !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Si le gradient d'une fonction au point (2, 3) est [4, -6], dans quelle direction faut-il se déplacer pour MINIMISER la fonction ?",
+          options: [
+            "A) Direction [4, -6]",
+            "B) Direction [-4, 6]",
+            "C) Direction [6, 4]",
+            "D) Rester sur place",
+          ],
+          correct: 1,
+          explanation:
+            "Pour minimiser, on va dans la direction OPPOSÉE au gradient. Si le gradient est [4, -6], on se déplace dans la direction [-4, 6] pour descendre vers le minimum.",
+        },
+        prevModule: "derivatives.html",
+        nextModule: "probability.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>
