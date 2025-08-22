@@ -137,31 +137,49 @@ class ModuleEngine {
                     ${
                       section.description ? `<p>${section.description}</p>` : ""
                     }
-                    <div class="code-container">
-                        <div class="code-header">
-                            <span class="code-title">Code Python</span>
-                        </div>
-                        <textarea class="code-editor" id="code-${index}">${
-          section.code
-        }</textarea>
-                        <div class="code-controls">
-                            <button class="btn btn-run" onclick="moduleEngine.runCode('code-${index}', 'output-${index}')">
-                                ▶ Exécuter
-                            </button>
-                            <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-${index}')">
-                                📋 Copier
-                            </button>
-                            <button class="btn btn-reset" onclick="moduleEngine.resetCode('code-${index}', \`${section.code.replace(
+                    <div class="code-container horizontal">
+                        <div class="code-left-panel">
+                            <div class="code-header">
+                                <span class="code-title">Code Python</span>
+                                <div class="code-controls">
+                                    <button class="btn btn-run" onclick="moduleEngine.runCode('code-${index}', 'output-${index}')">
+                                        ▶ Exécuter
+                                    </button>
+                                    <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-${index}')">
+                                        📋 Copier
+                                    </button>
+                                    <button class="btn btn-reset" onclick="moduleEngine.resetCode('code-${index}', \`${section.code.replace(
           /`/g,
           "\\`"
         )}\`)">
-                                ↺ Réinitialiser
-                            </button>
+                                        ↺ Reset
+                                    </button>
+                                    <button class="btn btn-fullscreen" onclick="moduleEngine.toggleFullscreen('code-container-${index}')">
+                                        ⛶ Plein écran
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="code-editor-wrapper">
+                                <div class="line-numbers" id="line-numbers-${index}"></div>
+                                <textarea class="code-editor" id="code-${index}" oninput="moduleEngine.updateLineNumbers('code-${index}', 'line-numbers-${index}')">${
+          section.code
+        }</textarea>
+                            </div>
                         </div>
-                        <div class="loading" id="loading-${index}">⏳ Chargement de Python...</div>
-                        <div class="output" id="output-${index}"></div>
+                        <div class="code-right-panel">
+                            <div class="output-header">
+                                <span class="output-title">Résultat</span>
+                                <div class="loading" id="loading-${index}" style="color: #6c757d; font-size: 0.8rem;">⏳ Chargement...</div>
+                            </div>
+                            <textarea class="output" id="output-${index}" readonly placeholder="Cliquez sur 'Exécuter' pour voir le résultat..."></textarea>
+                        </div>
                     </div>
                 `;
+
+        // Initialiser les numéros de ligne après création
+        setTimeout(() => {
+          this.updateLineNumbers(`code-${index}`, `line-numbers-${index}`);
+        }, 100);
         break;
     }
 
@@ -172,9 +190,6 @@ class ModuleEngine {
   async runCode(codeId, outputId) {
     const codeElement = document.getElementById(codeId);
     const outputElement = document.getElementById(outputId);
-    const loadingElement = document.getElementById(
-      `loading-${codeId.split("-")[1]}`
-    );
     const runButton = document.querySelector(`button[onclick*="${codeId}"]`);
 
     if (!codeElement || !outputElement) return;
@@ -183,12 +198,13 @@ class ModuleEngine {
 
     // Afficher le loading si Pyodide n'est pas prêt
     if (!this.pyodideReady) {
-      loadingElement.classList.add("show");
-      runButton.classList.add("running");
+      runButton.innerHTML = "⏳ Chargement...";
       await this.initializePyodide();
-      loadingElement.classList.remove("show");
-      runButton.classList.remove("running");
+      runButton.innerHTML = "▶ Exécuter";
     }
+
+    // Animation d'exécution
+    runButton.innerHTML = "⚡ Exécution...";
 
     try {
       // Rediriger stdout et stderr
@@ -207,21 +223,19 @@ class ModuleEngine {
       const stderr = this.pyodide.runPython("sys.stderr.getvalue()");
 
       if (stderr) {
-        outputElement.textContent = "Erreur :\n" + stderr;
-        outputElement.classList.add("error");
+        outputElement.value = "❌ Erreur :\n" + stderr;
       } else {
-        outputElement.textContent =
-          stdout || "Code exécuté avec succès (pas de sortie)";
-        outputElement.classList.remove("error");
+        outputElement.value =
+          stdout || "✅ Code exécuté avec succès (pas de sortie)";
       }
-
-      outputElement.classList.add("show");
 
       // Marquer l'objectif correspondant comme complété
       this.completeObjective(1); // Généralement le 2ème objectif concerne la pratique
     } catch (error) {
-      outputElement.textContent = "Erreur : " + error.message;
-      outputElement.classList.add("error", "show");
+      outputElement.value = "❌ Erreur Python :\n" + error.message;
+    } finally {
+      // Arrêter l'animation
+      runButton.innerHTML = "▶ Exécuter";
     }
   }
 
@@ -239,7 +253,7 @@ class ModuleEngine {
     );
     if (button) {
       const originalText = button.innerHTML;
-      button.innerHTML = "✓ Copié !";
+      button.innerHTML = "✅ Copié !";
       setTimeout(() => {
         button.innerHTML = originalText;
       }, 2000);
@@ -247,18 +261,23 @@ class ModuleEngine {
   }
 
   // Réinitialiser le code
-  resetCode(codeId, originalCode) {
+  resetCode(codeId) {
     const codeElement = document.getElementById(codeId);
     const outputElement = document.getElementById(
       codeId.replace("code-", "output-")
     );
 
     if (codeElement) {
+      // Récupérer le code original depuis l'attribut data
+      const originalCode =
+        codeElement.getAttribute("data-original") || codeElement.defaultValue;
       codeElement.value = originalCode;
     }
 
     if (outputElement) {
-      outputElement.classList.remove("show", "error");
+      outputElement.value = "";
+      outputElement.placeholder =
+        "Cliquez sur 'Exécuter' pour voir le résultat...";
     }
   }
 

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Bases | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>💻 Python</span>
+          <span>›</span>
+          <span>Python Bases</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🐍 Python Bases</h1>
+      <p class="subtitle">Module 2.1 - Programmation pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Python Bases</h3>
+        <p>
+          Félicitations ! Vous maîtrisez maintenant les bases de Python pour
+          l'IA.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="../math/statistics.html" class="nav-link" id="prev-link"
+          >← Module précédent : Statistiques</a
+        >
+        <a href="numpy.html" class="nav-link" id="next-link"
+          >Module suivant : NumPy →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Python Bases
+      const moduleConfig = {
+        id: "python-basics",
+        title: "Python Bases",
+        category: "Python",
+        objectives: [
+          "Comprendre pourquoi Python domine l'IA",
+          "Maîtriser la syntaxe Python moderne",
+          "Manipuler les structures de données essentielles",
+          "Créer un projet concret de recommandation",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Pourquoi Python domine l'IA ?",
+            content: `
+                        <p><strong>Python</strong> n'est pas juste un langage de programmation, c'est <strong>l'écosystème de référence</strong> pour l'intelligence artificielle :</p>
+                        
+                        <p><strong>📊 Comparaison concrète :</strong></p>
+                        <p><strong>Java (12 lignes) :</strong></p>
+                        <pre style="background: #f4f4f4; padding: 1rem; border-radius: 4px; font-size: 0.9rem;">
+import java.util.Arrays;
+public class Main {
+    public static void main(String[] args) {
+        int[] numbers = {1, 2, 3, 4, 5};
+        int sum = Arrays.stream(numbers).sum();
+        double average = (double) sum / numbers.length;
+        System.out.println("Moyenne: " + average);
+    }
+}</pre>
+                        
+                        <p><strong>Python (3 lignes) :</strong></p>
+                        <pre style="background: #f4f4f4; padding: 1rem; border-radius: 4px; font-size: 0.9rem;">
+numbers = [1, 2, 3, 4, 5]
+average = sum(numbers) / len(numbers)
+print(f"Moyenne: {average}")</pre>
+                        
+                        <p><strong>🚀 Écosystème IA :</strong></p>
+                        <ul>
+                            <li>🔢 <strong>NumPy</strong> : calculs numériques ultra-rapides</li>
+                            <li>🤖 <strong>scikit-learn</strong> : machine learning clé en main</li>
+                            <li>🧠 <strong>PyTorch/TensorFlow</strong> : deep learning</li>
+                            <li>💬 <strong>Transformers</strong> : LLMs et NLP</li>
+                            <li>📊 <strong>Pandas</strong> : manipulation de données</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "Python : le couteau suisse de l'IA",
+            content: `
+                        <p>Imaginez que vous êtes un <strong>chef cuisinier</strong> :</p>
+                        <ul>
+                            <li>🔪 <strong>Autres langages</strong> : comme avoir 50 couteaux différents, un pour chaque tâche</li>
+                            <li>🎯 <strong>Python</strong> : comme avoir un couteau suisse parfait qui fait tout</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Avec Python, vous pouvez :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Analyser</strong> des millions de données en quelques lignes</li>
+                            <li>🤖 <strong>Entraîner</strong> un modèle d'IA en 10 minutes</li>
+                            <li>🌐 <strong>Créer</strong> une API web pour votre modèle</li>
+                            <li>📱 <strong>Automatiser</strong> des tâches répétitives</li>
+                            <li>📈 <strong>Visualiser</strong> vos résultats en graphiques</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Python vous permet de passer de l'idée au prototype en quelques heures, pas quelques semaines !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Variables et types Python",
+            content: `
+                        <p><strong>🎯 En Python, pas besoin de déclarer les types :</strong></p>
+                        
+                        <div class="code-container">
+                            <div class="code-left">
+                                <div class="code-header">
+                                    <div class="code-title">🐍 Code Python</div>
+                                </div>
+                                <textarea class="code-editor" id="code-variables">
+# Python devine automatiquement le type !
+nom = "Alice"              # str (texte)
+age = 25                   # int (entier)
+taille = 1.65             # float (décimal)
+est_etudiant = True       # bool (vrai/faux)
+
+print(f"👋 Salut {nom} !")
+print(f"📊 Tu as {age} ans et mesures {taille}m")
+print(f"🎓 Étudiant : {'Oui' if est_etudiant else 'Non'}")
+
+# Python est dynamique - on peut changer le type !
+age = "vingt-cinq"        # Maintenant c'est du texte
+print(f"🔄 Âge en texte : {age}")
+
+# Types utiles pour l'IA
+precision = 0.95          # Précision d'un modèle
+classes = ["chat", "chien", "oiseau"]  # Liste de classes
+scores = {"chat": 0.8, "chien": 0.9}  # Dictionnaire de scores
+
+print(f"🤖 Modèle avec {precision*100}% de précision")
+print(f"📋 Classes : {classes}")
+print(f"📊 Scores : {scores}")
+                                </textarea>
+                                <div class="code-controls">
+                                    <button class="btn btn-run" onclick="moduleEngine.runCode('code-variables', 'output-variables')">
+                                        ▶ Exécuter
+                                    </button>
+                                    <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-variables')">
+                                        📋 Copier
+                                    </button>
+                                    <button class="btn btn-reset" onclick="moduleEngine.resetCode('code-variables')">
+                                        ↺ Reset
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="code-right">
+                                <div class="output-header">
+                                    <div class="output-title">▶️ Résultat</div>
+                                </div>
+                                <textarea class="output" id="output-variables" readonly></textarea>
+                            </div>
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Listes : la base des données en IA",
+            content: `
+                        <p><strong>🎯 Les listes Python sont parfaites pour manipuler des données :</strong></p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-title">Manipulation de listes</span>
+                            </div>
+                            <textarea class="code-editor" id="code-listes">
+# Données d'un dataset d'IA
+temperatures = [22.5, 25.1, 23.8, 26.2, 24.0]
+villes = ["Paris", "Lyon", "Marseille", "Toulouse", "Nice"]
+
+print("🌡️ DONNÉES MÉTÉO")
+print(f"Températures : {temperatures}")
+print(f"Villes : {villes}")
+
+# Opérations essentielles pour l'IA
+print(f"\\n📊 STATISTIQUES")
+print(f"Nombre de mesures : {len(temperatures)}")
+print(f"Température max : {max(temperatures)}°C")
+print(f"Température min : {min(temperatures)}°C")
+print(f"Moyenne : {sum(temperatures)/len(temperatures):.1f}°C")
+
+# Indexation (accès aux éléments)
+print(f"\\n🎯 ACCÈS AUX DONNÉES")
+print(f"Première ville : {villes[0]}")
+print(f"Dernière température : {temperatures[-1]}°C")
+print(f"3 premières villes : {villes[:3]}")
+
+# Ajout de nouvelles données (comme en temps réel)
+temperatures.append(27.3)
+villes.append("Bordeaux")
+print(f"\\n➕ NOUVELLES DONNÉES")
+print(f"Nouvelle température : {temperatures[-1]}°C à {villes[-1]}")
+
+# Filtrage (très utile en IA)
+temperatures_chaudes = [t for t in temperatures if t > 25]
+print(f"\\n🔥 TEMPÉRATURES > 25°C : {temperatures_chaudes}")
+                            </textarea>
+                            <div class="code-controls">
+                                <button class="btn btn-run" onclick="moduleEngine.runCode('code-listes', 'output-listes')">
+                                    ▶ Exécuter
+                                </button>
+                                <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-listes')">
+                                    📋 Copier
+                                </button>
+                            </div>
+                            <div class="output" id="output-listes"></div>
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Dictionnaires : organiser l'information",
+            content: `
+                        <p><strong>🎯 Les dictionnaires stockent des paires clé-valeur, parfait pour l'IA :</strong></p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-title">Dictionnaires Python</span>
+                            </div>
+                            <textarea class="code-editor" id="code-dicts">
+# Profil utilisateur pour un système de recommandation
+utilisateur = {
+    "nom": "Alice",
+    "age": 28,
+    "ville": "Paris",
+    "genres_preferes": ["Action", "Sci-Fi", "Thriller"],
+    "note_moyenne": 4.2
+}
+
+print("👤 PROFIL UTILISATEUR")
+print(f"Nom : {utilisateur['nom']}")
+print(f"Âge : {utilisateur['age']} ans")
+print(f"Genres préférés : {utilisateur['genres_preferes']}")
+
+# Scores de prédiction d'un modèle IA
+predictions = {
+    "Avengers": 0.95,
+    "Titanic": 0.23,
+    "Interstellar": 0.87,
+    "Fast & Furious": 0.91
+}
+
+print(f"\\n🤖 PRÉDICTIONS IA")
+for film, score in predictions.items():
+    emoji = "👍" if score > 0.7 else "👎"
+    print(f"{emoji} {film}: {score*100:.0f}% de chance d'aimer")
+
+# Mise à jour dynamique (apprentissage en temps réel)
+utilisateur["films_vus"] = 47
+utilisateur["note_moyenne"] = 4.3
+
+print(f"\\n📊 MISE À JOUR")
+print(f"Films vus : {utilisateur['films_vus']}")
+print(f"Nouvelle note moyenne : {utilisateur['note_moyenne']}")
+
+# Vérification de clés (éviter les erreurs)
+if "abonnement_premium" in utilisateur:
+    print("✨ Utilisateur premium")
+else:
+    print("👤 Utilisateur standard")
+                            </textarea>
+                            <div class="code-controls">
+                                <button class="btn btn-run" onclick="moduleEngine.runCode('code-dicts', 'output-dicts')">
+                                    ▶ Exécuter
+                                </button>
+                                <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-dicts')">
+                                    📋 Copier
+                                </button>
+                            </div>
+                            <div class="output" id="output-dicts"></div>
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Conditions et boucles : la logique de l'IA",
+            content: `
+                        <p><strong>🎯 Les conditions et boucles permettent de créer une logique intelligente :</strong></p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-title">Logique de programme</span>
+                            </div>
+                            <textarea class="code-editor" id="code-logique">
+# Système de classification simple
+def classifier_temperature(temp):
+    """Classifie une température selon des seuils"""
+    if temp < 0:
+        return "🥶 Glacial"
+    elif temp < 10:
+        return "❄️ Froid"
+    elif temp < 20:
+        return "😐 Frais"
+    elif temp < 30:
+        return "☀️ Agréable"
+    else:
+        return "🔥 Chaud"
+
+# Test du classificateur
+temperatures_test = [-5, 8, 15, 25, 35]
+print("🌡️ CLASSIFICATION DES TEMPÉRATURES")
+for temp in temperatures_test:
+    categorie = classifier_temperature(temp)
+    print(f"{temp}°C → {categorie}")
+
+# Analyse de données avec boucles
+notes_films = [4.5, 2.1, 4.8, 3.2, 4.9, 1.8, 4.3]
+print(f"\\n📊 ANALYSE DE {len(notes_films)} FILMS")
+
+# Compteurs pour statistiques
+excellents = 0
+bons = 0
+moyens = 0
+mauvais = 0
+
+for note in notes_films:
+    if note >= 4.5:
+        excellents += 1
+    elif note >= 3.5:
+        bons += 1
+    elif note >= 2.5:
+        moyens += 1
+    else:
+        mauvais += 1
+
+print(f"⭐ Excellents (≥4.5) : {excellents}")
+print(f"👍 Bons (≥3.5) : {bons}")
+print(f"😐 Moyens (≥2.5) : {moyens}")
+print(f"👎 Mauvais (<2.5) : {mauvais}")
+
+# Recommandation basée sur la moyenne
+moyenne = sum(notes_films) / len(notes_films)
+print(f"\\n🎯 Note moyenne : {moyenne:.1f}")
+if moyenne >= 4.0:
+    print("✨ Profil cinéphile exigeant")
+elif moyenne >= 3.0:
+    print("👤 Profil spectateur standard")
+else:
+    print("🤔 Profil difficile à satisfaire")
+                            </textarea>
+                            <div class="code-controls">
+                                <button class="btn btn-run" onclick="moduleEngine.runCode('code-logique', 'output-logique')">
+                                    ▶ Exécuter
+                                </button>
+                                <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-logique')">
+                                    📋 Copier
+                                </button>
+                            </div>
+                            <div class="output" id="output-logique"></div>
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Fonctions : code modulaire et réutilisable",
+            content: `
+                        <p><strong>🎯 Les fonctions permettent d'organiser le code et de le réutiliser :</strong></p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-title">Fonctions Python</span>
+                            </div>
+                            <textarea class="code-editor" id="code-fonctions">
+def calculer_similarite(utilisateur1, utilisateur2):
+    """
+    Calcule la similarité entre deux utilisateurs basée sur leurs genres préférés.
+    Plus le score est élevé, plus ils sont similaires.
+    """
+    genres1 = set(utilisateur1["genres"])
+    genres2 = set(utilisateur2["genres"])
+    
+    # Intersection (genres en commun) / Union (tous les genres)
+    communs = len(genres1.intersection(genres2))
+    total = len(genres1.union(genres2))
+    
+    if total == 0:
+        return 0.0
+    
+    similarite = communs / total
+    return round(similarite, 2)
+
+def recommander_films(utilisateur_cible, tous_utilisateurs, films_db):
+    """
+    Recommande des films basés sur des utilisateurs similaires.
+    """
+    print(f"🎯 RECOMMANDATIONS POUR {utilisateur_cible['nom']}")
+    print(f"Genres préférés : {utilisateur_cible['genres']}")
+    
+    # Trouver l'utilisateur le plus similaire
+    meilleure_similarite = 0
+    utilisateur_similaire = None
+    
+    for autre_utilisateur in tous_utilisateurs:
+        if autre_utilisateur['nom'] != utilisateur_cible['nom']:
+            sim = calculer_similarite(utilisateur_cible, autre_utilisateur)
+            print(f"Similarité avec {autre_utilisateur['nom']}: {sim*100:.0f}%")
+            
+            if sim > meilleure_similarite:
+                meilleure_similarite = sim
+                utilisateur_similaire = autre_utilisateur
+    
+    # Recommandations basées sur l'utilisateur le plus similaire
+    if utilisateur_similaire:
+        print(f"\\n✨ Utilisateur le plus similaire : {utilisateur_similaire['nom']}")
+        films_recommandes = utilisateur_similaire.get('films_aimes', [])
+        print(f"🎬 Films recommandés : {films_recommandes}")
+    else:
+        print("\\n🤔 Aucun utilisateur similaire trouvé")
+
+# Base de données d'utilisateurs
+utilisateurs = [
+    {"nom": "Alice", "genres": ["Action", "Sci-Fi"], "films_aimes": ["Matrix", "Blade Runner"]},
+    {"nom": "Bob", "genres": ["Comédie", "Romance"], "films_aimes": ["Amélie", "Love Actually"]},
+    {"nom": "Charlie", "genres": ["Action", "Thriller"], "films_aimes": ["John Wick", "Heat"]},
+    {"nom": "Diana", "genres": ["Sci-Fi", "Thriller"], "films_aimes": ["Inception", "Minority Report"]}
+]
+
+# Nouvel utilisateur à qui recommander
+nouvel_utilisateur = {"nom": "Eve", "genres": ["Sci-Fi", "Action"]}
+
+# Générer des recommandations
+recommander_films(nouvel_utilisateur, utilisateurs, {})
+                            </textarea>
+                            <div class="code-controls">
+                                <button class="btn btn-run" onclick="moduleEngine.runCode('code-fonctions', 'output-fonctions')">
+                                    ▶ Exécuter
+                                </button>
+                                <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-fonctions')">
+                                    📋 Copier
+                                </button>
+                            </div>
+                            <div class="output" id="output-fonctions"></div>
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "List comprehensions : Python élégant",
+            content: `
+                        <p><strong>🎯 Les list comprehensions permettent de créer des listes de manière concise et élégante :</strong></p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-title">List Comprehensions</span>
+                            </div>
+                            <textarea class="code-editor" id="code-comprehensions">
+# Données d'exemple : scores de modèles IA
+scores_bruts = [0.67, 0.89, 0.45, 0.92, 0.78, 0.34, 0.88, 0.56]
+
+print("📊 DONNÉES ORIGINALES")
+print(f"Scores bruts : {scores_bruts}")
+
+# Méthode traditionnelle (longue)
+scores_pourcentage_long = []
+for score in scores_bruts:
+    scores_pourcentage_long.append(score * 100)
+
+print(f"\\n📈 MÉTHODE TRADITIONNELLE")
+print(f"En pourcentage : {scores_pourcentage_long}")
+
+# List comprehension (élégant !)
+scores_pourcentage = [score * 100 for score in scores_bruts]
+print(f"\\n✨ LIST COMPREHENSION")
+print(f"En pourcentage : {scores_pourcentage}")
+
+# Filtrage avec condition
+bons_scores = [score for score in scores_bruts if score > 0.7]
+print(f"\\n🎯 FILTRAGE")
+print(f"Scores > 70% : {bons_scores}")
+
+# Transformation + filtrage en une ligne
+excellents = [f"{score*100:.0f}%" for score in scores_bruts if score > 0.8]
+print(f"Excellents (>80%) : {excellents}")
+
+# Exemple plus complexe : classification
+def classifier_score(score):
+    if score > 0.8:
+        return "Excellent"
+    elif score > 0.6:
+        return "Bon"
+    else:
+        return "À améliorer"
+
+classifications = [classifier_score(score) for score in scores_bruts]
+print(f"\\n🏷️ CLASSIFICATIONS")
+for i, (score, classe) in enumerate(zip(scores_bruts, classifications)):
+    print(f"Modèle {i+1}: {score:.2f} → {classe}")
+
+# Création de dictionnaire avec comprehension
+resultats = {f"modele_{i+1}": score for i, score in enumerate(scores_bruts)}
+print(f"\\n📋 DICTIONNAIRE")
+print(f"Résultats : {resultats}")
+                            </textarea>
+                            <div class="code-controls">
+                                <button class="btn btn-run" onclick="moduleEngine.runCode('code-comprehensions', 'output-comprehensions')">
+                                    ▶ Exécuter
+                                </button>
+                                <button class="btn btn-copy" onclick="moduleEngine.copyCode('code-comprehensions')">
+                                    📋 Copier
+                                </button>
+                            </div>
+                            <div class="output" id="output-comprehensions"></div>
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Pourquoi ces bases sont cruciales pour l'IA ?",
+            content: `
+                        <p><strong>🧠 Chaque concept Python que nous venons de voir est utilisé quotidiennement en IA :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Listes</strong> : stockent vos datasets (images, textes, nombres)</li>
+                            <li>🗂️ <strong>Dictionnaires</strong> : organisent les métadonnées et configurations</li>
+                            <li>🔄 <strong>Boucles</strong> : parcourent des millions de données</li>
+                            <li>⚖️ <strong>Conditions</strong> : implémentent la logique de décision</li>
+                            <li>🔧 <strong>Fonctions</strong> : créent des modèles réutilisables</li>
+                            <li>✨ <strong>List comprehensions</strong> : transforment les données efficacement</li>
+                        </ul>
+                        <p><strong>💡 Point clé :</strong> Maîtriser ces bases vous permet de comprendre et modifier n'importe quel code d'IA !</p>
+                        <p><strong>🚀 Prochaine étape :</strong> NumPy va transformer ces concepts simples en calculs ultra-rapides pour l'IA !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Quelle est la façon la plus élégante de créer une liste des carrés de [1, 2, 3, 4, 5] ?",
+          options: [
+            "A) for i in range(5): squares.append((i+1)**2)",
+            "B) [x**2 for x in [1, 2, 3, 4, 5]]",
+            "C) map(lambda x: x**2, [1, 2, 3, 4, 5])",
+            "D) squares = []; for x in [1,2,3,4,5]: squares += [x**2]",
+          ],
+          correct: 1,
+          explanation:
+            "La list comprehension [x**2 for x in [1, 2, 3, 4, 5]] est la façon la plus pythonique et lisible de créer cette liste. C'est concis, efficace et très lisible.",
+        },
+        prevModule: "../math/statistics.html",
+        nextModule: "numpy.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

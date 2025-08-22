@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NumPy | IA4Ndada</title>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>💻 Python</span>
+          <span>›</span>
+          <span>NumPy</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🔢 NumPy : Calcul Numérique</h1>
+      <p class="subtitle">Module 2.2 - Programmation pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - NumPy</h3>
+        <p>
+          Félicitations ! Vous maîtrisez maintenant NumPy pour les calculs
+          numériques en IA.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="basics.html" class="nav-link" id="prev-link"
+          >← Module précédent : Python Bases</a
+        >
+        <a href="pandas.html" class="nav-link" id="next-link"
+          >Module suivant : Pandas →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module NumPy
+      const moduleConfig = {
+        id: "python-numpy",
+        title: "NumPy : Calcul Numérique",
+        category: "Python",
+        objectives: [
+          "Comprendre pourquoi NumPy est essentiel pour l'IA",
+          "Créer et manipuler des arrays NumPy efficacement",
+          "Maîtriser les opérations vectorielles et matricielles",
+          "Appliquer NumPy aux problèmes concrets d'IA",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Pourquoi NumPy révolutionne l'IA ?",
+            content: `
+                        <p><strong>NumPy</strong> (Numerical Python) est la fondation de tout l'écosystème IA en Python. Sans NumPy, pas de Pandas, pas de scikit-learn, pas de TensorFlow !</p>
+                        
+                        <p><strong>🔑 Problème résolu :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Listes Python</strong> : lentes pour les gros calculs</li>
+                            <li>⚡ <strong>Arrays NumPy</strong> : jusqu'à 100x plus rapides !</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Avantages NumPy :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Performance</strong> : code optimisé en C</li>
+                            <li>🧮 <strong>Vectorisation</strong> : opérations sur des arrays entiers</li>
+                            <li>📐 <strong>Broadcasting</strong> : opérations entre arrays de tailles différentes</li>
+                            <li>🔗 <strong>Intégration</strong> : base de tout l'écosystème scientifique</li>
+                        </ul>
+                        
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li>🖼️ <strong>Images</strong> : matrices de pixels</li>
+                            <li>📊 <strong>Datasets</strong> : tableaux de données</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : matrices de poids</li>
+                            <li>📈 <strong>Calculs mathématiques</strong> : algèbre linéaire rapide</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "Liste Python vs Array NumPy",
+            content: `
+                        <p>Imaginez que vous devez <strong>additionner 1 million de nombres</strong> :</p>
+                        
+                        <p><strong>🐌 Avec des listes Python :</strong></p>
+                        <ul>
+                            <li>Python parcourt chaque élément un par un</li>
+                            <li>Vérifie le type de chaque nombre</li>
+                            <li>Fait l'addition en Python pur</li>
+                            <li><strong>Résultat :</strong> 1 seconde ⏱️</li>
+                        </ul>
+                        
+                        <p><strong>⚡ Avec des arrays NumPy :</strong></p>
+                        <ul>
+                            <li>NumPy sait que tous les éléments sont des nombres</li>
+                            <li>Utilise du code C optimisé</li>
+                            <li>Traite plusieurs éléments simultanément</li>
+                            <li><strong>Résultat :</strong> 0.01 seconde ⚡</li>
+                        </ul>
+                        
+                        <p><strong>💡 Analogie :</strong></p>
+                        <p>C'est comme la différence entre :</p>
+                        <ul>
+                            <li>🚶 <strong>Marcher</strong> (listes Python) : flexible mais lent</li>
+                            <li>🚄 <strong>TGV</strong> (arrays NumPy) : rapide sur des rails optimisés</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Création d'arrays NumPy",
+            description:
+              "Découvrons les différentes façons de créer des arrays :",
+            code: `import numpy as np
+
+# Création à partir d'une liste
+liste_python = [1, 2, 3, 4, 5]
+array_numpy = np.array(liste_python)
+
+print("Liste Python:", liste_python)
+print("Array NumPy:", array_numpy)
+print("Type:", type(array_numpy))
+
+# Arrays 2D (matrices)
+matrice = np.array([[1, 2, 3], 
+                    [4, 5, 6]])
+print("\\nMatrice 2D:")
+print(matrice)
+print("Forme (shape):", matrice.shape)  # (lignes, colonnes)
+
+# Création d'arrays spéciaux
+zeros = np.zeros(5)  # Array de zéros
+ones = np.ones((3, 4))  # Matrice de uns
+identite = np.eye(3)  # Matrice identité
+aleatoire = np.random.random((2, 3))  # Nombres aléatoires
+
+print("\\nArrays spéciaux:")
+print("Zéros:", zeros)
+print("Ones:\\n", ones)
+print("Identité:\\n", identite)
+print("Aléatoire:\\n", aleatoire)
+
+# Séquences
+sequence = np.arange(0, 10, 2)  # De 0 à 10, pas de 2
+lineaire = np.linspace(0, 1, 5)  # 5 points entre 0 et 1
+
+print("\\nSéquences:")
+print("Arange:", sequence)
+print("Linspace:", lineaire)`,
+          },
+          {
+            type: "code",
+            title: "Opérations vectorielles",
+            description:
+              "La puissance de NumPy : opérations sur des arrays entiers :",
+            code: `import numpy as np
+
+# Création d'arrays
+a = np.array([1, 2, 3, 4, 5])
+b = np.array([10, 20, 30, 40, 50])
+
+print("Array a:", a)
+print("Array b:", b)
+
+# Opérations élément par élément (vectorisées)
+addition = a + b
+multiplication = a * b
+puissance = a ** 2
+racine = np.sqrt(a)
+
+print("\\nOpérations vectorisées:")
+print("a + b =", addition)
+print("a * b =", multiplication)
+print("a² =", puissance)
+print("√a =", racine)
+
+# Opérations avec des scalaires
+scalaire = a + 10  # Ajoute 10 à chaque élément
+print("\\na + 10 =", scalaire)
+
+# Fonctions mathématiques
+angles = np.array([0, np.pi/4, np.pi/2, np.pi])
+sinus = np.sin(angles)
+cosinus = np.cos(angles)
+
+print("\\nFonctions trigonométriques:")
+print("Angles:", angles)
+print("Sin:", sinus)
+print("Cos:", cosinus)
+
+# Statistiques
+donnees = np.array([12, 15, 18, 14, 16, 13, 17])
+print("\\nStatistiques:")
+print("Données:", donnees)
+print("Moyenne:", np.mean(donnees))
+print("Médiane:", np.median(donnees))
+print("Écart-type:", np.std(donnees))
+print("Min/Max:", np.min(donnees), "/", np.max(donnees))`,
+          },
+          {
+            type: "code",
+            title: "Indexation et slicing avancés",
+            description: "Accéder et modifier les données efficacement :",
+            code: `import numpy as np
+
+# Array 2D pour les exemples
+matrice = np.array([[1,  2,  3,  4],
+                    [5,  6,  7,  8],
+                    [9, 10, 11, 12]])
+
+print("Matrice originale:")
+print(matrice)
+
+# Indexation de base
+print("\\nIndexation:")
+print("Élément [0,0]:", matrice[0, 0])
+print("Élément [1,2]:", matrice[1, 2])
+print("Dernière ligne:", matrice[-1])
+print("Dernière colonne:", matrice[:, -1])
+
+# Slicing
+print("\\nSlicing:")
+print("2 premières lignes:\\n", matrice[:2])
+print("2 dernières colonnes:\\n", matrice[:, -2:])
+print("Sous-matrice [1:3, 1:3]:\\n", matrice[1:3, 1:3])
+
+# Indexation booléenne (très puissant !)
+condition = matrice > 6
+print("\\nIndexation booléenne:")
+print("Éléments > 6:", condition)
+print("Valeurs > 6:", matrice[condition])
+
+# Modification avec indexation booléenne
+matrice_copie = matrice.copy()
+matrice_copie[matrice_copie > 8] = 99
+print("\\nAprès modification (>8 → 99):")
+print(matrice_copie)
+
+# Indexation avec des arrays
+indices_lignes = np.array([0, 2])
+indices_colonnes = np.array([1, 3])
+print("\\nIndexation avec arrays:")
+print("Lignes 0 et 2:", matrice[indices_lignes])
+print("Éléments [0,1] et [2,3]:", matrice[indices_lignes, indices_colonnes])`,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Broadcasting : la magie NumPy",
+            content: `
+                        <p>Le <strong>broadcasting</strong> permet d'effectuer des opérations entre arrays de tailles différentes. C'est l'une des fonctionnalités les plus puissantes de NumPy !</p>
+                        
+                        <p><strong>🔑 Règles du broadcasting :</strong></p>
+                        <ol>
+                            <li>NumPy compare les dimensions de droite à gauche</li>
+                            <li>Les dimensions sont compatibles si elles sont égales ou si l'une vaut 1</li>
+                            <li>Les dimensions manquantes sont considérées comme 1</li>
+                        </ol>
+                        
+                        <p><strong>📐 Exemples de compatibilité :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• (3, 4) + (4,)</strong> → ✅ Compatible</li>
+                            <li><strong>• (3, 4) + (3, 1)</strong> → ✅ Compatible</li>
+                            <li><strong>• (3, 4) + (2, 4)</strong> → ❌ Incompatible</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Applications pratiques :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Normalisation</strong> : soustraire la moyenne de chaque colonne</li>
+                            <li>🖼️ <strong>Traitement d'images</strong> : appliquer un filtre à tous les pixels</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : ajouter un biais à chaque neurone</li>
+                        </ul>
+                        
+                        <p><strong>💡 Avantage :</strong> Pas besoin de boucles explicites, NumPy gère tout automatiquement !</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Broadcasting en action",
+            description: "Voyons le broadcasting à l'œuvre :",
+            code: `import numpy as np
+
+# Exemple 1: Array 2D + Array 1D
+matrice = np.array([[1, 2, 3],
+                    [4, 5, 6],
+                    [7, 8, 9]])
+
+vecteur = np.array([10, 20, 30])
+
+print("Matrice (3x3):")
+print(matrice)
+print("\\nVecteur (3,):")
+print(vecteur)
+
+# Broadcasting: ajoute le vecteur à chaque ligne
+resultat = matrice + vecteur
+print("\\nMatrice + Vecteur (broadcasting):")
+print(resultat)
+
+# Exemple 2: Normalisation par colonne
+donnees = np.array([[1, 2, 3],
+                    [4, 5, 6],
+                    [7, 8, 9]], dtype=float)
+
+# Calculer la moyenne de chaque colonne
+moyennes = np.mean(donnees, axis=0)
+print("\\nDonnées originales:")
+print(donnees)
+print("Moyennes par colonne:", moyennes)
+
+# Centrer les données (broadcasting automatique)
+donnees_centrees = donnees - moyennes
+print("\\nDonnées centrées:")
+print(donnees_centrees)
+print("Nouvelles moyennes:", np.mean(donnees_centrees, axis=0))
+
+# Exemple 3: Opération avec scalaire
+print("\\nMultiplication par scalaire (broadcasting):")
+print(matrice * 2)
+
+# Exemple 4: Broadcasting complexe
+a = np.array([[1], [2], [3]])  # (3, 1)
+b = np.array([10, 20])         # (2,)
+print("\\nBroadcasting complexe:")
+print("a (3x1):\\n", a)
+print("b (2,):", b)
+print("a + b (3x2):\\n", a + b)`,
+          },
+          {
+            type: "code",
+            title: "Algèbre linéaire avec NumPy",
+            description:
+              "NumPy implémente toutes les opérations d'algèbre linéaire :",
+            code: `import numpy as np
+
+# Création de matrices
+A = np.array([[1, 2], 
+              [3, 4]])
+B = np.array([[5, 6], 
+              [7, 8]])
+v = np.array([1, 2])
+
+print("Matrice A:")
+print(A)
+print("\\nMatrice B:")
+print(B)
+print("\\nVecteur v:", v)
+
+# Produit matriciel (@ ou np.dot)
+produit = A @ B  # Équivalent à np.dot(A, B)
+print("\\nProduit matriciel A @ B:")
+print(produit)
+
+# Produit matrice-vecteur
+Av = A @ v
+print("\\nProduit A @ v:", Av)
+
+# Transposée
+print("\\nTransposée de A:")
+print(A.T)
+
+# Déterminant
+det_A = np.linalg.det(A)
+print("\\nDéterminant de A:", det_A)
+
+# Inverse
+inv_A = np.linalg.inv(A)
+print("\\nInverse de A:")
+print(inv_A)
+
+# Vérification: A @ inv(A) = I
+verification = A @ inv_A
+print("\\nVérification A @ inv(A):")
+print(verification)
+
+# Valeurs et vecteurs propres
+valeurs_propres, vecteurs_propres = np.linalg.eig(A)
+print("\\nValeurs propres:", valeurs_propres)
+print("Vecteurs propres:")
+print(vecteurs_propres)
+
+# Norme d'un vecteur
+norme = np.linalg.norm(v)
+print("\\nNorme du vecteur v:", norme)`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : traitement d'image",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Simulons le traitement d'une image en niveaux de gris (matrice de pixels) :</p>
+                        
+                        <p><strong>📝 Tâches :</strong></p>
+                        <ol>
+                            <li>Créer une "image" 5x5 avec des valeurs aléatoires entre 0 et 255</li>
+                            <li>Appliquer un filtre de flou (moyenne des voisins)</li>
+                            <li>Augmenter la luminosité de 20%</li>
+                            <li>Créer un masque pour les pixels sombres (< 100)</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solution :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('numpy-exercise-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="numpy-exercise-solution" style="display: none;">
+                        <pre><code>import numpy as np
+
+# 1. Créer une image 5x5
+np.random.seed(42)  # Pour la reproductibilité
+image = np.random.randint(0, 256, (5, 5))
+print("Image originale:")
+print(image)
+
+# 2. Filtre de flou simple (moyenne 3x3)
+def appliquer_flou(img):
+    # Créer une image avec padding pour gérer les bords
+    padded = np.pad(img, 1, mode='edge')
+    flou = np.zeros_like(img)
+    
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
+            # Moyenne des 9 pixels voisins
+            region = padded[i:i+3, j:j+3]
+            flou[i, j] = np.mean(region)
+    
+    return flou.astype(int)
+
+image_flou = appliquer_flou(image)
+print("\\nImage avec flou:")
+print(image_flou)
+
+# 3. Augmenter la luminosité
+luminosite = np.clip(image * 1.2, 0, 255).astype(int)
+print("\\nImage plus lumineuse (+20%):")
+print(luminosite)
+
+# 4. Masque pour pixels sombres
+masque_sombre = image < 100
+pixels_sombres = np.sum(masque_sombre)
+
+print("\\nMasque pixels sombres (< 100):")
+print(masque_sombre.astype(int))
+print(f"Nombre de pixels sombres: {pixels_sombres}")
+
+# Bonus: statistiques de l'image
+print("\\nStatistiques de l'image:")
+print(f"Luminosité moyenne: {np.mean(image):.1f}")
+print(f"Contraste (écart-type): {np.std(image):.1f}")
+print(f"Pixel le plus sombre: {np.min(image)}")
+print(f"Pixel le plus clair: {np.max(image)}")
+</code></pre>
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Optimisations et bonnes pratiques",
+            content: `
+                        <p><strong>🚀 Optimisations NumPy :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Vectorisation</strong> : éviter les boucles Python</li>
+                            <li>📊 <strong>Broadcasting</strong> : utiliser les opérations automatiques</li>
+                            <li>💾 <strong>Views vs Copies</strong> : attention aux modifications</li>
+                            <li>🎯 <strong>Dtype approprié</strong> : int32 vs float64 selon les besoins</li>
+                        </ul>
+                        
+                        <p><strong>⚠️ Pièges à éviter :</strong></p>
+                        <ul>
+                            <li>🐌 <strong>Boucles Python</strong> sur des arrays NumPy</li>
+                            <li>📝 <strong>Copies inutiles</strong> : utiliser les views quand possible</li>
+                            <li>🔢 <strong>Mauvais dtype</strong> : float64 par défaut peut être excessif</li>
+                            <li>📐 <strong>Broadcasting non intentionnel</strong> : vérifier les shapes</li>
+                        </ul>
+                        
+                        <p><strong>💡 Règle d'or :</strong> Si vous écrivez une boucle for sur un array NumPy, il y a probablement une meilleure façon vectorisée !</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Pandas pour la manipulation de données structurées !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Quelle est la principale différence entre une liste Python et un array NumPy ?",
+          options: [
+            "A) Les arrays NumPy peuvent contenir plus d'éléments",
+            "B) Les arrays NumPy sont plus rapides pour les calculs numériques",
+            "C) Les listes Python sont plus précises",
+            "D) Il n'y a pas de différence significative",
+          ],
+          correct: 1,
+          explanation:
+            "Les arrays NumPy sont optimisés pour les calculs numériques et peuvent être jusqu'à 100x plus rapides que les listes Python grâce à leur implémentation en C et aux opérations vectorisées.",
+        },
+        prevModule: "basics.html",
+        nextModule: "pandas.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>
