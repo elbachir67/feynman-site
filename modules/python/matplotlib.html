@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matplotlib | IA4Ndada</title>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>💻 Python</span>
+          <span>›</span>
+          <span>Matplotlib</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>📊 Matplotlib : Visualisation de Données</h1>
+      <p class="subtitle">Module 2.4 - Programmation pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Matplotlib</h3>
+        <p>
+          Félicitations ! Vous maîtrisez maintenant Matplotlib pour visualiser
+          vos données d'IA.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="pandas.html" class="nav-link" id="prev-link"
+          >← Module précédent : Pandas</a
+        >
+        <a href="algorithms.html" class="nav-link" id="next-link"
+          >Module suivant : Algorithmes →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Matplotlib
+      const moduleConfig = {
+        id: "python-matplotlib",
+        title: "Matplotlib : Visualisation de Données",
+        category: "Python",
+        objectives: [
+          "Comprendre pourquoi la visualisation est cruciale en IA",
+          "Créer des graphiques clairs et informatifs",
+          "Maîtriser les différents types de visualisations",
+          "Analyser des données sénégalaises avec des graphiques",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Pourquoi visualiser les données ?",
+            content: `
+                        <p><strong>Matplotlib</strong> transforme vos chiffres en histoires visuelles ! C'est la différence entre regarder 1000 nombres dans un tableau et comprendre instantanément les tendances.</p>
+                        
+                        <p><strong>🧠 Le cerveau humain :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Traite les images</strong> 60 000x plus vite que le texte</li>
+                            <li>👁️ <strong>Détecte les patterns</strong> visuels instantanément</li>
+                            <li>🎯 <strong>Mémorise mieux</strong> avec des graphiques</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Avantages Matplotlib :</strong></p>
+                        <ul>
+                            <li>📈 <strong>Graphiques professionnels</strong> : publication scientifique</li>
+                            <li>🎨 <strong>Personnalisation totale</strong> : couleurs, styles, annotations</li>
+                            <li>🔗 <strong>Intégration parfaite</strong> : NumPy, Pandas, Jupyter</li>
+                            <li>📱 <strong>Export multiple</strong> : PNG, PDF, SVG, web</li>
+                        </ul>
+                        
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Analyse exploratoire</strong> : comprendre les données avant modélisation</li>
+                            <li>📈 <strong>Courbes d'apprentissage</strong> : suivre l'entraînement des modèles</li>
+                            <li>🎯 <strong>Matrices de confusion</strong> : évaluer les performances</li>
+                            <li>🔍 <strong>Détection d'anomalies</strong> : identifier les outliers visuellement</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "Données vs Visualisations : l'exemple sénégalais",
+            content: `
+                        <p>Imaginez que vous analysez <strong>l'économie sénégalaise</strong> :</p>
+                        
+                        <p><strong>📋 Données brutes :</strong></p>
+                        <p style="background: #f4f4f4; padding: 1rem; border-radius: 4px; font-family: monospace; font-size: 0.9rem;">
+Dakar: 2019: 1.2M, 2020: 1.1M, 2021: 1.3M, 2022: 1.4M<br>
+Thiès: 2019: 0.8M, 2020: 0.7M, 2021: 0.9M, 2022: 1.0M<br>
+Saint-Louis: 2019: 0.5M, 2020: 0.4M, 2021: 0.6M, 2022: 0.7M
+                        </p>
+                        
+                        <p><strong>🤯 Questions impossibles à répondre rapidement :</strong></p>
+                        <ul>
+                            <li>Quelle région croît le plus vite ?</li>
+                            <li>Y a-t-il eu un impact COVID en 2020 ?</li>
+                            <li>Quelle est la tendance générale ?</li>
+                        </ul>
+                        
+                        <p><strong>📊 Avec un graphique :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Réponse en 2 secondes</strong> : Dakar domine, toutes les régions ont chuté en 2020, reprise forte en 2021-2022</li>
+                            <li>👁️ <strong>Patterns évidents</strong> : courbes parallèles = croissance similaire</li>
+                            <li>🎯 <strong>Insights immédiats</strong> : Saint-Louis rattrape son retard</li>
+                        </ul>
+                        
+                        <p><strong>💡 C'est le pouvoir de Matplotlib !</strong></p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Premier graphique simple",
+            description:
+              "Créons notre premier graphique avec des données sénégalaises :",
+            code: `import matplotlib.pyplot as plt
+import numpy as np
+
+# Configuration pour Pyodide
+plt.ioff()  # Mode interactif désactivé
+
+# Données de température à Dakar (2024)
+mois = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun']
+temperatures = [24, 25, 27, 28, 30, 32]  # °C
+
+# Création du graphique
+fig, ax = plt.subplots(figsize=(8, 5))
+ax.plot(mois, temperatures)
+ax.set_title('Temperatures a Dakar (2024)')
+ax.set_xlabel('Mois')
+ax.set_ylabel('Température (°C)')
+ax.grid(True, alpha=0.3)
+fig.show()
+
+print("📊 Graphique créé avec succès !")`,
+          },
+          {
+            type: "code",
+            title: "Personnalisation des couleurs",
+            description: "Ajoutons des couleurs et du style sénégalais :",
+            code: `# Couleurs du drapeau sénégalais
+couleur_vert = '#00A651'  # Vert du drapeau
+couleur_jaune = '#FDEF42'  # Jaune du drapeau
+couleur_rouge = '#E31E24'  # Rouge du drapeau
+
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(mois, temperatures, 
+         color=couleur_vert, 
+         linewidth=3, 
+         marker='o', 
+         markersize=8,
+         label='Température Dakar')
+
+ax.set_title('Climat de Dakar - Couleurs Nationales', fontsize=16)
+ax.set_xlabel('Mois', fontsize=12)
+ax.set_ylabel('Température (°C)', fontsize=12)
+ax.legend()
+ax.grid(True, alpha=0.3)
+fig.show()
+
+print("🎨 Graphique stylisé aux couleurs du Sénégal !")`,
+          },
+          {
+            type: "code",
+            title: "Comparaison multi-villes",
+            description:
+              "Comparons les températures de plusieurs villes sénégalaises :",
+            code: `# Données climatiques de 3 villes sénégalaises
+villes_data = {
+    'Dakar': [24, 25, 27, 28, 30, 32],
+    'Saint-Louis': [22, 23, 25, 26, 28, 30],
+    'Tambacounda': [26, 28, 32, 35, 38, 40]
+}
+
+fig, ax = plt.subplots(figsize=(12, 7))
+
+# Graphique pour chaque ville
+for ville, temps in villes_data.items():
+    ax.plot(mois, temps, marker='o', linewidth=2, label=ville)
+
+ax.set_title('Comparaison Climatique - Senegal 2024', fontsize=16)
+ax.set_xlabel('Mois', fontsize=12)
+ax.set_ylabel('Température (°C)', fontsize=12)
+ax.legend(fontsize=11)
+ax.grid(True, alpha=0.3)
+fig.show()
+
+print("🏙️ Comparaison de 3 villes sénégalaises terminée !")`,
+          },
+          {
+            type: "code",
+            title: "Graphique en barres : PIB régional",
+            description: "Visualisons le PIB des régions sénégalaises :",
+            code: `# PIB par région (en milliards FCFA)
+regions = ['Dakar', 'Thiès', 'Diourbel', 'Saint-Louis', 'Kaolack']
+pib_2024 = [2800, 850, 420, 380, 350]
+
+fig, ax = plt.subplots(figsize=(10, 6))
+barres = ax.bar(regions, pib_2024, 
+                color=['#00A651', '#FDEF42', '#E31E24', '#00A651', '#FDEF42'])
+
+# Ajouter les valeurs sur les barres
+for i, barre in enumerate(barres):
+    hauteur = barre.get_height()
+    ax.text(barre.get_x() + barre.get_width()/2., hauteur + 20,
+            f'{pib_2024[i]}B', ha='center', va='bottom', fontweight='bold')
+
+ax.set_title('PIB par Region - Senegal 2024', fontsize=16)
+ax.set_xlabel('Régions', fontsize=12)
+ax.set_ylabel('PIB (Milliards FCFA)', fontsize=12)
+ax.tick_params(axis='x', rotation=45)
+fig.tight_layout()
+fig.show()
+
+print("📊 Graphique PIB régional créé !")`,
+          },
+          {
+            type: "code",
+            title: "Histogramme : distribution des âges",
+            description:
+              "Analysons la distribution des âges dans une startup dakaroise :",
+            code: `# Âges des employés d'une startup tech à Dakar
+np.random.seed(42)
+ages_employes = np.random.normal(28, 5, 100)  # Moyenne 28 ans, écart-type 5
+ages_employes = ages_employes[ages_employes > 20]  # Filtrer les âges réalistes
+
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.hist(ages_employes, bins=15, color=couleur_vert, alpha=0.7, edgecolor='black')
+ax.axvline(np.mean(ages_employes), color=couleur_rouge, linestyle='--', 
+            linewidth=2, label=f'Moyenne: {np.mean(ages_employes):.1f} ans')
+
+ax.set_title('Distribution des Ages - Startup Dakar', fontsize=16)
+ax.set_xlabel('Âge (années)', fontsize=12)
+ax.set_ylabel('Nombre d\'employés', fontsize=12)
+ax.legend()
+ax.grid(True, alpha=0.3)
+fig.show()
+
+print(f"📈 Âge moyen: {np.mean(ages_employes):.1f} ans")
+print(f"📊 {len(ages_employes)} employés analysés")`,
+          },
+          {
+            type: "code",
+            title: "Graphique en secteurs : langues parlées",
+            description: "Répartition des langues parlées au Sénégal :",
+            code: `# Langues parlées au Sénégal (pourcentages approximatifs)
+langues = ['Wolof', 'Pulaar', 'Serer', 'Mandinka', 'Diola', 'Autres']
+pourcentages = [43.3, 23.8, 14.7, 3.4, 3.7, 11.1]
+
+# Couleurs inspirées de l'artisanat sénégalais
+couleurs = ['#8B4513', '#DAA520', '#CD853F', '#D2691E', '#A0522D', '#F4A460']
+
+plt.figure(figsize=(10, 8))
+wedges, texts, autotexts = plt.pie(pourcentages, labels=langues, colors=couleurs,
+                                  autopct='%1.1f%%', startangle=90)
+
+# Améliorer la lisibilité
+for autotext in autotexts:
+    autotext.set_color('white')
+    autotext.set_fontweight('bold')
+
+plt.title('Langues Parlees au Senegal', fontsize=16, pad=20)
+plt.axis('equal')  # Cercle parfait
+plt.show()
+
+print("🇸🇳 Diversité linguistique du Sénégal visualisée !")`,
+          },
+          {
+            type: "code",
+            title: "Nuage de points : corrélation économique",
+            description:
+              "Relation entre éducation et revenus dans les régions :",
+            code: `# Données économiques par région
+regions_noms = ['Dakar', 'Thiès', 'Diourbel', 'Saint-Louis', 'Kaolack', 
+                'Fatick', 'Kolda', 'Ziguinchor', 'Louga', 'Matam']
+taux_alphabetisation = [85, 72, 68, 75, 65, 58, 52, 70, 60, 55]  # %
+revenu_moyen = [180, 120, 95, 110, 85, 75, 65, 105, 80, 70]  # milliers FCFA
+
+plt.figure(figsize=(12, 8))
+scatter = plt.scatter(taux_alphabetisation, revenu_moyen, 
+                     s=100, c=range(len(regions_noms)), 
+                     cmap='viridis', alpha=0.7)
+
+# Ajouter les noms des régions
+for i, region in enumerate(regions_noms):
+    plt.annotate(region, (taux_alphabetisation[i], revenu_moyen[i]),
+                xytext=(5, 5), textcoords='offset points', fontsize=9)
+
+plt.title('Education vs Revenus - Regions du Senegal', fontsize=16)
+plt.xlabel('Taux d\'alphabétisation (%)', fontsize=12)
+plt.ylabel('Revenu moyen (milliers FCFA)', fontsize=12)
+plt.grid(True, alpha=0.3)
+plt.colorbar(scatter, label='Régions')
+plt.show()
+
+print("🔍 Corrélation éducation-revenus analysée !")`,
+          },
+          {
+            type: "code",
+            title: "Sous-graphiques : tableau de bord",
+            description: "Créons un tableau de bord économique complet :",
+            code: `# Données pour le tableau de bord
+mois_complets = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 
+                'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc']
+exportations = [45, 48, 52, 55, 58, 62, 65, 68, 64, 60, 55, 50]  # Milliards FCFA
+importations = [38, 42, 45, 48, 52, 55, 58, 60, 57, 53, 48, 45]
+inflation = [2.1, 2.3, 2.8, 3.1, 3.4, 3.2, 2.9, 2.7, 2.5, 2.3, 2.1, 2.0]  # %
+
+# Création du tableau de bord
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))
+
+# Graphique 1: Commerce extérieur
+ax1.plot(mois_complets, exportations, 'g-', label='Exportations', linewidth=2)
+ax1.plot(mois_complets, importations, 'r-', label='Importations', linewidth=2)
+ax1.set_title('Commerce Exterieur 2024')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+print("📊 Tableau de bord économique en cours de création...")`,
+          },
+          {
+            type: "code",
+            title: "Tableau de bord : suite",
+            description: "Complétons notre tableau de bord :",
+            code: `# Graphique 2: Inflation
+ax2.bar(mois_complets, inflation, color=couleur_jaune, alpha=0.7)
+ax2.set_title('Taux d\'Inflation 2024')
+ax2.set_ylabel('Inflation (%)')
+ax2.tick_params(axis='x', rotation=45)
+
+# Graphique 3: Balance commerciale
+balance = [exp - imp for exp, imp in zip(exportations, importations)]
+couleurs_balance = [couleur_vert if b > 0 else couleur_rouge for b in balance]
+ax3.bar(mois_complets, balance, color=couleurs_balance, alpha=0.7)
+ax3.set_title('Balance Commerciale 2024')
+ax3.axhline(y=0, color='black', linestyle='-', alpha=0.5)
+ax3.tick_params(axis='x', rotation=45)
+
+# Graphique 4: Secteurs économiques (camembert)
+secteurs = ['Agriculture', 'Industrie', 'Services', 'Mines']
+parts_pib = [16, 24, 54, 6]
+ax4.pie(parts_pib, labels=secteurs, autopct='%1.1f%%', startangle=90)
+ax4.set_title('Repartition du PIB par Secteur')
+
+plt.tight_layout()
+plt.show()
+print("✅ Tableau de bord économique sénégalais terminé !")`,
+          },
+          {
+            type: "code",
+            title: "Graphique temporel avancé",
+            description: "Évolution du taux de change FCFA/USD :",
+            code: `import pandas as pd
+from datetime import datetime, timedelta
+
+# Simulation de données de change FCFA/USD
+dates = pd.date_range('2024-01-01', periods=100, freq='D')
+np.random.seed(42)
+taux_base = 600  # 1 USD = 600 FCFA environ
+variations = np.random.normal(0, 5, 100).cumsum()
+taux_change = taux_base + variations
+
+plt.figure(figsize=(14, 8))
+plt.plot(dates, taux_change, color=couleur_vert, linewidth=2)
+plt.fill_between(dates, taux_change, alpha=0.3, color=couleur_vert)
+
+# Ligne de référence
+plt.axhline(y=taux_base, color=couleur_rouge, linestyle='--', 
+           label=f'Taux de référence: {taux_base} FCFA')
+
+plt.title('Evolution FCFA/USD - 2024', fontsize=16)
+plt.xlabel('Date', fontsize=12)
+plt.ylabel('Taux de change (FCFA pour 1 USD)', fontsize=12)
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+print(f"💰 Taux actuel: {taux_change[-1]:.0f} FCFA/USD")
+print(f"📊 Variation sur la période: {taux_change[-1] - taux_change[0]:+.0f} FCFA")`,
+          },
+          {
+            type: "code",
+            title: "Heatmap : matrice de corrélation",
+            description:
+              "Analysons les corrélations entre indicateurs économiques :",
+            code: `# Données économiques multiples
+donnees_eco = {
+    'PIB': [2800, 850, 420, 380, 350, 280, 250, 320, 200, 180],
+    'Population': [3.7, 2.0, 1.8, 1.0, 1.2, 0.8, 0.7, 0.6, 0.9, 0.7],  # Millions
+    'Alphabétisation': [85, 72, 68, 75, 65, 58, 52, 70, 60, 55],
+    'Revenus': [180, 120, 95, 110, 85, 75, 65, 105, 80, 70]
+}
+
+# Création du DataFrame et calcul des corrélations
+df_eco = pd.DataFrame(donnees_eco)
+correlations = df_eco.corr()
+
+# Création de la heatmap
+plt.figure(figsize=(10, 8))
+im = plt.imshow(correlations, cmap='RdYlGn', aspect='auto', vmin=-1, vmax=1)
+
+# Ajout des labels
+plt.xticks(range(len(correlations.columns)), correlations.columns, rotation=45)
+plt.yticks(range(len(correlations.columns)), correlations.columns)
+
+# Ajout des valeurs dans les cellules
+for i in range(len(correlations.columns)):
+    for j in range(len(correlations.columns)):
+        plt.text(j, i, f'{correlations.iloc[i, j]:.2f}', 
+                ha='center', va='center', fontweight='bold')
+
+plt.colorbar(im, label='Coefficient de corrélation')
+plt.title('Matrice de Correlation - Indicateurs Economiques', fontsize=16)
+plt.tight_layout()
+plt.show()
+
+print("🔍 Corrélations économiques analysées !")`,
+          },
+          {
+            type: "code",
+            title: "Graphique 3D : données multidimensionnelles",
+            description: "Visualisation 3D des données régionales :",
+            code: `from mpl_toolkits.mplot3d import Axes3D
+
+# Données 3D pour les régions
+fig = plt.figure(figsize=(12, 9))
+ax = fig.add_subplot(111, projection='3d')
+
+# Données
+x = taux_alphabetisation  # Éducation
+y = revenu_moyen         # Revenus
+z = [2800, 850, 420, 380, 350, 280, 250, 320, 200, 180]  # PIB
+
+# Couleurs selon le PIB
+couleurs_3d = plt.cm.viridis(np.array(z) / max(z))
+
+scatter = ax.scatter(x, y, z, c=couleurs_3d, s=100, alpha=0.7)
+
+# Labels des axes
+ax.set_xlabel('Taux d\'alphabétisation (%)', fontsize=12)
+ax.set_ylabel('Revenu moyen (milliers FCFA)', fontsize=12)
+ax.set_zlabel('PIB (milliards FCFA)', fontsize=12)
+ax.set_title('Analyse 3D - Regions du Senegal', fontsize=16)
+
+# Ajouter les noms des régions
+for i, region in enumerate(regions_noms):
+    ax.text(x[i], y[i], z[i], region, fontsize=8)
+
+plt.show()
+print("🎯 Visualisation 3D des régions terminée !")`,
+          },
+          {
+            type: "code",
+            title: "Styles et thèmes",
+            description: "Appliquons différents styles à nos graphiques :",
+            code: `# Affichage des styles disponibles
+print("🎨 Styles disponibles dans Matplotlib:")
+print(plt.style.available[:10])  # Premiers 10 styles
+
+# Application d'un style moderne
+plt.style.use('seaborn-v0_8')  # Style moderne et propre
+
+# Graphique avec le nouveau style
+plt.figure(figsize=(12, 6))
+for ville, temps in villes_data.items():
+    plt.plot(mois, temps, marker='o', linewidth=3, markersize=8, label=ville)
+
+plt.title('Temperatures avec Style Moderne', fontsize=18, pad=20)
+plt.xlabel('Mois', fontsize=14)
+plt.ylabel('Température (°C)', fontsize=14)
+plt.legend(fontsize=12, frameon=True, shadow=True)
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Retour au style par défaut
+plt.style.use('default')
+print("✅ Style appliqué et restauré !")`,
+          },
+          {
+            type: "code",
+            title: "Sauvegarde et export",
+            description:
+              "Sauvegardons nos graphiques dans différents formats :",
+            code: `# Création d'un graphique final pour l'export
+plt.figure(figsize=(12, 8))
+plt.plot(mois_complets, exportations, 'g-', linewidth=3, 
+         marker='o', markersize=8, label='Exportations')
+plt.plot(mois_complets, importations, 'r-', linewidth=3, 
+         marker='s', markersize=8, label='Importations')
+
+plt.title('Commerce Exterieur du Senegal - 2024', fontsize=18, pad=20)
+plt.xlabel('Mois', fontsize=14)
+plt.ylabel('Valeur (Milliards FCFA)', fontsize=14)
+plt.legend(fontsize=12, loc='upper left')
+plt.grid(True, alpha=0.3)
+plt.xticks(rotation=45)
+plt.tight_layout()
+
+# Sauvegarde (simulation - en réalité sauvegarderait les fichiers)
+print("💾 Sauvegarde en cours...")
+print("✅ Graphique sauvé en PNG (haute résolution)")
+print("✅ Graphique sauvé en PDF (vectoriel)")
+print("✅ Graphique sauvé en SVG (web)")
+
+plt.show()
+print("🎯 Export terminé - Graphiques prêts pour publication !")`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Bonnes pratiques de visualisation pour l'IA",
+            content: `
+                        <p><strong>📋 Règles d'or pour des graphiques efficaces :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Clarté avant beauté</strong> : le message doit être évident</li>
+                            <li>🎨 <strong>Couleurs cohérentes</strong> : maximum 5-7 couleurs distinctes</li>
+                            <li>📊 <strong>Échelles appropriées</strong> : ne pas tromper avec les axes</li>
+                            <li>📝 <strong>Titres explicites</strong> : "Quoi, Où, Quand" en un coup d'œil</li>
+                            <li>🔍 <strong>Légendes claires</strong> : pas d'ambiguïté sur les données</li>
+                            <li>📱 <strong>Lisibilité mobile</strong> : tailles de police adaptées</li>
+                        </ul>
+                        
+                        <p><strong>🤖 Spécificités IA :</strong></p>
+                        <ul>
+                            <li>📈 <strong>Courbes d'apprentissage</strong> : loss vs epochs</li>
+                            <li>🎯 <strong>Matrices de confusion</strong> : heatmaps pour classification</li>
+                            <li>📊 <strong>Distributions</strong> : histogrammes pour comprendre les données</li>
+                            <li>🔍 <strong>Outliers</strong> : scatter plots pour détecter les anomalies</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Un bon graphique raconte une histoire et guide la prise de décision. En IA, vos visualisations peuvent révéler des insights cachés dans vos données !</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Algorithmes pour structurer notre logique de programmation !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Quel type de graphique est le plus approprié pour montrer l'évolution du PIB sénégalais sur 10 ans ?",
+          options: [
+            "A) Graphique en secteurs (camembert)",
+            "B) Histogramme",
+            "C) Graphique linéaire",
+            "D) Nuage de points",
+          ],
+          correct: 2,
+          explanation:
+            "Le graphique linéaire est parfait pour montrer l'évolution d'une variable dans le temps. Il permet de voir clairement les tendances, les pics et les creux du PIB sur la période.",
+        },
+        prevModule: "pandas.html",
+        nextModule: "algorithms.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

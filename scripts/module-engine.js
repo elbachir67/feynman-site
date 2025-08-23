@@ -338,6 +338,11 @@ class ModuleEngine {
     this.saveProgress();
   }
 
+  // Mettre à jour la barre de progression (alias pour compatibilité)
+  updateProgressBar() {
+    this.updateProgress(0);
+  }
+
   // Configurer la navigation
   setupNavigation() {
     const prevLink = document.getElementById("prev-link");

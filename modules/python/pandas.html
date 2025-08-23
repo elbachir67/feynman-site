@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pandas | IA4Ndada</title>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>💻 Python</span>
+          <span>›</span>
+          <span>Pandas</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🐼 Pandas : Manipulation de Données</h1>
+      <p class="subtitle">Module 2.3 - Programmation pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Pandas</h3>
+        <p>
+          Félicitations ! Vous maîtrisez maintenant Pandas pour la manipulation
+          de données en IA.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="numpy.html" class="nav-link" id="prev-link"
+          >← Module précédent : NumPy</a
+        >
+        <a href="matplotlib.html" class="nav-link" id="next-link"
+          >Module suivant : Matplotlib →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Pandas
+      const moduleConfig = {
+        id: "python-pandas",
+        title: "Pandas : Manipulation de Données",
+        category: "Python",
+        objectives: [
+          "Comprendre pourquoi Pandas est essentiel pour l'IA",
+          "Créer et manipuler des DataFrames efficacement",
+          "Nettoyer et transformer des données réelles",
+          "Analyser des datasets comme un data scientist",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Pourquoi Pandas révolutionne l'analyse de données ?",
+            content: `
+                        <p><strong>Pandas</strong> (Panel Data) est LA bibliothèque incontournable pour manipuler des données structurées en Python. C'est l'Excel des data scientists, mais en 100x plus puissant !</p>
+                        
+                        <p><strong>🔑 Problème résolu :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Données brutes</strong> : CSV, Excel, JSON, SQL → chaos</li>
+                            <li>✨ <strong>Pandas</strong> : structure, nettoie, analyse → insights</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Superpouvoir Pandas :</strong></p>
+                        <ul>
+                            <li>📋 <strong>DataFrames</strong> : tableaux intelligents avec labels</li>
+                            <li>🧹 <strong>Nettoyage</strong> : gère les données manquantes automatiquement</li>
+                            <li>🔄 <strong>Transformation</strong> : pivot, group by, merge en une ligne</li>
+                            <li>📈 <strong>Analyse</strong> : statistiques descriptives instantanées</li>
+                        </ul>
+                        
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Préparation de données</strong> : 80% du travail d'un data scientist</li>
+                            <li>🧠 <strong>Feature engineering</strong> : créer de nouvelles variables</li>
+                            <li>📈 <strong>Analyse exploratoire</strong> : comprendre les patterns</li>
+                            <li>🎯 <strong>Preprocessing</strong> : préparer pour les modèles ML</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "Excel vs Pandas : le match du siècle",
+            content: `
+                        <p>Imaginez que vous devez analyser <strong>1 million de lignes de données de ventes</strong> :</p>
+                        
+                        <p><strong>📊 Avec Excel :</strong></p>
+                        <ul>
+                            <li>💥 <strong>Crash</strong> : Excel plante avec trop de données</li>
+                            <li>🐌 <strong>Lenteur</strong> : 5 minutes pour un simple tri</li>
+                            <li>🤯 <strong>Complexité</strong> : formules illisibles partout</li>
+                            <li>❌ <strong>Erreurs</strong> : un clic et tout est cassé</li>
+                        </ul>
+                        
+                        <p><strong>🐼 Avec Pandas :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Rapidité</strong> : 1 seconde pour trier 1M de lignes</li>
+                            <li>🧠 <strong>Intelligence</strong> : détecte automatiquement les types</li>
+                            <li>🔄 <strong>Reproductibilité</strong> : même code = même résultat</li>
+                            <li>🚀 <strong>Évolutivité</strong> : de 1000 à 1 milliard de lignes</li>
+                        </ul>
+                        
+                        <p><strong>💡 Analogie :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Excel</strong> : comme une calculatrice avancée</li>
+                            <li>🐼 <strong>Pandas</strong> : comme un supercalculateur intelligent</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Création d'un DataFrame",
+            description:
+              "Créons notre premier DataFrame à partir d'un dictionnaire :",
+            code: `import pandas as pd
+
+# Création d'un DataFrame à partir d'un dictionnaire
+data = {
+    'nom': ['Aminata', 'Moussa', 'Fatou', 'Ibrahima', 'Aïssatou'],
+    'age': [25, 30, 35, 28, 32],
+    'ville': ['Dakar', 'Thiès', 'Saint-Louis', 'Kaolack', 'Ziguinchor'],
+    'salaire': [450000, 550000, 480000, 520000, 580000]  # En FCFA
+}
+
+df = pd.DataFrame(data)
+print("📊 DATAFRAME CRÉÉ")
+print(df)
+print(f"\\nForme : {df.shape} (lignes, colonnes)")`,
+          },
+          {
+            type: "code",
+            title: "Exploration du DataFrame",
+            description: "Découvrons les méthodes d'exploration essentielles :",
+            code: `# Informations générales sur le DataFrame
+print("🔍 INFORMATIONS GÉNÉRALES")
+print(df.info())
+
+print("\\n📈 STATISTIQUES DESCRIPTIVES")
+print(df.describe())
+
+print("\\n👀 APERÇU DES DONNÉES")
+print("5 premières lignes :")
+print(df.head())`,
+          },
+          {
+            type: "code",
+            title: "Accès aux données",
+            description: "Comment accéder aux colonnes et lignes :",
+            code: `# Accès aux colonnes
+print("👥 NOMS DES EMPLOYÉS")
+print(df['nom'].tolist())
+
+print("\\n👤 PREMIER EMPLOYÉ (par index)")
+print(df.iloc[0])
+
+print("\\n💰 SALAIRES > 500000 FCFA")
+riches = df[df['salaire'] > 500000]
+print(riches[['nom', 'salaire']])`,
+          },
+          {
+            type: "code",
+            title: "Modification du DataFrame",
+            description: "Ajoutons de nouvelles colonnes calculées :",
+            code: `# Ajout d'une nouvelle colonne
+df['salaire_mensuel'] = df['salaire'] / 12
+df['experience'] = [2, 5, 8, 3, 6]
+
+print("💳 NOUVELLES COLONNES AJOUTÉES")
+print(df[['nom', 'salaire', 'salaire_mensuel', 'experience']].round(0))
+
+print("\\n📊 RÉSUMÉ FINAL")
+print(f"Nombre d'employés : {len(df)}")
+print(f"Salaire moyen : {df['salaire'].mean():.0f} FCFA")`,
+          },
+          {
+            type: "code",
+            title: "Génération de données e-commerce",
+            description: "Créons un dataset réaliste de ventes en ligne :",
+            code: `import numpy as np
+
+# Simulation d'un dataset de ventes e-commerce
+np.random.seed(42)
+n_ventes = 50
+
+produits = ['Ordinateur', 'Téléphone', 'Tablette', 'Écouteurs', 'Montre']
+villes = ['Dakar', 'Thiès', 'Saint-Louis', 'Kaolack', 'Ziguinchor']
+
+ventes_data = {
+    'date': pd.date_range('2024-01-01', periods=n_ventes, freq='D'),
+    'produit': np.random.choice(produits, n_ventes),
+    'prix': np.random.uniform(25000, 750000, n_ventes).round(0),  # Prix en FCFA
+    'quantite': np.random.randint(1, 5, n_ventes),
+    'ville': np.random.choice(villes, n_ventes)
+}
+
+df_ventes = pd.DataFrame(ventes_data)
+df_ventes['ca'] = df_ventes['prix'] * df_ventes['quantite']
+
+print("🛒 DATASET DE VENTES E-COMMERCE SÉNÉGAL")
+print(df_ventes.head(10))`,
+          },
+          {
+            type: "code",
+            title: "Analyse des ventes",
+            description: "Analysons les performances de notre e-commerce :",
+            code: `print(f"📊 APERÇU DU DATASET")
+print(f"Nombre de ventes : {len(df_ventes)}")
+print(f"Période : {df_ventes['date'].min()} à {df_ventes['date'].max()}")
+print(f"CA total : {df_ventes['ca'].sum():,.0f} FCFA")
+
+print("\\n🏆 TOP 3 PRODUITS PAR CA")
+top_produits = df_ventes.groupby('produit')['ca'].sum().sort_values(ascending=False)
+print(top_produits.head(3))
+
+print("\\n🌍 CA PAR VILLE")
+ca_ville = df_ventes.groupby('ville')['ca'].sum().sort_values(ascending=False)
+print(ca_ville)`,
+          },
+          {
+            type: "code",
+            title: "Données avec problèmes",
+            description: "Créons un dataset 'sale' avec des problèmes réels :",
+            code: `# Dataset avec des problèmes typiques
+data_sale = {
+    'nom': ['Aminata', '', 'Ousmane', 'Marième', None, 'Cheikh'],
+    'age': [25, 30, -5, 28, 150, 32],  # Âges aberrants
+    'email': ['aminata@orange.sn', 'moussa@', 'ousmane@gmail.com', 
+              'marieme@yahoo.fr', 'email-invalide', 'cheikh@hotmail.com'],
+    'salaire': [45000, np.nan, 48000, 52000, 58000, np.nan]  # Valeurs manquantes
+}
+
+df_sale = pd.DataFrame(data_sale)
+print("🚨 DATASET AVEC PROBLÈMES")
+print(df_sale)
+print(f"\\nValeurs manquantes par colonne :")
+print(df_sale.isnull().sum())`,
+          },
+          {
+            type: "code",
+            title: "Nettoyage des données",
+            description: "Nettoyons les problèmes un par un :",
+            code: `# 1. Nettoyage des noms vides
+df_clean = df_sale.copy()
+df_clean = df_clean.dropna(subset=['nom'])  # Supprimer les NaN
+df_clean = df_clean[df_clean['nom'] != '']  # Supprimer les chaînes vides
+
+print("🧹 APRÈS NETTOYAGE DES NOMS")
+print(f"Lignes restantes : {len(df_clean)}")
+
+# 2. Correction des âges aberrants
+age_median = df_clean['age'][(df_clean['age'] > 0) & (df_clean['age'] < 100)].median()
+df_clean.loc[(df_clean['age'] <= 0) | (df_clean['age'] >= 100), 'age'] = age_median
+
+print(f"\\n👶 ÂGES CORRIGÉS (médiane = {age_median})")
+print("Âges après correction :", df_clean['age'].tolist())`,
+          },
+          {
+            type: "code",
+            title: "Validation et finalisation",
+            description: "Validons les emails et finalisons le nettoyage :",
+            code: `# 3. Validation des emails
+email_pattern = r'^[\\w\\.-]+@[\\w\\.-]+\\.[a-zA-Z]{2,}$'
+df_clean['email_valide'] = df_clean['email'].str.match(email_pattern, na=False)
+
+print("📧 VALIDATION DES EMAILS")
+print(df_clean[['email', 'email_valide']])
+
+# 4. Gestion des salaires manquants
+salaire_moyen = df_clean['salaire'].mean()
+df_clean['salaire'].fillna(salaire_moyen, inplace=True)
+
+print(f"\\n💰 SALAIRES COMPLÉTÉS (moyenne = {salaire_moyen:.0f} FCFA)")
+print("\\n✅ DATASET NETTOYÉ FINAL")
+print(df_clean[['nom', 'age', 'email_valide', 'salaire']])`,
+          },
+          {
+            type: "code",
+            title: "Génération de données par région",
+            description:
+              "Créons un dataset de ventes par région pour les analyses groupées :",
+            code: `# Dataset de ventes par région
+np.random.seed(42)
+n_ventes = 100
+
+regions = ['Dakar', 'Thiès', 'Kaolack', 'Saint-Louis', 'Ziguinchor']
+vendeurs = ['Aminata', 'Moussa', 'Fatou', 'Ibrahima', 'Aïssatou']
+produits = ['Ordinateur', 'Téléphone', 'Tablette', 'Écouteurs']
+
+ventes = pd.DataFrame({
+    'date': pd.date_range('2024-01-01', periods=n_ventes, freq='D'),
+    'region': np.random.choice(regions, n_ventes),
+    'vendeur': np.random.choice(vendeurs, n_ventes),
+    'produit': np.random.choice(produits, n_ventes),
+    'prix_unitaire': np.random.uniform(50000, 1000000, n_ventes).round(0),  # FCFA
+    'quantite': np.random.randint(1, 10, n_ventes)
+})
+
+ventes['ca'] = ventes['prix_unitaire'] * ventes['quantite']
+print("📊 DATASET DE VENTES PAR RÉGION")
+print(ventes.head(8))`,
+          },
+          {
+            type: "code",
+            title: "Analyses par région",
+            description: "Analysons les performances par région avec groupby :",
+            code: `# Analyse par région
+print("🌍 PERFORMANCE PAR RÉGION")
+perf_region = ventes.groupby('region').agg({
+    'ca': ['sum', 'mean', 'count'],
+    'quantite': 'sum'
+}).round(2)
+
+perf_region.columns = ['CA_Total', 'CA_Moyen', 'Nb_Ventes', 'Quantite_Totale']
+print(perf_region.sort_values('CA_Total', ascending=False))
+
+print("\\n🏆 TOP 3 VENDEURS")
+top_vendeurs = ventes.groupby('vendeur')['ca'].sum().sort_values(ascending=False)
+print(top_vendeurs.head(3))`,
+          },
+          {
+            type: "code",
+            title: "Tableaux croisés et évolution",
+            description:
+              "Créons des tableaux croisés et analysons l'évolution :",
+            code: `# Tableau croisé : Produit x Région
+print("📱 TABLEAU CROISÉ : CA PAR PRODUIT ET RÉGION")
+pivot_table = pd.pivot_table(ventes, 
+                           values='ca', 
+                           index='produit', 
+                           columns='region', 
+                           aggfunc='sum', 
+                           fill_value=0).round(0)
+print(pivot_table)
+
+# Évolution mensuelle
+ventes['mois'] = ventes['date'].dt.to_period('M')
+print("\\n📈 ÉVOLUTION DU CA PAR MOIS")
+ca_mensuel = ventes.groupby('mois')['ca'].sum().round(0)
+print(ca_mensuel)`,
+          },
+          {
+            type: "code",
+            title: "Création de tables liées",
+            description:
+              "Créons plusieurs DataFrames liés comme une vraie base de données :",
+            code: `# Tables liées (comme une base de données)
+np.random.seed(42)
+
+# Table des clients
+clients = pd.DataFrame({
+    'client_id': range(1, 11),
+    'nom': ['Aminata Diallo', 'Moussa Sow', 'Fatou Ba', 'Ibrahima Fall', 'Aïssatou Ndiaye',
+            'Ousmane Diouf', 'Marième Sarr', 'Cheikh Sy', 'Khady Faye', 'Mamadou Kane'],
+    'ville': np.random.choice(['Dakar', 'Thiès', 'Saint-Louis'], 10),
+    'age': np.random.randint(25, 65, 10)
+})
+
+# Table des commandes
+commandes = pd.DataFrame({
+    'commande_id': range(101, 121),
+    'client_id': np.random.choice(range(1, 11), 20),
+    'date': pd.date_range('2024-01-01', periods=20, freq='D'),
+    'total': np.random.uniform(25000, 250000, 20).round(0)  # FCFA
+})
+
+print("👥 TABLE CLIENTS")
+print(clients.head())
+print("\\n🛒 TABLE COMMANDES")
+print(commandes.head())`,
+          },
+          {
+            type: "code",
+            title: "Jointures simples",
+            description: "Effectuons des jointures entre nos tables :",
+            code: `# Jointure clients + commandes
+commandes_completes = pd.merge(commandes, clients, on='client_id', how='left')
+
+print("🔗 JOINTURE CLIENTS + COMMANDES")
+print(commandes_completes[['commande_id', 'nom', 'ville', 'total']].head())
+
+print("\\n💰 CA PAR CLIENT")
+ca_par_client = commandes_completes.groupby('nom')['total'].sum().sort_values(ascending=False)
+print(ca_par_client.head())
+
+print("\\n🌍 CA PAR VILLE")
+ca_par_ville = commandes_completes.groupby('ville')['total'].sum().sort_values(ascending=False)
+print(ca_par_ville)`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Bonnes pratiques Pandas pour l'IA",
+            content: `
+                        <p><strong>📋 Règles d'or pour l'IA :</strong></p>
+                        <ul>
+                            <li>🧹 <strong>Toujours nettoyer</strong> : 80% du temps d'un data scientist</li>
+                            <li>📊 <strong>Explorer d'abord</strong> : .describe(), .info(), .head()</li>
+                            <li>🔍 <strong>Vérifier les types</strong> : .dtypes pour éviter les surprises</li>
+                            <li>💾 <strong>Sauvegarder les étapes</strong> : df.copy() avant modifications</li>
+                            <li>📈 <strong>Visualiser</strong> : graphiques pour comprendre les patterns</li>
+                            <li>🎯 <strong>Optimiser la mémoire</strong> : .memory_usage() pour gros datasets</li>
+                        </ul>
+                        <p><strong>💡 Point clé :</strong> Pandas est votre meilleur ami pour préparer les données avant de les donner aux modèles d'IA. Des données propres = modèles performants !</p>
+                        <p><strong>🔮 Prochaine étape :</strong> Matplotlib pour visualiser tout ce qu'on a analysé !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Quelle méthode utilise-t-on pour joindre deux DataFrames sur une colonne commune ?",
+          options: [
+            "A) df.join()",
+            "B) pd.merge()",
+            "C) df.concat()",
+            "D) df.append()",
+          ],
+          correct: 1,
+          explanation:
+            "pd.merge() est la méthode principale pour joindre des DataFrames sur des colonnes communes. Elle offre différents types de jointures (left, right, inner, outer) comme en SQL.",
+        },
+        prevModule: "numpy.html",
+        nextModule: "matplotlib.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

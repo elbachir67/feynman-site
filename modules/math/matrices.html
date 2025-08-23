@@ -128,18 +128,29 @@
           {
             type: "intuition",
             icon: "🧠",
-            title: "L'analogie de la machine à transformation",
+            title: "L'analogie du GPS et des coordonnées",
             content: `
-                        <p>Imaginez une <strong>machine à transformation</strong> qui prend des ingrédients en entrée et produit des résultats :</p>
-                        <p>🏭 <strong>Entrée</strong> : [farine=3kg, sucre=2kg] → <strong>Machine</strong> → <strong>Sortie</strong> : [gâteaux=5, biscuits=8]</p>
-                        <p>La machine applique des <strong>règles de transformation</strong> :</p>
+                        <p>Imaginez que vous utilisez un <strong>GPS</strong> pour convertir votre position :</p>
+                        <p>📍 <strong>Position actuelle</strong> : [3 km à l'est, 4 km au nord] du centre-ville</p>
+                        <p>🎯 <strong>Nouvelle position</strong> après avoir tourné et bougé : [5 km à l'est, 2 km au nord]</p>
+                        
+                        <p>Le GPS applique des <strong>règles de transformation</strong> :</p>
                         <ul>
-                            <li>🧁 <strong>1 gâteau</strong> = 1kg farine + 2kg sucre</li>
-                            <li>🍪 <strong>1 biscuit</strong> = 2kg farine + 1kg sucre</li>
+                            <li>📐 <strong>Nouvelle position Est</strong> = 0.6 × ancienne_est + 0.8 × ancienne_nord</li>
+                            <li>📐 <strong>Nouvelle position Nord</strong> = -0.8 × ancienne_est + 0.6 × ancienne_nord</li>
                         </ul>
-                        <p>Cette "recette" peut être représentée par une matrice :</p>
-                        $$\\begin{bmatrix} 1 & 2 \\\\ 2 & 1 \\end{bmatrix}$$
-                        <p><strong>C'est exactement ce que fait une matrice :</strong> elle transforme un vecteur d'entrée en un vecteur de sortie selon des règles précises !</p>
+                        
+                        <p>Ces règles forment une matrice de transformation :</p>
+                        $$\\begin{bmatrix} 0.6 & 0.8 \\\\ -0.8 & 0.6 \\end{bmatrix}$$
+                        
+                        <p><strong>💡 C'est exactement ce que fait une matrice :</strong></p>
+                        <ul>
+                            <li>🎯 Elle prend vos <strong>coordonnées actuelles</strong> (vecteur d'entrée)</li>
+                            <li>🔄 Elle applique une <strong>transformation géométrique</strong> (rotation, étirement, etc.)</li>
+                            <li>📍 Elle vous donne vos <strong>nouvelles coordonnées</strong> (vecteur de sortie)</li>
+                        </ul>
+                        
+                        <p><strong>🌟 Applications concrètes :</strong> rotation d'images, animations 3D, transformations en réalité virtuelle !</p>
                     `,
           },
           {
@@ -347,32 +358,41 @@
             title: "Le rang d'une matrice : dimension de l'information",
             content: `
                         <p><strong>🤔 Qu'est-ce que le rang ?</strong></p>
-                        <p>Le <strong>rang</strong> d'une matrice mesure la \"quantité d'information indépendante\" qu'elle contient. C'est le nombre de directions vraiment différentes dans la matrice.</p>
+                        <p>Le <strong>rang</strong> d'une matrice mesure combien de "directions vraiment différentes" elle contient. C'est comme compter les informations uniques et non redondantes.</p>
                         
-                        <p><strong>🎯 Analogie simple :</strong></p>
-                        <p>Imaginez une équipe de 5 personnes :</p>
+                        <p><strong>🎯 Analogie des témoins :</strong></p>
+                        <p>Imaginez 5 témoins d'un accident qui donnent leur version :</p>
                         <ul>
-                            <li>🧑‍💼 <strong>Rang 5</strong> : chacun apporte une compétence unique</li>
-                            <li>🧑‍💼 <strong>Rang 3</strong> : seulement 3 compétences différentes (2 personnes font la même chose)</li>
-                            <li>🧑‍💼 <strong>Rang 1</strong> : tout le monde fait exactement la même chose</li>
+                            <li>👥 <strong>Rang 5</strong> : chaque témoin raconte quelque chose de différent → 5 infos uniques</li>
+                            <li>👥 <strong>Rang 3</strong> : 2 témoins répètent exactement ce que dit un autre → seulement 3 infos uniques</li>
+                            <li>👥 <strong>Rang 1</strong> : tous disent exactement la même chose → 1 seule info</li>
                         </ul>
                         
-                        <p><strong>📐 Définition mathématique :</strong></p>
-                        <p>Le rang est le nombre maximal de <strong>lignes (ou colonnes) linéairement indépendantes</strong>.</p>
+                        <p><strong>📐 En termes mathématiques :</strong></p>
+                        <p>Le rang compte les <strong>lignes (ou colonnes) qui apportent une information nouvelle</strong>.</p>
+                        
+                        <p><strong>🔍 Dépendance linéaire expliquée simplement :</strong></p>
+                        <p>Deux lignes sont <strong>"dépendantes"</strong> si l'une peut être obtenue en multipliant l'autre par un nombre :</p>
+                        <ul>
+                            <li>✅ <strong>Indépendantes</strong> : [1, 2] et [3, 1] → directions différentes</li>
+                            <li>❌ <strong>Dépendantes</strong> : [1, 2] et [2, 4] → la 2ème = 2 × la 1ère</li>
+                        </ul>
+                        
+                        <p><strong>💡 Intuition :</strong> Si vous pouvez "deviner" une ligne à partir des autres, elle n'apporte pas d'information nouvelle !</p>
                         
                         <p><strong>🔍 Propriétés importantes :</strong></p>
                         <ul>
                             <li><strong>rang(A) ≤ min(nombre de lignes, nombre de colonnes)</strong></li>
-                            <li><strong>rang(A) = n</strong> ⟺ A est de \"rang plein\" (information maximale)</li>
-                            <li><strong>rang(A) < n</strong> ⟺ A a de la \"redondance\" (information perdue)</li>
+                            <li><strong>rang(A) = maximum possible</strong> ⟺ aucune redondance (information maximale)</li>
+                            <li><strong>rang(A) < maximum</strong> ⟺ il y a de la redondance (information perdue)</li>
                         </ul>
                         
                         <p><strong>🤖 Pourquoi crucial en IA ?</strong></p>
                         <ul>
-                            <li>📊 <strong>Réduction de dimension</strong> : éliminer l'information redondante</li>
-                            <li>🧠 <strong>Analyse de données</strong> : détecter les patterns cachés</li>
+                            <li>📊 <strong>Compression de données</strong> : éliminer les informations redondantes</li>
+                            <li>🧠 <strong>Détection de patterns</strong> : trouver les vraies dimensions importantes</li>
                             <li>🎯 <strong>Compression</strong> : stocker moins d'information sans perte</li>
-                            <li>🔍 <strong>Détection de problèmes</strong> : matrices mal conditionnées</li>
+                            <li>🔍 <strong>Diagnostic</strong> : détecter si un système a assez d'informations uniques</li>
                         </ul>
                     `,
           },

@@ -168,133 +168,170 @@ print(f"Moyenne: {average}")</pre>
                     `,
           },
           {
-            type: "exemple",
-            icon: "💻",
-            title: "Variables et types Python",
-            content: `
-                        <p><strong>🎯 En Python, pas besoin de déclarer les types :</strong></p>
-                        
-                    `,
+            type: "code",
+            title: "Variables et types automatiques",
+            description:
+              "Python détecte automatiquement le type des variables :",
+            code: `# Profil d'un étudiant sénégalais
+nom = "Aminata Diallo"
+age = 22
+taille = 1.68
+est_etudiant = True
+
+print(f"👤 Nom: {nom} (type: {type(nom).__name__})")
+print(f"Âge: {age} (type: {type(age).__name__})")
+print(f"📏 Taille: {taille}m (type: {type(taille).__name__})")
+print(f"🎓 Étudiant UCAD: {est_etudiant} (type: {type(est_etudiant).__name__})")`,
           },
           {
             type: "code",
-            title: "Listes : la base des données en IA",
+            title: "Opérations et chaînes",
+            description: "Opérations de base et manipulation de chaînes :",
+            code: `# Calculs de budget étudiant (en FCFA)
+frais_scolarite, transport = 75000, 15000
+print(f"💰 Scolarité + Transport: {frais_scolarite} + {transport} = {frais_scolarite + transport} FCFA")
+print(f"📊 Ratio: {frais_scolarite} / {transport} = {frais_scolarite / transport:.1f}")
+print(f"📈 Croissance: {frais_scolarite} ** 2 = {frais_scolarite ** 2:,} FCFA")
+
+# Chaînes de caractères
+prenom = "Fatou"
+nom_famille = "Sow"
+nom_complet = f"{prenom} {nom_famille}"
+print(f"\\n👤 Nom complet: {nom_complet}")
+print(f"📢 En majuscules: {nom_complet.upper()}")
+print(f"📏 Longueur: {len(nom_complet)} caractères")`,
+          },
+          {
+            type: "code",
+            title: "Listes : création et manipulation",
             description:
-              "Les listes Python sont parfaites pour manipuler des données :",
-            code: `# Données d'un dataset d'IA
-temperatures = [22.5, 25.1, 23.8, 26.2, 24.0]
-villes = ["Paris", "Lyon", "Marseille", "Toulouse", "Nice"]
+              "Les listes sont parfaites pour stocker des collections de données :",
+            code: `# Données météo du Sénégal
+temperatures = [28.5, 31.2, 29.8, 33.1, 30.4]  # En Celsius
+villes = ["Dakar", "Thiès", "Saint-Louis", "Kaolack", "Ziguinchor"]
 
 print("🌡️ DONNÉES MÉTÉO")
 print(f"Températures : {temperatures}")
 print(f"Villes : {villes}")
 
-# Opérations essentielles pour l'IA
+# Statistiques de base
 print(f"\\n📊 STATISTIQUES")
 print(f"Nombre de mesures : {len(temperatures)}")
 print(f"Température max : {max(temperatures)}°C")
 print(f"Température min : {min(temperatures)}°C")
-print(f"Moyenne : {sum(temperatures)/len(temperatures):.1f}°C")
-
-# Indexation (accès aux éléments)
-print(f"\\n🎯 ACCÈS AUX DONNÉES")
+print(f"Moyenne : {sum(temperatures)/len(temperatures):.1f}°C")`,
+          },
+          {
+            type: "code",
+            title: "Listes : indexation et modification",
+            description: "Accédons et modifions les éléments des listes :",
+            code: `# Indexation (accès aux éléments)
+print("🎯 ACCÈS AUX DONNÉES")
 print(f"Première ville : {villes[0]}")
 print(f"Dernière température : {temperatures[-1]}°C")
 print(f"3 premières villes : {villes[:3]}")
 
-# Ajout de nouvelles données (comme en temps réel)
-temperatures.append(27.3)
-villes.append("Bordeaux")
+# Ajout de nouvelles données
+temperatures.append(32.8)
+villes.append("Tambacounda")
 print(f"\\n➕ NOUVELLES DONNÉES")
 print(f"Nouvelle température : {temperatures[-1]}°C à {villes[-1]}")
 
-# Filtrage (très utile en IA)
-temperatures_chaudes = [t for t in temperatures if t > 25]
-print(f"\\n🔥 TEMPÉRATURES > 25°C : {temperatures_chaudes}")
-`,
+# Filtrage des températures élevées
+temperatures_chaudes = [t for t in temperatures if t > 30]
+print(f"\\n🔥 TEMPÉRATURES > 30°C : {temperatures_chaudes}")`,
           },
           {
             type: "code",
-            title: "Dictionnaires : organiser l'information",
-            description:
-              "Les dictionnaires stockent des paires clé-valeur, parfait pour l'IA :",
-            code: `# Profil utilisateur pour un système de recommandation
+            title: "Dictionnaires : profils utilisateur",
+            description: "Les dictionnaires stockent des paires clé-valeur :",
+            code: `# Profil utilisateur Netflix Sénégal
 utilisateur = {
-    "nom": "Alice",
-    "age": 28,
-    "ville": "Paris",
-    "genres_preferes": ["Action", "Sci-Fi", "Thriller"],
-    "note_moyenne": 4.2
+    "nom": "Moussa Diop",
+    "age": 26,
+    "ville": "Dakar",
+    "genres_preferes": ["Nollywood", "Action", "Comédie"],
+    "note_moyenne": 4.3,
+    "langue": "Wolof"
 }
 
-print("👤 PROFIL UTILISATEUR")
+print("👤 PROFIL UTILISATEUR SÉNÉGAL")
 print(f"Nom : {utilisateur['nom']}")
-print(f"Âge : {utilisateur['age']} ans")
+print(f"Âge : {utilisateur['age']} ans - {utilisateur['ville']}")
 print(f"Genres préférés : {utilisateur['genres_preferes']}")
 
-# Scores de prédiction d'un modèle IA
-predictions = {
-    "Avengers": 0.95,
-    "Titanic": 0.23,
-    "Interstellar": 0.87,
-    "Fast & Furious": 0.91
-}
-
-print(f"\\n🤖 PRÉDICTIONS IA")
-for film, score in predictions.items():
-    emoji = "👍" if score > 0.7 else "👎"
-    print(f"{emoji} {film}: {score*100:.0f}% de chance d'aimer")
-
-# Mise à jour dynamique (apprentissage en temps réel)
-utilisateur["films_vus"] = 47
-utilisateur["note_moyenne"] = 4.3
-
+# Mise à jour dynamique
+utilisateur["films_vus"] = 52
+utilisateur["note_moyenne"] = 4.4
 print(f"\\n📊 MISE À JOUR")
 print(f"Films vus : {utilisateur['films_vus']}")
-print(f"Nouvelle note moyenne : {utilisateur['note_moyenne']}")
-
-# Vérification de clés (éviter les erreurs)
-if "abonnement_premium" in utilisateur:
-    print("✨ Utilisateur premium")
-else:
-    print("👤 Utilisateur standard")
-`,
+print(f"Nouvelle note moyenne : {utilisateur['note_moyenne']}")`,
           },
           {
             type: "code",
-            title: "Conditions et boucles : la logique de l'IA",
+            title: "Dictionnaires : prédictions IA",
             description:
-              "Les conditions et boucles permettent de créer une logique intelligente :",
-            code: `# Système de classification simple
+              "Utilisons les dictionnaires pour stocker des prédictions :",
+            code: `# Recommandations IA pour utilisateur sénégalais
+predictions = {
+    "Black Panther": 0.94,
+    "Adama": 0.89,  # Film sénégalais
+    "La Pirogue": 0.92,  # Film sénégalais
+    "Fast & Furious": 0.78,
+    "Atlantique": 0.85  # Film sénégalais
+}
+
+print("🤖 RECOMMANDATIONS IA SÉNÉGAL")
+for film, score in predictions.items():
+    emoji = "👍" if score > 0.7 else "👎"
+    drapeau = "🇸🇳" if film in ["Adama", "La Pirogue", "Atlantique"] else "🌍"
+    print(f"{emoji} {drapeau} {film}: {score*100:.0f}% de chance d'aimer")
+
+# Vérification de clés
+if "langue" in utilisateur:
+    print(f"\\n🗣️ Langue préférée : {utilisateur['langue']}")
+else:
+    print("\\n🌍 Langue non spécifiée")`,
+          },
+          {
+            type: "code",
+            title: "Conditions : classification simple",
+            description:
+              "Créons un système de classification avec des conditions :",
+            code: `# Classification climatique du Sénégal
 def classifier_temperature(temp):
-    """Classifie une température selon des seuils"""
-    if temp < 0:
-        return "🥶 Glacial"
-    elif temp < 10:
-        return "❄️ Froid"
-    elif temp < 20:
-        return "😐 Frais"
-    elif temp < 30:
-        return "☀️ Agréable"
+    """Classifie le climat sénégalais selon les saisons"""
+    if temp < 20:
+        return "❄️ Frais (saison sèche)"
+    elif temp < 28:
+        return "😐 Tempéré"
+    elif temp < 35:
+        return "☀️ Chaud (normal)"
+    elif temp < 40:
+        return "🔥 Très chaud"
     else:
-        return "🔥 Chaud"
+        return "🌡️ Extrême (harmattan)"
 
 # Test du classificateur
-temperatures_test = [-5, 8, 15, 25, 35]
-print("🌡️ CLASSIFICATION DES TEMPÉRATURES")
+temperatures_test = [18, 25, 32, 38, 42]
+print("🌡️ CLASSIFICATION CLIMAT SÉNÉGAL")
 for temp in temperatures_test:
     categorie = classifier_temperature(temp)
-    print(f"{temp}°C → {categorie}")
+    print(f"{temp}°C → {categorie}")`,
+          },
+          {
+            type: "code",
+            title: "Boucles : analyse de données",
+            description: "Analysons des données avec des boucles :",
+            code: `# Analyse des notes de films sénégalais
+notes_films = [4.7, 3.2, 4.9, 2.8, 4.6, 3.8, 4.4, 2.5]
+films = ["Adama", "Atlantique", "La Pirogue", "Karmen Geï", 
+         "Moolaadé", "Xala", "Ceddo", "Guelwaar"]
 
-# Analyse de données avec boucles
-notes_films = [4.5, 2.1, 4.8, 3.2, 4.9, 1.8, 4.3]
-print(f"\\n📊 ANALYSE DE {len(notes_films)} FILMS")
+print(f"🎬 ANALYSE DE {len(notes_films)} FILMS SÉNÉGALAIS")
 
 # Compteurs pour statistiques
-excellents = 0
-bons = 0
-moyens = 0
-mauvais = 0
+excellents = bons = moyens = mauvais = 0
 
 for note in notes_films:
     if note >= 4.5:
@@ -306,31 +343,42 @@ for note in notes_films:
     else:
         mauvais += 1
 
-print(f"⭐ Excellents (≥4.5) : {excellents}")
-print(f"👍 Bons (≥3.5) : {bons}")
-print(f"😐 Moyens (≥2.5) : {moyens}")
-print(f"👎 Mauvais (<2.5) : {mauvais}")
-
-# Recommandation basée sur la moyenne
-moyenne = sum(notes_films) / len(notes_films)
-print(f"\\n🎯 Note moyenne : {moyenne:.1f}")
-if moyenne >= 4.0:
-    print("✨ Profil cinéphile exigeant")
-elif moyenne >= 3.0:
-    print("👤 Profil spectateur standard")
-else:
-    print("🤔 Profil difficile à satisfaire")
-`,
+print(f"🏆 Excellents (≥4.5) : {excellents} films")
+print(f"👍 Bons (≥3.5) : {bons} films")
+print(f"😐 Moyens (≥2.5) : {moyens} films")
+print(f"👎 À améliorer (<2.5) : {mauvais} films")`,
           },
           {
             type: "code",
-            title: "Fonctions : code modulaire et réutilisable",
+            title: "Boucles : recommandations",
             description:
-              "Les fonctions permettent d'organiser le code et de le réutiliser :",
-            code: `def calculer_similarite(utilisateur1, utilisateur2):
+              "Créons un système de recommandation basé sur la moyenne :",
+            code: `# Recommandation basée sur la moyenne
+moyenne = sum(notes_films) / len(notes_films)
+print(f"\\n🎯 Note moyenne cinéma sénégalais : {moyenne:.1f}/5")
+
+if moyenne >= 4.0:
+    profil = "🎭 Cinéphile averti du cinéma africain"
+    recommandation = "Films de Sembène Ousmane et nouveaux talents"
+elif moyenne >= 3.0:
+    profil = "🎬 Amateur de cinéma sénégalais"
+    recommandation = "Comédies dakaroises et drames familiaux"
+else:
+    profil = "🤔 Spectateur sélectif"
+    recommandation = "Uniquement les classiques primés à Cannes"
+
+print(profil)
+print(f"Recommandation : {recommandation}")`,
+          },
+          {
+            type: "code",
+            title: "Fonctions : calcul de similarité",
+            description:
+              "Créons une fonction pour calculer la similarité entre utilisateurs :",
+            code: `def calculer_similarite_culturelle(utilisateur1, utilisateur2):
     """
-    Calcule la similarité entre deux utilisateurs basée sur leurs genres préférés.
-    Plus le score est élevé, plus ils sont similaires.
+    Calcule la similarité culturelle entre deux utilisateurs 
+    sénégalais basée sur leurs préférences.
     """
     genres1 = set(utilisateur1["genres"])
     genres2 = set(utilisateur2["genres"])
@@ -345,10 +393,20 @@ else:
     similarite = communs / total
     return round(similarite, 2)
 
-def recommander_films(utilisateur_cible, tous_utilisateurs, films_db):
-    """
-    Recommande des films basés sur des utilisateurs similaires.
-    """
+# Test de la fonction
+user1 = {"nom": "Aminata", "genres": ["Nollywood", "Comédie"]}
+user2 = {"nom": "Ibrahima", "genres": ["Comédie", "Drame"]}
+
+sim = calculer_similarite_culturelle(user1, user2)
+print(f"Similarité entre {user1['nom']} et {user2['nom']}: {sim*100:.0f}%")`,
+          },
+          {
+            type: "code",
+            title: "Système de recommandation complet",
+            description:
+              "Assemblons tout pour créer un système de recommandation :",
+            code: `def recommander_films_senegal(utilisateur_cible, tous_utilisateurs):
+    """Recommande des films sénégalais basés sur des utilisateurs similaires."""
     print(f"🎯 RECOMMANDATIONS POUR {utilisateur_cible['nom']}")
     print(f"Genres préférés : {utilisateur_cible['genres']}")
     
@@ -358,120 +416,106 @@ def recommander_films(utilisateur_cible, tous_utilisateurs, films_db):
     
     for autre_utilisateur in tous_utilisateurs:
         if autre_utilisateur['nom'] != utilisateur_cible['nom']:
-            sim = calculer_similarite(utilisateur_cible, autre_utilisateur)
+            sim = calculer_similarite_culturelle(utilisateur_cible, autre_utilisateur)
             print(f"Similarité avec {autre_utilisateur['nom']}: {sim*100:.0f}%")
             
             if sim > meilleure_similarite:
                 meilleure_similarite = sim
                 utilisateur_similaire = autre_utilisateur
     
-    # Recommandations basées sur l'utilisateur le plus similaire
+    # Recommandations
     if utilisateur_similaire:
         print(f"\\n✨ Utilisateur le plus similaire : {utilisateur_similaire['nom']}")
-        films_recommandes = utilisateur_similaire.get('films_aimes', [])
-        print(f"🎬 Films recommandés : {films_recommandes}")
+        films = utilisateur_similaire.get('films_aimes', ['Adama', 'La Pirogue'])
+        print(f"🎬 Films recommandés : {films}")
     else:
-        print("\\n🤔 Aucun utilisateur similaire trouvé")
-
-# Base de données d'utilisateurs
-utilisateurs = [
-    {"nom": "Alice", "genres": ["Action", "Sci-Fi"], "films_aimes": ["Matrix", "Blade Runner"]},
-    {"nom": "Bob", "genres": ["Comédie", "Romance"], "films_aimes": ["Amélie", "Love Actually"]},
-    {"nom": "Charlie", "genres": ["Action", "Thriller"], "films_aimes": ["John Wick", "Heat"]},
-    {"nom": "Diana", "genres": ["Sci-Fi", "Thriller"], "films_aimes": ["Inception", "Minority Report"]}
-]
-
-# Nouvel utilisateur à qui recommander
-nouvel_utilisateur = {"nom": "Eve", "genres": ["Sci-Fi", "Action"]}
-
-# Générer des recommandations
-recommander_films(nouvel_utilisateur, utilisateurs, {})
-`,
+        print("\\n🤔 Aucun utilisateur similaire trouvé")`,
           },
           {
             type: "code",
-            title: "List comprehensions : Python élégant",
-            description:
-              "Les list comprehensions permettent de créer des listes de manière concise et élégante :",
-            code: `# Données d'exemple : scores de modèles IA
-scores_bruts = [0.67, 0.89, 0.45, 0.92, 0.78, 0.34, 0.88, 0.56]
+            title: "Test du système complet",
+            description: "Testons notre système de recommandation :",
+            code: `# Base d'utilisateurs sénégalais
+utilisateurs = [
+    {"nom": "Aminata", "genres": ["Nollywood", "Drame"], 
+     "films_aimes": ["Adama", "Atlantique"]},
+    {"nom": "Moussa", "genres": ["Comédie", "Action"], 
+     "films_aimes": ["Hyènes", "Karmen Geï"]},
+    {"nom": "Fatou", "genres": ["Drame", "Historique"], 
+     "films_aimes": ["La Pirogue", "Moolaadé"]},
+    {"nom": "Ibrahima", "genres": ["Action", "Thriller"], 
+     "films_aimes": ["Ceddo", "Xala"]}
+]
 
-print("📊 DONNÉES ORIGINALES")
-print(f"Scores bruts : {scores_bruts}")
+# Nouvel utilisateur
+nouvel_utilisateur = {"nom": "Khady", "genres": ["Drame", "Nollywood"]}
 
-# Méthode traditionnelle (longue)
-scores_pourcentage_long = []
-for score in scores_bruts:
-    scores_pourcentage_long.append(score * 100)
-
-print(f"\\n📈 MÉTHODE TRADITIONNELLE")
-print(f"En pourcentage : {scores_pourcentage_long}")
-
-# List comprehension (élégant !)
-scores_pourcentage = [score * 100 for score in scores_bruts]
-print(f"\\n✨ LIST COMPREHENSION")
-print(f"En pourcentage : {scores_pourcentage}")
-
-# Filtrage avec condition
-bons_scores = [score for score in scores_bruts if score > 0.7]
-print(f"\\n🎯 FILTRAGE")
-print(f"Scores > 70% : {bons_scores}")
-
-# Transformation + filtrage en une ligne
-excellents = [f"{score*100:.0f}%" for score in scores_bruts if score > 0.8]
-print(f"Excellents (>80%) : {excellents}")
-
-# Exemple plus complexe : classification
-def classifier_score(score):
-    if score > 0.8:
-        return "Excellent"
-    elif score > 0.6:
-        return "Bon"
-    else:
-        return "À améliorer"
-
-classifications = [classifier_score(score) for score in scores_bruts]
-print(f"\\n🏷️ CLASSIFICATIONS")
-for i, (score, classe) in enumerate(zip(scores_bruts, classifications)):
-    print(f"Modèle {i+1}: {score:.2f} → {classe}")
-
-# Création de dictionnaire avec comprehension
-resultats = {f"modele_{i+1}": score for i, score in enumerate(scores_bruts)}
-print(f"\\n📋 DICTIONNAIRE")
-print(f"Résultats : {resultats}")
-`,
+# Générer des recommandations
+recommander_films_senegal(nouvel_utilisateur, utilisateurs)`,
           },
           {
-            type: "warning",
-            icon: "⚠️",
-            title: "Pourquoi ces bases sont cruciales pour l'IA ?",
-            content: `
-                        <p><strong>🧠 Chaque concept Python que nous venons de voir est utilisé quotidiennement en IA :</strong></p>
-                        <ul>
-                            <li>📊 <strong>Listes</strong> : stockent vos datasets (images, textes, nombres)</li>
-                            <li>🗂️ <strong>Dictionnaires</strong> : organisent les métadonnées et configurations</li>
-                            <li>🔄 <strong>Boucles</strong> : parcourent des millions de données</li>
-                            <li>⚖️ <strong>Conditions</strong> : implémentent la logique de décision</li>
-                            <li>🔧 <strong>Fonctions</strong> : créent des modèles réutilisables</li>
-                            <li>✨ <strong>List comprehensions</strong> : transforment les données efficacement</li>
-                        </ul>
-                        <p><strong>💡 Point clé :</strong> Maîtriser ces bases vous permet de comprendre et modifier n'importe quel code d'IA !</p>
-                        <p><strong>🚀 Prochaine étape :</strong> NumPy va transformer ces concepts simples en calculs ultra-rapides pour l'IA !</p>
-                    `,
+            type: "code",
+            title: "List comprehensions : style élégant",
+            description:
+              "Les list comprehensions permettent un code plus concis :",
+            code: `# Scores de reconnaissance vocale en langues sénégalaises
+scores_langues = [0.89, 0.76, 0.92, 0.68, 0.84, 0.71, 0.88, 0.79]
+langues = ["Wolof", "Pulaar", "Serer", "Mandinka", "Diola", "Soninké", "Français", "Arabe"]
+
+print("🗣️ RECONNAISSANCE VOCALE SÉNÉGAL")
+print(f"Scores par langue : {scores_langues}")
+
+# Méthode traditionnelle vs list comprehension
+scores_pourcentage_long = []
+for score in scores_langues:
+    scores_pourcentage_long.append(round(score * 100, 1))
+
+# List comprehension (élégant !)
+scores_pourcentage = [round(score * 100, 1) for score in scores_langues]
+
+print(f"\\n📈 CONVERSION EN POURCENTAGE")
+print(f"Résultat : {scores_pourcentage}%")`,
+          },
+          {
+            type: "code",
+            title: "List comprehensions : transformations",
+            description: "Filtrage et transformation en une ligne :",
+            code: `# Langues bien reconnues (>75%)
+bonnes_langues = [(langues[i], scores_langues[i]) for i in range(len(langues)) if scores_langues[i] > 0.75]
+print("🎯 FILTRAGE")
+print("Langues bien reconnues :")
+for langue, score in bonnes_langues:
+    print(f"  {langue}: {score*100:.0f}%")
+
+# Langues nationales excellentes
+excellentes = [langues[i] for i in range(len(langues)) if scores_langues[i] > 0.85 and langues[i] not in ["Français", "Arabe"]]
+print(f"\\n🏆 Langues nationales excellentes : {excellentes}")
+
+# Classification avec fonction
+def classifier_score(score):
+    if score > 0.85: return "🏆 Excellent"
+    elif score > 0.75: return "👍 Bon"
+    elif score > 0.65: return "😐 Moyen"
+    else: return "📈 À améliorer"
+
+classifications = [classifier_score(score) for score in scores_langues]
+print(f"\\n🏷️ CLASSIFICATIONS")
+for i, (langue, classe) in enumerate(zip(langues, classifications)):
+    print(f"{langue}: {classe}")`,
           },
         ],
         quiz: {
           question:
-            "🤔 Quelle est la façon la plus élégante de créer une liste des carrés de [1, 2, 3, 4, 5] ?",
+            "🤔 Quelle est la différence principale entre une liste et un dictionnaire en Python ?",
           options: [
-            "A) for i in range(5): squares.append((i+1)**2)",
-            "B) [x**2 for x in [1, 2, 3, 4, 5]]",
-            "C) map(lambda x: x**2, [1, 2, 3, 4, 5])",
-            "D) squares = []; for x in [1,2,3,4,5]: squares += [x**2]",
+            "A) Les listes sont plus rapides",
+            "B) Les dictionnaires utilisent des clés pour accéder aux valeurs",
+            "C) Les listes ne peuvent contenir que des nombres",
+            "D) Il n'y a pas de différence",
           ],
           correct: 1,
           explanation:
-            "La list comprehension [x**2 for x in [1, 2, 3, 4, 5]] est la façon la plus pythonique et lisible de créer cette liste. C'est concis, efficace et très lisible.",
+            "Les dictionnaires utilisent des clés (strings, nombres) pour accéder aux valeurs, tandis que les listes utilisent des indices numériques. Cela rend les dictionnaires parfaits pour structurer des données avec des labels.",
         },
         prevModule: "../math/statistics.html",
         nextModule: "numpy.html",

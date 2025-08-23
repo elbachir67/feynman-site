@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Algorithmes | IA4Ndada</title>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>💻 Python</span>
+          <span>›</span>
+          <span>Algorithmes</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>⚙️ Algorithmes : Logique et Efficacité</h1>
+      <p class="subtitle">Module 2.5 - Programmation pour l'IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Algorithmes</h3>
+        <p>
+          Félicitations ! Vous maîtrisez maintenant les algorithmes essentiels
+          pour l'IA.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="matplotlib.html" class="nav-link" id="prev-link"
+          >← Module précédent : Matplotlib</a
+        >
+        <a href="../ml/introduction.html" class="nav-link" id="next-link"
+          >Module suivant : Machine Learning →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Algorithmes
+      const moduleConfig = {
+        id: "python-algorithms",
+        title: "Algorithmes : Logique et Efficacité",
+        category: "Python",
+        objectives: [
+          "Comprendre pourquoi les algorithmes sont cruciaux en IA",
+          "Maîtriser les algorithmes de tri et de recherche",
+          "Analyser la complexité temporelle et spatiale",
+          "Implémenter des structures de données efficaces",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Pourquoi les algorithmes dominent l'IA ?",
+            content: `
+                        <p><strong>Les algorithmes</strong> sont le cœur battant de l'intelligence artificielle. Sans algorithmes efficaces, même les ordinateurs les plus puissants seraient inutiles !</p>
+                        
+                        <p><strong>🔑 Problème concret :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Recherche naïve</strong> : 1 million de données = 1 million d'opérations</li>
+                            <li>⚡ <strong>Recherche binaire</strong> : 1 million de données = 20 opérations !</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Impact en IA :</strong></p>
+                        <ul>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : algorithmes d'optimisation (Adam, SGD)</li>
+                            <li>🔍 <strong>Recherche</strong> : Google utilise PageRank (algorithme de graphe)</li>
+                            <li>🎯 <strong>Recommandations</strong> : algorithmes de filtrage collaboratif</li>
+                            <li>💬 <strong>LLMs</strong> : algorithmes d'attention et transformers</li>
+                        </ul>
+                        
+                        <p><strong>🤖 Applications concrètes :</strong></p>
+                        <ul>
+                            <li>📱 <strong>Tri intelligent</strong> : organiser 1 million de photos en secondes</li>
+                            <li>🚗 <strong>Navigation GPS</strong> : trouver le chemin optimal parmi des millions de routes</li>
+                            <li>🛒 <strong>E-commerce</strong> : recommander les bons produits parmi des millions</li>
+                            <li>🏥 <strong>Diagnostic médical</strong> : analyser des milliers de symptômes rapidement</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie du marché de Sandaga",
+            content: `
+                        <p>Imaginez que vous cherchez <strong>un tissu spécifique au marché de Sandaga</strong> à Dakar :</p>
+                        
+                        <p><strong>🐌 Approche naïve (recherche linéaire) :</strong></p>
+                        <ul>
+                            <li>Vous visitez <strong>chaque boutique une par une</strong></li>
+                            <li>1000 boutiques = 1000 visites dans le pire cas</li>
+                            <li>Temps : <strong>toute la journée</strong> ⏰</li>
+                        </ul>
+                        
+                        <p><strong>⚡ Approche intelligente (recherche organisée) :</strong></p>
+                        <ul>
+                            <li>Vous demandez au <strong>chef de secteur</strong> qui connaît l'organisation</li>
+                            <li>Il vous dirige vers la <strong>zone textile</strong></li>
+                            <li>Puis vers le <strong>sous-secteur</strong> de votre tissu</li>
+                            <li>Temps : <strong>15 minutes</strong> ⚡</li>
+                        </ul>
+                        
+                        <p><strong>💡 C'est exactement la différence entre :</strong></p>
+                        <ul>
+                            <li>🐌 <strong>Algorithme naïf</strong> : force brute, lent mais sûr</li>
+                            <li>🧠 <strong>Algorithme intelligent</strong> : structure, rapide et efficace</li>
+                        </ul>
+                        
+                        <p><strong>🎯 En IA, cette différence peut être :</strong></p>
+                        <ul>
+                            <li>⏰ <strong>1 heure vs 1 seconde</strong> pour traiter des données</li>
+                            <li>💰 <strong>1000€ vs 1€</strong> de coût de calcul cloud</li>
+                            <li>🔋 <strong>Batterie vide vs 1% consommé</strong> sur mobile</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Recherche linéaire : méthode de base",
+            description: "Cherchons un étudiant dans une liste de l'UCAD :",
+            code: `# Base de données étudiants UCAD
+etudiants_ucad = [
+    "Aminata Diallo", "Moussa Sow", "Fatou Ba", "Ibrahima Fall",
+    "Aissatou Ndiaye", "Ousmane Diouf", "Marieme Sarr", "Cheikh Sy",
+    "Khady Faye", "Mamadou Kane", "Ndeye Diop", "Alioune Cisse"
+]
+
+def recherche_lineaire(liste, cible):
+    """Recherche linéaire : vérifie chaque élément un par un"""
+    comparaisons = 0
+    
+    for i, etudiant in enumerate(liste):
+        comparaisons += 1
+        print(f"Vérification {comparaisons}: {etudiant}")
+        
+        if etudiant == cible:
+            return i, comparaisons
+    
+    return -1, comparaisons
+
+# Test de recherche
+nom_recherche = "Cheikh Sy"
+print(f"🔍 Recherche de: {nom_recherche}")
+print(f"📚 Dans une liste de {len(etudiants_ucad)} étudiants UCAD")
+print()
+
+position, nb_comparaisons = recherche_lineaire(etudiants_ucad, nom_recherche)
+
+if position != -1:
+    print(f"✅ Trouvé à la position {position}")
+else:
+    print("❌ Étudiant non trouvé")
+    
+print(f"📊 Nombre de comparaisons: {nb_comparaisons}")`,
+          },
+          {
+            type: "code",
+            title: "Recherche binaire : méthode optimisée",
+            description: "Recherche plus efficace sur une liste triée :",
+            code: `# Liste triée alphabétiquement
+etudiants_tries = sorted(etudiants_ucad)
+print("📋 Liste triée:", etudiants_tries)
+print()
+
+def recherche_binaire(liste, cible):
+    """Recherche binaire : divise la liste en deux à chaque étape"""
+    gauche, droite = 0, len(liste) - 1
+    comparaisons = 0
+    
+    while gauche <= droite:
+        comparaisons += 1
+        milieu = (gauche + droite) // 2
+        element_milieu = liste[milieu]
+        
+        print(f"Étape {comparaisons}: Vérification de '{element_milieu}' (position {milieu})")
+        
+        if element_milieu == cible:
+            return milieu, comparaisons
+        elif element_milieu < cible:
+            print(f"  → '{cible}' est après '{element_milieu}', chercher à droite")
+            gauche = milieu + 1
+        else:
+            print(f"  → '{cible}' est avant '{element_milieu}', chercher à gauche")
+            droite = milieu - 1
+    
+    return -1, comparaisons
+
+# Test de recherche binaire
+print(f"🔍 Recherche binaire de: {nom_recherche}")
+position, nb_comparaisons = recherche_binaire(etudiants_tries, nom_recherche)
+
+if position != -1:
+    print(f"✅ Trouvé à la position {position}")
+else:
+    print("❌ Étudiant non trouvé")
+    
+print(f"📊 Nombre de comparaisons: {nb_comparaisons}")
+print(f"🚀 Gain: {len(etudiants_ucad) - nb_comparaisons} comparaisons évitées!")`,
+          },
+          {
+            type: "code",
+            title: "Tri à bulles : algorithme simple",
+            description:
+              "Trions les notes d'étudiants avec l'algorithme à bulles :",
+            code: `# Notes d'étudiants en IA (sur 20)
+notes_ia = [12.5, 8.0, 16.5, 14.0, 9.5, 18.0, 11.0, 15.5, 13.0, 7.5]
+etudiants_notes = [
+    "Aminata", "Moussa", "Fatou", "Ibrahima", "Aissatou",
+    "Ousmane", "Marieme", "Cheikh", "Khady", "Mamadou"
+]
+
+print("📊 Notes initiales:")
+for i, (etudiant, note) in enumerate(zip(etudiants_notes, notes_ia)):
+    print(f"{i+1:2d}. {etudiant:10s}: {note:4.1f}/20")
+print()
+
+def tri_bulles(notes, noms):
+    """Tri à bulles : compare les éléments adjacents"""
+    n = len(notes)
+    notes_copie = notes.copy()
+    noms_copie = noms.copy()
+    comparaisons = 0
+    echanges = 0
+    
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            comparaisons += 1
+            
+            # Si l'élément actuel est plus grand que le suivant
+            if notes_copie[j] > notes_copie[j + 1]:
+                # Échanger les notes et les noms
+                notes_copie[j], notes_copie[j + 1] = notes_copie[j + 1], notes_copie[j]
+                noms_copie[j], noms_copie[j + 1] = noms_copie[j + 1], noms_copie[j]
+                echanges += 1
+                
+                print(f"Échange: {noms_copie[j]} ({notes_copie[j]}) ↔ {noms_copie[j+1]} ({notes_copie[j+1]})")
+    
+    return notes_copie, noms_copie, comparaisons, echanges
+
+notes_triees, noms_tries, comp, ech = tri_bulles(notes_ia, etudiants_notes)
+
+print(f"\n📈 Résultat du tri (ordre croissant):")
+for i, (etudiant, note) in enumerate(zip(noms_tries, notes_triees)):
+    print(f"{i+1:2d}. {etudiant:10s}: {note:4.1f}/20")
+
+print(f"\n📊 Statistiques:")
+print(f"Comparaisons: {comp}")
+print(f"Échanges: {ech}")`,
+          },
+          {
+            type: "code",
+            title: "Structures de données : Pile (Stack)",
+            description:
+              "Implémentons une pile pour gérer l'historique de navigation :",
+            code: `class PileNavigation:
+    """Pile pour gérer l'historique de navigation web"""
+    
+    def __init__(self):
+        self.pages = []
+    
+    def visiter_page(self, url):
+        """Ajouter une nouvelle page (push)"""
+        self.pages.append(url)
+        print(f"📄 Visite: {url}")
+    
+    def page_precedente(self):
+        """Retourner à la page précédente (pop)"""
+        if len(self.pages) > 1:
+            page_actuelle = self.pages.pop()
+            page_precedente = self.pages[-1]
+            print(f"⬅️ Retour de '{page_actuelle}' vers '{page_precedente}'")
+            return page_precedente
+        else:
+            print("❌ Aucune page précédente")
+            return None
+    
+    def page_actuelle(self):
+        """Obtenir la page actuelle (peek)"""
+        if self.pages:
+            return self.pages[-1]
+        return None
+    
+    def historique(self):
+        """Afficher tout l'historique"""
+        print("📚 Historique de navigation:")
+        for i, page in enumerate(self.pages):
+            marqueur = "👉" if i == len(self.pages) - 1 else "  "
+            print(f"{marqueur} {i+1}. {page}")
+
+# Simulation de navigation sur des sites sénégalais
+nav = PileNavigation()
+
+print("🌐 SIMULATION NAVIGATION WEB SÉNÉGAL")
+print("=" * 40)
+
+# Navigation
+nav.visiter_page("www.seneweb.com")
+nav.visiter_page("www.dakaractu.com") 
+nav.visiter_page("www.leral.net")
+nav.visiter_page("www.xibar.net")
+
+print(f"\n📍 Page actuelle: {nav.page_actuelle()}")
+nav.historique()
+
+print(f"\n⬅️ NAVIGATION ARRIÈRE:")
+nav.page_precedente()
+nav.page_precedente()
+
+print(f"\n📍 Page actuelle: {nav.page_actuelle()}")`,
+          },
+          {
+            type: "code",
+            title: "Structures de données : File (Queue)",
+            description:
+              "Implémentons une file pour gérer les commandes d'un restaurant :",
+            code: `from collections import deque
+
+class FileCommandes:
+    """File pour gérer les commandes d'un restaurant sénégalais"""
+    
+    def __init__(self, nom_restaurant):
+        self.commandes = deque()
+        self.nom_restaurant = nom_restaurant
+        self.numero_commande = 1
+    
+    def nouvelle_commande(self, client, plat):
+        """Ajouter une nouvelle commande (enqueue)"""
+        commande = {
+            'numero': self.numero_commande,
+            'client': client,
+            'plat': plat,
+            'statut': 'En attente'
+        }
+        self.commandes.append(commande)
+        print(f"🍽️ Commande #{self.numero_commande}: {client} - {plat}")
+        self.numero_commande += 1
+    
+    def servir_commande(self):
+        """Servir la première commande (dequeue)"""
+        if self.commandes:
+            commande = self.commandes.popleft()
+            commande['statut'] = 'Servie'
+            print(f"✅ Servi: Commande #{commande['numero']} - {commande['client']}")
+            return commande
+        else:
+            print("❌ Aucune commande en attente")
+            return None
+    
+    def afficher_file(self):
+        """Afficher toutes les commandes en attente"""
+        if not self.commandes:
+            print("📋 Aucune commande en attente")
+            return
+        
+        print(f"📋 FILE D'ATTENTE - {self.nom_restaurant}")
+        print("-" * 40)
+        for i, cmd in enumerate(self.commandes):
+            position = "👉 SUIVANT" if i == 0 else f"   #{i+1}"
+            print(f"{position} - {cmd['client']}: {cmd['plat']}")
+
+# Simulation restaurant sénégalais
+restaurant = FileCommandes("Chez Fatou - Thiéboudienne")
+
+print("🍽️ SIMULATION RESTAURANT SÉNÉGALAIS")
+print("=" * 45)
+
+# Arrivée des commandes
+restaurant.nouvelle_commande("Aminata", "Thiéboudienne rouge")
+restaurant.nouvelle_commande("Moussa", "Yassa poulet")
+restaurant.nouvelle_commande("Fatou", "Mafé bœuf")
+restaurant.nouvelle_commande("Ibrahima", "Thiou kandja")
+restaurant.nouvelle_commande("Aissatou", "Caldou")
+
+print()
+restaurant.afficher_file()
+
+print(f"\n🍳 SERVICE DES COMMANDES:")
+restaurant.servir_commande()
+restaurant.servir_commande()
+
+print()
+restaurant.afficher_file()`,
+          },
+          {
+            type: "code",
+            title: "Algorithme de recommandation simple",
+            description:
+              "Créons un système de recommandation pour films sénégalais :",
+            code: `class RecommandationFilms:
+    """Système de recommandation de films sénégalais"""
+    
+    def __init__(self):
+        # Base de films sénégalais avec genres
+        self.films = {
+            "Adama": ["Drame", "Historique", "Animation"],
+            "La Pirogue": ["Drame", "Social"],
+            "Atlantique": ["Drame", "Fantastique"],
+            "Hyènes": ["Drame", "Comédie"],
+            "Moolaadé": ["Drame", "Social"],
+            "Xala": ["Comédie", "Satire"],
+            "Ceddo": ["Historique", "Drame"],
+            "Karmen Geï": ["Musical", "Drame"],
+            "Guelwaar": ["Drame", "Politique"],
+            "Faat Kiné": ["Drame", "Féministe"]
+        }
+        
+        # Profils utilisateurs avec leurs préférences
+        self.utilisateurs = {}
+    
+    def ajouter_utilisateur(self, nom, films_aimes):
+        """Ajouter un utilisateur avec ses films préférés"""
+        self.utilisateurs[nom] = films_aimes
+        print(f"👤 Utilisateur ajouté: {nom}")
+        print(f"   Films aimés: {', '.join(films_aimes)}")
+    
+    def calculer_similarite(self, user1, user2):
+        """Calculer la similarité entre deux utilisateurs"""
+        films1 = set(self.utilisateurs[user1])
+        films2 = set(self.utilisateurs[user2])
+        
+        # Coefficient de Jaccard: intersection / union
+        intersection = len(films1.intersection(films2))
+        union = len(films1.union(films2))
+        
+        return intersection / union if union > 0 else 0
+    
+    def recommander(self, utilisateur_cible):
+        """Recommander des films à un utilisateur"""
+        if utilisateur_cible not in self.utilisateurs:
+            print(f"❌ Utilisateur '{utilisateur_cible}' non trouvé")
+            return []
+        
+        print(f"🎬 RECOMMANDATIONS POUR {utilisateur_cible}")
+        print("=" * 40)
+        
+        # Trouver l'utilisateur le plus similaire
+        meilleure_similarite = 0
+        utilisateur_similaire = None
+        
+        for autre_user in self.utilisateurs:
+            if autre_user != utilisateur_cible:
+                sim = self.calculer_similarite(utilisateur_cible, autre_user)
+                print(f"Similarité avec {autre_user}: {sim:.2f}")
+                
+                if sim > meilleure_similarite:
+                    meilleure_similarite = sim
+                    utilisateur_similaire = autre_user
+        
+        if utilisateur_similaire:
+            # Films du plus similaire que l'utilisateur cible n'a pas vus
+            films_cible = set(self.utilisateurs[utilisateur_cible])
+            films_similaire = set(self.utilisateurs[utilisateur_similaire])
+            recommandations = films_similaire - films_cible
+            
+            print(f"\n✨ Utilisateur le plus similaire: {utilisateur_similaire}")
+            print(f"📽️ Films recommandés: {', '.join(recommandations)}")
+            return list(recommandations)
+        
+        return []
+
+# Test du système
+systeme = RecommandationFilms()
+
+# Ajout d'utilisateurs
+systeme.ajouter_utilisateur("Aminata", ["Adama", "La Pirogue", "Moolaadé"])
+systeme.ajouter_utilisateur("Moussa", ["Hyènes", "Xala", "Guelwaar"])
+systeme.ajouter_utilisateur("Fatou", ["Adama", "Atlantique", "Karmen Geï"])
+systeme.ajouter_utilisateur("Ibrahima", ["La Pirogue", "Ceddo", "Faat Kiné"])
+
+print()
+# Recommandations pour Aminata
+recommandations = systeme.recommander("Aminata")`,
+          },
+          {
+            type: "code",
+            title: "Optimisation : cache et mémoïsation",
+            description: "Optimisons les calculs avec la mémoïsation :",
+            code: `import time
+
+# Fibonacci avec mémoïsation (rapide)
+cache_fibonacci = {}
+
+def fibonacci_rapide(n):
+    """Fibonacci avec cache - très efficace"""
+    if n in cache_fibonacci:
+        return cache_fibonacci[n]
+    
+    if n <= 1:
+        cache_fibonacci[n] = n
+        return n
+    
+    resultat = fibonacci_rapide(n-1) + fibonacci_rapide(n-2)
+    cache_fibonacci[n] = resultat
+    return resultat
+
+# Application pratique: croissance démographique du Sénégal
+def croissance_population_senegal(annee_base, population_base, taux_croissance, annees):
+    """Modèle de croissance démographique avec cache"""
+    cache_population = {0: population_base}
+    
+    def calculer_population(n):
+        if n in cache_population:
+            return cache_population[n]
+        
+        if n == 0:
+            return population_base
+        
+        pop_precedente = calculer_population(n-1)
+        nouvelle_pop = pop_precedente * (1 + taux_croissance)
+        cache_population[n] = nouvelle_pop
+        return nouvelle_pop
+    
+    print(f"📊 PROJECTION DÉMOGRAPHIQUE SÉNÉGAL")
+    print(f"Année de base: {annee_base}")
+    print(f"Population de base: {population_base:,.0f} habitants")
+    print(f"Taux de croissance: {taux_croissance*100:.1f}% par an")
+    print("-" * 50)
+    
+    for i in range(0, annees + 1, 5):  # Tous les 5 ans
+        population = calculer_population(i)
+        annee = annee_base + i
+        print(f"{annee}: {population:,.0f} habitants")
+    
+    return cache_population
+
+# Test des performances Fibonacci
+print("⚡ TEST DE PERFORMANCE - FIBONACCI")
+print("=" * 40)
+
+n_test = 30
+print(f"Calcul de Fibonacci({n_test}):")
+
+# Version rapide
+debut = time.time()
+resultat_rapide = fibonacci_rapide(n_test)
+temps_rapide = time.time() - debut
+print(f"⚡ Version optimisée: {resultat_rapide} en {temps_rapide:.6f}s")
+
+print()
+
+# Application démographique
+croissance_population_senegal(2024, 17_000_000, 0.025, 20)`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Algorithmes en IA : les fondations du futur",
+            content: `
+                        <p><strong>🧠 Les algorithmes sont le DNA de l'IA moderne :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Efficacité cruciale</strong> : O(n²) vs O(n log n) = différence entre 1h et 1 minute</li>
+                            <li>💰 <strong>Coût économique</strong> : algorithmes optimisés = millions d'euros économisés</li>
+                            <li>🔋 <strong>Énergie</strong> : algorithmes efficaces = moins de consommation électrique</li>
+                            <li>📱 <strong>Expérience utilisateur</strong> : réponse instantanée vs attente frustrante</li>
+                        </ul>
+                        
+                        <p><strong>🤖 Algorithmes fondamentaux en IA :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Recherche</strong> : BFS, DFS, A* pour navigation et jeux</li>
+                            <li>📊 <strong>Tri</strong> : QuickSort, MergeSort pour organiser les données</li>
+                            <li>🧠 <strong>Optimisation</strong> : Gradient descent, Adam pour entraîner les modèles</li>
+                            <li>🎯 <strong>Recommandation</strong> : Filtrage collaboratif, similarité cosinus</li>
+                            <li>📈 <strong>Clustering</strong> : K-means, DBSCAN pour grouper les données</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Maîtriser les algorithmes, c'est comprendre comment l'IA "pense" et optimise ses décisions. C'est la différence entre utiliser l'IA et la créer !</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Machine Learning - où nous utiliserons ces algorithmes pour créer des systèmes intelligents !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Quelle est la complexité temporelle de la recherche binaire sur une liste triée de n éléments ?",
+          options: [
+            "A) O(n) - linéaire",
+            "B) O(log n) - logarithmique",
+            "C) O(n²) - quadratique",
+            "D) O(1) - constante",
+          ],
+          correct: 1,
+          explanation:
+            "La recherche binaire a une complexité O(log n) car elle divise l'espace de recherche par 2 à chaque étape. Pour 1 million d'éléments, elle ne nécessite que ~20 comparaisons au maximum !",
+        },
+        prevModule: "matplotlib.html",
+        nextModule: "../ml/introduction.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>
