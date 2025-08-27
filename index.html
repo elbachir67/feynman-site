@@ -359,6 +359,12 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        transition: all 0.3s ease;
+      }
+
+      .module-item:hover {
+        background: rgba(0, 86, 179, 0.05);
+        padding-left: 1rem;
       }
 
       .module-item:last-child {
@@ -369,10 +375,12 @@
         color: var(--text-dark);
         text-decoration: none;
         font-weight: 500;
+        flex: 1;
       }
 
       .module-name:hover {
         color: var(--primary-color);
+        font-weight: 600;
       }
 
       .module-status {
@@ -391,6 +399,86 @@
       .module-status.in-progress {
         background: var(--warning-color);
         color: white;
+      }
+
+      /* Section de navigation rapide */
+      .quick-nav {
+        background: white;
+        padding: 3rem 2rem;
+        margin: 2rem 0;
+      }
+
+      .quick-nav h2 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        color: var(--text-dark);
+      }
+
+      .nav-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .nav-category {
+        background: var(--bg-light);
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .nav-category h3 {
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+        font-size: 1.1rem;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .nav-module-link {
+        padding: 0.5rem;
+        background: white;
+        border-radius: 4px;
+        text-decoration: none;
+        color: var(--text-dark);
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+      }
+
+      .nav-module-link:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateX(5px);
+      }
+
+      .nav-module-link.math:hover {
+        background: var(--math-color);
+        border-left-color: var(--math-color);
+      }
+
+      .nav-module-link.python:hover {
+        background: var(--python-color);
+        border-left-color: var(--python-color);
+      }
+
+      .nav-module-link.ml:hover {
+        background: var(--ml-color);
+        border-left-color: var(--ml-color);
+      }
+
+      .nav-module-link.dl:hover {
+        background: var(--dl-color);
+      }
+      .nav-module-link.llm:hover {
+        background: #f39c12;
       }
 
       /* Footer */
@@ -556,6 +644,134 @@
             <li>Prompt Engineering</li>
           </ul>
           <button class="module-btn">Commencer</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation rapide vers les modules -->
+    <section class="quick-nav" id="navigation">
+      <h2>🧭 Navigation rapide</h2>
+      <div class="nav-grid">
+        <!-- Mathématiques -->
+        <div class="nav-category">
+          <h3>🧮 Mathématiques</h3>
+          <div class="nav-links">
+            <a href="modules/math/vectors.html" class="nav-module-link math"
+              >📐 Vecteurs</a
+            >
+            <a href="modules/math/matrices.html" class="nav-module-link math"
+              >🔢 Matrices</a
+            >
+            <a href="modules/math/eigenvalues.html" class="nav-module-link math"
+              >🎯 Valeurs propres</a
+            >
+            <a href="modules/math/derivatives.html" class="nav-module-link math"
+              >📈 Dérivées</a
+            >
+            <a href="modules/math/gradients.html" class="nav-module-link math"
+              >🏔️ Gradients</a
+            >
+            <a href="modules/math/probability.html" class="nav-module-link math"
+              >🎲 Probabilités</a
+            >
+            <a href="modules/math/statistics.html" class="nav-module-link math"
+              >📊 Statistiques</a
+            >
+          </div>
+        </div>
+
+        <!-- Python -->
+        <div class="nav-category">
+          <h3>💻 Python</h3>
+          <div class="nav-links">
+            <a href="modules/python/basics.html" class="nav-module-link python"
+              >🐍 Python Bases</a
+            >
+            <a href="modules/python/numpy.html" class="nav-module-link python"
+              >🔢 NumPy</a
+            >
+            <a href="modules/python/pandas.html" class="nav-module-link python"
+              >🐼 Pandas</a
+            >
+            <a
+              href="modules/python/matplotlib.html"
+              class="nav-module-link python"
+              >📊 Visualisation</a
+            >
+            <a
+              href="modules/python/algorithms.html"
+              class="nav-module-link python"
+              >⚙️ Algorithmes</a
+            >
+          </div>
+        </div>
+
+        <!-- Machine Learning -->
+        <div class="nav-category">
+          <h3>🤖 Machine Learning</h3>
+          <div class="nav-links">
+            <a href="modules/ml/introduction.html" class="nav-module-link ml"
+              >🎯 Introduction ML</a
+            >
+            <a
+              href="modules/ml/linear-regression.html"
+              class="nav-module-link ml"
+              >📈 Régression Linéaire</a
+            >
+            <a href="modules/ml/classification.html" class="nav-module-link ml"
+              >🎯 Classification</a
+            >
+            <a href="modules/ml/clustering.html" class="nav-module-link ml"
+              >🔍 Clustering</a
+            >
+            <a href="modules/ml/validation.html" class="nav-module-link ml"
+              >✅ Validation</a
+            >
+          </div>
+        </div>
+
+        <!-- Deep Learning -->
+        <div class="nav-category">
+          <h3>🧠 Deep Learning</h3>
+          <div class="nav-links">
+            <a href="modules/dl/perceptron.html" class="nav-module-link dl"
+              >⚡ Perceptron</a
+            >
+            <a href="modules/dl/neural-networks.html" class="nav-module-link dl"
+              >🧠 Réseaux de neurones</a
+            >
+            <a href="modules/dl/backpropagation.html" class="nav-module-link dl"
+              >🔄 Backpropagation</a
+            >
+            <a href="modules/dl/cnn.html" class="nav-module-link dl">🖼️ CNN</a>
+            <a href="modules/dl/rnn.html" class="nav-module-link dl"
+              >🔗 RNN/LSTM</a
+            >
+          </div>
+        </div>
+
+        <!-- LLMs -->
+        <div class="nav-category">
+          <h3>💬 LLMs & IA Moderne</h3>
+          <div class="nav-links">
+            <a href="modules/llm/attention.html" class="nav-module-link llm"
+              >👁️ Attention</a
+            >
+            <a href="modules/llm/transformers.html" class="nav-module-link llm"
+              >🔄 Transformers</a
+            >
+            <a href="modules/llm/gpt-bert.html" class="nav-module-link llm"
+              >🤖 GPT & BERT</a
+            >
+            <a href="modules/llm/fine-tuning.html" class="nav-module-link llm"
+              >🎯 Fine-tuning</a
+            >
+            <a
+              href="modules/llm/prompt-engineering.html"
+              class="nav-module-link llm"
+              >💭 Prompt Engineering</a
+            >
+          </div>
         </div>
       </div>
     </section>

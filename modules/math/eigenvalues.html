@@ -102,198 +102,533 @@
         title: "Valeurs propres et Vecteurs propres",
         category: "Mathématiques",
         objectives: [
-          "Comprendre intuitivement les valeurs propres et vecteurs propres",
-          "Découvrir l'importance de ces concepts en mathématiques",
-          "Calculer valeurs et vecteurs propres avec NumPy",
-          "Comprendre les applications pratiques",
+          "Comprendre les espaces vectoriels et les bases",
+          "Maîtriser les valeurs propres et vecteurs propres",
+          "Découvrir les décompositions matricielles (eigen, SVD)",
+          "Comprendre les applications en IA (PCA, compression)",
         ],
         content: [
           {
             type: "concept",
             icon: "💡",
-            title: "Concept fondamental",
+            title: "Espaces vectoriels : l'environnement des vecteurs",
             content: `
-                        <p>Les <strong>valeurs propres</strong> et <strong>vecteurs propres</strong> révèlent les "directions privilégiées" d'une matrice - les directions où elle agit le plus simplement.</p>
-                        <p><strong>🔑 Idée simple :</strong> Certaines directions sont "spéciales" pour une matrice. Dans ces directions, la matrice ne fait qu'étirer ou rétrécir, sans faire tourner !</p>
-                        <p><strong>💡 Concrètement :</strong> Si on applique la matrice à un vecteur spécial, on obtient le même vecteur mais plus grand ou plus petit. C'est tout !</p>
-                        <p><strong>🌍 Applications dans le monde réel :</strong></p>
+                        <p>Un <strong>espace vectoriel</strong> est l'environnement mathématique où vivent les vecteurs. C'est comme définir les règles du jeu avant de commencer à jouer.</p>
+                        
+                        <p><strong>🔑 Règles fondamentales :</strong></p>
                         <ul>
-                            <li>🤖 <strong>Réduction de dimension</strong> : simplifier des données complexes (PCA)</li>
-                            <li>🔍 <strong>Moteurs de recherche</strong> : algorithme PageRank de Google</li>
-                            <li>🧠 <strong>Deep Learning</strong> : comprendre comment les réseaux apprennent</li>
-                            <li>📊 <strong>Analyse de données</strong> : trouver les directions les plus importantes</li>
+                            <li>➕ <strong>Addition</strong> : on peut additionner deux vecteurs</li>
+                            <li>✖️ <strong>Multiplication scalaire</strong> : on peut multiplier par un nombre</li>
+                            <li>🎯 <strong>Vecteur zéro</strong> : point de référence neutre</li>
+                            <li>↔️ <strong>Vecteur opposé</strong> : pour chaque vecteur, il existe son opposé</li>
                         </ul>
-                    `,
-          },
-          {
-            type: "intuition",
-            icon: "🧠",
-            title: "L'analogie du ressort",
-            content: `
-                        <p>Imaginez un <strong>ressort spécial</strong> que vous étirez dans différentes directions :</p>
+                        
+                        <p><strong>🌍 Exemples concrets :</strong></p>
                         <ul>
-                            <li>↔️ <strong>Direction horizontale</strong> : le ressort s'étire facilement (facteur 3)</li>
-                            <li>↕️ <strong>Direction verticale</strong> : le ressort résiste plus (facteur 1.5)</li>
-                            <li>↗️ <strong>Direction diagonale</strong> : comportement complexe (étirement + rotation)</li>
+                            <li>📐 <strong>ℝ²</strong> : plan (positions sur une carte)</li>
+                            <li>📦 <strong>ℝ³</strong> : espace (objets dans une pièce)</li>
+                            <li>🤖 <strong>ℝⁿ</strong> : données IA (n caractéristiques par exemple)</li>
                         </ul>
-                        <p><strong>🎯 Les directions horizontale et verticale sont "spéciales" :</strong></p>
-                        <ul>
-                            <li>🧭 <strong>Vecteurs propres</strong> = directions naturelles (pas de rotation)</li>
-                            <li>📏 <strong>Valeurs propres</strong> = facteur d'étirement dans chaque direction</li>
-                        </ul>
-                        <p><strong>💡 Point clé :</strong> Chaque matrice a ses propres "directions privilégiées" où elle agit simplement par étirement/compression, sans rotation !</p>
+                        
+                        <p><strong>💡 Pourquoi important en IA ?</strong></p>
+                        <p>Chaque donnée devient un point dans un espace vectoriel. L'IA trouve des patterns en analysant la géométrie de cet espace.</p>
                     `,
           },
           {
             type: "exemple",
             icon: "💻",
-            title: "Calcul manuel des valeurs propres",
-            content: `
-                        <p><strong>Prenons une matrice simple :</strong></p>
-                        <p>$$A = \\begin{bmatrix} 3 & 1 \\\\ 0 & 2 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>🔍 Étape 1 : Recherche des valeurs propres \\(\\lambda\\)</strong></p>
-                        <p>On résout : $$\\det(A - \\lambda I) = 0$$</p>
-                        
-                        <p>$$A - \\lambda I = \\begin{bmatrix} 3-\\lambda & 1 \\\\ 0 & 2-\\lambda \\end{bmatrix}$$</p>
-                        
-                        <p>$$\\det(A - \\lambda I) = (3-\\lambda)(2-\\lambda) - 1 \\times 0 = (3-\\lambda)(2-\\lambda)$$</p>
-                        
-                        <p><strong>Solutions :</strong> \\(\\lambda_1 = 3\\) et \\(\\lambda_2 = 2\\)</p>
-                        
-                        <p><strong>✅ Étape 2 : Vérification pour \\(\\lambda_1 = 3\\)</strong></p>
-                        <p>Si \\(\\vec{v} = \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix}\\), alors :</p>
-                        <p>$$A\\vec{v} = \\begin{bmatrix} 3 & 1 \\\\ 0 & 2 \\end{bmatrix} \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix} = \\begin{bmatrix} 3 \\\\ 0 \\end{bmatrix} = 3 \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix} = 3\\vec{v}$$</p>
-                        
-                        <p><strong>🎉 Parfait !</strong> Le vecteur \\([1, 0]\\) garde sa direction horizontale, mais sa longueur est multipliée par 3.</p>
-                    `,
-          },
-          {
-            type: "mathematique",
-            icon: "∑",
-            title: "Méthode générale de calcul",
-            content: `
-                        <p>Pour trouver les valeurs propres \\(\\lambda\\) d'une matrice \\(A\\), on résout l'<strong>équation caractéristique</strong> :</p>
-                        $$\\det(A - \\lambda I) = 0$$
-                        <p><strong>📋 Méthode étape par étape :</strong></p>
-                        <ul>
-                            <li><strong>1.</strong> Calculer \\(A - \\lambda I\\) où \\(I\\) est la matrice identité</li>
-                            <li><strong>2.</strong> Calculer le déterminant de cette matrice</li>
-                            <li><strong>3.</strong> Résoudre l'équation polynomiale obtenue</li>
-                            <li><strong>4.</strong> Pour chaque \\(\\lambda\\), résoudre \\((A - \\lambda I)\\vec{v} = \\vec{0}\\)</li>
-                        </ul>
-                        <p><strong>🔑 Propriétés importantes :</strong></p>
-                        <ul>
-                            <li>Une matrice \\(n \\times n\\) a au maximum \\(n\\) valeurs propres</li>
-                            <li>Les vecteurs propres peuvent former une base de l'espace</li>
-                            <li>Les valeurs propres révèlent les propriétés fondamentales de la matrice</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice : matrice de rotation",
-            content: `
-                        <p><strong>🔄 Analysons une matrice de rotation de 90° :</strong></p>
-                        <p>$$R = \\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>📝 Exercice : Trouvons les valeurs propres</strong></p>
-                        <p><strong>Étape 1 :</strong> Calculer \\(R - \\lambda I\\)</p>
-                        <p>$$R - \\lambda I = \\begin{bmatrix} 0-\\lambda & -1 \\\\ 1 & 0-\\lambda \\end{bmatrix} = \\begin{bmatrix} -\\lambda & -1 \\\\ 1 & -\\lambda \\end{bmatrix}$$</p>
-                        
-                        <p><strong>Étape 2 :</strong> Calculer le déterminant</p>
-                        <p>$$\\det(R - \\lambda I) = (-\\lambda)(-\\lambda) - (-1)(1) = \\lambda^2 + 1$$</p>
-                        
-                        <p><strong>Étape 3 :</strong> Résoudre \\(\\lambda^2 + 1 = 0\\)</p>
-                        <p>$$\\lambda^2 = -1 \\Rightarrow \\lambda = \\pm i$$</p>
-                        
-                        <p><strong>🤔 Observation importante :</strong></p>
-                        <p>Les valeurs propres sont <strong>complexes</strong> ! Cela signifie qu'une rotation pure n'a pas de directions privilégiées réelles - elle fait tourner tous les vecteurs.</p>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice pratique : calculs manuels",
+            title: "Exercice : espaces vectoriels",
             content: `
                         <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Soit la matrice $$A = \\begin{bmatrix} 4 & 1 \\\\ 0 & 3 \\end{bmatrix}$$</p>
+                        <p>Vérifiez que ℝ² est bien un espace vectoriel en testant les propriétés :</p>
                         
-                        <p><strong>📝 Calculez à la main :</strong></p>
+                        <p><strong>📝 Soient :</strong> \\(\\vec{u} = \\begin{bmatrix} 2 \\\\ 3 \\end{bmatrix}\\), \\(\\vec{v} = \\begin{bmatrix} 1 \\\\ 4 \\end{bmatrix}\\), \\(\\vec{0} = \\begin{bmatrix} 0 \\\\ 0 \\end{bmatrix}\\)</p>
+                        
                         <ol>
-                            <li>Les valeurs propres \\(\\lambda_1\\) et \\(\\lambda_2\\)</li>
-                            <li>Le vecteur propre correspondant à \\(\\lambda_1 = 4\\)</li>
-                            <li>Vérifiez que \\(A\\vec{v} = \\lambda\\vec{v}\\) pour votre vecteur propre</li>
+                            <li>Calculez \\(\\vec{u} + \\vec{v}\\) et \\(\\vec{v} + \\vec{u}\\) (commutativité)</li>
+                            <li>Calculez \\(3 \\times \\vec{u}\\) (multiplication scalaire)</li>
+                            <li>Vérifiez que \\(\\vec{u} + \\vec{0} = \\vec{u}\\) (élément neutre)</li>
+                            <li>Trouvez \\(-\\vec{u}\\) tel que \\(\\vec{u} + (-\\vec{u}) = \\vec{0}\\)</li>
                         </ol>
                         
                         <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('eigenvalues-exercise-solution')" style="margin-bottom: 1rem;">
+                        <button class="btn btn-copy" onclick="toggleSolution('vector-space-exercise')" style="margin-bottom: 1rem;">
                             👁️ Voir la solution
                         </button>
-                        <div id="eigenvalues-exercise-solution" style="display: none;">
-                        <p><strong>1. Calcul des valeurs propres :</strong></p>
-                        <p>$$\\det(A - \\lambda I) = \\det\\begin{bmatrix} 4-\\lambda & 1 \\\\ 0 & 3-\\lambda \\end{bmatrix} = (4-\\lambda)(3-\\lambda) = 0$$</p>
-                        <p>Donc \\(\\lambda_1 = 4\\) et \\(\\lambda_2 = 3\\)</p>
+                        <div id="vector-space-exercise" style="display: none;">
+                        <ol>
+                            <li>\\(\\vec{u} + \\vec{v} = \\begin{bmatrix} 3 \\\\ 7 \\end{bmatrix} = \\vec{v} + \\vec{u}\\) ✓</li>
+                            <li>\\(3 \\times \\vec{u} = \\begin{bmatrix} 6 \\\\ 9 \\end{bmatrix}\\)</li>
+                            <li>\\(\\vec{u} + \\vec{0} = \\begin{bmatrix} 2 \\\\ 3 \\end{bmatrix} + \\begin{bmatrix} 0 \\\\ 0 \\end{bmatrix} = \\begin{bmatrix} 2 \\\\ 3 \\end{bmatrix} = \\vec{u}\\) ✓</li>
+                            <li>\\(-\\vec{u} = \\begin{bmatrix} -2 \\\\ -3 \\end{bmatrix}\\) car \\(\\vec{u} + (-\\vec{u}) = \\begin{bmatrix} 0 \\\\ 0 \\end{bmatrix}\\) ✓</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Base d'un espace vectoriel : système de coordonnées",
+            content: `
+                        <p>Une <strong>base</strong> est un ensemble de vecteurs qui servent de "système de coordonnées" pour tout l'espace. Avec une base, on peut décrire n'importe quel vecteur de l'espace.</p>
                         
-                        <p><strong>2. Vecteur propre pour \\(\\lambda_1 = 4\\) :</strong></p>
-                        <p>$$(A - 4I)\\vec{v} = \\vec{0} \\Rightarrow \\begin{bmatrix} 0 & 1 \\\\ 0 & -1 \\end{bmatrix}\\begin{bmatrix} x \\\\ y \\end{bmatrix} = \\begin{bmatrix} 0 \\\\ 0 \\end{bmatrix}$$</p>
-                        <p>Cela donne \\(y = 0\\) et \\(-y = 0\\), donc \\(\\vec{v} = \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix}\\)</p>
+                        <p><strong>🧭 Analogie simple :</strong></p>
+                        <p>Pour décrire une position sur une carte, on utilise :</p>
+                        <ul>
+                            <li>📍 <strong>Direction Est-Ouest</strong> : combien de km vers l'est</li>
+                            <li>📍 <strong>Direction Nord-Sud</strong> : combien de km vers le nord</li>
+                        </ul>
+                        <p>Ces deux directions forment une "base" pour localiser n'importe quel point !</p>
                         
-                        <p><strong>3. Vérification :</strong></p>
-                        <p>$$A\\vec{v} = \\begin{bmatrix} 4 & 1 \\\\ 0 & 3 \\end{bmatrix}\\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix} = \\begin{bmatrix} 4 \\\\ 0 \\end{bmatrix} = 4\\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix} = 4\\vec{v}$$ ✓</p>
+                        <p><strong>🔑 Propriétés d'une base :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Indépendance linéaire</strong> : aucun vecteur ne peut être obtenu en combinant les autres</li>
+                            <li>📏 <strong>Génération</strong> : tout vecteur de l'espace peut être écrit comme combinaison de la base</li>
+                            <li>📊 <strong>Dimension</strong> : nombre de vecteurs dans la base = dimension de l'espace</li>
+                        </ul>
+                        
+                        <p><strong>📐 Base canonique de ℝ² :</strong></p>
+                        <p>$$\\vec{e_1} = \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix}, \\quad \\vec{e_2} = \\begin{bmatrix} 0 \\\\ 1 \\end{bmatrix}$$</p>
+                        <p>Tout vecteur \\(\\vec{v} = \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix}\\) s'écrit : \\(\\vec{v} = 3\\vec{e_1} + 4\\vec{e_2}\\)</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : bases et coordonnées",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Considérons une nouvelle base \\(\\mathcal{B} = \\{\\vec{b_1}, \\vec{b_2}\\}\\) avec :</p>
+                        <p>$$\\vec{b_1} = \\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix}, \\quad \\vec{b_2} = \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Questions :</strong></p>
+                        <ol>
+                            <li>Vérifiez que \\(\\vec{b_1}\\) et \\(\\vec{b_2}\\) sont linéairement indépendants</li>
+                            <li>Exprimez \\(\\vec{v} = \\begin{bmatrix} 3 \\\\ 1 \\end{bmatrix}\\) dans la base \\(\\mathcal{B}\\)</li>
+                            <li>Vérifiez votre résultat</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('basis-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="basis-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Indépendance :</strong> \\(\\vec{b_1}\\) et \\(\\vec{b_2}\\) ne sont pas colinéaires car \\(\\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix} ≠ k \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix}\\) pour tout k ✓</li>
+                            <li><strong>Changement de base :</strong> On cherche \\(\\alpha, \\beta\\) tels que :\\(\\vec{v} = \\alpha \\vec{b_1} + \\beta \\vec{b_2}\\)
+                                <br>\\(\\begin{bmatrix} 3 \\\\ 1 \\end{bmatrix} = \\alpha \\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix} + \\beta \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix}\\)
+                                <br>Système : \\(\\alpha + \\beta = 3\\) et \\(\\alpha - \\beta = 1\\)
+                                <br>Solution : \\(\\alpha = 2, \\beta = 1\\)</li>
+                            <li><strong>Vérification :</strong> \\(2\\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix} + 1\\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix} = \\begin{bmatrix} 3 \\\\ 1 \\end{bmatrix}\\) ✓</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Valeurs propres : directions privilégiées",
+            content: `
+                        <p>Les <strong>valeurs propres</strong> et <strong>vecteurs propres</strong> révèlent les directions où une matrice agit le plus simplement : elle ne fait qu'étirer ou rétrécir, sans rotation.</p>
+                        
+                        <p><strong>🎯 Définition mathématique :</strong></p>
+                        <p>Pour une matrice \\(A\\), un vecteur \\(\\vec{v}\\) est un <strong>vecteur propre</strong> avec valeur propre \\(\\lambda\\) si :</p>
+                        <p>$$A\\vec{v} = \\lambda\\vec{v}$$</p>
+                        
+                        <p><strong>💡 Interprétation :</strong></p>
+                        <ul>
+                            <li>🧭 <strong>Direction préservée</strong> : \\(\\vec{v}\\) garde sa direction</li>
+                            <li>📏 <strong>Longueur modifiée</strong> : multipliée par \\(\\lambda\\)</li>
+                            <li>🔄 <strong>Pas de rotation</strong> : transformation la plus simple possible</li>
+                        </ul>
+                        
+                        <p><strong>🔍 Analogie du ressort :</strong></p>
+                        <p>Un ressort a des directions naturelles d'étirement. Si vous tirez dans ces directions, il s'étire proprement. Si vous tirez en diagonale, il se déforme de manière complexe.</p>
+                        
+                        <p><strong>🤖 Applications en IA :</strong></p>
+                        <ul>
+                            <li>📊 <strong>PCA</strong> : trouver les directions de plus grande variance</li>
+                            <li>🔍 <strong>PageRank</strong> : Google utilise la valeur propre dominante</li>
+                            <li>🧠 <strong>Stabilité</strong> : analyser la convergence des algorithmes</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : calcul de valeurs propres 2×2",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Soit la matrice $$A = \\begin{bmatrix} 5 & 2 \\\\ 2 & 2 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>Les valeurs propres \\(\\lambda_1\\) et \\(\\lambda_2\\)</li>
+                            <li>Le vecteur propre pour \\(\\lambda_1\\)</li>
+                            <li>Vérifiez que \\(A\\vec{v_1} = \\lambda_1\\vec{v_1}\\)</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('eigenvalue-calculation-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="eigenvalue-calculation-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Équation caractéristique :</strong>
+                                <br>\\(\\det(A - \\lambda I) = \\det\\begin{bmatrix} 5-\\lambda & 2 \\\\ 2 & 2-\\lambda \\end{bmatrix} = (5-\\lambda)(2-\\lambda) - 4 = 0\\)
+                                <br>\\(\\lambda^2 - 7\\lambda + 6 = 0\\)
+                                <br>\\((\\lambda - 6)(\\lambda - 1) = 0\\)
+                                <br>Donc \\(\\lambda_1 = 6\\) et \\(\\lambda_2 = 1\\)</li>
+                            <li><strong>Vecteur propre pour \\(\\lambda_1 = 6\\) :</strong>
+                                <br>\\((A - 6I)\\vec{v} = \\vec{0}\\)
+                                <br>\\(\\begin{bmatrix} -1 & 2 \\\\ 2 & -4 \\end{bmatrix}\\begin{bmatrix} x \\\\ y \\end{bmatrix} = \\begin{bmatrix} 0 \\\\ 0 \\end{bmatrix}\\)
+                                <br>De \\(-x + 2y = 0\\), on obtient \\(x = 2y\\)
+                                <br>Donc \\(\\vec{v_1} = \\begin{bmatrix} 2 \\\\ 1 \\end{bmatrix}\\)</li>
+                            <li><strong>Vérification :</strong>
+                                <br>\\(A\\vec{v_1} = \\begin{bmatrix} 5 & 2 \\\\ 2 & 2 \\end{bmatrix}\\begin{bmatrix} 2 \\\\ 1 \\end{bmatrix} = \\begin{bmatrix} 12 \\\\ 6 \\end{bmatrix} = 6\\begin{bmatrix} 2 \\\\ 1 \\end{bmatrix} = 6\\vec{v_1}\\) ✓</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title:
+              "Décomposition en valeurs propres : décomposer pour comprendre",
+            content: `
+                        <p>La <strong>décomposition en valeurs propres</strong> consiste à réécrire une matrice en termes de ses directions privilégiées. C'est comme décomposer une transformation complexe en étapes simples.</p>
+                        
+                        <p><strong>📐 Formule de décomposition :</strong></p>
+                        <p>$$A = P \\Lambda P^{-1}$$</p>
+                        
+                        <p><strong>🔍 Composants :</strong></p>
+                        <ul>
+                            <li>\\(P\\) = <strong>matrice des vecteurs propres</strong> (changement de base)</li>
+                            <li>\\(\\Lambda\\) = <strong>matrice diagonale des valeurs propres</strong> (étirements)</li>
+                            <li>\\(P^{-1}\\) = <strong>retour à la base originale</strong></li>
+                        </ul>
+                        
+                        <p><strong>💡 Interprétation géométrique :</strong></p>
+                        <ol>
+                            <li>\\(P^{-1}\\) : <strong>tourner vers les axes naturels</strong></li>
+                            <li>\\(\\Lambda\\) : <strong>étirer dans chaque direction</strong></li>
+                            <li>\\(P\\) : <strong>tourner pour revenir aux axes originaux</strong></li>
+                        </ol>
+                        
+                        <p><strong>🎯 Avantages :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Compréhension</strong> : voir les composants fondamentaux</li>
+                            <li>⚡ <strong>Calculs efficaces</strong> : \\(A^n = P\\Lambda^n P^{-1}\\)</li>
+                            <li>🎛️ <strong>Analyse de stabilité</strong> : valeurs propres révèlent le comportement</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : décomposition complète",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Pour la matrice $$A = \\begin{bmatrix} 3 & 1 \\\\ 0 & 2 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Effectuez la décomposition complète :</strong></p>
+                        <ol>
+                            <li>Trouvez les valeurs propres</li>
+                            <li>Trouvez les vecteurs propres correspondants</li>
+                            <li>Construisez les matrices P et Λ</li>
+                            <li>Vérifiez que \\(A = P\\Lambda P^{-1}\\)</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('eigen-decomposition-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="eigen-decomposition-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Valeurs propres :</strong>
+                                <br>\\(\\det(A - \\lambda I) = (3-\\lambda)(2-\\lambda) = 0\\)
+                                <br>Donc \\(\\lambda_1 = 3\\) et \\(\\lambda_2 = 2\\)</li>
+                            <li><strong>Vecteurs propres :</strong>
+                                <br>Pour \\(\\lambda_1 = 3\\) : \\(\\vec{v_1} = \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix}\\)
+                                <br>Pour \\(\\lambda_2 = 2\\) : \\(\\vec{v_2} = \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix}\\)</li>
+                            <li><strong>Matrices :</strong>
+                                <br>\\(P = \\begin{bmatrix} 1 & 1 \\\\ 0 & -1 \\end{bmatrix}\\), \\(\\Lambda = \\begin{bmatrix} 3 & 0 \\\\ 0 & 2 \\end{bmatrix}\\)
+                                <br>\\(P^{-1} = \\begin{bmatrix} 1 & 1 \\\\ 0 & -1 \\end{bmatrix}\\)</li>
+                            <li><strong>Vérification :</strong>
+                                <br>\\(P\\Lambda P^{-1} = \\begin{bmatrix} 1 & 1 \\\\ 0 & -1 \\end{bmatrix}\\begin{bmatrix} 3 & 0 \\\\ 0 & 2 \\end{bmatrix}\\begin{bmatrix} 1 & 1 \\\\ 0 & -1 \\end{bmatrix} = \\begin{bmatrix} 3 & 1 \\\\ 0 & 2 \\end{bmatrix} = A\\) ✓</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "SVD : la décomposition universelle",
+            content: `
+                        <p>La <strong>Décomposition en Valeurs Singulières</strong> (SVD) fonctionne pour TOUTES les matrices, même non carrées. C'est l'outil le plus puissant de l'algèbre linéaire.</p>
+                        
+                        <p><strong>🎯 Pourquoi "universelle" ?</strong></p>
+                        <ul>
+                            <li>✅ <strong>Matrices rectangulaires</strong> : 3×5, 100×50, etc.</li>
+                            <li>✅ <strong>Matrices singulières</strong> : déterminant = 0</li>
+                            <li>✅ <strong>Toujours possible</strong> : aucune condition restrictive</li>
+                        </ul>
+                        
+                        <p><strong>📐 Décomposition SVD :</strong></p>
+                        <p>$$A = U \\Sigma V^T$$</p>
+                        
+                        <p><strong>🔍 Composants :</strong></p>
+                        <ul>
+                            <li>\\(U\\) = <strong>vecteurs singuliers gauches</strong> (directions de sortie)</li>
+                            <li>\\(\\Sigma\\) = <strong>valeurs singulières</strong> (facteurs d'étirement, ≥ 0)</li>
+                            <li>\\(V^T\\) = <strong>vecteurs singuliers droits</strong> (directions d'entrée)</li>
+                        </ul>
+                        
+                        <p><strong>🎵 Analogie musicale :</strong></p>
+                        <p>Imaginez décomposer une chanson complexe :</p>
+                        <ul>
+                            <li>🥁 <strong>Première valeur singulière</strong> : rythme principal (le plus important)</li>
+                            <li>🎸 <strong>Deuxième</strong> : mélodie principale</li>
+                            <li>🎺 <strong>Suivantes</strong> : harmonies secondaires</li>
+                            <li>🔇 <strong>Petites valeurs</strong> : détails négligeables</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : SVD d'une matrice simple",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Soit la matrice $$A = \\begin{bmatrix} 3 & 1 \\\\ 1 & 3 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Calculez la SVD étape par étape :</strong></p>
+                        <ol>
+                            <li>Calculez \\(A^T A\\) et trouvez ses valeurs propres</li>
+                            <li>Les valeurs singulières sont \\(\\sigma_i = \\sqrt{\\lambda_i}\\)</li>
+                            <li>Trouvez les vecteurs propres de \\(A^T A\\) (colonnes de V)</li>
+                            <li>Construisez la matrice \\(\\Sigma\\)</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('svd-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="svd-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>\\(A^T A\\) :</strong>
+                                <br>\\(A^T A = \\begin{bmatrix} 3 & 1 \\\\ 1 & 3 \\end{bmatrix}\\begin{bmatrix} 3 & 1 \\\\ 1 & 3 \\end{bmatrix} = \\begin{bmatrix} 10 & 6 \\\\ 6 & 10 \\end{bmatrix}\\)
+                                <br>Valeurs propres : \\(\\det\\begin{bmatrix} 10-\\lambda & 6 \\\\ 6 & 10-\\lambda \\end{bmatrix} = (10-\\lambda)^2 - 36 = 0\\)
+                                <br>\\(\\lambda_1 = 16, \\lambda_2 = 4\\)</li>
+                            <li><strong>Valeurs singulières :</strong>
+                                <br>\\(\\sigma_1 = \\sqrt{16} = 4\\), \\(\\sigma_2 = \\sqrt{4} = 2\\)</li>
+                            <li><strong>Vecteurs propres de \\(A^T A\\) :</strong>
+                                <br>Pour \\(\\lambda_1 = 16\\) : \\(\\vec{v_1} = \\frac{1}{\\sqrt{2}}\\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix}\\)
+                                <br>Pour \\(\\lambda_2 = 4\\) : \\(\\vec{v_2} = \\frac{1}{\\sqrt{2}}\\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix}\\)</li>
+                            <li><strong>Matrice \\(\\Sigma\\) :</strong>
+                                <br>\\(\\Sigma = \\begin{bmatrix} 4 & 0 \\\\ 0 & 2 \\end{bmatrix}\\)</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "PCA : réduction de dimension intelligente",
+            content: `
+                        <p>L'<strong>Analyse en Composantes Principales</strong> (PCA) utilise les valeurs propres pour identifier les directions les plus importantes dans vos données.</p>
+                        
+                        <p><strong>🎯 Objectif simple :</strong></p>
+                        <p>Passer de 1000 dimensions à 10 dimensions en gardant 95% de l'information utile !</p>
+                        
+                        <p><strong>🔑 Principe :</strong></p>
+                        <ol>
+                            <li><strong>Centrer</strong> : soustraire la moyenne de chaque variable</li>
+                            <li><strong>Covariance</strong> : mesurer comment les variables varient ensemble</li>
+                            <li><strong>Valeurs propres</strong> : trouver les directions de plus grande variance</li>
+                            <li><strong>Projection</strong> : garder seulement les directions importantes</li>
+                        </ol>
+                        
+                        <p><strong>💡 Analogie de la photographie :</strong></p>
+                        <p>Pour photographier un objet complexe, vous cherchez le meilleur angle qui capture l'essentiel. PCA fait pareil avec les données : elle trouve les "angles" qui capturent le maximum d'information.</p>
+                        
+                        <p><strong>🤖 Applications révolutionnaires :</strong></p>
+                        <ul>
+                            <li>🖼️ <strong>Compression d'images</strong> : réduire la taille sans perte visible</li>
+                            <li>📊 <strong>Visualisation</strong> : afficher des données complexes en 2D</li>
+                            <li>🧠 <strong>Preprocessing ML</strong> : simplifier avant entraînement</li>
+                            <li>💬 <strong>NLP</strong> : réduire la dimension des mots</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : PCA sur données économiques",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Données de 3 régions avec 2 variables (PIB, Population) :</p>
+                        <p>$$X = \\begin{bmatrix} 4 & 2 \\\\ 2 & 4 \\\\ 6 & 6 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Effectuez la PCA :</strong></p>
+                        <ol>
+                            <li>Centrez les données (soustrayez la moyenne de chaque colonne)</li>
+                            <li>Calculez la matrice de covariance</li>
+                            <li>Trouvez les valeurs propres de la matrice de covariance</li>
+                            <li>Quelle proportion de variance explique la première composante ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('pca-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="pca-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Centrage :</strong>
+                                <br>Moyennes : PIB = 4, Population = 4
+                                <br>\\(X_{centré} = \\begin{bmatrix} 0 & -2 \\\\ -2 & 0 \\\\ 2 & 2 \\end{bmatrix}\\)</li>
+                            <li><strong>Matrice de covariance :</strong>
+                                <br>\\(C = \\frac{1}{2}X_{centré}^T X_{centré} = \\frac{1}{2}\\begin{bmatrix} 8 & 4 \\\\ 4 & 8 \\end{bmatrix} = \\begin{bmatrix} 4 & 2 \\\\ 2 & 4 \\end{bmatrix}\\)</li>
+                            <li><strong>Valeurs propres :</strong>
+                                <br>\\(\\det\\begin{bmatrix} 4-\\lambda & 2 \\\\ 2 & 4-\\lambda \\end{bmatrix} = (4-\\lambda)^2 - 4 = 0\\)
+                                <br>\\(\\lambda_1 = 6, \\lambda_2 = 2\\)</li>
+                            <li><strong>Proportion de variance :</strong>
+                                <br>PC1 explique : \\(\\frac{6}{6+2} = \\frac{6}{8} = 75\\%\\) de la variance
+                                <br>PC2 explique : \\(\\frac{2}{8} = 25\\%\\) de la variance</li>
+                        </ol>
                         </div>
                     `,
           },
           {
             type: "mathematique",
             icon: "∑",
-            title: "Propriétés importantes",
+            title: "Comparaison : Eigen-décomposition vs SVD",
             content: `
-                        <p><strong>🔢 Propriétés mathématiques :</strong></p>
+                        <p><strong>🤔 Quelle décomposition choisir ?</strong></p>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 0.8rem; border: 1px solid #dee2e6;">Critère</th>
+                                <th style="padding: 0.8rem; border: 1px solid #dee2e6;">Eigen-décomposition</th>
+                                <th style="padding: 0.8rem; border: 1px solid #dee2e6;">SVD</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;"><strong>Matrices acceptées</strong></td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Carrées uniquement</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Toutes (carrées, rectangulaires)</td>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;"><strong>Existence garantie</strong></td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Non (matrices diagonalisables)</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Oui (toujours)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;"><strong>Stabilité numérique</strong></td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Moyenne</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Excellente</td>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;"><strong>Applications principales</strong></td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Analyse de transformations</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Analyse de données, ML</td>
+                            </tr>
+                        </table>
+                        
+                        <p><strong>🎯 Guide de choix :</strong></p>
                         <ul>
-                            <li><strong>• Trace :</strong> $$\\text{tr}(A) = \\sum_{i=1}^{n} \\lambda_i$$ (somme des valeurs propres = somme des éléments diagonaux)</li>
-                            <li style="margin-top: 0.5rem"><strong>• Déterminant :</strong> $$\\det(A) = \\prod_{i=1}^{n} \\lambda_i$$ (produit des valeurs propres)</li>
-                            <li style="margin-top: 0.5rem"><strong>• Inversibilité :</strong> \\(A\\) est inversible si et seulement si toutes ses valeurs propres sont non nulles</li>
+                            <li>🔧 <strong>Transformations géométriques</strong> → Eigen-décomposition</li>
+                            <li>📊 <strong>Analyse de données</strong> → SVD</li>
+                            <li>🤖 <strong>Machine Learning</strong> → SVD (plus robuste)</li>
+                            <li>🧮 <strong>Théorie mathématique</strong> → Eigen-décomposition</li>
                         </ul>
-                        <p><strong>🎯 Types de matrices particulières :</strong></p>
-                        <ul>
-                            <li><strong>• Matrices symétriques :</strong> valeurs propres toujours réelles</li>
-                            <li><strong>• Matrices orthogonales :</strong> valeurs propres de module 1</li>
-                            <li><strong>• Matrices diagonales :</strong> valeurs propres = éléments diagonaux</li>
-                        </ul>
+                        
+                        <p><strong>💡 En pratique :</strong> SVD est devenue l'outil de référence en IA car elle est plus robuste et universelle.</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : comparaison des décompositions",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Pour la matrice $$A = \\begin{bmatrix} 2 & 1 \\\\ 1 & 2 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Comparez les deux approches :</strong></p>
+                        <ol>
+                            <li>Calculez la décomposition en valeurs propres</li>
+                            <li>Calculez les valeurs singulières (\\(\\sigma_i = \\sqrt{\\lambda_i}\\) où \\(\\lambda_i\\) sont les valeurs propres de \\(A^T A\\))</li>
+                            <li>Comparez les résultats</li>
+                            <li>Cette matrice est-elle bien conditionnée ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('decomposition-comparison-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="decomposition-comparison-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Valeurs propres de A :</strong>
+                                <br>\\(\\det\\begin{bmatrix} 2-\\lambda & 1 \\\\ 1 & 2-\\lambda \\end{bmatrix} = (2-\\lambda)^2 - 1 = 0\\)
+                                <br>\\(\\lambda_1 = 3, \\lambda_2 = 1\\)</li>
+                            <li><strong>Valeurs singulières :</strong>
+                                <br>\\(A^T A = A^2 = \\begin{bmatrix} 5 & 4 \\\\ 4 & 5 \\end{bmatrix}\\)
+                                <br>Valeurs propres de \\(A^T A\\) : \\(\\lambda_1 = 9, \\lambda_2 = 1\\)
+                                <br>Valeurs singulières : \\(\\sigma_1 = 3, \\sigma_2 = 1\\)</li>
+                            <li><strong>Comparaison :</strong>
+                                <br>Valeurs propres de A : [3, 1]
+                                <br>Valeurs singulières de A : [3, 1]
+                                <br>Elles coïncident car A est symétrique !</li>
+                            <li><strong>Conditionnement :</strong>
+                                <br>Nombre de condition = \\(\\frac{\\sigma_{max}}{\\sigma_{min}} = \\frac{3}{1} = 3\\)
+                                <br>C'est bien conditionné (< 10)</li>
+                        </ol>
+                        </div>
                     `,
           },
           {
             type: "warning",
             icon: "⚠️",
-            title: "Pourquoi les valeurs propres sont-elles importantes ?",
+            title: "Impact révolutionnaire en IA",
             content: `
-                        <p><strong>🔍 Les valeurs propres révèlent les "secrets" cachés des matrices :</strong></p>
+                        <p><strong>🚀 Ces concepts ont révolutionné l'IA moderne :</strong></p>
+                        
+                        <p><strong>📊 Réduction de dimension (PCA) :</strong></p>
                         <ul>
-                            <li>🤖 <strong>Machine Learning</strong> : directions de variance maximale dans les données</li>
-                            <li>🧠 <strong>Deep Learning</strong> : comprendre la stabilité des réseaux de neurones</li>
-                            <li>🔍 <strong>Moteurs de recherche</strong> : PageRank de Google pour classer les pages</li>
-                            <li>📊 <strong>Analyse de données</strong> : réduire la complexité sans perdre l'information</li>
-                            <li>💬 <strong>NLP</strong> : comprendre les relations cachées entre les mots</li>
+                            <li>🖼️ <strong>Images</strong> : 1M pixels → 100 features essentielles</li>
+                            <li>💬 <strong>Texte</strong> : 50k mots → 300 dimensions d'embedding</li>
+                            <li>🧬 <strong>Génomique</strong> : 20k gènes → 10 signatures biologiques</li>
                         </ul>
-                        <p><strong>💡 Point clé :</strong> Les valeurs propres permettent de comprendre le comportement fondamental d'une transformation et d'identifier ses directions les plus importantes.</p>
-                        <p><strong>🎯 Dans la suite :</strong> Nous verrons comment utiliser ces concepts en programmation pour résoudre des problèmes concrets !</p>
+                        
+                        <p><strong>🎬 Systèmes de recommandation (SVD) :</strong></p>
+                        <ul>
+                            <li>🎵 <strong>Spotify</strong> : découvrir vos goûts musicaux cachés</li>
+                            <li>📺 <strong>Netflix</strong> : "Vous aimerez probablement..."</li>
+                            <li>🛒 <strong>E-commerce</strong> : "Les clients ayant acheté ceci..."</li>
+                        </ul>
+                        
+                        <p><strong>🔍 Moteurs de recherche (PageRank) :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Google</strong> : classer les pages par importance</li>
+                            <li>🌐 <strong>Réseaux sociaux</strong> : identifier les influenceurs</li>
+                            <li>📊 <strong>Analyse de réseaux</strong> : détecter les communautés</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Les valeurs propres et la SVD ne sont pas juste des outils mathématiques - ils sont les <strong>fondations invisibles</strong> de l'IA moderne. Ils permettent de transformer des données complexes en insights actionnables !</p>
                     `,
           },
         ],
         quiz: {
           question:
-            "🤔 Si une matrice a une valeur propre λ = 3, que se passe-t-il quand on applique la matrice au vecteur propre correspondant ?",
+            "🤔 Quelle est la principale différence entre la décomposition en valeurs propres et la SVD ?",
           options: [
-            "A) Il est divisé par 3",
-            "B) Il est multiplié par 3 (triplé)",
-            "C) Il tourne de 3 degrés",
-            "D) Il devient nul",
+            "A) La SVD est plus rapide à calculer",
+            "B) La SVD fonctionne pour toutes les matrices, pas seulement les carrées",
+            "C) Les valeurs propres sont plus précises",
+            "D) Il n'y a pas de différence",
           ],
           correct: 1,
           explanation:
-            "Par définition, A⃗v = λ⃗v. Donc avec λ = 3, le vecteur propre est multiplié par 3 (triplé) en longueur mais garde exactement la même direction.",
+            "La SVD est universelle et fonctionne pour toutes les matrices (carrées, rectangulaires, singulières), tandis que la décomposition en valeurs propres ne fonctionne que pour les matrices carrées diagonalisables.",
         },
         prevModule: "matrices.html",
         nextModule: "derivatives.html",
