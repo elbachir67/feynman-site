@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Régression Linéaire | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🤖 Machine Learning</span>
+          <span>›</span>
+          <span>Régression Linéaire</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>📈 Régression Linéaire</h1>
+      <p class="subtitle">Module 3.2 - Machine Learning</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Régression Linéaire</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant le premier algorithme
+          d'apprentissage automatique.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="introduction.html" class="nav-link" id="prev-link"
+          >← Module précédent : Introduction ML</a
+        >
+        <a href="classification.html" class="nav-link" id="next-link"
+          >Module suivant : Classification →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Régression Linéaire
+      const moduleConfig = {
+        id: "ml-linear-regression",
+        title: "Régression Linéaire",
+        category: "Machine Learning",
+        objectives: [
+          "Comprendre le problème que résout la régression",
+          "Construire une fonction de coût depuis zéro",
+          "Dériver mathématiquement la solution optimale",
+          "Comprendre pourquoi cette solution est unique",
+          "Calculer manuellement sur un exemple concret",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Le problème fondamental",
+            content: `
+                        <p><strong>Commençons par un problème concret :</strong></p>
+                        
+                        <p>Vous avez observé des données :</p>
+                        <table style="margin: 1rem auto; text-align: center;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.5rem;">Heures d'étude (x)</th>
+                                <th style="padding: 0.5rem;">Note obtenue (y)</th>
+                            </tr>
+                            <tr><td>1</td><td>5</td></tr>
+                            <tr><td>2</td><td>7</td></tr>
+                            <tr><td>3</td><td>8</td></tr>
+                            <tr><td>4</td><td>10</td></tr>
+                        </table>
+                        
+                        <p><strong>🎯 La question :</strong> Si quelqu'un étudie 2.5 heures, quelle note prédire ?</p>
+                        
+                        <p><strong>💡 L'idée :</strong> Trouver une règle mathématique qui relie x et y.</p>
+                        
+                        <p><strong>📐 Le choix le plus simple :</strong> Une relation linéaire</p>
+                        <p style="text-align: center;">$$y = ax + b$$</p>
+                        
+                        <p>Où :</p>
+                        <ul>
+                            <li><strong>a</strong> = combien y augmente quand x augmente de 1</li>
+                            <li><strong>b</strong> = valeur de y quand x = 0</li>
+                        </ul>
+                        
+                        <p><strong>❓ Mais comment trouver les BONS a et b ?</strong></p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "Qu'est-ce qu'une \"bonne\" droite ?",
+            content: `
+                        <p><strong>Intuitivement, une bonne droite passe "près" de tous les points.</strong></p>
+                        
+                        <p><strong>🎯 Mais "près", ça veut dire quoi mathématiquement ?</strong></p>
+                        
+                        <p>Pour chaque point \\(i\\), il y a une erreur :</p>
+                        <ul>
+                            <li><strong>Valeur réelle :</strong> \\(y_i\\)</li>
+                            <li><strong>Valeur prédite :</strong> \\(\\hat{y}_i = ax_i + b\\)</li>
+                            <li><strong>Erreur :</strong> \\(e_i = y_i - \\hat{y}_i\\)</li>
+                        </ul>
+                        
+                        <p><strong>📊 Mesurer l'erreur totale - 3 options :</strong></p>
+                        
+                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Option 1 : Somme des erreurs ?</strong><br>
+                            $$\\sum_{i=1}^{n} e_i = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)$$
+                            
+                            ❌ <strong>Problème :</strong> Les erreurs + et - s'annulent !<br>
+                            Une droite très mauvaise pourrait avoir une erreur totale de 0.
+                        </div>
+                        
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Option 2 : Somme des valeurs absolues ?</strong><br>
+                            $$\\sum_{i=1}^{n} |e_i| = \\sum_{i=1}^{n} |y_i - \\hat{y}_i|$$
+                            
+                            ✓ Pas d'annulation<br>
+                            ❌ <strong>Problème :</strong> Pas dérivable en 0 (voir <a href="../math/derivatives.html">Module 1.4</a>)
+                        </div>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Option 3 : Somme des carrés ✅</strong><br>
+                            $$\\sum_{i=1}^{n} e_i^2 = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2$$
+                            
+                            ✓ Pas d'annulation (carré toujours positif)<br>
+                            ✓ Dérivable partout<br>
+                            ✓ Pénalise plus les grandes erreurs<br>
+                            ✓ Solution mathématique unique !
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Construction de la fonction de coût",
+            content: `
+                        <p><strong>Définissons formellement notre fonction de coût :</strong></p>
+                        
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Fonction de coût J(a, b) :</strong><br><br>
+                            $$J(a, b) = \\frac{1}{2n} \\sum_{i=1}^{n} (y_i - (ax_i + b))^2$$
+                            
+                            <strong>Pourquoi chaque partie ?</strong><br>
+                            • \\((y_i - (ax_i + b))^2\\) : erreur au carré pour le point i<br>
+                            • \\(\\sum\\) : on additionne toutes les erreurs<br>
+                            • \\(\\frac{1}{n}\\) : moyenne (indépendant du nombre de points)<br>
+                            • \\(\\frac{1}{2}\\) : simplifie les calculs de dérivée (disparaît avec le 2 du carré)
+                        </div>
+                        
+                        <p><strong>🎯 Notre objectif :</strong> Trouver \\(a^*\\) et \\(b^*\\) qui minimisent \\(J(a, b)\\).</p>
+                        
+                        <p><strong>📐 Rappel sur les minima (<a href="../math/derivatives.html">Module 1.4</a>) :</strong></p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Pour une fonction d'une variable \\(f(x)\\), au minimum :<br>
+                            • La dérivée \\(f'(x) = 0\\) (tangente horizontale)<br>
+                            • La dérivée seconde \\(f''(x) > 0\\) (courbe en U)<br><br>
+                            
+                            Pour une fonction de deux variables \\(J(a, b)\\) (<a href="../math/gradients.html">Module 1.5</a>) :<br>
+                            • Les dérivées partielles \\(\\frac{\\partial J}{\\partial a} = 0\\) et \\(\\frac{\\partial J}{\\partial b} = 0\\)<br>
+                            • C'est le gradient \\(\\nabla J = [0, 0]\\)
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Calcul des dérivées partielles",
+            content: `
+                        <p><strong>Trouvons où le gradient s'annule :</strong></p>
+                        
+                        <p><strong>📐 Étape 1 : Dérivée par rapport à a</strong></p>
+                        
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Partons de : $$J(a, b) = \\frac{1}{2n} \\sum_{i=1}^{n} (y_i - ax_i - b)^2$$
+                            
+                            Appliquons la règle de chaîne (<a href="../math/derivatives.html">Module 1.4</a>) :<br><br>
+                            
+                            $$\\frac{\\partial J}{\\partial a} = \\frac{1}{2n} \\sum_{i=1}^{n} 2(y_i - ax_i - b) \\cdot (-x_i)$$
+                            
+                            $$= -\\frac{1}{n} \\sum_{i=1}^{n} x_i(y_i - ax_i - b)$$
+                        </div>
+                        
+                        <p><strong>📐 Étape 2 : Dérivée par rapport à b</strong></p>
+                        
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            De même : $$\\frac{\\partial J}{\\partial b} = \\frac{1}{2n} \\sum_{i=1}^{n} 2(y_i - ax_i - b) \\cdot (-1)$$
+                            
+                            $$= -\\frac{1}{n} \\sum_{i=1}^{n} (y_i - ax_i - b)$$
+                        </div>
+                        
+                        <p><strong>📐 Étape 3 : Conditions d'optimalité (gradient = 0)</strong></p>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Pour le minimum, on veut :<br><br>
+                            
+                            $$\\frac{\\partial J}{\\partial a} = 0 \\Rightarrow \\sum_{i=1}^{n} x_i(y_i - ax_i - b) = 0$$
+                            
+                            $$\\frac{\\partial J}{\\partial b} = 0 \\Rightarrow \\sum_{i=1}^{n} (y_i - ax_i - b) = 0$$
+                            
+                            C'est un système de 2 équations à 2 inconnues !
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Résolution du système d'équations",
+            content: `
+                        <p><strong>Résolvons ce système étape par étape :</strong></p>
+                        
+                        <p><strong>De la deuxième équation :</strong></p>
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$\\sum_{i=1}^{n} (y_i - ax_i - b) = 0$$
+                            
+                            $$\\sum_{i=1}^{n} y_i - a\\sum_{i=1}^{n} x_i - nb = 0$$
+                            
+                            Divisons par n et introduisons les moyennes (<a href="../math/statistics.html">Module 1.7</a>) :<br>
+                            $$\\bar{y} = \\frac{1}{n}\\sum_{i=1}^{n} y_i, \\quad \\bar{x} = \\frac{1}{n}\\sum_{i=1}^{n} x_i$$
+                            
+                            On obtient : $$\\boxed{b = \\bar{y} - a\\bar{x}}$$
+                            
+                            <strong>💡 Insight :</strong> La droite passe par le point moyen \\((\\bar{x}, \\bar{y})\\) !
+                        </div>
+                        
+                        <p><strong>De la première équation :</strong></p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Substituons \\(b = \\bar{y} - a\\bar{x}\\) dans la première équation :<br><br>
+                            
+                            $$\\sum_{i=1}^{n} x_i(y_i - ax_i - \\bar{y} + a\\bar{x}) = 0$$
+                            
+                            Réarrangeons :<br>
+                            $$\\sum_{i=1}^{n} x_i(y_i - \\bar{y}) = a\\sum_{i=1}^{n} x_i(x_i - \\bar{x})$$
+                            
+                            Une astuce mathématique (développons et simplifions) :<br>
+                            $$\\sum_{i=1}^{n} (x_i - \\bar{x})(y_i - \\bar{y}) = a\\sum_{i=1}^{n} (x_i - \\bar{x})^2$$
+                        </div>
+                        
+                        <p><strong>La solution finale :</strong></p>
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$\\boxed{a = \\frac{\\sum_{i=1}^{n} (x_i - \\bar{x})(y_i - \\bar{y})}{\\sum_{i=1}^{n} (x_i - \\bar{x})^2}}$$
+                            
+                            <strong>🔍 Reconnaissons ces quantités (<a href="../math/statistics.html">Module 1.7</a>) :</strong><br><br>
+                            
+                            • Numérateur = n × Covariance(X, Y)<br>
+                            • Dénominateur = n × Variance(X)<br><br>
+                            
+                            Donc : $$a = \\frac{\\text{Cov}(X, Y)}{\\text{Var}(X)}$$
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Pourquoi cette formule a du sens",
+            content: `
+                        <p><strong>Décortiquons la formule de la pente :</strong></p>
+                        
+                        <p>$$a = \\frac{\\text{Cov}(X, Y)}{\\text{Var}(X)}$$</p>
+                        
+                        <p><strong>📊 La Covariance (<a href="../math/statistics.html">Module 1.7</a>) :</strong></p>
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$\\text{Cov}(X, Y) = \\frac{1}{n}\\sum_{i=1}^{n} (x_i - \\bar{x})(y_i - \\bar{y})$$
+                            
+                            <strong>Intuition :</strong> Mesure si X et Y "bougent ensemble"<br>
+                            • Si X↑ et Y↑ ensemble : produits positifs → Cov > 0<br>
+                            • Si X↑ mais Y↓ : produits négatifs → Cov < 0<br>
+                            • Si pas de relation : produits mixtes → Cov ≈ 0
+                        </div>
+                        
+                        <p><strong>📊 La Variance :</strong></p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$\\text{Var}(X) = \\frac{1}{n}\\sum_{i=1}^{n} (x_i - \\bar{x})^2$$
+                            
+                            <strong>Intuition :</strong> Mesure l'étalement de X<br>
+                            • Grande variance : X très dispersé<br>
+                            • Petite variance : X concentré
+                        </div>
+                        
+                        <p><strong>🎯 Le ratio Cov/Var :</strong></p>
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Pourquoi diviser ?</strong><br><br>
+                            
+                            Imaginez X en mètres, puis convertissez en centimètres (×100) :<br>
+                            • Cov → 100 × Cov (un facteur de X)<br>
+                            • Var → 10000 × Var (X au carré)<br>
+                            • Ratio → (100×Cov)/(10000×Var) = Cov/(100×Var) = a/100<br><br>
+                            
+                            La pente s'ajuste automatiquement ! C'est une <strong>normalisation naturelle</strong>.
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Application numérique complète",
+            content: `
+                        <p><strong>Reprenons nos données initiales :</strong></p>
+                        
+                        <table style="margin: 1rem auto; text-align: center;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.5rem;">i</th>
+                                <th style="padding: 0.5rem;">x_i (heures)</th>
+                                <th style="padding: 0.5rem;">y_i (note)</th>
+                            </tr>
+                            <tr><td>1</td><td>1</td><td>5</td></tr>
+                            <tr><td>2</td><td>2</td><td>7</td></tr>
+                            <tr><td>3</td><td>3</td><td>8</td></tr>
+                            <tr><td>4</td><td>4</td><td>10</td></tr>
+                        </table>
+                        
+                        <p><strong>📊 Étape 1 : Moyennes</strong></p>
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$\\bar{x} = \\frac{1+2+3+4}{4} = 2.5$$
+                            $$\\bar{y} = \\frac{5+7+8+10}{4} = 7.5$$
+                            
+                            Point moyen : (2.5, 7.5)
+                        </div>
+                        
+                        <p><strong>📊 Étape 2 : Calcul de a</strong></p>
+                        <table style="margin: 1rem auto; text-align: center; font-size: 0.9rem;">
+                            <tr style="background: #3498db; color: white;">
+                                <th>i</th>
+                                <th>x_i - 2.5</th>
+                                <th>y_i - 7.5</th>
+                                <th>(x_i - 2.5)(y_i - 7.5)</th>
+                                <th>(x_i - 2.5)²</th>
+                            </tr>
+                            <tr><td>1</td><td>-1.5</td><td>-2.5</td><td style="background: yellow;">3.75</td><td>2.25</td></tr>
+                            <tr><td>2</td><td>-0.5</td><td>-0.5</td><td style="background: yellow;">0.25</td><td>0.25</td></tr>
+                            <tr><td>3</td><td>0.5</td><td>0.5</td><td style="background: yellow;">0.25</td><td>0.25</td></tr>
+                            <tr><td>4</td><td>1.5</td><td>2.5</td><td style="background: yellow;">3.75</td><td>2.25</td></tr>
+                            <tr style="font-weight: bold;"><td colspan="3">Sommes →</td><td>8</td><td>5</td></tr>
+                        </table>
+                        
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$a = \\frac{8}{5} = 1.6$$
+                            
+                            <strong>Interprétation :</strong> +1 heure d'étude → +1.6 points
+                        </div>
+                        
+                        <p><strong>📊 Étape 3 : Calcul de b</strong></p>
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$b = \\bar{y} - a\\bar{x} = 7.5 - 1.6 \\times 2.5 = 7.5 - 4 = 3.5$$
+                            
+                            <strong>Interprétation :</strong> Note de base (0 heure) = 3.5
+                        </div>
+                        
+                        <p><strong>✅ Modèle final :</strong></p>
+                        <div style="background: #d1ecf1; padding: 1rem; border-radius: 4px; margin: 1rem 0; text-align: center; font-size: 1.2rem;">
+                            <strong>Note = 1.6 × Heures + 3.5</strong>
+                        </div>
+                        
+                        <p><strong>🎯 Prédiction pour 2.5 heures :</strong></p>
+                        <div style="background: #d4edda; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Note = 1.6 × 2.5 + 3.5 = 4 + 3.5 = <strong>7.5</strong><br>
+                            (C'est exactement la moyenne ! Normal, c'est \\(\\bar{x}\\))
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Unicité de la solution",
+            content: `
+                        <p><strong>Pourquoi cette solution est-elle unique ?</strong></p>
+                        
+                        <p><strong>🔍 Géométriquement :</strong></p>
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            La fonction de coût \\(J(a, b)\\) forme une surface en 3D :<br>
+                            • Axes horizontaux : a et b<br>
+                            • Axe vertical : erreur J<br><br>
+                            
+                            Cette surface est un <strong>paraboloïde</strong> (forme de bol).<br>
+                            Un bol n'a qu'UN SEUL point le plus bas !
+                        </div>
+                        
+                        <p><strong>📐 Mathématiquement :</strong></p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            La matrice Hessienne (dérivées secondes) est :<br><br>
+                            
+                            $$H = \\begin{bmatrix} 
+                            \\frac{\\partial^2 J}{\\partial a^2} & \\frac{\\partial^2 J}{\\partial a \\partial b} \\\\
+                            \\frac{\\partial^2 J}{\\partial b \\partial a} & \\frac{\\partial^2 J}{\\partial b^2}
+                            \\end{bmatrix} = \\frac{1}{n}\\begin{bmatrix} 
+                            \\sum x_i^2 & \\sum x_i \\\\
+                            \\sum x_i & n
+                            \\end{bmatrix}$$<br>
+                            
+                            Cette matrice est <strong>définie positive</strong> (sauf cas dégénéré).<br>
+                            → Un seul minimum global !
+                        </div>
+                        
+                        <p><strong>🎯 Cas dégénéré :</strong></p>
+                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Si tous les x_i sont identiques :<br>
+                            • Variance(X) = 0<br>
+                            • Division par 0 dans la formule !<br>
+                            • Géométriquement : tous les points alignés verticalement<br>
+                            • Infinité de droites possibles → pas de solution unique
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Biais, Variance et limites",
+            content: `
+                        <p><strong>Comprendre les erreurs du modèle :</strong></p>
+                        
+                        <p><strong>1️⃣ Le Biais :</strong></p>
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Définition :</strong> Erreur due à des hypothèses trop simples<br><br>
+                            
+                            Si la vraie relation est \\(y = x^2\\) mais on utilise \\(y = ax + b\\) :<br>
+                            • Même avec ∞ données parfaites<br>
+                            • Notre droite ne pourra JAMAIS capturer la courbe<br>
+                            • C'est un biais structurel du modèle
+                        </div>
+                        
+                        <p><strong>2️⃣ La Variance :</strong></p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Définition :</strong> Sensibilité aux données d'entraînement<br><br>
+                            
+                            Avec peu de données bruitées :<br>
+                            • Changer 1 point change la droite<br>
+                            • Différents échantillons → différentes droites<br>
+                            • Plus de données → variance réduite
+                        </div>
+                        
+                        <p><strong>⚖️ Trade-off pour la régression linéaire :</strong></p>
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            • <strong>Biais :</strong> Potentiellement élevé (modèle simple)<br>
+                            • <strong>Variance :</strong> Faible (seulement 2 paramètres)<br>
+                            • <strong>Robuste</strong> mais peut être trop simpliste<br><br>
+                            
+                            C'est souvent un bon point de départ !
+                        </div>
+                        
+                        <p><strong>⚠️ Hypothèses importantes :</strong></p>
+                        <ul>
+                            <li>Relation linéaire entre X et Y</li>
+                            <li>Erreurs indépendantes et identiquement distribuées</li>
+                            <li>Variance constante des erreurs (homoscédasticité)</li>
+                            <li>Pas de colinéarité parfaite (pour régression multiple)</li>
+                        </ul>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Que se passe-t-il si tous les points sont parfaitement alignés sur une droite ?",
+          options: [
+            "A) La régression échoue",
+            "B) a = ∞ et b = 0",
+            "C) L'erreur J = 0 et la solution est exacte",
+            "D) Il y a une infinité de solutions",
+          ],
+          correct: 2,
+          explanation:
+            "Si les points sont parfaitement alignés, la régression trouve LA droite qui passe exactement par tous les points. L'erreur J = 0 (aucune erreur !), et les formules donnent les paramètres exacts de cette droite.",
+        },
+        prevModule: "introduction.html",
+        nextModule: "classification.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

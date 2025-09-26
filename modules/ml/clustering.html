@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clustering | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🤖 Machine Learning</span>
+          <span>›</span>
+          <span>Clustering</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🔍 Clustering</h1>
+      <p class="subtitle">Module 3.4 - Machine Learning</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Clustering</h3>
+        <p>
+          Vous comprenez maintenant comment regrouper automatiquement des
+          données similaires.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="classification.html" class="nav-link" id="prev-link"
+          >← Module précédent : Classification</a
+        >
+        <a href="validation.html" class="nav-link" id="next-link"
+          >Module suivant : Validation →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Clustering
+      const moduleConfig = {
+        id: "ml-clustering",
+        title: "Clustering",
+        category: "Machine Learning",
+        objectives: [
+          "Comprendre ce qu'est l'apprentissage non-supervisé",
+          "Maîtriser complètement l'algorithme K-means",
+          "Comprendre pourquoi il converge mathématiquement",
+          "Savoir identifier ses limites fondamentales",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Le changement de paradigme : pas d'étiquettes",
+            content: `
+                        <p><strong>Jusqu'ici, nous avions toujours un "professeur" : les étiquettes y.</strong></p>
+                        
+                        <p>En clustering, on n'a que les données X. La machine doit découvrir seule s'il existe une structure.</p>
+                        
+                        <p>C'est comme trier des billes sans savoir qu'elles ont des couleurs différentes. On remarque qu'elles forment naturellement des groupes, et on les sépare.</p>
+                        
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>La différence fondamentale :</strong><br><br>
+                            • <strong>Supervisé :</strong> "Voici des chats et des chiens étiquetés. Apprends à les distinguer."<br>
+                            • <strong>Non-supervisé :</strong> "Voici des animaux. Y a-t-il des groupes naturels ?"<br><br>
+                            
+                            Le non-supervisé révèle la structure cachée des données.
+                        </div>
+                        
+                        <p><strong>Applications concrètes :</strong> Segmentation clients (sans connaître les segments à l'avance), compression d'images (regrouper les couleurs similaires), organisation de documents (thèmes émergents).</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "K-means : l'algorithme fondamental",
+            content: `
+                        <p><strong>L'idée est simple et élégante :</strong></p>
+                        
+                        <p>Si les données forment K groupes naturels, chaque groupe doit avoir un "centre de gravité". Si on connaît les centres, on peut assigner chaque point au centre le plus proche. Si on connaît les assignations, on peut calculer les centres.</p>
+                        
+                        <p>C'est un problème de poule et œuf ! K-means le résout en alternant :</p>
+                        
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Les deux étapes qui se renforcent mutuellement :</strong><br><br>
+                            1. <strong>Assignation :</strong> chaque point rejoint le centre le plus proche<br>
+                            2. <strong>Recentrage :</strong> chaque centre se déplace au milieu de ses points<br><br>
+                            
+                            Répéter jusqu'à stabilité. C'est tout !
+                        </div>
+                        
+                        <p><strong>Pourquoi "K-means" ?</strong> K = nombre de clusters (fixé), means = moyennes (les centres).</p>
+                        
+                        <p>L'algorithme trouve une partition qui minimise la dispersion interne des groupes. C'est optimal localement.</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Formalisation mathématique rigoureuse",
+            content: `
+                        <p><strong>Posons le problème proprement :</strong></p>
+                        
+                        <p>Données : \\(\\mathcal{X} = \\{\\vec{x}_1, ..., \\vec{x}_n\\}\\) avec \\(\\vec{x}_i \\in \\mathbb{R}^d\\)</p>
+                        
+                        <p>On cherche K centres \\(\\mathcal{M} = \\{\\vec{\\mu}_1, ..., \\vec{\\mu}_K\\}\\) et une fonction d'assignation \\(c: \\mathcal{X} \\to \\{1, ..., K\\}\\).</p>
+                        
+                        <p><strong>La fonction objectif (inertie) :</strong></p>
+                        
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$J(\\mathcal{M}, c) = \\sum_{i=1}^{n} ||\\vec{x}_i - \\vec{\\mu}_{c(i)}||^2$$
+                            
+                            où \\(||\\cdot||\\) est la norme euclidienne (<a href="../math/vectors.html">Module 1.1</a>).<br><br>
+                            
+                            <strong>Rappel :</strong> \\(||\\vec{u}||^2 = \\vec{u}^T\\vec{u} = \\sum_{j=1}^{d} u_j^2\\)<br><br>
+                            
+                            J mesure la somme totale des distances² de chaque point à son centre assigné.
+                        </div>
+                        
+                        <p><strong>Le problème d'optimisation :</strong></p>
+                        <p>$$\\min_{\\mathcal{M}, c} J(\\mathcal{M}, c)$$</p>
+                        
+                        <p>C'est NP-difficile ! Mais K-means trouve efficacement un minimum local.</p>
+                        
+                        <p><strong>Les deux sous-problèmes (plus simples) :</strong></p>
+                        
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>1. Assignation optimale (centres fixes) :</strong><br>
+                            $$c^*(\\vec{x}_i) = \\arg\\min_{k \\in \\{1,...,K\\}} ||\\vec{x}_i - \\vec{\\mu}_k||^2$$
+                            
+                            Trivial : choisir le centre le plus proche !<br><br>
+                            
+                            <strong>2. Centres optimaux (assignations fixes) :</strong><br>
+                            Pour le cluster k, minimiser : \\(\\sum_{i: c(i)=k} ||\\vec{x}_i - \\vec{\\mu}_k||^2\\)<br><br>
+                            
+                            Dérivons par rapport à \\(\\vec{\\mu}_k\\) (<a href="../math/derivatives.html">Module 1.4</a>) :<br>
+                            $$\\frac{\\partial}{\\partial \\vec{\\mu}_k} \\sum_{i \\in C_k} ||\\vec{x}_i - \\vec{\\mu}_k||^2 = -2\\sum_{i \\in C_k} (\\vec{x}_i - \\vec{\\mu}_k) = 0$$
+                            
+                            D'où : $$\\vec{\\mu}_k^* = \\frac{1}{|C_k|} \\sum_{i \\in C_k} \\vec{x}_i$$
+                            
+                            Le centre optimal est la moyenne arithmétique !
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Pourquoi K-means converge toujours",
+            content: `
+                        <p><strong>Théorème de convergence :</strong></p>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>K-means converge en un nombre fini d'itérations.</strong><br><br>
+                            
+                            <strong>Preuve :</strong><br><br>
+                            
+                            1. <strong>J diminue à chaque étape :</strong><br>
+                            • L'assignation choisit le centre minimisant la distance → J diminue ou reste stable<br>
+                            • Le recentrage minimise J pour les assignations fixes → J diminue ou reste stable<br><br>
+                            
+                            2. <strong>J est borné inférieurement :</strong><br>
+                            $$J \\geq 0$$ (somme de carrés)<br><br>
+                            
+                            3. <strong>Nombre fini de partitions :</strong><br>
+                            Il y a au plus \\(K^n\\) façons d'assigner n points à K clusters.<br><br>
+                            
+                            4. <strong>Conclusion :</strong><br>
+                            J décroît et est minorée → convergence<br>
+                            Nombre fini de partitions → convergence en temps fini ✓
+                        </div>
+                        
+                        <p><strong>Complexité :</strong> \\(O(nKdI)\\) où I est le nombre d'itérations (typiquement < 100).</p>
+                        
+                        <p>C'est remarquablement efficace pour un problème NP-difficile !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel sur un exemple simple",
+            content: `
+                        <p><strong>Groupons 4 points en 2 clusters :</strong></p>
+                        
+                        <table style="margin: 1rem auto; text-align: center;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.5rem;">Point</th>
+                                <th style="padding: 0.5rem;">x₁</th>
+                                <th style="padding: 0.5rem;">x₂</th>
+                            </tr>
+                            <tr><td>A</td><td>1</td><td>1</td></tr>
+                            <tr><td>B</td><td>2</td><td>1</td></tr>
+                            <tr><td>C</td><td>4</td><td>3</td></tr>
+                            <tr><td>D</td><td>5</td><td>4</td></tr>
+                        </table>
+                        
+                        <p><strong>Initialisation :</strong> Centres en A(1,1) et C(4,3)</p>
+                        
+                        <p><strong>Itération 1 - Assignation :</strong></p>
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Distances au centre μ₁ = (1,1) :<br>
+                            • d(A, μ₁) = 0<br>
+                            • d(B, μ₁) = \\(\\sqrt{(2-1)^2 + (1-1)^2} = 1\\)<br>
+                            • d(C, μ₁) = \\(\\sqrt{(4-1)^2 + (3-1)^2} = \\sqrt{9+4} = \\sqrt{13} \\approx 3.6\\)<br>
+                            • d(D, μ₁) = \\(\\sqrt{(5-1)^2 + (4-1)^2} = \\sqrt{16+9} = 5\\)<br><br>
+                            
+                            Distances au centre μ₂ = (4,3) :<br>
+                            • d(A, μ₂) = \\(\\sqrt{13} \\approx 3.6\\)<br>
+                            • d(B, μ₂) = \\(\\sqrt{8} \\approx 2.8\\)<br>
+                            • d(C, μ₂) = 0<br>
+                            • d(D, μ₂) = \\(\\sqrt{2} \\approx 1.4\\)<br><br>
+                            
+                            <strong>Assignations :</strong> A→1, B→1, C→2, D→2
+                        </div>
+                        
+                        <p><strong>Itération 1 - Recentrage :</strong></p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            μ₁ = moyenne(A, B) = ((1+2)/2, (1+1)/2) = (1.5, 1)<br>
+                            μ₂ = moyenne(C, D) = ((4+5)/2, (3+4)/2) = (4.5, 3.5)<br><br>
+                            
+                            <strong>Inertie :</strong> J = 0.25 + 0.25 + 0.5 + 0.5 = 1.5
+                        </div>
+                        
+                        <p><strong>Itération 2 :</strong></p>
+                        <p>Avec les nouveaux centres, les assignations restent identiques.<br>
+                        Les centres ne bougent plus → <strong>Convergence !</strong></p>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Résultat final :</strong><br>
+                            • Cluster 1 : {A, B} centré en (1.5, 1)<br>
+                            • Cluster 2 : {C, D} centré en (4.5, 3.5)<br>
+                            • Inertie finale : J = 1.5
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "La limite fondamentale de K-means",
+            content: `
+                        <p><strong>K-means fait une hypothèse implicite forte :</strong></p>
+                        
+                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Les clusters sont sphériques et de taille comparable.</strong><br><br>
+                            
+                            Pourquoi ? La distance euclidienne crée des "boules" autour des centres.<br>
+                            K-means partitionne l'espace par des hyperplans (frontières linéaires).<br><br>
+                            
+                            <strong>Conséquences :</strong><br>
+                            • Échoue sur des formes en croissant, anneaux, spirales<br>
+                            • Divise artificiellement les clusters allongés<br>
+                            • Sensible aux échelles différentes (→ normalisation cruciale)
+                        </div>
+                        
+                        <p><strong>Autres limitations :</strong></p>
+                        <ul>
+                            <li><strong>K fixé à l'avance :</strong> Méthode du coude pour choisir</li>
+                            <li><strong>Sensible à l'initialisation :</strong> K-means++ améliore</li>
+                            <li><strong>Sensible aux outliers :</strong> La moyenne n'est pas robuste</li>
+                        </ul>
+                        
+                        <p><strong>Pour aller plus loin :</strong> DBSCAN (densité), clustering hiérarchique (arbre), GMM (probabiliste).</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Que se passe-t-il si on initialise tous les centres au même point ?",
+          options: [
+            "A) L'algorithme converge normalement",
+            "B) L'algorithme ne peut pas démarrer car tous les points sont assignés au même cluster",
+            "C) L'algorithme diverge",
+            "D) On obtient K clusters équilibrés",
+          ],
+          correct: 1,
+          explanation:
+            "Si tous les centres sont identiques, tous les points sont assignés au même cluster initial. Lors du recentrage, tous les centres se déplacent au même point (la moyenne globale). L'algorithme est bloqué avec un seul cluster actif. C'est pourquoi l'initialisation est cruciale : il faut des centres distincts pour que K-means puisse séparer les données.",
+        },
+        prevModule: "classification.html",
+        nextModule: "validation.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Classification | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🤖 Machine Learning</span>
+          <span>›</span>
+          <span>Classification</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🎯 Classification</h1>
+      <p class="subtitle">Module 3.3 - Machine Learning</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Classification</h3>
+        <p>
+          Vous maîtrisez maintenant la régression logistique et ses extensions.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="linear-regression.html" class="nav-link" id="prev-link"
+          >← Module précédent : Régression Linéaire</a
+        >
+        <a href="clustering.html" class="nav-link" id="next-link"
+          >Module suivant : Clustering →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Classification
+      const moduleConfig = {
+        id: "ml-classification",
+        title: "Classification",
+        category: "Machine Learning",
+        objectives: [
+          "Comprendre pourquoi on ne peut pas utiliser la régression directement",
+          "Maîtriser la fonction sigmoïde et son rôle crucial",
+          "Dériver et comprendre l'entropie croisée",
+          "Comprendre la régularisation et son importance",
+          "Généraliser au cas multi-classe avec softmax",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Le problème : prédire des catégories",
+            content: `
+                        <p><strong>La classification prédit une classe discrète, pas une valeur continue.</strong></p>
+                        
+                        <p>Exemple médical : une tumeur est maligne (1) ou bénigne (0). Pas 0.7 maligne.</p>
+                        
+                        <p><strong>Pourquoi pas la régression linéaire ?</strong> Testons avec y ∈ {0, 1} :</p>
+                        
+                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Problème fatal :</strong> y = ax + b peut donner n'importe quelle valeur !<br><br>
+                            • Tumeur 1mm → y = -0.2 (probabilité négative ?)<br>
+                            • Tumeur 100mm → y = 1.8 (probabilité > 100% ?)<br><br>
+                            
+                            On a besoin d'une fonction bornée entre 0 et 1.
+                        </div>
+                        
+                        <p><strong>L'idée :</strong> Transformer la sortie linéaire en probabilité P(y=1|x).</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "La sigmoïde : le cœur de la solution",
+            content: `
+                        <p><strong>La fonction sigmoïde transforme ℝ → (0,1) :</strong></p>
+                        
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$\\sigma(z) = \\frac{1}{1 + e^{-z}}$$
+                            
+                            <strong>Propriétés essentielles :</strong><br>
+                            • \\(\\lim_{z \\to -\\infty} \\sigma(z) = 0\\) et \\(\\lim_{z \\to +\\infty} \\sigma(z) = 1\\)<br>
+                            • \\(\\sigma(0) = 0.5\\) (point d'inflexion)<br>
+                            • Strictement croissante (préserve l'ordre)<br>
+                            • Symétrique : \\(\\sigma(-z) = 1 - \\sigma(z)\\)
+                        </div>
+                        
+                        <p><strong>LA propriété cruciale (dérivée) :</strong></p>
+                        
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$\\frac{d\\sigma}{dz} = \\sigma(z) \\cdot (1 - \\sigma(z))$$
+                            
+                            <strong>Démonstration :</strong> Posons \\(\\sigma = (1 + e^{-z})^{-1}\\)<br><br>
+                            
+                            Par la règle de chaîne (<a href="../math/derivatives.html">Module 1.4</a>) :<br>
+                            $$\\frac{d\\sigma}{dz} = -(1 + e^{-z})^{-2} \\cdot (-e^{-z}) = \\frac{e^{-z}}{(1 + e^{-z})^2}$$
+                            
+                            Or : \\(\\sigma = \\frac{1}{1 + e^{-z}}\\) donc \\(1 - \\sigma = \\frac{e^{-z}}{1 + e^{-z}}\\)<br><br>
+                            
+                            Ainsi : \\(\\sigma(1 - \\sigma) = \\frac{1}{1 + e^{-z}} \\cdot \\frac{e^{-z}}{1 + e^{-z}} = \\frac{e^{-z}}{(1 + e^{-z})^2}\\) ✓
+                        </div>
+                        
+                        <p>Cette forme élégante va simplifier tous nos calculs d'optimisation !</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "L'entropie croisée : pourquoi cette fonction de coût",
+            content: `
+                        <p><strong>Le modèle complet (régression logistique) :</strong></p>
+                        <p>$$P(y=1|\\vec{x}) = \\sigma(\\vec{w}^T\\vec{x} + b)$$</p>
+                        
+                        <p><strong>Pourquoi pas l'erreur quadratique ?</strong></p>
+                        <p>Avec \\(J = \\sum(y_i - \\sigma(\\vec{w}^T\\vec{x}_i + b))^2\\), la fonction n'est pas convexe → minima locaux !</p>
+                        
+                        <p><strong>L'approche par maximum de vraisemblance :</strong></p>
+                        
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Pour un exemple \\((\\vec{x}_i, y_i)\\), la probabilité d'observer \\(y_i\\) est :<br><br>
+                            
+                            $$P(y_i|\\vec{x}_i) = p_i^{y_i}(1-p_i)^{1-y_i}$$<br>
+                            où \\(p_i = \\sigma(\\vec{w}^T\\vec{x}_i + b)\\)<br><br>
+                            
+                            <strong>Vérification :</strong><br>
+                            • Si \\(y_i = 1\\) : \\(P = p_i\\) ✓<br>
+                            • Si \\(y_i = 0\\) : \\(P = 1 - p_i\\) ✓
+                        </div>
+                        
+                        <p><strong>La fonction de coût (entropie croisée binaire) :</strong></p>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            En prenant le -log de la vraisemblance et en moyennant :<br><br>
+                            
+                            $$J(\\vec{w}, b) = -\\frac{1}{n}\\sum_{i=1}^{n} [y_i \\log(p_i) + (1-y_i) \\log(1-p_i)]$$<br><br>
+                            
+                            <strong>Cette fonction est convexe !</strong> (Un seul minimum global)<br><br>
+                            
+                            <strong>Gradient (après calcul avec règle de chaîne) :</strong><br>
+                            $$\\nabla_{\\vec{w}} J = \\frac{1}{n}\\sum_{i=1}^{n} (p_i - y_i) \\vec{x}_i$$<br>
+                            $$\\frac{\\partial J}{\\partial b} = \\frac{1}{n}\\sum_{i=1}^{n} (p_i - y_i)$$<br><br>
+                            
+                            Forme identique à la régression, mais avec \\(p_i = \\sigma(\\vec{w}^T\\vec{x}_i + b)\\) !
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "La régularisation : éviter le sur-apprentissage",
+            content: `
+                        <p><strong>Le problème du sur-apprentissage :</strong></p>
+                        
+                        <p>Avec beaucoup de features, le modèle peut "mémoriser" les données d'entraînement au lieu de généraliser.</p>
+                        
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>La solution : pénaliser les poids trop grands</strong><br><br>
+                            
+                            On ajoute un terme de régularisation à J :<br>
+                            $$J_{reg}(\\vec{w}, b) = J(\\vec{w}, b) + \\lambda \\cdot R(\\vec{w})$$<br><br>
+                            
+                            où \\(\\lambda > 0\\) contrôle la force de régularisation.
+                        </div>
+                        
+                        <p><strong>Deux types principaux :</strong></p>
+                        
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>L2 (Ridge) :</strong> \\(R(\\vec{w}) = ||\\vec{w}||_2^2 = \\sum_{j} w_j^2\\)<br>
+                            • Réduit uniformément tous les poids<br>
+                            • Garde toutes les features<br>
+                            • Solution analytique modifiée : \\((X^TX + \\lambda I)^{-1}X^Ty\\)<br><br>
+                            
+                            <strong>L1 (Lasso) :</strong> \\(R(\\vec{w}) = ||\\vec{w}||_1 = \\sum_{j} |w_j|\\)<br>
+                            • Force certains poids à exactement 0<br>
+                            • Sélection automatique de features<br>
+                            • Pas de solution analytique
+                        </div>
+                        
+                        <p><strong>Interprétation bayésienne :</strong> La régularisation correspond à un prior sur les poids (L2 = gaussien, L1 = laplacien).</p>
+                        
+                        <p><strong>Impact sur le gradient :</strong><br>
+                        L2 : \\(\\nabla_{\\vec{w}} J_{reg} = \\nabla_{\\vec{w}} J + 2\\lambda\\vec{w}\\)<br>
+                        L1 : \\(\\nabla_{\\vec{w}} J_{reg} = \\nabla_{\\vec{w}} J + \\lambda \\cdot \\text{sign}(\\vec{w})\\)</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Extension multi-classe : softmax",
+            content: `
+                        <p><strong>Pour K classes (K > 2), on généralise avec softmax :</strong></p>
+                        
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Un vecteur de poids par classe :</strong><br>
+                            \\(\\vec{w}_1, \\vec{w}_2, ..., \\vec{w}_K\\) et \\(b_1, b_2, ..., b_K\\)<br><br>
+                            
+                            <strong>Scores (logits) :</strong><br>
+                            $$z_k = \\vec{w}_k^T\\vec{x} + b_k \\quad \\text{pour } k = 1, ..., K$$<br><br>
+                            
+                            <strong>Fonction softmax :</strong><br>
+                            $$P(y=k|\\vec{x}) = \\frac{e^{z_k}}{\\sum_{j=1}^{K} e^{z_j}}$$
+                        </div>
+                        
+                        <p><strong>Propriétés du softmax :</strong></p>
+                        <ul>
+                            <li>\\(\\sum_{k=1}^{K} P(y=k|\\vec{x}) = 1\\) (vraie distribution)</li>
+                            <li>\\(0 < P(y=k|\\vec{x}) < 1\\) pour tout k</li>
+                            <li>Invariant par translation : ajouter c à tous les \\(z_k\\) ne change rien</li>
+                            <li>Si K=2, équivalent à la sigmoïde</li>
+                        </ul>
+                        
+                        <p><strong>Fonction de coût (entropie croisée catégorielle) :</strong></p>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Avec encodage one-hot : \\(y_i \\in \\{0,1\\}^K\\) où \\(\\sum_k y_{ik} = 1\\)<br><br>
+                            
+                            $$J = -\\frac{1}{n}\\sum_{i=1}^{n} \\sum_{k=1}^{K} y_{ik} \\log(p_{ik})$$<br>
+                            où \\(p_{ik} = P(y=k|\\vec{x}_i)\\)<br><br>
+                            
+                            <strong>Gradient (forme vectorielle) :</strong><br>
+                            $$\\nabla_{\\vec{w}_k} J = \\frac{1}{n}\\sum_{i=1}^{n} (p_{ik} - y_{ik}) \\vec{x}_i$$<br><br>
+                            
+                            Même forme élégante qu'en binaire !
+                        </div>
+                        
+                        <p><strong>Astuce numérique :</strong> Pour éviter overflow, calculer :<br>
+                        \\(\\log P(y=k|\\vec{x}) = z_k - \\log\\sum_j e^{z_j} = z_k - \\log\\sum_j e^{z_j - \\max_j z_j} - \\max_j z_j\\)</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Application : classification binaire régularisée",
+            content: `
+                        <p><strong>Classifions avec régularisation L2 :</strong></p>
+                        
+                        <table style="margin: 1rem auto; text-align: center;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.5rem;">x₁</th>
+                                <th style="padding: 0.5rem;">x₂</th>
+                                <th style="padding: 0.5rem;">y</th>
+                            </tr>
+                            <tr><td>1</td><td>2</td><td>0</td></tr>
+                            <tr><td>2</td><td>3</td><td>0</td></tr>
+                            <tr><td>3</td><td>1</td><td>1</td></tr>
+                            <tr><td>4</td><td>2</td><td>1</td></tr>
+                        </table>
+                        
+                        <p><strong>Sans régularisation (λ=0) :</strong></p>
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Après optimisation : \\(w_1 = 2.5, w_2 = -1.8, b = -1.2\\)<br>
+                            Norme des poids : \\(||\\vec{w}||_2 = \\sqrt{2.5^2 + 1.8^2} \\approx 3.08\\)
+                        </div>
+                        
+                        <p><strong>Avec régularisation L2 (λ=0.5) :</strong></p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            Le gradient devient :<br>
+                            $$\\nabla_{\\vec{w}} J_{reg} = \\frac{1}{n}\\sum (p_i - y_i)\\vec{x}_i + \\lambda\\vec{w}$$<br><br>
+                            
+                            Après optimisation : \\(w_1 = 1.2, w_2 = -0.8, b = -0.7\\)<br>
+                            Norme des poids : \\(||\\vec{w}||_2 \\approx 1.44\\) (réduite de 53% !)<br><br>
+                            
+                            <strong>Impact :</strong> Modèle plus simple, moins sensible au bruit
+                        </div>
+                        
+                        <p><strong>Interprétation des coefficients :</strong></p>
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            • \\(w_1 = 1.2 > 0\\) : x₁ augmente → probabilité classe 1 augmente<br>
+                            • \\(w_2 = -0.8 < 0\\) : x₂ augmente → probabilité classe 1 diminue<br>
+                            • \\(|w_1| > |w_2|\\) : x₁ plus important que x₂<br><br>
+                            
+                            <strong>Frontière de décision :</strong> \\(1.2x_1 - 0.8x_2 - 0.7 = 0\\)<br>
+                            Soit : \\(x_2 = 1.5x_1 - 0.875\\)
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "L'essentiel à retenir",
+            content: `
+                        <p><strong>Les concepts fondamentaux :</strong></p>
+                        
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>1. La sigmoïde transforme linéaire → probabilité</strong><br>
+                            Sans elle, pas de classification propre.<br><br>
+                            
+                            <strong>2. L'entropie croisée garantit la convexité</strong><br>
+                            Contrairement à MSE, un seul minimum global.<br><br>
+                            
+                            <strong>3. La régularisation contrôle la complexité</strong><br>
+                            Équilibre biais-variance via λ.<br><br>
+                            
+                            <strong>4. Softmax généralise naturellement</strong><br>
+                            De 2 à K classes, même principe.
+                        </div>
+                        
+                        <p><strong>Les pièges à éviter :</strong></p>
+                        <ul>
+                            <li>Classes déséquilibrées → pondérer les exemples</li>
+                            <li>Features à échelles différentes → normaliser</li>
+                            <li>Trop de features → régulariser</li>
+                            <li>Non-linéarité → ajouter features polynomiales ou kernel</li>
+                        </ul>
+                        
+                        <p><strong>Pour aller plus loin :</strong> SVM (marges maximales), arbres de décision (non-linéaire), réseaux de neurones (compositions de sigmoïdes).</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Pourquoi la régularisation L1 peut-elle mettre des poids à exactement zéro, mais pas L2 ?",
+          options: [
+            "A) L1 est plus forte que L2",
+            "B) La dérivée de |w| a une discontinuité en 0 qui 'attrape' les poids",
+            "C) C'est un bug de l'algorithme",
+            "D) L2 met aussi des poids à zéro",
+          ],
+          correct: 1,
+          explanation:
+            "La dérivée de L2 (w²) est 2w, qui tend vers 0 quand w→0 : le gradient diminue progressivement. La dérivée de L1 (|w|) est sign(w) = ±1, constante jusqu'à w=0 : le gradient 'pousse' avec force constante jusqu'à zéro. Géométriquement, L1 crée une contrainte en losange avec des 'coins' sur les axes (w=0), tandis que L2 crée une contrainte circulaire sans points privilégiés.",
+        },
+        prevModule: "linear-regression.html",
+        nextModule: "clustering.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Validation Croisée | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🤖 Machine Learning</span>
+          <span>›</span>
+          <span>Validation</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>✅ Validation Croisée</h1>
+      <p class="subtitle">Module 3.5 - Évaluation Robuste des Modèles</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Validation Croisée</h3>
+        <p>
+          Vous maîtrisez maintenant les techniques de validation pour évaluer
+          rigoureusement vos modèles ML.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="clustering.html" class="nav-link" id="prev-link"
+          >← Module précédent : Clustering</a
+        >
+        <a href="../dl/perceptron.html" class="nav-link" id="next-link"
+          >Module suivant : Perceptron →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Validation Croisée
+      const moduleConfig = {
+        id: "ml-validation",
+        title: "Validation Croisée",
+        category: "Machine Learning",
+        objectives: [
+          "Comprendre pourquoi la validation est cruciale en ML",
+          "Maîtriser les fondements mathématiques de la validation croisée",
+          "Distinguer les différentes stratégies de validation",
+          "Analyser le compromis biais-variance dans l'évaluation",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Le problème fondamental de l'évaluation",
+            content: `
+                        <p><strong>🎯 Pourquoi la validation est-elle critique ?</strong></p>
+                        <p>En ML, nous cherchons à prédire sur des données <strong>futures</strong>, pas à mémoriser des données <strong>passées</strong>. C'est la différence entre comprendre et réciter.</p>
+                        
+                        <p><strong>⚠️ Le paradoxe de l'apprentissage :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Performance apparente</strong> : excellente sur les données d'entraînement</li>
+                            <li>🎯 <strong>Performance réelle</strong> : médiocre sur de nouvelles données</li>
+                            <li>📈 <strong>L'écart révélateur</strong> : mesure du surapprentissage</li>
+                        </ul>
+                        
+                        <p><strong>💡 Analogie éclairante :</strong></p>
+                        <p>Un étudiant qui mémorise les questions-réponses d'annales peut avoir 20/20 sur ces exercices précis, mais échouer face à une variante. La validation teste la <strong>compréhension</strong>, pas la mémorisation.</p>
+                        
+                        <p><strong>🔬 Principe scientifique :</strong></p>
+                        <p>La validation croisée applique la méthode scientifique : tester une hypothèse (modèle) sur des données indépendantes de celles qui ont servi à la formuler.</p>
+                    `,
+          },
+          {
+            type: "math",
+            icon: "🔢",
+            title: "Formalisation mathématique de la généralisation",
+            content: `
+                        <p><strong>📊 Cadre théorique rigoureux :</strong></p>
+                        
+                        <p><strong>Distribution des données :</strong></p>
+                        <p>Les données proviennent d'une distribution jointe \\(P(X, Y)\\) inconnue. Notre dataset \\(D = \\{(x_i, y_i)\\}_{i=1}^n\\) est un échantillon de cette distribution.</p>
+                        
+                        <p><strong>🎯 Risque empirique vs risque réel :</strong></p>
+                        
+                        <p><strong>Risque réel</strong> (ce qu'on veut minimiser) :</p>
+                        <p>$$R(f) = \\mathbb{E}_{(X,Y) \\sim P}[L(f(X), Y)] = \\int L(f(x), y) \\, dP(x,y)$$</p>
+                        
+                        <p><strong>Risque empirique</strong> (ce qu'on peut calculer) :</p>
+                        <p>$$\\hat{R}_n(f) = \\frac{1}{n}\\sum_{i=1}^{n} L(f(x_i), y_i)$$</p>
+                        
+                        <p><strong>⚠️ Le piège :</strong> Si \\(f\\) est choisie en fonction de \\(D\\), alors \\(\\hat{R}_n(f)\\) sous-estime \\(R(f)\\) !</p>
+                        
+                        <p><strong>🔗 Théorème fondamental (lien avec les <a href="../math/probability.html">probabilités</a>) :</strong></p>
+                        <p>Pour un ensemble de test indépendant \\(T\\), l'estimateur :</p>
+                        <p>$$\\hat{R}_T(f) = \\frac{1}{|T|}\\sum_{(x,y) \\in T} L(f(x), y)$$</p>
+                        <p>vérifie : \\(\\mathbb{E}[\\hat{R}_T(f)] = R(f)\\) (estimateur non biaisé)</p>
+                        
+                        <p><strong>📈 Borne de généralisation (lien avec les <a href="../math/statistics.html">statistiques</a>) :</strong></p>
+                        <p>Avec probabilité \\(1-\\delta\\) :</p>
+                        <p>$$R(f) \\leq \\hat{R}_n(f) + \\sqrt{\\frac{\\log(2/\\delta)}{2n}}$$</p>
+                        <p>Cette borne montre que l'écart diminue en \\(O(1/\\sqrt{n})\\).</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "La k-fold validation : équilibre optimal",
+            content: `
+                        <p><strong>🔄 Principe géométrique de la k-fold :</strong></p>
+                        <p>Imaginez vos données comme un gâteau. Au lieu de le couper une fois (train/test simple), vous le découpez en \\(k\\) parts égales et testez \\(k\\) fois, chaque part servant tour à tour de test.</p>
+                        
+                        <p><strong>📊 Décomposition mathématique :</strong></p>
+                        <p>Partition de l'espace des données : \\(D = D_1 \\cup D_2 \\cup ... \\cup D_k\\) avec \\(D_i \\cap D_j = \\emptyset\\) pour \\(i \\neq j\\)</p>
+                        
+                        <p><strong>Pour chaque fold \\(i\\) :</strong></p>
+                        <ul>
+                            <li>Ensemble d'entraînement : \\(D^{(i)}_{train} = D \\setminus D_i\\)</li>
+                            <li>Ensemble de test : \\(D^{(i)}_{test} = D_i\\)</li>
+                            <li>Taille d'entraînement : \\(|D^{(i)}_{train}| = \\frac{(k-1)n}{k}\\)</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Estimation finale :</strong></p>
+                        <p>$$\\hat{R}_{CV} = \\frac{1}{k}\\sum_{i=1}^{k} \\hat{R}_{D_i}(f_i)$$</p>
+                        <p>où \\(f_i\\) est le modèle entraîné sur \\(D^{(i)}_{train}\\)</p>
+                        
+                        <p><strong>💡 Propriétés remarquables :</strong></p>
+                        <ul>
+                            <li>📈 <strong>Utilisation des données</strong> : chaque point est utilisé exactement \\(k-1\\) fois pour l'entraînement et 1 fois pour le test</li>
+                            <li>🎯 <strong>Réduction de variance</strong> : moyenner \\(k\\) estimations réduit la variance par un facteur \\(\\approx\\sqrt{k}\\)</li>
+                            <li>⚖️ <strong>Compromis</strong> : \\(k\\) grand → moins de biais mais plus de corrélation entre folds</li>
+                        </ul>
+                        
+                        <p><strong>🔗 Lien avec les <a href="../math/matrices.html">matrices</a> :</strong></p>
+                        <p>La matrice d'incidence \\(M \\in \\{0,1\\}^{k \\times n}\\) où \\(M_{ij} = 1\\) si l'exemple \\(j\\) est dans le fold \\(i\\) forme une partition équilibrée.</p>
+                    `,
+          },
+          {
+            type: "math",
+            icon: "🔢",
+            title: "Analyse du compromis biais-variance",
+            content: `
+                        <p><strong>📊 Décomposition fondamentale de l'erreur :</strong></p>
+                        
+                        <p>Pour un point \\(x\\) fixé, l'erreur quadratique se décompose :</p>
+                        <p>$$\\mathbb{E}_{D,\\epsilon}[(y - \\hat{f}_D(x))^2] = \\underbrace{(f(x) - \\mathbb{E}_D[\\hat{f}_D(x)])^2}_{\\text{Biais}^2} + \\underbrace{\\mathbb{E}_D[(\\hat{f}_D(x) - \\mathbb{E}_D[\\hat{f}_D(x)])^2]}_{\\text{Variance}} + \\underbrace{\\sigma^2}_{\\text{Bruit}}$$</p>
+                        
+                        <p><strong>Interprétation géométrique (lien avec les <a href="../math/vectors.html">vecteurs</a>) :</strong></p>
+                        <ul>
+                            <li><strong>Biais</strong> : distance entre le centre de la cible et le centre de nos tirs</li>
+                            <li><strong>Variance</strong> : dispersion de nos tirs autour de leur centre</li>
+                            <li><strong>Bruit</strong> : incertitude irréductible de la cible elle-même</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Impact du choix de \\(k\\) dans la k-fold :</strong></p>
+                        
+                        <p><strong>Analyse du biais :</strong></p>
+                        <p>Taille d'entraînement = \\(\\frac{k-1}{k}n\\)</p>
+                        <ul>
+                            <li>\\(k = 2\\) : utilise 50% des données → biais élevé</li>
+                            <li>\\(k = n\\) (LOO) : utilise \\((n-1)\\) données → biais minimal</li>
+                            <li>Biais décroît comme : \\(O\\left(\\frac{1}{k}\\right)\\)</li>
+                        </ul>
+                        
+                        <p><strong>Analyse de la variance :</strong></p>
+                        <p>Corrélation entre les modèles \\(f_i\\) et \\(f_j\\) :</p>
+                        <p>$$\\rho_{ij} = \\text{Corr}(f_i, f_j) \\approx \\frac{|D^{(i)}_{train} \\cap D^{(j)}_{train}|}{|D^{(i)}_{train}|} = \\frac{k-2}{k-1}$$</p>
+                        
+                        <p>Plus \\(k\\) augmente, plus \\(\\rho_{ij} \\to 1\\), augmentant la variance de l'estimation moyenne.</p>
+                        
+                        <p><strong>✨ Résultat optimal :</strong></p>
+                        <p>Études empiriques et théoriques convergent vers \\(k \\in \\{5, 10\\}\\) comme compromis optimal pour la plupart des problèmes.</p>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Stratégies de validation spécialisées",
+            content: `
+                        <p><strong>🎯 Adapter la validation au contexte du problème :</strong></p>
+                        
+                        <p><strong>1️⃣ Validation stratifiée (classification déséquilibrée)</strong></p>
+                        <p>Préserve la distribution des classes : si \\(P(Y=c) = p_c\\) dans \\(D\\), alors \\(P(Y=c) = p_c\\) dans chaque fold.</p>
+                        
+                        <p><strong>Formalisation :</strong></p>
+                        <p>Pour chaque classe \\(c\\) et fold \\(i\\) :</p>
+                        <p>$$\\frac{|\\{(x,y) \\in D_i : y = c\\}|}{|D_i|} \\approx \\frac{|\\{(x,y) \\in D : y = c\\}|}{|D|}$$</p>
+                        
+                        <p><strong>Impact (lien avec les <a href="../math/probability.html">probabilités conditionnelles</a>) :</strong></p>
+                        <p>Réduit la variance de l'estimation en préservant \\(P(Y|\\text{fold})\\)</p>
+                        
+                        <p><strong>2️⃣ Validation temporelle (séries temporelles)</strong></p>
+                        <p><strong>Principe de causalité :</strong> jamais d'information future dans l'entraînement</p>
+                        
+                        <p><strong>Forward chaining :</strong></p>
+                        <ul>
+                            <li>Fold 1 : train=[1:t₁], test=[t₁+1:t₂]</li>
+                            <li>Fold 2 : train=[1:t₂], test=[t₂+1:t₃]</li>
+                            <li>Fold k : train=[1:tₖ₋₁], test=[tₖ₋₁+1:tₖ]</li>
+                        </ul>
+                        
+                        <p><strong>Propriété importante :</strong> \\(D^{(i)}_{train} \\subset D^{(i+1)}_{train}\\) (entraînement croissant)</p>
+                        
+                        <p><strong>3️⃣ Validation groupée (données corrélées)</strong></p>
+                        <p>Quand les données ont une structure de groupe (patients, utilisateurs, sessions)</p>
+                        
+                        <p><strong>Partition par groupes :</strong></p>
+                        <p>$$D = \\bigcup_{g \\in G} D_g \\text{ où } D_g = \\{(x,y) : \\text{groupe}(x) = g\\}$$</p>
+                        <p>Les folds respectent les groupes : un groupe entier dans train ou test, jamais divisé.</p>
+                        
+                        <p><strong>4️⃣ Leave-One-Out (LOO) : cas limite</strong></p>
+                        <p>Cas extrême où \\(k = n\\) (un seul exemple en test)</p>
+                        
+                        <p><strong>Propriétés mathématiques :</strong></p>
+                        <ul>
+                            <li>Biais : \\(O(1/n)\\) (quasi-nul)</li>
+                            <li>Variance : maximale (folds très corrélés)</li>
+                            <li>Complexité : \\(O(n \\times T_{train})\\)</li>
+                        </ul>
+                        
+                        <p><strong>Théorème (lien avec les <a href="../math/derivatives.html">dérivées</a>) :</strong></p>
+                        <p>Pour certains modèles linéaires, LOO peut être calculé efficacement via la formule :</p>
+                        <p>$$CV_{LOO} = \\sum_{i=1}^n \\left(\\frac{y_i - \\hat{y}_i}{1 - h_{ii}}\\right)^2$$</p>
+                        <p>où \\(h_{ii}\\) est le levier (élément diagonal de la matrice hat).</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "Validation imbriquée pour les hyperparamètres",
+            content: `
+                        <p><strong>🎛️ Le problème de la double sélection :</strong></p>
+                        <p>Utiliser les mêmes données pour choisir le modèle ET l'évaluer introduit un biais d'optimisme.</p>
+                        
+                        <p><strong>📊 Architecture à trois niveaux :</strong></p>
+                        
+                        <p><strong>Niveau 1 - Paramètres \\(\\theta\\) :</strong></p>
+                        <ul>
+                            <li>Appris sur l'ensemble d'entraînement</li>
+                            <li>Exemple : poids d'un réseau de neurones</li>
+                        </ul>
+                        
+                        <p><strong>Niveau 2 - Hyperparamètres \\(\\lambda\\) :</strong></p>
+                        <ul>
+                            <li>Sélectionnés via l'ensemble de validation</li>
+                            <li>Exemple : taux de régularisation, profondeur d'arbre</li>
+                        </ul>
+                        
+                        <p><strong>Niveau 3 - Évaluation finale :</strong></p>
+                        <ul>
+                            <li>Performance mesurée sur l'ensemble de test</li>
+                            <li>Jamais utilisé pendant le développement</li>
+                        </ul>
+                        
+                        <p><strong>🔄 Validation croisée imbriquée :</strong></p>
+                        
+                        <p><strong>Structure double boucle :</strong></p>
+                        <p>Pour chaque fold externe \\(i\\) :</p>
+                        <ol>
+                            <li>Diviser \\(D^{(i)}_{train}\\) en \\(m\\) folds internes</li>
+                            <li>Pour chaque configuration \\(\\lambda\\) :
+                                <ul>
+                                    <li>Faire une m-fold CV interne</li>
+                                    <li>Calculer le score moyen \\(S(\\lambda)\\)</li>
+                                </ul>
+                            </li>
+                            <li>Sélectionner \\(\\lambda^* = \\arg\\max_\\lambda S(\\lambda)\\)</li>
+                            <li>Réentraîner sur tout \\(D^{(i)}_{train}\\) avec \\(\\lambda^*\\)</li>
+                            <li>Évaluer sur \\(D^{(i)}_{test}\\)</li>
+                        </ol>
+                        
+                        <p><strong>Complexité totale :</strong> \\(O(k \\times m \\times |\\Lambda| \\times T_{train})\\)</p>
+                        
+                        <p><strong>💡 Garantie théorique :</strong></p>
+                        <p>L'estimation finale est non biaisée car chaque fold externe est indépendant de la sélection d'hyperparamètres.</p>
+                        
+                        <p><strong>🔗 Lien avec l'<a href="../math/probability.html">indépendance statistique</a> :</strong></p>
+                        <p>\\(P(\\text{performance} | \\text{test}) = P(\\text{performance})\\) car test n'influence pas le choix du modèle.</p>
+                    `,
+          },
+          {
+            type: "math",
+            icon: "🔢",
+            title: "Bornes théoriques et intervalles de confiance",
+            content: `
+                        <p><strong>📊 Intervalles de confiance pour la k-fold :</strong></p>
+                        
+                        <p>Soit \\(e_1, ..., e_k\\) les erreurs sur chaque fold. L'erreur moyenne :</p>
+                        <p>$$\\bar{e} = \\frac{1}{k}\\sum_{i=1}^k e_i$$</p>
+                        
+                        <p><strong>Variance empirique :</strong></p>
+                        <p>$$s^2 = \\frac{1}{k-1}\\sum_{i=1}^k (e_i - \\bar{e})^2$$</p>
+                        
+                        <p><strong>Intervalle de confiance (lien avec les <a href="../math/statistics.html">statistiques</a>) :</strong></p>
+                        <p>Sous hypothèse de normalité, IC à 95% :</p>
+                        <p>$$\\bar{e} \\pm t_{0.975, k-1} \\cdot \\frac{s}{\\sqrt{k}}$$</p>
+                        
+                        <p><strong>⚠️ Attention :</strong> Les folds ne sont pas indépendants ! Correction :</p>
+                        <p>$$\\text{Var}(\\bar{e}) = \\frac{\\sigma^2}{k}\\left(1 + (k-1)\\rho\\right)$$</p>
+                        <p>où \\(\\rho\\) est la corrélation moyenne entre folds.</p>
+                        
+                        <p><strong>🎯 Test statistique pour comparer deux modèles :</strong></p>
+                        
+                        <p>Différences appariées : \\(d_i = e_i^{(A)} - e_i^{(B)}\\) pour chaque fold</p>
+                        
+                        <p><strong>Statistique de test :</strong></p>
+                        <p>$$t = \\frac{\\bar{d}}{s_d/\\sqrt{k}} \\sim t_{k-1}$$</p>
+                        
+                        <p><strong>Règle de décision :</strong></p>
+                        <p>Rejeter \\(H_0\\) (modèles équivalents) si \\(|t| > t_{\\alpha/2, k-1}\\)</p>
+                        
+                        <p><strong>🔗 Lien avec les <a href="../math/gradients.html">gradients</a> :</strong></p>
+                        <p>La variance de l'estimation du gradient dans SGD suit une loi similaire, d'où l'importance de moyenner sur plusieurs mini-batches.</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Pourquoi la k-fold validation avec k=n (Leave-One-Out) n'est-elle pas toujours optimale malgré son biais minimal ?",
+          options: [
+            "A) Elle utilise trop peu de données pour l'entraînement",
+            "B) Sa variance est maximale car les modèles sont très corrélés",
+            "C) Elle ne peut pas gérer les classes déséquilibrées",
+            "D) Son temps de calcul est trop faible",
+          ],
+          correct: 1,
+          explanation:
+            "LOO a une variance maximale car les k modèles sont entraînés sur des ensembles quasi-identiques (n-1 exemples en commun), créant une forte corrélation. Cette variance élevée peut dominer le gain en biais, rendant k=5 ou k=10 souvent préférables.",
+        },
+        prevModule: "clustering.html",
+        nextModule: "../dl/perceptron.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>
