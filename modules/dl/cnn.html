@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CNN | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧠 Deep Learning</span>
+          <span>›</span>
+          <span>CNN</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🖼️ CNN : Réseaux de Neurones Convolutifs</h1>
+      <p class="subtitle">Module 4.4 - Vision par Ordinateur</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - CNN</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant comment l'IA "voit" et
+          analyse les images.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="backpropagation.html" class="nav-link" id="prev-link"
+          >← Module précédent : Backpropagation</a
+        >
+        <a href="rnn.html" class="nav-link" id="next-link"
+          >Module suivant : RNN/LSTM →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module CNN
+      const moduleConfig = {
+        id: "dl-cnn",
+        title: "CNN : Réseaux de Neurones Convolutifs",
+        category: "Deep Learning",
+        objectives: [
+          "Comprendre pourquoi les réseaux classiques échouent sur les images",
+          "Maîtriser l'opération de convolution mathématiquement",
+          "Calculer manuellement convolutions et pooling",
+          "Comprendre l'architecture hiérarchique des CNN",
+          "Implémenter un CNN simple from scratch",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Le défi impossible : comprendre les images",
+            content: `
+                        <p>Les <strong>images</strong> représentent le défi le plus complexe pour l'IA : transformer des millions de pixels en compréhension sémantique. Les CNN ont révolutionné ce domaine en s'inspirant du système visuel humain.</p>
+                        
+                        <p><strong>🔑 Problème fondamental :</strong></p>
+                        <ul>
+                            <li>🖼️ <strong>Image 224×224 RGB</strong> = 224 × 224 × 3 = <strong>150 528 pixels</strong></li>
+                            <li>🧠 <strong>Réseau classique</strong> = 150 528 neurones d'entrée</li>
+                            <li>⚡ <strong>Première couche cachée (1000 neurones)</strong> = 150 millions de poids !</li>
+                            <li>💥 <strong>Résultat</strong> : explosion combinatoire, surapprentissage garanti</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Révolution CNN :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Localité</strong> : un pixel dépend de ses voisins, pas de pixels lointains</li>
+                            <li>🔄 <strong>Partage de poids</strong> : même détecteur utilisé partout</li>
+                            <li>📐 <strong>Hiérarchie</strong> : contours → formes → objets → scènes</li>
+                            <li>⚡ <strong>Efficacité</strong> : millions de fois moins de paramètres</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Applications révolutionnaires :</strong></p>
+                        <ul>
+                            <li>📱 <strong>Reconnaissance faciale</strong> : déverrouillage téléphone</li>
+                            <li>🏥 <strong>Diagnostic médical</strong> : détection cancer, COVID sur radios</li>
+                            <li>🚗 <strong>Voitures autonomes</strong> : reconnaissance panneaux, piétons</li>
+                            <li>🛡️ <strong>Sécurité</strong> : surveillance automatique, détection d'intrusion</li>
+                            <li>🎨 <strong>Art génératif</strong> : création d'images, style transfer</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Les CNN ne sont pas juste "des réseaux pour images" - ils représentent un <strong>changement de paradigme</strong> : exploiter la structure des données pour créer des architectures spécialisées.</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie du système visuel humain",
+            content: `
+                        <p>Imaginez comment <strong>votre œil et votre cerveau</strong> reconnaissent un visage familier dans une foule :</p>
+                        
+                        <p><strong>👁️ Étape 1 - Rétine (détection de base) :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Cellules spécialisées</strong> : détectent contours, coins, mouvements</li>
+                            <li>📍 <strong>Champ récepteur local</strong> : chaque cellule "voit" une petite zone</li>
+                            <li>🔄 <strong>Même détecteur partout</strong> : détecteur de contour vertical fonctionne partout</li>
+                        </ul>
+                        
+                        <p><strong>🧠 Étape 2 - Cortex visuel primaire (formes simples) :</strong></p>
+                        <ul>
+                            <li>📐 <strong>Combinaison de contours</strong> : lignes → angles → formes géométriques</li>
+                            <li>🎯 <strong>Invariance position</strong> : triangle reconnu partout dans l'image</li>
+                            <li>📏 <strong>Réduction progressive</strong> : moins de détails, plus d'abstraction</li>
+                        </ul>
+                        
+                        <p><strong>🎭 Étape 3 - Cortex visuel supérieur (objets) :</strong></p>
+                        <ul>
+                            <li>👁️ <strong>Yeux</strong> : 2 cercles + point central</li>
+                            <li>👃 <strong>Nez</strong> : triangle + 2 points</li>
+                            <li>👄 <strong>Bouche</strong> : ligne courbe horizontale</li>
+                        </ul>
+                        
+                        <p><strong>🧠 Étape 4 - Reconnaissance (concepts) :</strong></p>
+                        <ul>
+                            <li>👤 <strong>Visage</strong> : yeux + nez + bouche dans la bonne configuration</li>
+                            <li>🎯 <strong>Identité</strong> : comparaison avec visages mémorisés</li>
+                            <li>⚡ <strong>Reconnaissance</strong> : "C'est Aminata !" en 0.1 seconde</li>
+                        </ul>
+                        
+                        <p><strong>💡 C'est exactement l'architecture CNN :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Convolution</strong> = détecteurs de caractéristiques locales</li>
+                            <li>📏 <strong>Pooling</strong> = réduction et invariance spatiale</li>
+                            <li>🧠 <strong>Couches profondes</strong> = concepts de plus en plus abstraits</li>
+                            <li>🎯 <strong>Classification finale</strong> = décision basée sur les concepts</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "Qu'est-ce que la convolution ? L'analogie du tampon",
+            content: `
+                        <p>Imaginez que vous êtes <strong>artisan textile à Saint-Louis</strong> et que vous voulez décorer un tissu avec un motif répétitif :</p>
+                        
+                        <p><strong>🎨 Votre outil :</strong> Un petit tampon avec un motif gravé (ex: étoile)</p>
+                        <p><strong>🧵 Votre tissu :</strong> Grande surface blanche à décorer</p>
+                        
+                        <p><strong>🔄 Votre méthode :</strong></p>
+                        <ol>
+                            <li>📍 <strong>Positionner</strong> le tampon sur le coin du tissu</li>
+                            <li>🎯 <strong>Appuyer</strong> pour imprimer le motif</li>
+                            <li>➡️ <strong>Déplacer</strong> le tampon d'un cran vers la droite</li>
+                            <li>🔄 <strong>Répéter</strong> jusqu'au bout de la ligne</li>
+                            <li>⬇️ <strong>Descendre</strong> d'une ligne et recommencer</li>
+                        </ol>
+                        
+                        <p><strong>💡 C'est exactement la convolution !</strong></p>
+                        <ul>
+                            <li>🎨 <strong>Tampon</strong> = filtre/kernel (ex: 3×3)</li>
+                            <li>🧵 <strong>Tissu</strong> = image d'entrée</li>
+                            <li>✨ <strong>Motif imprimé</strong> = feature map (carte de caractéristiques)</li>
+                            <li>🔄 <strong>Déplacement systématique</strong> = convolution</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Différents tampons = différents détecteurs :</strong></p>
+                        <ul>
+                            <li>📏 <strong>Tampon "lignes verticales"</strong> → détecte les bords verticaux</li>
+                            <li>📐 <strong>Tampon "lignes horizontales"</strong> → détecte les bords horizontaux</li>
+                            <li>🔍 <strong>Tampon "coins"</strong> → détecte les angles</li>
+                            <li>🌀 <strong>Tampon "courbes"</strong> → détecte les formes arrondies</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Convolution manuelle : exemple 4×4",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong> Détection de contour vertical dans une image 4×4</p>
+                        
+                        <p><strong>🖼️ Image d'entrée (noir=0, blanc=1) :</strong></p>
+                        <div style="font-family: monospace; text-align: center; background: #f4f4f4; padding: 1rem; border-radius: 4px;">
+                        $$\\text{Image} = \\begin{bmatrix} 0 & 0 & 1 & 1 \\\\ 0 & 0 & 1 & 1 \\\\ 0 & 0 & 1 & 1 \\\\ 0 & 0 & 1 & 1 \\end{bmatrix}$$
+                        </div>
+                        <p><strong>Interprétation :</strong> Moitié gauche noire, moitié droite blanche → contour vertical au milieu</p>
+                        
+                        <p><strong>🔍 Filtre détecteur de contour vertical :</strong></p>
+                        <div style="font-family: monospace; text-align: center; background: #e8f5e9; padding: 1rem; border-radius: 4px;">
+                        $$\\text{Filtre} = \\begin{bmatrix} -1 & 0 & 1 \\\\ -1 & 0 & 1 \\\\ -1 & 0 & 1 \\end{bmatrix}$$
+                        </div>
+                        <p><strong>Logique :</strong> -1 (gauche) + 1 (droite) = détecte transition noir→blanc</p>
+                        
+                        <p><strong>🔢 Calcul position (0,0) :</strong></p>
+                        <p>Superposer le filtre sur le coin supérieur gauche :</p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                        $$\\text{Résultat}_{0,0} = (-1)×0 + 0×0 + 1×1 + (-1)×0 + 0×0 + 1×1 + (-1)×0 + 0×0 + 1×1$$
+                        $$= 0 + 0 + 1 + 0 + 0 + 1 + 0 + 0 + 1 = 3$$
+                        </div>
+                        
+                        <p><strong>🔢 Calcul position (0,1) :</strong></p>
+                        <p>Déplacer le filtre d'une case vers la droite :</p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                        $$\\text{Résultat}_{0,1} = (-1)×0 + 0×1 + 1×1 + (-1)×0 + 0×1 + 1×1 + (-1)×0 + 0×1 + 1×1$$
+                        $$= 0 + 0 + 1 + 0 + 0 + 1 + 0 + 0 + 1 = 3$$
+                        </div>
+                        
+                        <p><strong>🎯 Feature map complète (2×2) :</strong></p>
+                        <div style="font-family: monospace; text-align: center; background: #e8f5e9; padding: 1rem; border-radius: 4px;">
+                        $$\\text{Feature Map} = \\begin{bmatrix} 3 & 3 \\\\ 3 & 3 \\end{bmatrix}$$
+                        </div>
+                        
+                        <p><strong>💡 Interprétation :</strong> Valeurs élevées (3) partout → contour vertical détecté sur toute la hauteur ! Le filtre a parfaitement identifié la transition noir→blanc.</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "L'opération de convolution : formalisation rigoureuse",
+            content: `
+                        <p><strong>📐 Définition mathématique de la convolution 2D :</strong></p>
+                        <p>Pour une image \\(I\\) et un filtre (kernel) \\(K\\) :</p>
+                        <p>$$(I * K)(i, j) = \\sum_{m=0}^{M-1} \\sum_{n=0}^{N-1} I(i+m, j+n) \\cdot K(m, n)$$</p>
+                        
+                        <p><strong>🔍 Décryptage de la formule :</strong></p>
+                        <ul>
+                            <li>\\(I(i, j)\\) = <strong>valeur du pixel</strong> en position (i, j)</li>
+                            <li>\\(K(m, n)\\) = <strong>poids du filtre</strong> en position (m, n)</li>
+                            <li>\\(M \\times N\\) = <strong>taille du filtre</strong> (ex: 3×3, 5×5)</li>
+                            <li>\\((I * K)(i, j)\\) = <strong>valeur de sortie</strong> après convolution</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Interprétation intuitive :</strong></p>
+                        <p>La convolution <strong>glisse le filtre</strong> sur toute l'image et calcule à chaque position le <strong>produit scalaire</strong> entre le filtre et la zone d'image correspondante.</p>
+                        
+                        <p><strong>🔧 Paramètres de contrôle :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Stride (s) :</strong> pas de déplacement du filtre</li>
+                            <li style="margin-top: 0.5rem"><strong>• Padding (p) :</strong> bordure ajoutée à l'image</li>
+                            <li style="margin-top: 0.5rem"><strong>• Taille de sortie :</strong> \\(\\frac{W - F + 2P}{S} + 1\\)</li>
+                        </ul>
+                        
+                        <p><strong>🔍 Où :</strong></p>
+                        <ul>
+                            <li>W = largeur d'entrée</li>
+                            <li>F = taille du filtre</li>
+                            <li>P = padding</li>
+                            <li>S = stride</li>
+                        </ul>
+                        
+                        <p><strong>💡 Propriétés fondamentales :</strong></p>
+                        <ul>
+                            <li>🔄 <strong>Partage de poids</strong> : même filtre appliqué partout</li>
+                            <li>📍 <strong>Localité spatiale</strong> : connexions locales uniquement</li>
+                            <li>🎯 <strong>Invariance par translation</strong> : détecte la caractéristique où qu'elle soit</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel de convolution 3×3",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong> Détection de contours verticaux</p>
+                        
+                        <p><strong>🖼️ Image d'entrée 5×5 (niveaux de gris) :</strong></p>
+                        <p>$$I = \\begin{bmatrix} 
+                        0 & 0 & 255 & 255 & 255 \\\\
+                        0 & 0 & 255 & 255 & 255 \\\\
+                        0 & 0 & 255 & 255 & 255 \\\\
+                        0 & 0 & 255 & 255 & 255 \\\\
+                        0 & 0 & 255 & 255 & 255
+                        \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔍 Filtre de détection de contours verticaux 3×3 :</strong></p>
+                        <p>$$K = \\begin{bmatrix} 
+                        -1 & 0 & 1 \\\\
+                        -1 & 0 & 1 \\\\
+                        -1 & 0 & 1
+                        \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Calcul position (1,1) :</strong></p>
+                        <p>Zone d'image 3×3 centrée en (1,1) :</p>
+                        <p>$$\\begin{bmatrix} 0 & 0 & 255 \\\\ 0 & 0 & 255 \\\\ 0 & 0 & 255 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>Produit élément par élément :</strong></p>
+                        <p>$$(-1) \\times 0 + 0 \\times 0 + 1 \\times 255 + (-1) \\times 0 + 0 \\times 0 + 1 \\times 255 + (-1) \\times 0 + 0 \\times 0 + 1 \\times 255$$</p>
+                        <p>$$= 0 + 0 + 255 + 0 + 0 + 255 + 0 + 0 + 255 = 765$$</p>
+                        
+                        <p><strong>🎯 Résultat complet (sortie 3×3) :</strong></p>
+                        <p>$$\\text{Sortie} = \\begin{bmatrix} 
+                        765 & 765 & 765 \\\\
+                        765 & 765 & 765 \\\\
+                        765 & 765 & 765
+                        \\end{bmatrix}$$</p>
+                        
+                        <p><strong>💡 Interprétation :</strong> Valeur élevée (765) = <strong>contour vertical détecté</strong> ! Le filtre a trouvé la transition noir→blanc.</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : convolution manuelle",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Appliquez le filtre de détection de contours horizontaux sur cette image :</p>
+                        
+                        <p><strong>🖼️ Image 4×4 :</strong></p>
+                        <p>$$I = \\begin{bmatrix} 
+                        100 & 100 & 100 & 100 \\\\
+                        100 & 100 & 100 & 100 \\\\
+                        200 & 200 & 200 & 200 \\\\
+                        200 & 200 & 200 & 200
+                        \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔍 Filtre horizontal 3×3 :</strong></p>
+                        <p>$$K = \\begin{bmatrix} 
+                        -1 & -1 & -1 \\\\
+                        0 & 0 & 0 \\\\
+                        1 & 1 & 1
+                        \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>La convolution en position (1,1)</li>
+                            <li>La matrice de sortie complète 2×2</li>
+                            <li>Interprétez le résultat</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('convolution-manual-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="convolution-manual-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Position (1,1) :</strong><br>
+                                Zone 3×3 : \\(\\begin{bmatrix} 100 & 100 & 100 \\\\ 100 & 100 & 100 \\\\ 200 & 200 & 200 \\end{bmatrix}\\)<br>
+                                Calcul : (-1)×100 + (-1)×100 + (-1)×100 + 0×100 + 0×100 + 0×100 + 1×200 + 1×200 + 1×200<br>
+                                = -300 + 0 + 600 = <strong>300</strong></li>
+                            <li><strong>Sortie complète :</strong><br>
+                                Position (1,0) : 300<br>
+                                Position (1,1) : 300<br>
+                                Position (0,0) : 300<br>
+                                Position (0,1) : 300<br>
+                                Donc : \\(\\begin{bmatrix} 300 & 300 \\\\ 300 & 300 \\end{bmatrix}\\)</li>
+                            <li><strong>Interprétation :</strong><br>
+                                Valeur positive élevée (300) = <strong>contour horizontal détecté</strong> !<br>
+                                Le filtre a trouvé la transition du haut (100) vers le bas (200).</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Pooling : réduction intelligente de l'information",
+            content: `
+                        <p><strong>🤔 Pourquoi réduire la taille des images ?</strong></p>
+                        <p>Le <strong>pooling</strong> (mise en commun) réduit la taille spatiale tout en préservant l'information importante. C'est comme faire un résumé intelligent d'une image.</p>
+                        
+                        <p><strong>🎯 Objectifs du pooling :</strong></p>
+                        <ul>
+                            <li>📏 <strong>Réduction de taille</strong> : moins de paramètres, calculs plus rapides</li>
+                            <li>🎯 <strong>Invariance spatiale</strong> : "chat en haut à gauche" = "chat en bas à droite"</li>
+                            <li>🔍 <strong>Extraction d'essence</strong> : garder l'information importante</li>
+                            <li>🛡️ <strong>Robustesse au bruit</strong> : petites variations ignorées</li>
+                        </ul>
+                        
+                        <p><strong>📐 Types de pooling :</strong></p>
+                        
+                        <p><strong>1️⃣ Max Pooling :</strong></p>
+                        <p>$$\\text{MaxPool}(R) = \\max_{(i,j) \\in R} I(i,j)$$</p>
+                        <p><strong>Principe :</strong> Prendre la valeur maximale dans chaque région</p>
+                        
+                        <p><strong>2️⃣ Average Pooling :</strong></p>
+                        <p>$$\\text{AvgPool}(R) = \\frac{1}{|R|} \\sum_{(i,j) \\in R} I(i,j)$$</p>
+                        <p><strong>Principe :</strong> Prendre la moyenne dans chaque région</p>
+                        
+                        <p><strong>💡 Analogie du résumé :</strong></p>
+                        <p>Imaginez résumer un article de 1000 mots en 100 mots :</p>
+                        <ul>
+                            <li>📰 <strong>Max pooling</strong> : garder les phrases les plus importantes</li>
+                            <li>📊 <strong>Average pooling</strong> : faire la synthèse de chaque paragraphe</li>
+                        </ul>
+                        
+                        <p><strong>🔧 Paramètres typiques :</strong></p>
+                        <ul>
+                            <li><strong>Taille</strong> : 2×2 (divise par 4 la taille)</li>
+                            <li><strong>Stride</strong> : 2 (pas de chevauchement)</li>
+                            <li><strong>Effet</strong> : image 224×224 → 112×112</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel de pooling",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong> Max pooling 2×2 sur une feature map</p>
+                        
+                        <p><strong>🖼️ Feature map d'entrée 4×4 :</strong></p>
+                        <p>$$\\text{Input} = \\begin{bmatrix} 
+                        1 & 3 & 2 & 4 \\\\
+                        5 & 6 & 1 & 2 \\\\
+                        2 & 1 & 8 & 3 \\\\
+                        4 & 2 & 1 & 7
+                        \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Max pooling 2×2 avec stride 2 :</strong></p>
+                        
+                        <p><strong>Région 1 (haut-gauche) :</strong></p>
+                        <p>$$\\begin{bmatrix} 1 & 3 \\\\ 5 & 6 \\end{bmatrix} \\rightarrow \\max(1, 3, 5, 6) = 6$$</p>
+                        
+                        <p><strong>Région 2 (haut-droite) :</strong></p>
+                        <p>$$\\begin{bmatrix} 2 & 4 \\\\ 1 & 2 \\end{bmatrix} \\rightarrow \\max(2, 4, 1, 2) = 4$$</p>
+                        
+                        <p><strong>Région 3 (bas-gauche) :</strong></p>
+                        <p>$$\\begin{bmatrix} 2 & 1 \\\\ 4 & 2 \\end{bmatrix} \\rightarrow \\max(2, 1, 4, 2) = 4$$</p>
+                        
+                        <p><strong>Région 4 (bas-droite) :</strong></p>
+                        <p>$$\\begin{bmatrix} 8 & 3 \\\\ 1 & 7 \\end{bmatrix} \\rightarrow \\max(8, 3, 1, 7) = 8$$</p>
+                        
+                        <p><strong>🎯 Résultat final 2×2 :</strong></p>
+                        <p>$$\\text{Output} = \\begin{bmatrix} 6 & 4 \\\\ 4 & 8 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>💡 Observation :</strong> Taille divisée par 4 (16 → 4 éléments), mais les valeurs importantes (6, 8) sont préservées !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : pooling comparatif",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Comparez Max pooling vs Average pooling sur cette feature map :</p>
+                        
+                        <p><strong>🖼️ Feature map 4×4 :</strong></p>
+                        <p>$$\\text{Input} = \\begin{bmatrix} 
+                        10 & 2 & 8 & 1 \\\\
+                        3 & 15 & 4 & 6 \\\\
+                        7 & 1 & 12 & 2 \\\\
+                        5 & 9 & 3 & 14
+                        \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>Max pooling 2×2 avec stride 2</li>
+                            <li>Average pooling 2×2 avec stride 2</li>
+                            <li>Quelle méthode préserve mieux les pics d'activation ?</li>
+                            <li>Quelle méthode est plus robuste au bruit ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('pooling-comparison-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="pooling-comparison-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Max pooling :</strong><br>
+                                Région 1: max(10,2,3,15) = 15<br>
+                                Région 2: max(8,1,4,6) = 8<br>
+                                Région 3: max(7,1,5,9) = 9<br>
+                                Région 4: max(12,2,3,14) = 14<br>
+                                Résultat: \\(\\begin{bmatrix} 15 & 8 \\\\ 9 & 14 \\end{bmatrix}\\)</li>
+                            <li><strong>Average pooling :</strong><br>
+                                Région 1: (10+2+3+15)/4 = 7.5<br>
+                                Région 2: (8+1+4+6)/4 = 4.75<br>
+                                Région 3: (7+1+5+9)/4 = 5.5<br>
+                                Région 4: (12+2+3+14)/4 = 7.75<br>
+                                Résultat: \\(\\begin{bmatrix} 7.5 & 4.75 \\\\ 5.5 & 7.75 \\end{bmatrix}\\)</li>
+                            <li><strong>Préservation des pics :</strong> <strong>Max pooling</strong> (15 vs 7.5)</li>
+                            <li><strong>Robustesse au bruit :</strong> <strong>Average pooling</strong> (lisse les variations)</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Architecture CNN complète : formalisation",
+            content: `
+                        <p><strong>🏗️ Architecture typique d'un CNN :</strong></p>
+                        <p>$$\\text{Image} \\xrightarrow{\\text{Conv}} \\text{Feature Maps} \\xrightarrow{\\text{Pool}} \\text{Réduction} \\xrightarrow{\\text{Conv}} \\text{Features} \\xrightarrow{\\text{FC}} \\text{Classification}$$</p>
+                        
+                        <p><strong>📐 Évolution des dimensions :</strong></p>
+                        <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 0.8rem; border: 1px solid #dee2e6;">Couche</th>
+                                <th style="padding: 0.8rem; border: 1px solid #dee2e6;">Opération</th>
+                                <th style="padding: 0.8rem; border: 1px solid #dee2e6;">Taille</th>
+                                <th style="padding: 0.8rem; border: 1px solid #dee2e6;">Paramètres</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Entrée</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Image RGB</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">224×224×3</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">0</td>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Conv1</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">32 filtres 3×3</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">224×224×32</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">896</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Pool1</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Max pool 2×2</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">112×112×32</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">0</td>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Conv2</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">64 filtres 3×3</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">112×112×64</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">18 496</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Pool2</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Max pool 2×2</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">56×56×64</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">0</td>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Flatten</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Vectorisation</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">200 704×1</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">FC</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Dense 1000</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">1000×1</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">200M</td>
+                            </tr>
+                        </table>
+                        
+                        <p><strong>🔍 Calcul des paramètres :</strong></p>
+                        <ul>
+                            <li><strong>Conv1 :</strong> (3×3×3 + 1) × 32 = 896 paramètres</li>
+                            <li><strong>Conv2 :</strong> (3×3×32 + 1) × 64 = 18 496 paramètres</li>
+                            <li><strong>FC :</strong> (200 704 + 1) × 1000 = 200M paramètres</li>
+                        </ul>
+                        
+                        <p><strong>⚠️ Observation cruciale :</strong> 99% des paramètres sont dans les couches fully connected ! C'est pourquoi les architectures modernes minimisent ces couches.</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation convolution from scratch",
+            description: "Implémentons l'opération de convolution :",
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+class Convolution2D:
+    """Implémentation de la convolution 2D from scratch"""
+    
+    def __init__(self, nb_filtres, taille_filtre, stride=1, padding=0):
+        self.nb_filtres = nb_filtres
+        self.taille_filtre = taille_filtre
+        self.stride = stride
+        self.padding = padding
+        
+        # Initialisation des filtres (Xavier)
+        limite = np.sqrt(6 / (taille_filtre * taille_filtre))
+        self.filtres = np.random.uniform(-limite, limite, 
+                                       (nb_filtres, taille_filtre, taille_filtre))
+        self.biais = np.zeros(nb_filtres)
+        
+        print(f"🔍 Couche convolutive créée:")
+        print(f"   {nb_filtres} filtres {taille_filtre}×{taille_filtre}")
+        print(f"   Stride: {stride}, Padding: {padding}")
+    
+    def ajouter_padding(self, image):
+        """Ajoute du padding autour de l'image"""
+        if self.padding == 0:
+            return image
+        return np.pad(image, self.padding, mode='constant', constant_values=0)
+    
+    def convolution_simple(self, image, filtre):
+        """Convolution d'une image avec un seul filtre"""
+        h_img, w_img = image.shape
+        h_filtre, w_filtre = filtre.shape
+        
+        # Taille de sortie
+        h_out = (h_img - h_filtre) // self.stride + 1
+        w_out = (w_img - w_filtre) // self.stride + 1
+        
+        sortie = np.zeros((h_out, w_out))
+        
+        for i in range(h_out):
+            for j in range(w_out):
+                # Position dans l'image originale
+                start_i = i * self.stride
+                start_j = j * self.stride
+                
+                # Extraction de la région
+                region = image[start_i:start_i + h_filtre, start_j:start_j + w_filtre]
+                
+                # Produit scalaire (convolution)
+                sortie[i, j] = np.sum(region * filtre)
+        
+        return sortie
+    
+    def forward(self, image):
+        """Propagation avant complète"""
+        # Ajouter padding si nécessaire
+        image_paddee = self.ajouter_padding(image)
+        
+        # Appliquer chaque filtre
+        sorties = []
+        for i, filtre in enumerate(self.filtres):
+            feature_map = self.convolution_simple(image_paddee, filtre) + self.biais[i]
+            sorties.append(feature_map)
+        
+        return np.array(sorties)
+
+# Test avec une image simple
+print("🖼️ TEST CONVOLUTION SUR IMAGE SYNTHÉTIQUE")
+print("=" * 45)
+
+# Création d'une image test 6×6 avec un motif
+image_test = np.array([
+    [0, 0, 0, 255, 255, 255],
+    [0, 0, 0, 255, 255, 255],
+    [0, 0, 0, 255, 255, 255],
+    [0, 0, 0, 255, 255, 255],
+    [0, 0, 0, 255, 255, 255],
+    [0, 0, 0, 255, 255, 255]
+])
+
+print("Image d'entrée (transition noir→blanc):")
+print(image_test)
+
+# Création de filtres spécialisés
+conv_layer = Convolution2D(nb_filtres=3, taille_filtre=3, stride=1, padding=0)
+
+# Filtres manuels pour démonstration
+conv_layer.filtres[0] = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])  # Contours verticaux
+conv_layer.filtres[1] = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]])  # Contours horizontaux
+conv_layer.filtres[2] = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) / 9  # Lissage
+
+print(f"\n🔍 Filtres utilisés:")
+print("Filtre 1 (contours verticaux):")
+print(conv_layer.filtres[0])
+print("Filtre 2 (contours horizontaux):")
+print(conv_layer.filtres[1])
+print("Filtre 3 (lissage):")
+print(conv_layer.filtres[2])
+
+# Application des filtres
+feature_maps = conv_layer.forward(image_test)
+
+print(f"\n📊 Résultats convolution:")
+for i, fm in enumerate(feature_maps):
+    print(f"\nFeature map {i+1}:")
+    print(fm.round(1))`,
+          },
+          {
+            type: "code",
+            title: "Implémentation pooling",
+            description: "Ajoutons les opérations de pooling :",
+            code: `class MaxPooling2D:
+    """Implémentation du max pooling 2D"""
+    
+    def __init__(self, taille_pool=2, stride=2):
+        self.taille_pool = taille_pool
+        self.stride = stride
+        print(f"🏊 Max pooling {taille_pool}×{taille_pool}, stride {stride}")
+    
+    def forward(self, feature_maps):
+        """Applique max pooling à toutes les feature maps"""
+        nb_maps, h_in, w_in = feature_maps.shape
+        
+        # Calcul taille de sortie
+        h_out = (h_in - self.taille_pool) // self.stride + 1
+        w_out = (w_in - self.taille_pool) // self.stride + 1
+        
+        sortie = np.zeros((nb_maps, h_out, w_out))
+        
+        for map_idx in range(nb_maps):
+            for i in range(h_out):
+                for j in range(w_out):
+                    # Position dans la feature map
+                    start_i = i * self.stride
+                    start_j = j * self.stride
+                    
+                    # Extraction de la région
+                    region = feature_maps[map_idx, 
+                                        start_i:start_i + self.taille_pool,
+                                        start_j:start_j + self.taille_pool]
+                    
+                    # Max pooling
+                    sortie[map_idx, i, j] = np.max(region)
+        
+        return sortie
+
+# Test du pooling
+pooling_layer = MaxPooling2D(taille_pool=2, stride=2)
+feature_maps_pooled = pooling_layer.forward(feature_maps)
+
+print(f"\n🏊 RÉSULTATS APRÈS POOLING:")
+print(f"Taille avant pooling: {feature_maps.shape}")
+print(f"Taille après pooling: {feature_maps_pooled.shape}")
+
+for i, fm in enumerate(feature_maps_pooled):
+    print(f"\nFeature map {i+1} après pooling:")
+    print(fm.round(1))`,
+          },
+          {
+            type: "code",
+            title: "Visualisation des feature maps",
+            description: "Visualisons l'effet des convolutions :",
+            code: `# Visualisation complète du processus
+fig, axes = plt.subplots(3, 4, figsize=(16, 12))
+
+# Image originale
+axes[0, 0].imshow(image_test, cmap='gray')
+axes[0, 0].set_title('Image Originale')
+axes[0, 0].axis('off')
+
+# Filtres
+for i in range(3):
+    axes[0, i+1].imshow(conv_layer.filtres[i], cmap='RdBu', vmin=-1, vmax=1)
+    axes[0, i+1].set_title(f'Filtre {i+1}')
+    axes[0, i+1].axis('off')
+
+# Feature maps après convolution
+for i in range(3):
+    axes[1, i].imshow(feature_maps[i], cmap='viridis')
+    axes[1, i].set_title(f'Feature Map {i+1}\\n(après conv)')
+    axes[1, i].axis('off')
+
+# Feature maps après pooling
+for i in range(3):
+    axes[2, i].imshow(feature_maps_pooled[i], cmap='viridis')
+    axes[2, i].set_title(f'Feature Map {i+1}\\n(après pooling)')
+    axes[2, i].axis('off')
+
+# Masquer les axes inutilisés
+axes[1, 3].axis('off')
+axes[2, 3].axis('off')
+
+plt.suptitle('Pipeline CNN: Image → Convolution → Pooling', fontsize=16)
+plt.tight_layout()
+plt.show()
+
+print("🎨 Visualisation du pipeline CNN terminée !")`,
+          },
+          {
+            type: "code",
+            title: "CNN complet pour classification",
+            description: "Assemblons tout pour créer un CNN complet :",
+            code: `class CNNSimple:
+    """CNN simple pour classification d'images"""
+    
+    def __init__(self):
+        # Architecture: Conv → Pool → Conv → Pool → FC
+        self.conv1 = Convolution2D(nb_filtres=4, taille_filtre=3, stride=1, padding=1)
+        self.pool1 = MaxPooling2D(taille_pool=2, stride=2)
+        self.conv2 = Convolution2D(nb_filtres=8, taille_filtre=3, stride=1, padding=1)
+        self.pool2 = MaxPooling2D(taille_pool=2, stride=2)
+        
+        print("🧠 CNN Simple créé:")
+        print("   Conv1: 4 filtres 3×3 → Pool 2×2")
+        print("   Conv2: 8 filtres 3×3 → Pool 2×2")
+        print("   FC: Classification finale")
+    
+    def relu(self, x):
+        """Fonction d'activation ReLU"""
+        return np.maximum(0, x)
+    
+    def forward(self, image):
+        """Propagation avant complète"""
+        print(f"📊 Propagation avant - Image {image.shape}")
+        
+        # Première couche convolutive + activation
+        conv1_out = self.conv1.forward(image)
+        conv1_activated = self.relu(conv1_out)
+        print(f"   Après Conv1 + ReLU: {conv1_activated.shape}")
+        
+        # Premier pooling
+        pool1_out = self.pool1.forward(conv1_activated)
+        print(f"   Après Pool1: {pool1_out.shape}")
+        
+        # Deuxième couche convolutive + activation
+        # Adapter les filtres pour la nouvelle profondeur
+        if self.conv2.filtres.shape[1] != pool1_out.shape[0]:
+            # Réinitialiser conv2 avec la bonne profondeur
+            profondeur = pool1_out.shape[0]
+            limite = np.sqrt(6 / (3 * 3 * profondeur))
+            self.conv2.filtres = np.random.uniform(-limite, limite, 
+                                                 (8, profondeur, 3, 3))
+        
+        # Pour simplifier, on fait une convolution sur chaque canal séparément
+        conv2_results = []
+        for canal in range(pool1_out.shape[0]):
+            for filtre_idx in range(self.conv2.nb_filtres):
+                if filtre_idx < len(self.conv2.filtres):
+                    # Utiliser le premier canal du filtre
+                    filtre_2d = self.conv2.filtres[filtre_idx, 0, :, :]
+                    result = self.conv2.convolution_simple(pool1_out[canal], filtre_2d)
+                    conv2_results.append(result)
+                    if len(conv2_results) >= 8:  # Limiter à 8 feature maps
+                        break
+            if len(conv2_results) >= 8:
+                break
+        
+        conv2_out = np.array(conv2_results[:8])
+        conv2_activated = self.relu(conv2_out)
+        print(f"   Après Conv2 + ReLU: {conv2_activated.shape}")
+        
+        # Deuxième pooling
+        pool2_out = self.pool2.forward(conv2_activated)
+        print(f"   Après Pool2: {pool2_out.shape}")
+        
+        # Aplatissement pour couche dense
+        flattened = pool2_out.flatten()
+        print(f"   Après Flatten: {flattened.shape}")
+        
+        return flattened, {
+            'conv1': conv1_activated,
+            'pool1': pool1_out,
+            'conv2': conv2_activated,
+            'pool2': pool2_out
+        }
+
+# Test du CNN complet
+print("🧠 TEST CNN COMPLET")
+print("=" * 30)
+
+# Image test plus grande
+image_grande = np.random.randint(0, 256, (8, 8))
+print(f"Image test: {image_grande.shape}")
+
+# Création et test du CNN
+cnn = CNNSimple()
+sortie_finale, intermediaires = cnn.forward(image_grande)
+
+print(f"\n🎯 Sortie finale: {sortie_finale.shape}")
+print(f"📊 Prête pour classification avec {len(sortie_finale)} features")`,
+          },
+          {
+            type: "code",
+            title: "Filtres classiques de vision",
+            description: "Découvrons les filtres fondamentaux de la vision :",
+            code: `# Filtres classiques en vision par ordinateur
+filtres_classiques = {
+    'Sobel Vertical': np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]]),
+    'Sobel Horizontal': np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]]),
+    'Laplacien': np.array([[0, -1, 0], [-1, 4, -1], [0, -1, 0]]),
+    'Gaussien': np.array([[1, 2, 1], [2, 4, 2], [1, 2, 1]]) / 16,
+    'Détection coins': np.array([[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]]),
+    'Netteté': np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+}
+
+# Image test avec différents motifs
+image_complexe = np.array([
+    [50,  50,  50, 200, 200, 200],
+    [50,  50,  50, 200, 200, 200],
+    [50,  50,  50, 200, 200, 200],
+    [100, 100, 100, 150, 150, 150],
+    [100, 100, 100, 150, 150, 150],
+    [100, 100, 100, 150, 150, 150]
+])
+
+print("🔍 APPLICATION DES FILTRES CLASSIQUES")
+print("=" * 40)
+print("Image test (motifs géométriques):")
+print(image_complexe)
+
+# Test de chaque filtre
+conv_test = Convolution2D(nb_filtres=1, taille_filtre=3)
+
+for nom, filtre in filtres_classiques.items():
+    conv_test.filtres[0] = filtre
+    resultat = conv_test.convolution_simple(image_complexe, filtre)
+    
+    print(f"\n{nom}:")
+    print(f"Filtre:")
+    print(filtre)
+    print(f"Résultat:")
+    print(resultat.round(1))`,
+          },
+          {
+            type: "code",
+            title: "Visualisation des filtres appris",
+            description:
+              "Visualisons comment les filtres détectent différentes caractéristiques :",
+            code: `# Simulation de filtres appris par un CNN réel
+def generer_filtres_realistes():
+    """Génère des filtres similaires à ceux appris par de vrais CNN"""
+    
+    # Filtre détecteur de contours diagonaux
+    diag1 = np.array([[1, 0, -1], [0, 0, 0], [-1, 0, 1]])
+    
+    # Filtre détecteur de textures
+    texture = np.array([[1, -1, 1], [-1, 1, -1], [1, -1, 1]])
+    
+    # Filtre passe-bas (lissage)
+    lissage = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) / 9
+    
+    # Filtre détecteur de coins
+    coins = np.array([[-1, -1, 0], [-1, 0, 1], [0, 1, 1]])
+    
+    return [diag1, texture, lissage, coins]
+
+# Visualisation des filtres et leurs effets
+filtres_realistes = generer_filtres_realistes()
+noms_filtres = ['Diagonales', 'Textures', 'Lissage', 'Coins']
+
+fig, axes = plt.subplots(2, 4, figsize=(16, 8))
+
+# Ligne 1: Filtres
+for i, (filtre, nom) in enumerate(zip(filtres_realistes, noms_filtres)):
+    im = axes[0, i].imshow(filtre, cmap='RdBu', vmin=-1, vmax=1)
+    axes[0, i].set_title(f'Filtre: {nom}')
+    axes[0, i].axis('off')
+    plt.colorbar(im, ax=axes[0, i], fraction=0.046)
+
+# Ligne 2: Résultats sur image complexe
+conv_demo = Convolution2D(nb_filtres=1, taille_filtre=3)
+
+for i, (filtre, nom) in enumerate(zip(filtres_realistes, noms_filtres)):
+    resultat = conv_demo.convolution_simple(image_complexe, filtre)
+    im = axes[1, i].imshow(resultat, cmap='viridis')
+    axes[1, i].set_title(f'Résultat: {nom}')
+    axes[1, i].axis('off')
+    plt.colorbar(im, ax=axes[1, i], fraction=0.046)
+
+plt.suptitle('Filtres CNN et leurs Effets', fontsize=16)
+plt.tight_layout()
+plt.show()
+
+print("🎨 Visualisation des filtres terminée !")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : architecture CNN pour MNIST",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Concevez un CNN pour classifier des chiffres manuscrits (MNIST) :</p>
+                        
+                        <p><strong>📊 Contraintes :</strong></p>
+                        <ul>
+                            <li>Images d'entrée : 28×28×1 (niveaux de gris)</li>
+                            <li>10 classes de sortie (chiffres 0-9)</li>
+                            <li>Budget : maximum 100 000 paramètres</li>
+                            <li>Précision cible : >95%</li>
+                        </ul>
+                        
+                        <p><strong>📝 Concevez :</strong></p>
+                        <ol>
+                            <li>Architecture complète (couches, tailles, activations)</li>
+                            <li>Calcul du nombre de paramètres</li>
+                            <li>Justification de chaque choix</li>
+                            <li>Taille des feature maps à chaque étape</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solution :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('cnn-mnist-architecture')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="cnn-mnist-architecture" style="display: none;">
+                        <p><strong>🏗️ Architecture proposée :</strong></p>
+                        <ol>
+                            <li><strong>Conv1 :</strong> 16 filtres 3×3, ReLU → 28×28×16</li>
+                            <li><strong>Pool1 :</strong> Max pool 2×2 → 14×14×16</li>
+                            <li><strong>Conv2 :</strong> 32 filtres 3×3, ReLU → 14×14×32</li>
+                            <li><strong>Pool2 :</strong> Max pool 2×2 → 7×7×32</li>
+                            <li><strong>Flatten :</strong> → 1568 neurones</li>
+                            <li><strong>FC1 :</strong> 128 neurones, ReLU</li>
+                            <li><strong>FC2 :</strong> 10 neurones, Softmax</li>
+                        </ol>
+                        
+                        <p><strong>📊 Calcul des paramètres :</strong></p>
+                        <ul>
+                            <li>Conv1: (3×3×1 + 1) × 16 = 160</li>
+                            <li>Conv2: (3×3×16 + 1) × 32 = 4 640</li>
+                            <li>FC1: (1568 + 1) × 128 = 200 832</li>
+                            <li>FC2: (128 + 1) × 10 = 1 290</li>
+                            <li><strong>Total: 206 922 paramètres</strong> (dépasse le budget !)</li>
+                        </ul>
+                        
+                        <p><strong>🔧 Optimisation :</strong></p>
+                        <p>Réduire FC1 à 64 neurones → Total: 106 602 paramètres ✓</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Hiérarchie des caractéristiques : du pixel au concept",
+            content: `
+                        <p><strong>🧠 Les CNN apprennent une hiérarchie naturelle de concepts :</strong></p>
+                        
+                        <p><strong>🔍 Couche 1 - Détecteurs primitifs :</strong></p>
+                        <ul>
+                            <li>📐 <strong>Contours</strong> : lignes verticales, horizontales, diagonales</li>
+                            <li>🔵 <strong>Formes simples</strong> : coins, courbes, points</li>
+                            <li>🌈 <strong>Couleurs</strong> : transitions de couleurs, gradients</li>
+                            <li>📏 <strong>Textures</strong> : motifs répétitifs de base</li>
+                        </ul>
+                        
+                        <p><strong>🔍 Couche 2 - Combinaisons locales :</strong></p>
+                        <ul>
+                            <li>👁️ <strong>Formes géométriques</strong> : triangles, cercles, rectangles</li>
+                            <li>🎨 <strong>Motifs</strong> : rayures, damiers, spirales</li>
+                            <li>📐 <strong>Jonctions</strong> : T, L, X, Y</li>
+                            <li>🔄 <strong>Symétries</strong> : patterns symétriques</li>
+                        </ul>
+                        
+                        <p><strong>🔍 Couche 3 - Parties d'objets :</strong></p>
+                        <ul>
+                            <li>👁️ <strong>Yeux</strong> : cercle + pupille + cils</li>
+                            <li>🚗 <strong>Roues</strong> : cercle + rayons + pneu</li>
+                            <li>🏠 <strong>Fenêtres</strong> : rectangle + croisillons</li>
+                            <li>🌳 <strong>Feuilles</strong> : forme ovale + nervures</li>
+                        </ul>
+                        
+                        <p><strong>🔍 Couche 4 - Objets complets :</strong></p>
+                        <ul>
+                            <li>👤 <strong>Visages</strong> : yeux + nez + bouche dans la bonne configuration</li>
+                            <li>🚗 <strong>Voitures</strong> : carrosserie + roues + phares</li>
+                            <li>🏠 <strong>Maisons</strong> : murs + toit + fenêtres + porte</li>
+                            <li>🐕 <strong>Animaux</strong> : corps + pattes + tête + queue</li>
+                        </ul>
+                        
+                        <p><strong>🔍 Couche 5 - Scènes et contextes :</strong></p>
+                        <ul>
+                            <li>🏖️ <strong>Plage</strong> : sable + mer + palmiers + personnes</li>
+                            <li>🏙️ <strong>Ville</strong> : bâtiments + routes + voitures + foule</li>
+                            <li>🌳 <strong>Forêt</strong> : arbres + végétation + chemins</li>
+                        </ul>
+                        
+                        <p><strong>💡 Émergence spontanée :</strong></p>
+                        <p>Cette hiérarchie <strong>émerge automatiquement</strong> pendant l'entraînement ! Le CNN découvre seul que pour reconnaître un visage, il faut d'abord détecter des contours, puis des yeux, puis assembler le tout.</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : analyse de réceptive field",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Calculez le <strong>champ récepteur</strong> (receptive field) d'un neurone dans un CNN :</p>
+                        
+                        <p><strong>🏗️ Architecture :</strong></p>
+                        <ol>
+                            <li>Conv1: filtre 3×3, stride 1, padding 0</li>
+                            <li>Pool1: 2×2, stride 2</li>
+                            <li>Conv2: filtre 3×3, stride 1, padding 0</li>
+                            <li>Pool2: 2×2, stride 2</li>
+                        </ol>
+                        
+                        <p><strong>📝 Questions :</strong></p>
+                        <ol>
+                            <li>Quelle zone de l'image originale influence un neurone après Conv1 ?</li>
+                            <li>Et après Pool1 ?</li>
+                            <li>Et après Conv2 ?</li>
+                            <li>Champ récepteur final après Pool2 ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solution :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('receptive-field-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="receptive-field-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Après Conv1 :</strong> 3×3 pixels<br>
+                                <em>Chaque neurone voit une zone 3×3 de l'image originale</em></li>
+                            <li><strong>Après Pool1 :</strong> 6×6 pixels<br>
+                                <em>Pool 2×2 avec stride 2 double le champ récepteur</em></li>
+                            <li><strong>Après Conv2 :</strong> 10×10 pixels<br>
+                                <em>Filtre 3×3 ajoute 2 pixels de chaque côté : 6+2+2 = 10</em></li>
+                            <li><strong>Après Pool2 :</strong> 20×20 pixels<br>
+                                <em>Pool 2×2 avec stride 2 double encore : 10×2 = 20</em></li>
+                        </ol>
+                        <p><strong>💡 Conclusion :</strong> Un neurone en sortie "voit" une zone 20×20 de l'image originale. Plus le réseau est profond, plus le champ récepteur grandit !</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "CNN : révolution de la vision par ordinateur",
+            content: `
+                        <p><strong>🚀 Les CNN ont révolutionné notre monde numérique :</strong></p>
+                        
+                        <p><strong>📱 Applications quotidiennes :</strong></p>
+                        <ul>
+                            <li>📸 <strong>Photos</strong> : reconnaissance automatique de visages, objets, scènes</li>
+                            <li>🔒 <strong>Sécurité</strong> : déverrouillage facial, surveillance intelligente</li>
+                            <li>🚗 <strong>Transport</strong> : voitures autonomes, reconnaissance de panneaux</li>
+                            <li>🛒 <strong>Commerce</strong> : recherche visuelle, réalité augmentée</li>
+                            <li>🎮 <strong>Divertissement</strong> : filtres Instagram, effets spéciaux</li>
+                        </ul>
+                        
+                        <p><strong>🏥 Impact médical révolutionnaire :</strong></p>
+                        <ul>
+                            <li>🩻 <strong>Radiologie</strong> : détection cancer plus précise que les humains</li>
+                            <li>👁️ <strong>Ophtalmologie</strong> : diagnostic rétinopathie diabétique</li>
+                            <li>🧠 <strong>Neurologie</strong> : analyse IRM, détection AVC</li>
+                            <li>🔬 <strong>Pathologie</strong> : analyse automatique de biopsies</li>
+                        </ul>
+                        
+                        <p><strong>🌍 Applications au Sénégal :</strong></p>
+                        <ul>
+                            <li>🌾 <strong>Agriculture</strong> : surveillance des cultures par satellite</li>
+                            <li>🏥 <strong>Télémédecine</strong> : diagnostic à distance dans les zones rurales</li>
+                            <li>🛡️ <strong>Sécurité</strong> : surveillance des frontières, ports</li>
+                            <li>📚 <strong>Éducation</strong> : numérisation et reconnaissance de documents</li>
+                            <li>🌊 <strong>Environnement</strong> : surveillance côtière, déforestation</li>
+                        </ul>
+                        
+                        <p><strong>🔮 Évolution vers l'avenir :</strong></p>
+                        <ul>
+                            <li>🧠 <strong>Vision Transformers</strong> : remplacent progressivement les CNN</li>
+                            <li>🎯 <strong>Architectures hybrides</strong> : CNN + Attention pour le meilleur des deux</li>
+                            <li>⚡ <strong>Efficacité</strong> : MobileNets, EfficientNets pour mobile</li>
+                            <li>🎨 <strong>Génération</strong> : GANs, Diffusion Models pour créer des images</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Les CNN ont prouvé qu'en s'inspirant de la biologie (cortex visuel), on peut créer des systèmes artificiels qui surpassent les humains dans certaines tâches visuelles. C'est la puissance de l'<strong>architecture spécialisée</strong> !</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> RNN/LSTM - l'architecture pour comprendre les séquences et le temps !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Pourquoi utilise-t-on le partage de poids (weight sharing) dans les CNN ?",
+          options: [
+            "A) Pour réduire le temps de calcul",
+            "B) Pour détecter la même caractéristique partout dans l'image",
+            "C) Pour éviter le surapprentissage",
+            "D) Pour améliorer la précision",
+          ],
+          correct: 1,
+          explanation:
+            "Le partage de poids permet au même filtre de détecter une caractéristique (comme un contour vertical) n'importe où dans l'image. Cela crée l'invariance par translation : un chat reste un chat qu'il soit en haut à gauche ou en bas à droite de l'image.",
+        },
+        prevModule: "backpropagation.html",
+        nextModule: "rnn.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

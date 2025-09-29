@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RNN/LSTM | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧠 Deep Learning</span>
+          <span>›</span>
+          <span>RNN/LSTM</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🔗 RNN/LSTM : Mémoire et Séquences</h1>
+      <p class="subtitle">Module 4.5 - Deep Learning Séquentiel</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - RNN/LSTM</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant comment l'IA développe une
+          mémoire et traite les séquences.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="cnn.html" class="nav-link" id="prev-link"
+          >← Module précédent : CNN</a
+        >
+        <a href="../llm/attention.html" class="nav-link" id="next-link"
+          >Module suivant : Attention →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module RNN/LSTM
+      const moduleConfig = {
+        id: "dl-rnn-lstm",
+        title: "RNN/LSTM : Mémoire et Séquences",
+        category: "Deep Learning",
+        objectives: [
+          "Comprendre pourquoi les réseaux classiques échouent sur les séquences",
+          "Maîtriser l'architecture RNN et ses calculs",
+          "Découvrir le problème du gradient qui disparaît dans le temps",
+          "Comprendre l'innovation LSTM et ses portes",
+          "Implémenter RNN et LSTM from scratch",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Le défi impossible : donner une mémoire à l'IA",
+            content: `
+                        <p>Les <strong>réseaux de neurones classiques</strong> ont une limitation fondamentale : ils n'ont <strong>aucune mémoire</strong>. Chaque prédiction est indépendante, comme si l'IA souffrait d'amnésie totale.</p>
+                        
+                        <p><strong>🔑 Problème concret :</strong></p>
+                        <ul>
+                            <li>💬 <strong>Phrase</strong> : "Le président du Sénégal habite à..."</li>
+                            <li>🤖 <strong>IA classique</strong> : voit seulement "à" → impossible de prédire "Dakar"</li>
+                            <li>🧠 <strong>IA avec mémoire</strong> : se souvient de "président du Sénégal" → prédit "Dakar"</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Types de séquences cruciales :</strong></p>
+                        <ul>
+                            <li>💬 <strong>Langage</strong> : mots dans une phrase, phrases dans un texte</li>
+                            <li>📈 <strong>Séries temporelles</strong> : cours de bourse, météo, ventes</li>
+                            <li>🎵 <strong>Audio</strong> : notes de musique, reconnaissance vocale</li>
+                            <li>🧬 <strong>ADN</strong> : séquences génétiques, protéines</li>
+                            <li>🎬 <strong>Vidéo</strong> : séquence d'images dans le temps</li>
+                        </ul>
+                        
+                        <p><strong>⚠️ Échec des réseaux classiques :</strong></p>
+                        <ul>
+                            <li>❌ <strong>Pas de contexte</strong> : chaque mot traité isolément</li>
+                            <li>❌ <strong>Taille fixe</strong> : impossible de traiter des séquences de longueur variable</li>
+                            <li>❌ <strong>Pas d'ordre</strong> : "chat mange souris" = "souris mange chat"</li>
+                        </ul>
+                        
+                        <p><strong>💡 Solution révolutionnaire :</strong> Les <strong>Réseaux de Neurones Récurrents</strong> (RNN) introduisent une boucle qui permet de "se souvenir" des entrées précédentes !</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie du griot sénégalais",
+            content: `
+                        <p>Imaginez un <strong>griot traditionnel</strong> qui raconte l'histoire du Sénégal devant un public à Gorée :</p>
+                        
+                        <p><strong>🎭 Le griot intelligent (RNN) :</strong></p>
+                        <ul>
+                            <li>📚 <strong>Se souvient</strong> de ce qu'il vient de dire</li>
+                            <li>🧠 <strong>Adapte</strong> la suite selon le contexte</li>
+                            <li>🎯 <strong>Maintient la cohérence</strong> narrative</li>
+                            <li>💫 <strong>Crée des liens</strong> entre les événements distants</li>
+                        </ul>
+                        
+                        <p><strong>🤖 Le conteur amnésique (réseau classique) :</strong></p>
+                        <ul>
+                            <li>😵 <strong>Oublie</strong> chaque phrase après l'avoir dite</li>
+                            <li>🔀 <strong>Raconte</strong> des histoires incohérentes</li>
+                            <li>❌ <strong>Répète</strong> les mêmes informations</li>
+                            <li>🤯 <strong>Perd</strong> le fil de l'histoire</li>
+                        </ul>
+                        
+                        <p><strong>📖 Exemple concret :</strong></p>
+                        <p><strong>Début :</strong> "Léopold Sédar Senghor était un grand poète..."</p>
+                        <p><strong>Suite intelligente :</strong> "...qui devint le premier président du Sénégal indépendant"</p>
+                        <p><strong>Suite amnésique :</strong> "...qui aimait les bananes" (aucun lien !)</p>
+                        
+                        <p><strong>💡 C'est exactement ce que fait un RNN :</strong></p>
+                        <ul>
+                            <li>🧠 <strong>État caché</strong> = mémoire du griot</li>
+                            <li>📝 <strong>Mot actuel</strong> = ce qu'il dit maintenant</li>
+                            <li>🔄 <strong>Récurrence</strong> = influence du passé sur le présent</li>
+                            <li>🎯 <strong>Prédiction</strong> = mot suivant cohérent</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Architecture RNN : formalisation mathématique",
+            content: `
+                        <p><strong>📐 Formalisation rigoureuse d'un RNN :</strong></p>
+                        
+                        <p><strong>🔍 Variables du système :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• \\(\\vec{x}_t\\)</strong> = entrée au temps t (ex: mot encodé)</li>
+                            <li style="margin-top: 0.5rem"><strong>• \\(\\vec{h}_t\\)</strong> = état caché au temps t (mémoire)</li>
+                            <li style="margin-top: 0.5rem"><strong>• \\(\\vec{y}_t\\)</strong> = sortie au temps t (prédiction)</li>
+                            <li style="margin-top: 0.5rem"><strong>• \\(W_{xh}, W_{hh}, W_{hy}\\)</strong> = matrices de poids</li>
+                            <li style="margin-top: 0.5rem"><strong>• \\(\\vec{b}_h, \\vec{b}_y\\)</strong> = vecteurs de biais</li>
+                        </ul>
+                        
+                        <p><strong>🔄 Équations de récurrence :</strong></p>
+                        <p>$$\\vec{h}_t = \\tanh(W_{xh} \\vec{x}_t + W_{hh} \\vec{h}_{t-1} + \\vec{b}_h)$$</p>
+                        <p>$$\\vec{y}_t = W_{hy} \\vec{h}_t + \\vec{b}_y$$</p>
+                        
+                        <p><strong>🔍 Décryptage des formules :</strong></p>
+                        <ul>
+                            <li>\\(W_{xh} \\vec{x}_t\\) = <strong>traitement de l'entrée actuelle</strong></li>
+                            <li>\\(W_{hh} \\vec{h}_{t-1}\\) = <strong>influence de la mémoire précédente</strong></li>
+                            <li>\\(\\tanh\\) = <strong>fonction d'activation</strong> (garde les valeurs dans [-1,1])</li>
+                            <li>\\(\\vec{h}_t\\) = <strong>nouvelle mémoire</strong> (combinaison présent + passé)</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Propriétés remarquables :</strong></p>
+                        <ul>
+                            <li>🔄 <strong>Récurrence</strong> : \\(\\vec{h}_t\\) dépend de \\(\\vec{h}_{t-1}\\)</li>
+                            <li>📏 <strong>Longueur variable</strong> : peut traiter des séquences de toute taille</li>
+                            <li>⚖️ <strong>Partage de poids</strong> : mêmes W pour tous les pas de temps</li>
+                            <li>🧠 <strong>Mémoire compressée</strong> : tout le passé dans \\(\\vec{h}_t\\)</li>
+                        </ul>
+                        
+                        <p><strong>🔗 Déroulement temporel :</strong></p>
+                        <p>$$\\vec{h}_1 = \\tanh(W_{xh} \\vec{x}_1 + W_{hh} \\vec{h}_0 + \\vec{b}_h)$$</p>
+                        <p>$$\\vec{h}_2 = \\tanh(W_{xh} \\vec{x}_2 + W_{hh} \\vec{h}_1 + \\vec{b}_h)$$</p>
+                        <p>$$\\vec{h}_3 = \\tanh(W_{xh} \\vec{x}_3 + W_{hh} \\vec{h}_2 + \\vec{b}_h)$$</p>
+                        <p>$$\\vdots$$</p>
+                        
+                        <p><strong>💡 Observation cruciale :</strong> \\(\\vec{h}_t\\) contient implicitement l'information de TOUTE la séquence \\(\\vec{x}_1, \\vec{x}_2, ..., \\vec{x}_t\\) !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel RNN : prédiction de mots",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong> RNN pour compléter "Le Sénégal est..."</p>
+                        
+                        <p><strong>🔤 Vocabulaire simplifié :</strong></p>
+                        <ul>
+                            <li>Mots : ["Le", "Sénégal", "est", "beau", "grand"]</li>
+                            <li>Encodage : Le=1, Sénégal=2, est=3, beau=4, grand=5</li>
+                        </ul>
+                        
+                        <p><strong>⚙️ Paramètres du RNN :</strong></p>
+                        <p>Dimension cachée = 2, vocabulaire = 5</p>
+                        <p>$$W_{xh} = \\begin{bmatrix} 0.5 & 0.3 \\\\ -0.2 & 0.8 \\end{bmatrix}, \\quad W_{hh} = \\begin{bmatrix} 0.4 & -0.3 \\\\ 0.6 & 0.2 \\end{bmatrix}$$</p>
+                        <p>$$\\vec{b}_h = \\begin{bmatrix} 0.1 \\\\ -0.1 \\end{bmatrix}, \\quad \\vec{h}_0 = \\begin{bmatrix} 0 \\\\ 0 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Calcul étape par étape :</strong></p>
+                        
+                        <p><strong>t=1 : "Le" (x₁ = [1, 0, 0, 0, 0]) :</strong></p>
+                        <p>$$\\vec{z}_1 = W_{xh} \\vec{x}_1 + W_{hh} \\vec{h}_0 + \\vec{b}_h = \\begin{bmatrix} 0.5 \\\\ -0.2 \\end{bmatrix} + \\begin{bmatrix} 0 \\\\ 0 \\end{bmatrix} + \\begin{bmatrix} 0.1 \\\\ -0.1 \\end{bmatrix} = \\begin{bmatrix} 0.6 \\\\ -0.3 \\end{bmatrix}$$</p>
+                        <p>$$\\vec{h}_1 = \\tanh(\\vec{z}_1) = \\begin{bmatrix} \\tanh(0.6) \\\\ \\tanh(-0.3) \\end{bmatrix} ≈ \\begin{bmatrix} 0.537 \\\\ -0.291 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>t=2 : "Sénégal" (x₂ = [0, 1, 0, 0, 0]) :</strong></p>
+                        <p>$$\\vec{z}_2 = \\begin{bmatrix} 0.3 \\\\ 0.8 \\end{bmatrix} + \\begin{bmatrix} 0.4 & -0.3 \\\\ 0.6 & 0.2 \\end{bmatrix} \\begin{bmatrix} 0.537 \\\\ -0.291 \\end{bmatrix} + \\begin{bmatrix} 0.1 \\\\ -0.1 \\end{bmatrix}$$</p>
+                        <p>$$= \\begin{bmatrix} 0.3 \\\\ 0.8 \\end{bmatrix} + \\begin{bmatrix} 0.302 \\\\ 0.264 \\end{bmatrix} + \\begin{bmatrix} 0.1 \\\\ -0.1 \\end{bmatrix} = \\begin{bmatrix} 0.702 \\\\ 0.964 \\end{bmatrix}$$</p>
+                        <p>$$\\vec{h}_2 = \\tanh(\\vec{z}_2) ≈ \\begin{bmatrix} 0.604 \\\\ 0.747 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>💡 Observation cruciale :</strong> \\(\\vec{h}_2\\) contient maintenant l'information de "Le Sénégal" ! La mémoire s'enrichit à chaque étape.</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calcul manuel RNN",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>RNN simple pour analyser le sentiment de "Dakar est belle" :</p>
+                        
+                        <p><strong>⚙️ Paramètres :</strong></p>
+                        <p>$$W_{xh} = \\begin{bmatrix} 0.6 \\\\ -0.4 \\end{bmatrix}, \\quad W_{hh} = \\begin{bmatrix} 0.8 & 0.2 \\end{bmatrix}, \\quad \\vec{b}_h = \\begin{bmatrix} 0 \\\\ 0 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Séquence :</strong> ["Dakar"=1, "est"=2, "belle"=3]</p>
+                        <p><strong>État initial :</strong> \\(h_0 = 0\\)</p>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>\\(h_1\\) après "Dakar"</li>
+                            <li>\\(h_2\\) après "Dakar est"</li>
+                            <li>\\(h_3\\) après "Dakar est belle"</li>
+                            <li>Comment \\(h_3\\) encode-t-il toute la phrase ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('rnn-manual-calculation')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="rnn-manual-calculation" style="display: none;">
+                        <ol>
+                            <li><strong>Après "Dakar" (x₁=1) :</strong><br>
+                                \\(z_1 = 0.6 \\times 1 + 0.8 \\times 0 + 0 = 0.6\\)<br>
+                                \\(h_1 = \\tanh(0.6) ≈ 0.537\\)</li>
+                            <li><strong>Après "est" (x₂=2) :</strong><br>
+                                \\(z_2 = 0.6 \\times 2 + 0.8 \\times 0.537 = 1.2 + 0.430 = 1.630\\)<br>
+                                \\(h_2 = \\tanh(1.630) ≈ 0.928\\)</li>
+                            <li><strong>Après "belle" (x₃=3) :</strong><br>
+                                \\(z_3 = 0.6 \\times 3 + 0.8 \\times 0.928 = 1.8 + 0.742 = 2.542\\)<br>
+                                \\(h_3 = \\tanh(2.542) ≈ 0.987\\)</li>
+                            <li><strong>Encodage de la phrase :</strong><br>
+                                \\(h_3 ≈ 0.987\\) encode "Dakar est belle" en un seul nombre !<br>
+                                Cette valeur élevée pourrait indiquer un sentiment très positif.</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Le problème du gradient qui disparaît dans le temps",
+            content: `
+                        <p><strong>⚠️ Problème fondamental des RNN :</strong> Plus la séquence est longue, plus il devient difficile d'apprendre des dépendances lointaines.</p>
+                        
+                        <p><strong>🔍 Analyse mathématique :</strong></p>
+                        <p>Pour calculer \\(\\frac{\\partial L}{\\partial W_{hh}}\\), nous devons remonter dans le temps :</p>
+                        <p>$$\\frac{\\partial \\vec{h}_t}{\\partial \\vec{h}_{t-1}} = \\text{diag}(\\tanh'(\\vec{z}_t)) \\cdot W_{hh}$$</p>
+                        
+                        <p><strong>🔗 Règle de dérivation en chaîne temporelle :</strong></p>
+                        <p>$$\\frac{\\partial \\vec{h}_t}{\\partial \\vec{h}_{t-k}} = \\prod_{i=1}^{k} \\frac{\\partial \\vec{h}_{t-i+1}}{\\partial \\vec{h}_{t-i}}$$</p>
+                        
+                        <p><strong>💥 Explosion ou disparition :</strong></p>
+                        <ul>
+                            <li>Si \\(||\\frac{\\partial \\vec{h}_t}{\\partial \\vec{h}_{t-1}}|| > 1\\) : <strong>explosion exponentielle</strong></li>
+                            <li>Si \\(||\\frac{\\partial \\vec{h}_t}{\\partial \\vec{h}_{t-1}}|| < 1\\) : <strong>disparition exponentielle</strong></li>
+                        </ul>
+                        
+                        <p><strong>📊 Analyse numérique :</strong></p>
+                        <p>Supposons \\(||\\frac{\\partial \\vec{h}_t}{\\partial \\vec{h}_{t-1}}|| = 0.5\\) (cas typique avec tanh)</p>
+                        <p>Après k pas de temps : \\(||\\frac{\\partial \\vec{h}_t}{\\partial \\vec{h}_{t-k}}|| = (0.5)^k\\)</p>
+                        
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>📉 Disparition rapide :</strong><br>
+                            • k=5 : gradient × 0.03 (97% perdu)<br>
+                            • k=10 : gradient × 0.001 (99.9% perdu)<br>
+                            • k=20 : gradient × 10⁻⁶ (pratiquement 0)
+                        </div>
+                        
+                        <p><strong>💡 Conséquence pratique :</strong> Un RNN standard ne peut apprendre des dépendances que sur ~5-10 pas de temps. Pour des séquences plus longues, il "oublie" le début !</p>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "LSTM : l'innovation révolutionnaire",
+            content: `
+                        <p>Les <strong>Long Short-Term Memory</strong> (LSTM) résolvent le problème du gradient qui disparaît grâce à une architecture géniale avec des "portes" qui contrôlent le flux d'information.</p>
+                        
+                        <p><strong>🚪 Les trois portes magiques :</strong></p>
+                        
+                        <p><strong>1️⃣ Porte d'oubli (Forget Gate) :</strong></p>
+                        <p>$$\\vec{f}_t = \\sigma(W_f \\cdot [\\vec{h}_{t-1}, \\vec{x}_t] + \\vec{b}_f)$$</p>
+                        <p><strong>Rôle :</strong> Décide quoi oublier de la mémoire précédente (0 = oublier, 1 = garder)</p>
+                        
+                        <p><strong>2️⃣ Porte d'entrée (Input Gate) :</strong></p>
+                        <p>$$\\vec{i}_t = \\sigma(W_i \\cdot [\\vec{h}_{t-1}, \\vec{x}_t] + \\vec{b}_i)$$</p>
+                        <p>$$\\vec{\\tilde{C}}_t = \\tanh(W_C \\cdot [\\vec{h}_{t-1}, \\vec{x}_t] + \\vec{b}_C)$$</p>
+                        <p><strong>Rôle :</strong> Décide quelles nouvelles informations stocker</p>
+                        
+                        <p><strong>3️⃣ Porte de sortie (Output Gate) :</strong></p>
+                        <p>$$\\vec{o}_t = \\sigma(W_o \\cdot [\\vec{h}_{t-1}, \\vec{x}_t] + \\vec{b}_o)$$</p>
+                        <p><strong>Rôle :</strong> Décide quelles parties de la mémoire exposer</p>
+                        
+                        <p><strong>🧠 Mise à jour de la mémoire :</strong></p>
+                        <p>$$\\vec{C}_t = \\vec{f}_t \\odot \\vec{C}_{t-1} + \\vec{i}_t \\odot \\vec{\\tilde{C}}_t$$</p>
+                        <p>$$\\vec{h}_t = \\vec{o}_t \\odot \\tanh(\\vec{C}_t)$$</p>
+                        
+                        <p><strong>💡 Génie de l'architecture :</strong></p>
+                        <ul>
+                            <li>🔄 <strong>Autoroute d'information</strong> : \\(\\vec{C}_t\\) peut traverser de nombreux pas de temps sans dégradation</li>
+                            <li>🚪 <strong>Contrôle fin</strong> : les portes apprennent quand oublier/retenir/exposer</li>
+                            <li>📈 <strong>Gradients préservés</strong> : chemins directs pour la rétropropagation</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : calcul manuel LSTM simplifié",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>LSTM simplifié (dimension 1) pour analyser "Dakar→belle" :</p>
+                        
+                        <p><strong>⚙️ Paramètres simplifiés :</strong></p>
+                        <ul>
+                            <li>\\(W_f = 0.5, W_i = 0.8, W_o = 0.6, W_C = 0.7\\)</li>
+                            <li>Tous les biais = 0</li>
+                            <li>État initial : \\(h_0 = 0, C_0 = 0\\)</li>
+                        </ul>
+                        
+                        <p><strong>📝 Séquence :</strong> x₁ = 1 ("Dakar"), x₂ = 2 ("belle")</p>
+                        
+                        <p><strong>📝 Calculez pour t=1 :</strong></p>
+                        <ol>
+                            <li>Porte d'oubli \\(f_1\\)</li>
+                            <li>Porte d'entrée \\(i_1\\) et candidat \\(\\tilde{C}_1\\)</li>
+                            <li>Nouvelle mémoire \\(C_1\\)</li>
+                            <li>Porte de sortie \\(o_1\\) et état caché \\(h_1\\)</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('lstm-manual-calculation')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="lstm-manual-calculation" style="display: none;">
+                        <p><strong>t=1 avec x₁=1, h₀=0, C₀=0 :</strong></p>
+                        <ol>
+                            <li><strong>Porte d'oubli :</strong><br>
+                                \\(f_1 = \\sigma(0.5 \\times (0 + 1)) = \\sigma(0.5) ≈ 0.622\\)</li>
+                            <li><strong>Porte d'entrée et candidat :</strong><br>
+                                \\(i_1 = \\sigma(0.8 \\times 1) = \\sigma(0.8) ≈ 0.689\\)<br>
+                                \\(\\tilde{C}_1 = \\tanh(0.7 \\times 1) = \\tanh(0.7) ≈ 0.604\\)</li>
+                            <li><strong>Nouvelle mémoire :</strong><br>
+                                \\(C_1 = 0.622 \\times 0 + 0.689 \\times 0.604 ≈ 0.416\\)</li>
+                            <li><strong>Sortie :</strong><br>
+                                \\(o_1 = \\sigma(0.6 \\times 1) ≈ 0.646\\)<br>
+                                \\(h_1 = 0.646 \\times \\tanh(0.416) ≈ 0.646 \\times 0.395 ≈ 0.255\\)</li>
+                        </ol>
+                        <p><strong>💡 Résultat :</strong> \\(C_1 = 0.416\\) stocke "Dakar", \\(h_1 = 0.255\\) expose une partie de cette information.</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation RNN from scratch",
+            description: "Créons un RNN simple pour prédiction de séquences :",
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+class RNNSimple:
+    def __init__(self, input_size, hidden_size, output_size):
+        """RNN simple pour séquences"""
+        self.input_size = input_size
+        self.hidden_size = hidden_size
+        self.output_size = output_size
+        
+        # Initialisation des poids (Xavier)
+        self.Wxh = np.random.randn(hidden_size, input_size) * 0.1
+        self.Whh = np.random.randn(hidden_size, hidden_size) * 0.1
+        self.Why = np.random.randn(output_size, hidden_size) * 0.1
+        
+        # Biais
+        self.bh = np.zeros((hidden_size, 1))
+        self.by = np.zeros((output_size, 1))
+        
+        print(f"🧠 RNN créé: {input_size}→{hidden_size}→{output_size}")
+        print(f"📊 Paramètres: {self.compter_parametres()}")
+    
+    def compter_parametres(self):
+        """Compter le nombre total de paramètres"""
+        return (self.Wxh.size + self.Whh.size + self.Why.size + 
+                self.bh.size + self.by.size)
+    
+    def forward(self, inputs):
+        """Propagation avant sur une séquence"""
+        seq_length = len(inputs)
+        
+        # Stockage des états pour visualisation
+        self.h_states = {}
+        self.y_outputs = {}
+        
+        # État initial
+        h = np.zeros((self.hidden_size, 1))
+        self.h_states[-1] = h.copy()
+        
+        for t in range(seq_length):
+            # Entrée au temps t
+            x = np.array([[inputs[t]]])  # Reshape en colonne
+            
+            # Calcul état caché
+            h = np.tanh(self.Wxh @ x + self.Whh @ h + self.bh)
+            
+            # Calcul sortie
+            y = self.Why @ h + self.by
+            
+            # Stockage
+            self.h_states[t] = h.copy()
+            self.y_outputs[t] = y.copy()
+        
+        return self.h_states, self.y_outputs
+    
+    def predict_next(self, sequence):
+        """Prédire l'élément suivant d'une séquence"""
+        h_states, y_outputs = self.forward(sequence)
+        derniere_sortie = y_outputs[len(sequence) - 1]
+        return derniere_sortie[0, 0]
+
+# Test sur séquence de nombres (Fibonacci simplifié)
+print("🔢 TEST RNN SUR SÉQUENCE NUMÉRIQUE")
+print("=" * 40)
+
+# Création du RNN
+rnn = RNNSimple(input_size=1, hidden_size=3, output_size=1)
+
+# Séquence test: [1, 1, 2, 3, 5] (début Fibonacci)
+sequence_test = [1, 1, 2, 3, 5]
+print(f"Séquence d'entrée: {sequence_test}")
+
+# Propagation avant
+h_states, y_outputs = rnn.forward(sequence_test)
+
+print(f"\\nÉvolution des états cachés:")
+for t in range(len(sequence_test)):
+    h = h_states[t].flatten()
+    y = y_outputs[t][0, 0]
+    print(f"t={t}: x={sequence_test[t]} → h={h} → y={y:.3f}")
+
+# Prédiction du suivant
+prediction = rnn.predict_next(sequence_test)
+print(f"\\n🎯 Prédiction suivant: {prediction:.3f}")
+print(f"📊 Vraie valeur suivante: 8 (5+3)")`,
+          },
+          {
+            type: "code",
+            title: "Implémentation LSTM from scratch",
+            description: "Créons un LSTM complet avec toutes les portes :",
+            code: `class LSTMSimple:
+    def __init__(self, input_size, hidden_size):
+        """LSTM avec les 3 portes"""
+        self.input_size = input_size
+        self.hidden_size = hidden_size
+        
+        # Poids pour les 4 transformations (forget, input, candidate, output)
+        self.Wf = np.random.randn(hidden_size, input_size + hidden_size) * 0.1
+        self.Wi = np.random.randn(hidden_size, input_size + hidden_size) * 0.1
+        self.Wc = np.random.randn(hidden_size, input_size + hidden_size) * 0.1
+        self.Wo = np.random.randn(hidden_size, input_size + hidden_size) * 0.1
+        
+        # Biais
+        self.bf = np.zeros((hidden_size, 1))
+        self.bi = np.zeros((hidden_size, 1))
+        self.bc = np.zeros((hidden_size, 1))
+        self.bo = np.zeros((hidden_size, 1))
+        
+        print(f"🧠 LSTM créé: dimension cachée = {hidden_size}")
+    
+    def sigmoid(self, x):
+        """Sigmoid avec protection overflow"""
+        return 1 / (1 + np.exp(-np.clip(x, -500, 500)))
+    
+    def forward_step(self, x, h_prev, C_prev):
+        """Un pas de temps LSTM"""
+        # Concaténation [h_{t-1}, x_t]
+        concat = np.vstack([h_prev, x])
+        
+        # Calcul des portes
+        f_t = self.sigmoid(self.Wf @ concat + self.bf)  # Forget gate
+        i_t = self.sigmoid(self.Wi @ concat + self.bi)  # Input gate
+        C_tilde = np.tanh(self.Wc @ concat + self.bc)   # Candidate values
+        o_t = self.sigmoid(self.Wo @ concat + self.bo)  # Output gate
+        
+        # Mise à jour de la mémoire cellulaire
+        C_t = f_t * C_prev + i_t * C_tilde
+        
+        # Nouvel état caché
+        h_t = o_t * np.tanh(C_t)
+        
+        return h_t, C_t, (f_t, i_t, C_tilde, o_t)
+    
+    def forward(self, sequence):
+        """Propagation avant complète"""
+        seq_length = len(sequence)
+        
+        # États initiaux
+        h = np.zeros((self.hidden_size, 1))
+        C = np.zeros((self.hidden_size, 1))
+        
+        # Stockage pour analyse
+        self.h_history = []
+        self.C_history = []
+        self.gates_history = []
+        
+        for t in range(seq_length):
+            x = np.array([[sequence[t]]])
+            h, C, gates = self.forward_step(x, h, C)
+            
+            self.h_history.append(h.copy())
+            self.C_history.append(C.copy())
+            self.gates_history.append(gates)
+        
+        return h, C
+
+# Test LSTM sur séquence avec mémoire longue
+print("\\n🧠 TEST LSTM SUR SÉQUENCE LONGUE")
+print("=" * 40)
+
+lstm = LSTMSimple(input_size=1, hidden_size=2)
+
+# Séquence avec pattern à long terme: [1, 0, 0, 1, 0, 0, 1, 0, 0]
+# Pattern: 1 tous les 3 éléments
+sequence_longue = [1, 0, 0, 1, 0, 0, 1, 0, 0]
+print(f"Séquence avec pattern: {sequence_longue}")
+
+h_final, C_final = lstm.forward(sequence_longue)
+
+print(f"\\nÉvolution de la mémoire cellulaire:")
+for t, C_t in enumerate(lstm.C_history):
+    print(f"t={t}: C={C_t.flatten()}")
+
+print(f"\\nÉtat final:")
+print(f"h_final = {h_final.flatten()}")
+print(f"C_final = {C_final.flatten()}")`,
+          },
+          {
+            type: "code",
+            title: "Analyse des portes LSTM",
+            description: "Analysons le comportement des portes :",
+            code: `def analyser_portes_lstm():
+    """Analyse le comportement des portes LSTM"""
+    
+    print("🚪 ANALYSE DES PORTES LSTM")
+    print("=" * 30)
+    
+    # Récupération des portes de la dernière exécution
+    if hasattr(lstm, 'gates_history'):
+        for t, (f_t, i_t, C_tilde, o_t) in enumerate(lstm.gates_history):
+            print(f"\\nTemps t={t} (entrée: {sequence_longue[t]}):")
+            print(f"  🚪 Forget gate: {f_t.flatten()[0]:.3f} (oubli: {1-f_t.flatten()[0]:.3f})")
+            print(f"  📥 Input gate:  {i_t.flatten()[0]:.3f}")
+            print(f"  💭 Candidat:    {C_tilde.flatten()[0]:.3f}")
+            print(f"  📤 Output gate: {o_t.flatten()[0]:.3f}")
+            
+            # Interprétation
+            if f_t.flatten()[0] > 0.7:
+                print(f"     → Garde la mémoire précédente")
+            elif f_t.flatten()[0] < 0.3:
+                print(f"     → Oublie la mémoire précédente")
+            
+            if i_t.flatten()[0] > 0.7:
+                print(f"     → Stocke beaucoup de nouvelle info")
+            elif i_t.flatten()[0] < 0.3:
+                print(f"     → Ignore la nouvelle info")
+
+analyser_portes_lstm()
+
+# Visualisation de l'évolution des portes
+def visualiser_portes():
+    """Visualise l'évolution des portes dans le temps"""
+    if not hasattr(lstm, 'gates_history'):
+        return
+    
+    temps = range(len(lstm.gates_history))
+    forget_vals = [gates[0].flatten()[0] for gates in lstm.gates_history]
+    input_vals = [gates[1].flatten()[0] for gates in lstm.gates_history]
+    output_vals = [gates[3].flatten()[0] for gates in lstm.gates_history]
+    
+    plt.figure(figsize=(12, 6))
+    plt.plot(temps, forget_vals, 'r-o', label='Forget Gate', linewidth=2)
+    plt.plot(temps, input_vals, 'g-s', label='Input Gate', linewidth=2)
+    plt.plot(temps, output_vals, 'b-^', label='Output Gate', linewidth=2)
+    
+    plt.title('Évolution des Portes LSTM')
+    plt.xlabel('Temps')
+    plt.ylabel('Activation des portes')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.ylim(0, 1)
+    
+    # Marquer les entrées importantes
+    for t, val in enumerate(sequence_longue):
+        if val == 1:
+            plt.axvline(x=t, color='orange', linestyle='--', alpha=0.5)
+    
+    plt.show()
+
+visualiser_portes()
+print("📊 Analyse des portes terminée !")`,
+          },
+          {
+            type: "code",
+            title: "Comparaison RNN vs LSTM",
+            description: "Comparons les performances sur séquences longues :",
+            code: `def comparer_rnn_lstm():
+    """Compare RNN et LSTM sur mémorisation long terme"""
+    
+    print("⚔️ COMPARAISON RNN vs LSTM")
+    print("=" * 35)
+    
+    # Séquence avec dépendance très lointaine
+    # Pattern: premier élément détermine le dernier
+    sequences_test = [
+        ([1, 0, 0, 0, 0, 0, 0, 0], "Si début=1 → fin devrait être élevée"),
+        ([0, 0, 0, 0, 0, 0, 0, 0], "Si début=0 → fin devrait être faible"),
+        ([1, 0, 0, 0, 0, 0, 0, 1], "Pattern complexe avec mémoire"),
+    ]
+    
+    # Test RNN
+    rnn_test = RNNSimple(1, 3, 1)
+    
+    # Test LSTM  
+    lstm_test = LSTMSimple(1, 3)
+    
+    print("\\n📊 Résultats de mémorisation:")
+    print("-" * 50)
+    print(f"{'Séquence':<25} {'RNN':<10} {'LSTM':<10} {'Attendu'}")
+    print("-" * 50)
+    
+    for seq, description in sequences_test:
+        # RNN
+        rnn_test.forward(seq)
+        rnn_final = rnn_test.h_states[len(seq)-1][0, 0]
+        
+        # LSTM
+        h_lstm, C_lstm = lstm_test.forward(seq)
+        lstm_final = h_lstm[0, 0]
+        
+        # Valeur attendue basée sur le premier élément
+        attendu = "Élevé" if seq[0] == 1 else "Faible"
+        
+        print(f"{str(seq[:3])+'...'+str(seq[-2:]):<25} {rnn_final:<10.3f} {lstm_final:<10.3f} {attendu}")
+    
+    print("-" * 50)
+    print("💡 LSTM devrait mieux préserver l'information du début !")
+
+comparer_rnn_lstm()
+
+# Simulation du problème de gradient
+def simuler_gradient_temporel():
+    """Simule la disparition du gradient dans le temps"""
+    
+    print("\\n📉 SIMULATION: GRADIENT TEMPOREL")
+    print("=" * 35)
+    
+    # Simulation sur 20 pas de temps
+    pas_temps = range(1, 21)
+    
+    # RNN: gradient × (dérivée tanh) × (poids) à chaque pas
+    # Supposons dérivée tanh ≈ 0.5 et poids ≈ 0.8
+    facteur_rnn = 0.5 * 0.8  # = 0.4 par pas
+    gradients_rnn = [1.0 * (facteur_rnn ** t) for t in pas_temps]
+    
+    # LSTM: gradient préservé grâce aux connexions directes
+    # Supposons préservation de 90% par pas
+    facteur_lstm = 0.9
+    gradients_lstm = [1.0 * (facteur_lstm ** t) for t in pas_temps]
+    
+    plt.figure(figsize=(12, 6))
+    plt.semilogy(pas_temps, gradients_rnn, 'r-o', label='RNN Standard', linewidth=2)
+    plt.semilogy(pas_temps, gradients_lstm, 'b-s', label='LSTM', linewidth=2)
+    plt.axhline(y=1e-3, color='black', linestyle='--', alpha=0.5, label='Seuil critique')
+    
+    plt.title('Disparition des Gradients: RNN vs LSTM')
+    plt.xlabel('Pas de temps en arrière')
+    plt.ylabel('Magnitude du gradient (échelle log)')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.show()
+    
+    # Analyse
+    seuil_critique = 1e-3
+    rnn_limite = next((t for t, g in enumerate(gradients_rnn) if g < seuil_critique), 20)
+    lstm_limite = next((t for t, g in enumerate(gradients_lstm) if g < seuil_critique), 20)
+    
+    print(f"📊 RNN: gradient critique après {rnn_limite} pas")
+    print(f"🧠 LSTM: gradient critique après {lstm_limite} pas")
+    print(f"🚀 LSTM: {lstm_limite - rnn_limite}x plus de mémoire !")
+
+simuler_gradient_temporel()`,
+          },
+          {
+            type: "code",
+            title: "Application : prédiction météo Sénégal",
+            description: "Appliquons LSTM à la prédiction météorologique :",
+            code: `# Génération de données météo réalistes pour Dakar
+np.random.seed(42)
+
+def generer_meteo_dakar(nb_jours=100):
+    """Génère des données météo réalistes pour Dakar"""
+    
+    # Tendance saisonnière (saison sèche vs hivernage)
+    jours = np.arange(nb_jours)
+    tendance_saisonniere = 28 + 5 * np.sin(2 * np.pi * jours / 365)
+    
+    # Variations hebdomadaires
+    variation_hebdo = 2 * np.sin(2 * np.pi * jours / 7)
+    
+    # Bruit aléatoire
+    bruit = np.random.normal(0, 1.5, nb_jours)
+    
+    # Température finale
+    temperatures = tendance_saisonniere + variation_hebdo + bruit
+    
+    # Ajout d'événements extrêmes (harmattan, pluies)
+    for i in range(5):  # 5 événements aléatoires
+        jour_event = np.random.randint(0, nb_jours)
+        if np.random.random() > 0.5:  # Harmattan
+            temperatures[jour_event:jour_event+3] += np.random.uniform(8, 12)
+        else:  # Pluies
+            temperatures[jour_event:jour_event+2] -= np.random.uniform(3, 6)
+    
+    return temperatures
+
+# Génération des données
+temperatures_dakar = generer_meteo_dakar(60)
+jours = range(len(temperatures_dakar))
+
+print("🌡️ PRÉDICTION MÉTÉO DAKAR AVEC LSTM")
+print("=" * 40)
+print(f"Données: {len(temperatures_dakar)} jours")
+print(f"Température moyenne: {np.mean(temperatures_dakar):.1f}°C")
+print(f"Écart-type: {np.std(temperatures_dakar):.1f}°C")
+
+# Visualisation des données
+plt.figure(figsize=(14, 6))
+plt.plot(jours, temperatures_dakar, 'b-', linewidth=1.5, alpha=0.7)
+plt.title('Températures à Dakar - Dataset d\'Entraînement')
+plt.xlabel('Jour')
+plt.ylabel('Température (°C)')
+plt.grid(True, alpha=0.3)
+
+# Marquer les événements extrêmes
+seuil_haut = np.mean(temperatures_dakar) + 2 * np.std(temperatures_dakar)
+seuil_bas = np.mean(temperatures_dakar) - 2 * np.std(temperatures_dakar)
+
+extremes_hauts = np.where(temperatures_dakar > seuil_haut)[0]
+extremes_bas = np.where(temperatures_dakar < seuil_bas)[0]
+
+plt.scatter(extremes_hauts, temperatures_dakar[extremes_hauts], 
+           color='red', s=50, label='Harmattan', zorder=5)
+plt.scatter(extremes_bas, temperatures_dakar[extremes_bas], 
+           color='blue', s=50, label='Pluies', zorder=5)
+
+plt.legend()
+plt.show()
+
+print(f"🔥 Événements chauds détectés: {len(extremes_hauts)}")
+print(f"🌧️ Événements froids détectés: {len(extremes_bas)}")`,
+          },
+          {
+            type: "code",
+            title: "Entraînement LSTM pour prédiction",
+            description: "Entraînons le LSTM à prédire la météo :",
+            code: `def preparer_sequences_meteo(temperatures, longueur_sequence=7):
+    """Prépare les séquences pour l'entraînement"""
+    X, y = [], []
+    
+    for i in range(len(temperatures) - longueur_sequence):
+        # Séquence d'entrée: 7 jours précédents
+        sequence_entree = temperatures[i:i+longueur_sequence]
+        # Cible: température du jour suivant
+        temperature_cible = temperatures[i+longueur_sequence]
+        
+        X.append(sequence_entree)
+        y.append(temperature_cible)
+    
+    return np.array(X), np.array(y)
+
+# Préparation des données
+X_meteo, y_meteo = preparer_sequences_meteo(temperatures_dakar, 7)
+print(f"\\n📊 PRÉPARATION DES DONNÉES")
+print(f"Séquences d'entraînement: {len(X_meteo)}")
+print(f"Longueur de chaque séquence: {X_meteo.shape[1]} jours")
+
+# Exemple de séquence
+print(f"\\n📝 Exemple de séquence:")
+print(f"Entrée (7 jours): {X_meteo[0].round(1)}")
+print(f"Cible (jour 8): {y_meteo[0]:.1f}°C")
+
+# Test de prédiction simple (sans entraînement complet)
+lstm_meteo = LSTMSimple(input_size=1, hidden_size=4)
+
+def predire_temperature(lstm, sequence_7_jours):
+    """Prédiction simple basée sur l'état final"""
+    h_final, C_final = lstm.forward(sequence_7_jours)
+    
+    # Prédiction simple: combinaison linéaire de l'état caché
+    # (En réalité, il faudrait une couche de sortie entraînée)
+    prediction = np.sum(h_final) * 10 + 25  # Approximation
+    return prediction
+
+# Test sur quelques séquences
+print(f"\\n🎯 TESTS DE PRÉDICTION (sans entraînement):")
+print("-" * 45)
+print(f"{'Séquence (7j)':<25} {'Vraie':<8} {'Prédite':<8} {'Erreur'}")
+print("-" * 45)
+
+for i in range(0, min(5, len(X_meteo)), 1):
+    vraie_temp = y_meteo[i]
+    pred_temp = predire_temperature(lstm_meteo, X_meteo[i])
+    erreur = abs(vraie_temp - pred_temp)
+    
+    seq_str = f"[{X_meteo[i][0]:.0f}...{X_meteo[i][-1]:.0f}]"
+    print(f"{seq_str:<25} {vraie_temp:<8.1f} {pred_temp:<8.1f} {erreur:.1f}")
+
+print("-" * 45)
+print("⚠️ Note: Prédictions aléatoires sans entraînement !")
+print("🎯 Avec entraînement, LSTM apprendrait les patterns saisonniers")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : analyse de séquence wolof",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Analysez comment un LSTM traiterait la phrase wolof "Dakar dafa rafet" (Dakar est belle) :</p>
+                        
+                        <p><strong>📝 Encodage simplifié :</strong></p>
+                        <ul>
+                            <li>"Dakar" → 1</li>
+                            <li>"dafa" → 2 (auxiliaire être)</li>
+                            <li>"rafet" → 3 (belle)</li>
+                        </ul>
+                        
+                        <p><strong>🧠 Questions d'analyse :</strong></p>
+                        <ol>
+                            <li>Pourquoi un RNN standard pourrait oublier "Dakar" en arrivant à "rafet" ?</li>
+                            <li>Comment les portes LSTM préserveraient cette information ?</li>
+                            <li>Quelle porte serait la plus active pour "dafa" (mot de liaison) ?</li>
+                            <li>Comment le LSTM "comprendrait" que "rafet" se rapporte à "Dakar" ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('wolof-sequence-analysis')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="wolof-sequence-analysis" style="display: none;">
+                        <ol>
+                            <li><strong>Oubli RNN :</strong><br>
+                                Après 2-3 mots, l'information "Dakar" se dilue dans l'état caché.<br>
+                                Le gradient de "rafet" vers "Dakar" devient négligeable.</li>
+                            <li><strong>Préservation LSTM :</strong><br>
+                                La <strong>mémoire cellulaire C</strong> stocke "Dakar" directement.<br>
+                                Les portes apprennent à préserver cette info cruciale.</li>
+                            <li><strong>Porte pour "dafa" :</strong><br>
+                                <strong>Forget gate faible</strong> : ne pas oublier "Dakar"<br>
+                                <strong>Input gate faible</strong> : "dafa" n'apporte pas d'info nouvelle<br>
+                                <strong>Output gate modérée</strong> : maintenir le contexte</li>
+                            <li><strong>Compréhension LSTM :</strong><br>
+                                La mémoire C contient "Dakar", l'état h expose cette info quand "rafet" arrive.<br>
+                                Le LSTM "sait" que l'adjectif se rapporte au sujet initial !</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Variantes et évolutions : GRU et au-delà",
+            content: `
+                        <p><strong>🔧 GRU (Gated Recurrent Unit) : LSTM simplifié</strong></p>
+                        <p>Les <strong>GRU</strong> combinent les portes d'oubli et d'entrée en une seule "porte de mise à jour", réduisant la complexité tout en gardant l'efficacité.</p>
+                        
+                        <p><strong>📐 Équations GRU :</strong></p>
+                        <p>$$\\vec{r}_t = \\sigma(W_r \\cdot [\\vec{h}_{t-1}, \\vec{x}_t])$$ (porte de reset)</p>
+                        <p>$$\\vec{z}_t = \\sigma(W_z \\cdot [\\vec{h}_{t-1}, \\vec{x}_t])$$ (porte de mise à jour)</p>
+                        <p>$$\\vec{\\tilde{h}}_t = \\tanh(W \\cdot [\\vec{r}_t \\odot \\vec{h}_{t-1}, \\vec{x}_t])$$ (candidat)</p>
+                        <p>$$\\vec{h}_t = (1 - \\vec{z}_t) \\odot \\vec{h}_{t-1} + \\vec{z}_t \\odot \\vec{\\tilde{h}}_t$$ (état final)</p>
+                        
+                        <p><strong>⚖️ Comparaison LSTM vs GRU :</strong></p>
+                        <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 0.8rem; border: 1px solid #dee2e6;">Critère</th>
+                                <th style="padding: 0.8rem; border: 1px solid #dee2e6;">LSTM</th>
+                                <th style="padding: 0.8rem; border: 1px solid #dee2e6;">GRU</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;"><strong>Portes</strong></td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">3 portes + mémoire cellulaire</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">2 portes seulement</td>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;"><strong>Paramètres</strong></td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Plus nombreux</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">25% de moins</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;"><strong>Vitesse</strong></td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Plus lent</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Plus rapide</td>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;"><strong>Performance</strong></td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Légèrement meilleur</td>
+                                <td style="padding: 0.8rem; border: 1px solid #dee2e6;">Très proche</td>
+                            </tr>
+                        </table>
+                        
+                        <p><strong>🚀 Évolution vers les Transformers :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Problème RNN/LSTM</strong> : traitement séquentiel (pas de parallélisation)</li>
+                            <li>🧠 <strong>Solution Transformer</strong> : mécanisme d'attention (traitement parallèle)</li>
+                            <li>💬 <strong>Résultat</strong> : ChatGPT, GPT-4, révolution du NLP</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Guide de choix :</strong></p>
+                        <ul>
+                            <li>🔤 <strong>Séquences courtes</strong> (< 50) → GRU (plus rapide)</li>
+                            <li>📚 <strong>Séquences longues</strong> (> 100) → LSTM (plus robuste)</li>
+                            <li>💬 <strong>Texte moderne</strong> (> 1000) → Transformer (parallèle)</li>
+                            <li>📈 <strong>Séries temporelles</strong> → LSTM/GRU (structure temporelle)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : architecture pour différents problèmes",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Pour chaque problème, choisissez l'architecture optimale et justifiez :</p>
+                        
+                        <ol>
+                            <li><strong>Traduction Français→Wolof</strong> : phrases de 5-20 mots</li>
+                            <li><strong>Prédiction cours bourse</strong> : 100 jours d'historique</li>
+                            <li><strong>Classification sentiment</strong> : tweets de 280 caractères</li>
+                            <li><strong>Génération de musique</strong> : séquences de 1000+ notes</li>
+                            <li><strong>Reconnaissance vocale</strong> : audio de 10 secondes</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('architecture-choice-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="architecture-choice-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Traduction Fr→Wolof :</strong> <strong>Encoder-Decoder LSTM</strong><br>
+                                <em>Justification :</em> Séquences de longueur variable, besoin de comprendre toute la phrase source</li>
+                            <li><strong>Prédiction bourse :</strong> <strong>LSTM multicouche</strong><br>
+                                <em>Justification :</em> Dépendances long terme cruciales, patterns complexes</li>
+                            <li><strong>Sentiment tweets :</strong> <strong>GRU simple</strong><br>
+                                <em>Justification :</em> Séquences courtes, rapidité importante</li>
+                            <li><strong>Génération musique :</strong> <strong>Transformer</strong> ou <strong>LSTM très profond</strong><br>
+                                <em>Justification :</em> Très longues séquences, patterns harmoniques complexes</li>
+                            <li><strong>Reconnaissance vocale :</strong> <strong>CNN + LSTM</strong><br>
+                                <em>Justification :</em> CNN pour features audio, LSTM pour séquence temporelle</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Impact révolutionnaire : de la mémoire à l'intelligence",
+            content: `
+                        <p><strong>🚀 Les RNN/LSTM ont révolutionné l'IA en lui donnant une mémoire :</strong></p>
+                        
+                        <p><strong>📱 Applications quotidiennes :</strong></p>
+                        <ul>
+                            <li>💬 <strong>Traduction automatique</strong> : Google Translate comprend le contexte</li>
+                            <li>🗣️ <strong>Assistants vocaux</strong> : Siri se souvient de la conversation</li>
+                            <li>📝 <strong>Correction automatique</strong> : votre téléphone prédit le mot suivant</li>
+                            <li>🎵 <strong>Recommandations musicales</strong> : Spotify comprend vos goûts dans le temps</li>
+                            <li>📈 <strong>Trading algorithmique</strong> : analyse des tendances historiques</li>
+                        </ul>
+                        
+                        <p><strong>🇸🇳 Impact au Sénégal :</strong></p>
+                        <ul>
+                            <li>🌾 <strong>Agriculture</strong> : prédiction des rendements selon l'historique climatique</li>
+                            <li>🏥 <strong>Santé</strong> : suivi de l'évolution des épidémies</li>
+                            <li>💰 <strong>Finance</strong> : détection de fraudes basée sur l'historique</li>
+                            <li>📚 <strong>Éducation</strong> : systèmes adaptatifs qui se souviennent des difficultés</li>
+                            <li>🗣️ <strong>Langues locales</strong> : traduction automatique wolof-français</li>
+                        </ul>
+                        
+                        <p><strong>🔮 Évolution historique :</strong></p>
+                        <ul>
+                            <li>📅 <strong>1990s</strong> : RNN simples (mémoire courte)</li>
+                            <li>📅 <strong>1997</strong> : LSTM inventé (mémoire longue)</li>
+                            <li>📅 <strong>2014</strong> : GRU (simplification efficace)</li>
+                            <li>📅 <strong>2017</strong> : Transformers (révolution attention)</li>
+                            <li>📅 <strong>2023</strong> : ChatGPT (mémoire + créativité)</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Les RNN/LSTM ont été le <strong>pont crucial</strong> entre l'IA "amnésique" et l'IA "intelligente". Ils ont ouvert la voie aux LLMs modernes en prouvant qu'une IA avec mémoire pouvait comprendre le langage et les séquences complexes !</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Attention et Transformers - l'architecture qui a rendu possible ChatGPT et l'IA générative moderne !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Quelle est la principale innovation des LSTM par rapport aux RNN standards ?",
+          options: [
+            "A) Ils sont plus rapides à entraîner",
+            "B) Ils utilisent des portes pour contrôler le flux d'information",
+            "C) Ils ont plus de neurones",
+            "D) Ils n'utilisent pas de fonction d'activation",
+          ],
+          correct: 1,
+          explanation:
+            "Les LSTM introduisent des 'portes' (forget, input, output) qui apprennent à contrôler quelles informations oublier, stocker ou exposer. Cela résout le problème du gradient qui disparaît et permet d'apprendre des dépendances à long terme.",
+        },
+        prevModule: "cnn.html",
+        nextModule: "../llm/attention.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

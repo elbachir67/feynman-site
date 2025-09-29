@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Le Perceptron | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧠 Deep Learning</span>
+          <span>›</span>
+          <span>Le Perceptron</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>⚡ Le Perceptron : Premier Neurone Artificiel</h1>
+      <p class="subtitle">Module 4.1 - Deep Learning Fondamental</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Le Perceptron</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant le premier neurone
+          artificiel et les fondements du Deep Learning.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="../ml/validation.html" class="nav-link" id="prev-link"
+          >← Module précédent : Validation</a
+        >
+        <a href="neural-networks.html" class="nav-link" id="next-link"
+          >Module suivant : Réseaux de Neurones →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Perceptron
+      const moduleConfig = {
+        id: "dl-perceptron",
+        title: "Le Perceptron : Premier Neurone Artificiel",
+        category: "Deep Learning",
+        objectives: [
+          "Comprendre la révolution conceptuelle du perceptron",
+          "Maîtriser le modèle mathématique du neurone artificiel",
+          "Calculer manuellement l'apprentissage du perceptron",
+          "Comprendre les limites et l'évolution vers les réseaux",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title:
+              "La révolution conceptuelle : de la programmation à l'apprentissage",
+            content: `
+                        <p>Le <strong>perceptron</strong> (1957) marque une révolution : pour la première fois, une machine peut <strong>apprendre automatiquement</strong> à résoudre des problèmes sans qu'on lui programme explicitement la solution.</p>
+                        
+                        <p><strong>🔑 Changement de paradigme :</strong></p>
+                        <ul>
+                            <li>📝 <strong>Programmation classique</strong> : "Si température > 30°C, alors climatisation ON"</li>
+                            <li>🧠 <strong>Perceptron</strong> : "Voici 1000 exemples température→décision. Apprends la règle !"</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Inspiration biologique :</strong></p>
+                        <p>Le perceptron s'inspire du <strong>neurone biologique</strong> :</p>
+                        <ul>
+                            <li>🧠 <strong>Dendrites</strong> → entrées pondérées</li>
+                            <li>⚡ <strong>Corps cellulaire</strong> → sommation</li>
+                            <li>🔥 <strong>Seuil d'activation</strong> → fonction d'activation</li>
+                            <li>📡 <strong>Axone</strong> → sortie binaire</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Impact historique :</strong></p>
+                        <ul>
+                            <li>🤖 <strong>1957</strong> : Rosenblatt invente le perceptron</li>
+                            <li>📈 <strong>1960s</strong> : Euphorie - "machines pensantes" promises</li>
+                            <li>❄️ <strong>1969</strong> : "Hiver de l'IA" - limitations découvertes</li>
+                            <li>🔥 <strong>1980s+</strong> : Renaissance avec les réseaux multicouches</li>
+                            <li>🧠 <strong>2010s+</strong> : Deep Learning révolutionne tout</li>
+                        </ul>
+                        
+                        <p><strong>💡 Pourquoi crucial aujourd'hui ?</strong></p>
+                        <p>Chaque neurone dans ChatGPT, dans les voitures autonomes, dans la reconnaissance faciale... est un descendant direct du perceptron de 1957 !</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie du gardien de sécurité intelligent",
+            content: `
+                        <p>Imaginez un <strong>gardien de sécurité</strong> à l'entrée d'un bâtiment gouvernemental à Dakar :</p>
+                        
+                        <p><strong>🎯 Sa mission :</strong> Décider qui peut entrer (1) ou non (0)</p>
+                        
+                        <p><strong>🔍 Informations qu'il observe :</strong></p>
+                        <ul>
+                            <li>👔 <strong>Tenue vestimentaire</strong> (score 1-10)</li>
+                            <li>📋 <strong>Documents officiels</strong> (score 1-10)</li>
+                            <li>🎯 <strong>Rendez-vous confirmé</strong> (score 1-10)</li>
+                            <li>😊 <strong>Attitude</strong> (score 1-10)</li>
+                        </ul>
+                        
+                        <p><strong>🧠 Comment il prend sa décision :</strong></p>
+                        <ol>
+                            <li>📊 <strong>Pondération</strong> : il donne plus d'importance aux documents (×3) qu'à la tenue (×1)</li>
+                            <li>➕ <strong>Sommation</strong> : Score total = 1×tenue + 3×documents + 2×rdv + 1×attitude</li>
+                            <li>⚖️ <strong>Seuil</strong> : Si score total > 15 → ENTRER, sinon → REFUSER</li>
+                        </ol>
+                        
+                        <p><strong>📈 Apprentissage du gardien :</strong></p>
+                        <ul>
+                            <li>✅ <strong>Bonne décision</strong> : "Mes poids sont corrects, je continue"</li>
+                            <li>❌ <strong>Erreur</strong> : "Je dois ajuster mes priorités (poids)"</li>
+                            <li>🔄 <strong>Amélioration</strong> : modifier les poids selon les erreurs</li>
+                        </ul>
+                        
+                        <p><strong>💡 C'est exactement le perceptron :</strong></p>
+                        <ul>
+                            <li>🔢 <strong>Entrées</strong> : caractéristiques observées</li>
+                            <li>⚖️ <strong>Poids</strong> : importance de chaque caractéristique</li>
+                            <li>➕ <strong>Sommation</strong> : combinaison pondérée</li>
+                            <li>🎯 <strong>Fonction d'activation</strong> : décision finale</li>
+                            <li>📚 <strong>Apprentissage</strong> : ajustement automatique des poids</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Modèle mathématique du perceptron",
+            content: `
+                        <p><strong>📐 Formalisation rigoureuse :</strong></p>
+                        
+                        <p><strong>🔢 Entrées :</strong> Vecteur \\(\\vec{x} = \\begin{bmatrix} x_1 \\\\ x_2 \\\\ \\vdots \\\\ x_n \\end{bmatrix}\\) (voir <a href="../math/vectors.html">Module 1.1</a>)</p>
+                        
+                        <p><strong>⚖️ Poids :</strong> Vecteur \\(\\vec{w} = \\begin{bmatrix} w_1 \\\\ w_2 \\\\ \\vdots \\\\ w_n \\end{bmatrix}\\) + biais \\(b\\)</p>
+                        
+                        <p><strong>➕ Sommation pondérée :</strong></p>
+                        <p>$$z = \\vec{w}^T \\vec{x} + b = \\sum_{i=1}^{n} w_i x_i + b$$</p>
+                        
+                        <p><strong>🎯 Fonction d'activation (seuil) :</strong></p>
+                        <p>$$y = \\begin{cases} 1 & \\text{si } z \\geq 0 \\\\ 0 & \\text{si } z < 0 \\end{cases}$$</p>
+                        
+                        <p><strong>🔍 Interprétation géométrique :</strong></p>
+                        <p>L'équation \\(\\vec{w}^T \\vec{x} + b = 0\\) définit un <strong>hyperplan</strong> qui sépare l'espace en deux régions :</p>
+                        <ul>
+                            <li>🟢 <strong>Région positive</strong> : \\(\\vec{w}^T \\vec{x} + b > 0\\) → classe 1</li>
+                            <li>🔴 <strong>Région négative</strong> : \\(\\vec{w}^T \\vec{x} + b < 0\\) → classe 0</li>
+                        </ul>
+                        
+                        <p><strong>📐 En 2D :</strong> L'hyperplan devient une droite \\(w_1 x_1 + w_2 x_2 + b = 0\\)</p>
+                        
+                        <p><strong>🎯 Objectif d'apprentissage :</strong></p>
+                        <p>Trouver \\(\\vec{w}\\) et \\(b\\) qui séparent correctement les classes dans les données d'entraînement.</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel : exemple concret",
+            content: `
+                        <p><strong>📝 Problème :</strong> Classifier si un étudiant UCAD réussira son examen d'IA</p>
+                        
+                        <p><strong>🔢 Variables d'entrée :</strong></p>
+                        <ul>
+                            <li>\\(x_1\\) = Heures d'étude par semaine</li>
+                            <li>\\(x_2\\) = Note en mathématiques (/20)</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Sortie :</strong> y = 1 (réussite) ou 0 (échec)</p>
+                        
+                        <p><strong>📊 Exemple d'étudiant :</strong></p>
+                        <p>Aminata : 15 heures d'étude, 14/20 en maths → \\(\\vec{x} = \\begin{bmatrix} 15 \\\\ 14 \\end{bmatrix}\\)</p>
+                        
+                        <p><strong>⚖️ Poids initiaux (hypothèse) :</strong></p>
+                        <p>\\(\\vec{w} = \\begin{bmatrix} 0.3 \\\\ 0.5 \\end{bmatrix}\\), \\(b = -8\\)</p>
+                        
+                        <p><strong>🔢 Calcul de la prédiction :</strong></p>
+                        <p><strong>Étape 1 :</strong> Sommation pondérée</p>
+                        <p>$$z = w_1 x_1 + w_2 x_2 + b = 0.3 \\times 15 + 0.5 \\times 14 + (-8)$$</p>
+                        <p>$$z = 4.5 + 7 - 8 = 3.5$$</p>
+                        
+                        <p><strong>Étape 2 :</strong> Fonction d'activation</p>
+                        <p>$$y = \\begin{cases} 1 & \\text{si } z \\geq 0 \\\\ 0 & \\text{si } z < 0 \\end{cases}$$</p>
+                        <p>Comme \\(z = 3.5 > 0\\), alors \\(y = 1\\)</p>
+                        
+                        <p><strong>🎉 Prédiction :</strong> Aminata va <strong>réussir</strong> son examen d'IA !</p>
+                        
+                        <p><strong>🔍 Interprétation des poids :</strong></p>
+                        <ul>
+                            <li>\\(w_1 = 0.3\\) : chaque heure d'étude ajoute 0.3 au score</li>
+                            <li>\\(w_2 = 0.5\\) : chaque point en maths ajoute 0.5 au score</li>
+                            <li>\\(b = -8\\) : seuil de base (il faut compenser ce handicap)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Algorithme d'apprentissage du perceptron",
+            content: `
+                        <p><strong>🎯 Comment le perceptron apprend-il automatiquement ?</strong></p>
+                        
+                        <p><strong>📋 Algorithme d'apprentissage :</strong></p>
+                        <ol>
+                            <li><strong>Initialisation :</strong> \\(\\vec{w} = \\vec{0}\\), \\(b = 0\\) (ou aléatoire)</li>
+                            <li><strong>Pour chaque exemple</strong> \\((\\vec{x}_i, y_i)\\) :
+                                <ul>
+                                    <li>Calculer \\(\\hat{y}_i = \\text{seuil}(\\vec{w}^T \\vec{x}_i + b)\\)</li>
+                                    <li>Si \\(\\hat{y}_i \\neq y_i\\) (erreur), mettre à jour :</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <p><strong>🔧 Règle de mise à jour :</strong></p>
+                        <p>$$\\vec{w} \\leftarrow \\vec{w} + \\eta (y_i - \\hat{y}_i) \\vec{x}_i$$</p>
+                        <p>$$b \\leftarrow b + \\eta (y_i - \\hat{y}_i)$$</p>
+                        
+                        <p><strong>🔍 Décryptage de la formule :</strong></p>
+                        <ul>
+                            <li>\\(\\eta\\) = <strong>taux d'apprentissage</strong> (vitesse d'adaptation)</li>
+                            <li>\\((y_i - \\hat{y}_i)\\) = <strong>erreur</strong> (-1, 0, ou +1)</li>
+                            <li>\\(\\vec{x}_i\\) = <strong>direction de correction</strong></li>
+                        </ul>
+                        
+                        <p><strong>💡 Logique intuitive :</strong></p>
+                        <ul>
+                            <li>✅ <strong>Prédiction correcte</strong> : erreur = 0 → pas de changement</li>
+                            <li>❌ <strong>Faux positif</strong> : erreur = -1 → diminuer les poids</li>
+                            <li>❌ <strong>Faux négatif</strong> : erreur = +1 → augmenter les poids</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Théorème de convergence :</strong></p>
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Si les données sont linéairement séparables, le perceptron converge en un nombre fini d'étapes vers une solution parfaite.</strong>
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Apprentissage manuel étape par étape",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong> Apprendre à classifier si un produit se vendra bien</p>
+                        
+                        <p><strong>🔢 Variables :</strong></p>
+                        <ul>
+                            <li>\\(x_1\\) = Prix (en milliers FCFA)</li>
+                            <li>\\(x_2\\) = Qualité (score 1-10)</li>
+                        </ul>
+                        
+                        <p><strong>📊 Dataset d'entraînement :</strong></p>
+                        <table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Produit</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Prix (x₁)</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Qualité (x₂)</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Succès (y)</th>
+                            </tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">A</td><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">8</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">B</td><td style="padding: 0.5rem; border: 1px solid #ddd;">5</td><td style="padding: 0.5rem; border: 1px solid #ddd;">3</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">C</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">9</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">D</td><td style="padding: 0.5rem; border: 1px solid #ddd;">6</td><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                        </table>
+                        
+                        <p><strong>🚀 Initialisation :</strong> \\(w_1 = 0, w_2 = 0, b = 0, \\eta = 0.1\\)</p>
+                        
+                        <p><strong>📊 Époque 1 - Exemple A :</strong></p>
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Prédiction :</strong><br>
+                            z = 0×2 + 0×8 + 0 = 0<br>
+                            ŷ = seuil(0) = 0 (car z = 0, on prend 0)<br><br>
+                            
+                            <strong>Erreur :</strong> y - ŷ = 1 - 0 = 1<br><br>
+                            
+                            <strong>Mise à jour :</strong><br>
+                            w₁ ← 0 + 0.1 × 1 × 2 = 0.2<br>
+                            w₂ ← 0 + 0.1 × 1 × 8 = 0.8<br>
+                            b ← 0 + 0.1 × 1 = 0.1<br><br>
+                            
+                            <strong>Nouveaux poids :</strong> w₁=0.2, w₂=0.8, b=0.1
+                        </div>
+                        
+                        <p><strong>📊 Époque 1 - Exemple B :</strong></p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Prédiction :</strong><br>
+                            z = 0.2×5 + 0.8×3 + 0.1 = 1 + 2.4 + 0.1 = 3.5<br>
+                            ŷ = seuil(3.5) = 1<br><br>
+                            
+                            <strong>Erreur :</strong> y - ŷ = 0 - 1 = -1<br><br>
+                            
+                            <strong>Mise à jour :</strong><br>
+                            w₁ ← 0.2 + 0.1 × (-1) × 5 = 0.2 - 0.5 = -0.3<br>
+                            w₂ ← 0.8 + 0.1 × (-1) × 3 = 0.8 - 0.3 = 0.5<br>
+                            b ← 0.1 + 0.1 × (-1) = 0<br><br>
+                            
+                            <strong>Nouveaux poids :</strong> w₁=-0.3, w₂=0.5, b=0
+                        </div>
+                        
+                        <p><strong>🔄 Après plusieurs époques :</strong> Les poids convergent vers une solution qui sépare parfaitement les classes !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : apprentissage manuel complet",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Entraînez manuellement un perceptron pour classifier des emails (spam/non-spam) :</p>
+                        
+                        <p><strong>📊 Dataset :</strong></p>
+                        <table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Email</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Nb mots "gratuit" (x₁)</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Nb liens (x₂)</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Spam (y)</th>
+                            </tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">3</td><td style="padding: 0.5rem; border: 1px solid #ddd;">5</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">3</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">4</td><td style="padding: 0.5rem; border: 1px solid #ddd;">4</td><td style="padding: 0.5rem; border: 1px solid #ddd;">6</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                        </table>
+                        
+                        <p><strong>📝 Effectuez 2 époques complètes :</strong></p>
+                        <ol>
+                            <li>Initialisez : w₁=0, w₂=0, b=0, η=0.1</li>
+                            <li>Pour chaque exemple, calculez z, ŷ, erreur</li>
+                            <li>Mettez à jour les poids selon la règle</li>
+                            <li>Répétez pour la 2ème époque</li>
+                            <li>Testez la frontière de décision finale</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('perceptron-manual-training')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="perceptron-manual-training" style="display: none;">
+                        <p><strong>Époque 1 :</strong></p>
+                        <ul>
+                            <li><strong>Email 1 :</strong> z=0, ŷ=0, erreur=0 → pas de changement</li>
+                            <li><strong>Email 2 :</strong> z=0, ŷ=0, erreur=1 → w₁=0.3, w₂=0.5, b=0.1</li>
+                            <li><strong>Email 3 :</strong> z=1.4, ŷ=1, erreur=-1 → w₁=0.2, w₂=0.3, b=0</li>
+                            <li><strong>Email 4 :</strong> z=2.6, ŷ=1, erreur=0 → pas de changement</li>
+                        </ul>
+                        <p><strong>Époque 2 :</strong> Répéter avec les nouveaux poids...</p>
+                        <p><strong>Frontière finale :</strong> 0.2x₁ + 0.3x₂ = 0 (approximativement)</p>
+                        <p><strong>Interprétation :</strong> Les liens comptent plus que les mots "gratuit" pour détecter le spam</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation from scratch",
+            description: "Implémentons un perceptron complet :",
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+class PerceptronFromScratch:
+    def __init__(self, learning_rate=0.1, max_epochs=100):
+        self.learning_rate = learning_rate
+        self.max_epochs = max_epochs
+        self.weights = None
+        self.bias = None
+        self.errors_history = []
+    
+    def activation(self, z):
+        """Fonction d'activation seuil"""
+        return np.where(z >= 0, 1, 0)
+    
+    def fit(self, X, y):
+        """Entraîner le perceptron"""
+        n_samples, n_features = X.shape
+        
+        # Initialisation
+        self.weights = np.zeros(n_features)
+        self.bias = 0
+        
+        print(f"🧠 ENTRAÎNEMENT PERCEPTRON")
+        print(f"📊 Données: {n_samples} exemples, {n_features} features")
+        print(f"⚡ Taux d'apprentissage: {self.learning_rate}")
+        print("=" * 50)
+        
+        for epoch in range(self.max_epochs):
+            errors = 0
+            
+            for i in range(n_samples):
+                # Prédiction
+                z = np.dot(X[i], self.weights) + self.bias
+                y_pred = self.activation(z)
+                
+                # Calcul de l'erreur
+                error = y[i] - y_pred
+                
+                if error != 0:
+                    errors += 1
+                    # Mise à jour des poids
+                    self.weights += self.learning_rate * error * X[i]
+                    self.bias += self.learning_rate * error
+                    
+                    if epoch < 3:  # Afficher les premières époques
+                        print(f"Époque {epoch+1}, Exemple {i+1}:")
+                        print(f"  z = {z:.2f}, ŷ = {y_pred}, y = {y[i]}, erreur = {error}")
+                        print(f"  Nouveaux poids: {self.weights.round(2)}, biais: {self.bias:.2f}")
+            
+            self.errors_history.append(errors)
+            
+            if errors == 0:
+                print(f"\\n✅ Convergence atteinte à l'époque {epoch + 1} !")
+                break
+            elif epoch < 5:
+                print(f"\\nÉpoque {epoch + 1}: {errors} erreurs")
+        
+        return self
+    
+    def predict(self, X):
+        """Faire des prédictions"""
+        z = np.dot(X, self.weights) + self.bias
+        return self.activation(z)
+    
+    def decision_boundary(self):
+        """Retourner les paramètres de la frontière de décision"""
+        return self.weights, self.bias
+
+# Données de classification : réussite aux examens UCAD
+# x1 = heures d'étude, x2 = note en maths
+X_train = np.array([
+    [10, 12],  # Étudiant 1
+    [15, 16],  # Étudiant 2  
+    [5, 8],    # Étudiant 3
+    [20, 18],  # Étudiant 4
+    [8, 10],   # Étudiant 5
+    [18, 15]   # Étudiant 6
+])
+
+y_train = np.array([0, 1, 0, 1, 0, 1])  # 0=échec, 1=réussite
+
+# Entraînement
+perceptron = PerceptronFromScratch(learning_rate=0.1)
+perceptron.fit(X_train, y_train)
+
+print(f"\\n🏆 RÉSULTATS FINAUX:")
+print(f"Poids finaux: {perceptron.weights.round(3)}")
+print(f"Biais final: {perceptron.bias:.3f}")`,
+          },
+          {
+            type: "code",
+            title: "Visualisation de la frontière de décision",
+            description:
+              "Visualisons comment le perceptron sépare les classes :",
+            code: `# Visualisation des résultats
+plt.figure(figsize=(12, 5))
+
+# Graphique 1: Données et frontière
+plt.subplot(1, 2, 1)
+
+# Points d'entraînement
+echecs = X_train[y_train == 0]
+reussites = X_train[y_train == 1]
+
+plt.scatter(echecs[:, 0], echecs[:, 1], c='red', marker='x', s=100, label='Échecs')
+plt.scatter(reussites[:, 0], reussites[:, 1], c='green', marker='o', s=100, label='Réussites')
+
+# Frontière de décision: w1*x1 + w2*x2 + b = 0
+w1, w2 = perceptron.weights
+b = perceptron.bias
+
+if w2 != 0:  # Éviter division par zéro
+    x1_range = np.linspace(0, 25, 100)
+    x2_boundary = -(w1 * x1_range + b) / w2
+    plt.plot(x1_range, x2_boundary, 'b-', linewidth=2, label='Frontière de décision')
+
+plt.xlabel('Heures d\\'étude par semaine')
+plt.ylabel('Note en mathématiques (/20)')
+plt.title('Classification Réussite/Échec UCAD')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Graphique 2: Évolution des erreurs
+plt.subplot(1, 2, 2)
+plt.plot(range(1, len(perceptron.errors_history) + 1), perceptron.errors_history, 'bo-')
+plt.xlabel('Époque')
+plt.ylabel('Nombre d\\'erreurs')
+plt.title('Convergence du Perceptron')
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+print("📊 Visualisation terminée !")`,
+          },
+          {
+            type: "code",
+            title: "Test sur nouveaux exemples",
+            description: "Testons notre perceptron entraîné :",
+            code: `# Nouveaux étudiants à classifier
+nouveaux_etudiants = np.array([
+    [12, 14],  # Moussa
+    [6, 9],    # Fatou
+    [17, 17],  # Ibrahima
+    [4, 7]     # Aissatou
+])
+
+noms = ['Moussa', 'Fatou', 'Ibrahima', 'Aissatou']
+
+print("🎯 PRÉDICTIONS SUR NOUVEAUX ÉTUDIANTS")
+print("=" * 45)
+
+predictions = perceptron.predict(nouveaux_etudiants)
+
+for i, (nom, etudiant, pred) in enumerate(zip(noms, nouveaux_etudiants, predictions)):
+    # Calcul du score de confiance
+    z = np.dot(etudiant, perceptron.weights) + perceptron.bias
+    confiance = abs(z)  # Distance à la frontière
+    
+    resultat = "✅ RÉUSSITE" if pred == 1 else "❌ ÉCHEC"
+    print(f"{nom:10s}: {etudiant[0]:2d}h étude, {etudiant[1]:2d}/20 maths → {resultat}")
+    print(f"           Score: {z:+.2f} (confiance: {confiance:.2f})")
+    print()
+
+# Analyse de la frontière apprise
+print(f"🧠 ANALYSE DU MODÈLE APPRIS:")
+print(f"Équation frontière: {perceptron.weights[0]:.3f}×heures + {perceptron.weights[1]:.3f}×maths + {perceptron.bias:.3f} = 0")
+
+if perceptron.weights[1] != 0:
+    pente = -perceptron.weights[0] / perceptron.weights[1]
+    intercept = -perceptron.bias / perceptron.weights[1]
+    print(f"Forme y = mx + c: maths = {pente:.3f}×heures + {intercept:.3f}")
+    
+    print(f"\\n💡 INTERPRÉTATION:")
+    print(f"• Importance heures d'étude: {abs(perceptron.weights[0]):.3f}")
+    print(f"• Importance note maths: {abs(perceptron.weights[1]):.3f}")
+    
+    if abs(perceptron.weights[1]) > abs(perceptron.weights[0]):
+        print("• Les maths comptent plus que les heures d'étude !")
+    else:
+        print("• Les heures d'étude comptent plus que les maths !")`,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Limitation fondamentale : le problème XOR",
+            content: `
+                        <p><strong>⚠️ Le perceptron a une limitation cruciale :</strong> il ne peut résoudre que des problèmes <strong>linéairement séparables</strong>.</p>
+                        
+                        <p><strong>🔴 Le problème XOR (OU exclusif) :</strong></p>
+                        <table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+                            <tr style="background: #e74c3c; color: white;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">x₁</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">x₂</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">XOR</th>
+                            </tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                        </table>
+                        
+                        <p><strong>🤔 Pourquoi impossible ?</strong></p>
+                        <p>Essayez de tracer une <strong>droite</strong> qui sépare :</p>
+                        <ul>
+                            <li>🟢 <strong>Classe 1</strong> : points (0,1) et (1,0)</li>
+                            <li>🔴 <strong>Classe 0</strong> : points (0,0) et (1,1)</li>
+                        </ul>
+                        <p><strong>Impossible !</strong> Il faudrait une frontière courbe, pas droite.</p>
+                        
+                        <p><strong>💡 Analogie sénégalaise :</strong></p>
+                        <p>Imaginez classer les régions du Sénégal selon :</p>
+                        <ul>
+                            <li>🏖️ <strong>"Côtières"</strong> : Dakar, Saint-Louis (littoral)</li>
+                            <li>🏜️ <strong>"Intérieures"</strong> : Tambacounda, Kédougou (intérieur)</li>
+                        </ul>
+                        <p>Une droite peut séparer côte/intérieur. Mais si on veut classer :</p>
+                        <ul>
+                            <li>🎯 <strong>"Développées"</strong> : Dakar (côte) + Tambacounda (intérieur)</li>
+                            <li>🎯 <strong>"En développement"</strong> : Saint-Louis (côte) + Kédougou (intérieur)</li>
+                        </ul>
+                        <p>Aucune droite ne peut séparer ces 4 groupes ! Il faut des frontières plus complexes.</p>
+                        
+                        <p><strong>🔧 Solution :</strong> Réseaux de neurones multicouches (prochains modules) !</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Démonstration du problème XOR",
+            description: "Montrons pourquoi le perceptron échoue sur XOR :",
+            code: `# Données XOR
+X_xor = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+y_xor = np.array([0, 1, 1, 0])
+
+print("🔴 TENTATIVE DE RÉSOLUTION XOR")
+print("=" * 35)
+
+# Tentative d'entraînement sur XOR
+perceptron_xor = PerceptronFromScratch(learning_rate=0.1, max_epochs=20)
+perceptron_xor.fit(X_xor, y_xor)
+
+# Prédictions finales
+predictions_xor = perceptron_xor.predict(X_xor)
+
+print(f"\\n📊 RÉSULTATS:")
+print("Entrée → Attendu vs Prédit")
+for i in range(len(X_xor)):
+    x1, x2 = X_xor[i]
+    attendu = y_xor[i]
+    predit = predictions_xor[i]
+    status = "✅" if attendu == predit else "❌"
+    print(f"({x1},{x2}) → {attendu} vs {predit} {status}")
+
+erreurs_finales = sum(y_xor != predictions_xor)
+print(f"\\n📈 Erreurs finales: {erreurs_finales}/4")
+
+if erreurs_finales > 0:
+    print("❌ Le perceptron ne peut pas résoudre XOR !")
+    print("💡 Il faut des réseaux multicouches...")
+else:
+    print("✅ Résolution réussie (très rare !)")`,
+          },
+          {
+            type: "code",
+            title: "Visualisation du problème XOR",
+            description:
+              "Visualisons pourquoi XOR est impossible pour un perceptron :",
+            code: `# Visualisation du problème XOR
+plt.figure(figsize=(15, 5))
+
+# Graphique 1: Problème XOR
+plt.subplot(1, 3, 1)
+colors = ['red' if y == 0 else 'green' for y in y_xor]
+plt.scatter(X_xor[:, 0], X_xor[:, 1], c=colors, s=200, alpha=0.7)
+
+# Annotations
+labels = ['(0,0)→0', '(0,1)→1', '(1,0)→1', '(1,1)→0']
+for i, label in enumerate(labels):
+    plt.annotate(label, (X_xor[i, 0], X_xor[i, 1]), 
+                xytext=(10, 10), textcoords='offset points')
+
+plt.title('Problème XOR\\n(Impossible avec une droite)')
+plt.xlabel('x₁')
+plt.ylabel('x₂')
+plt.grid(True, alpha=0.3)
+
+# Graphique 2: Problème linéairement séparable
+plt.subplot(1, 3, 2)
+X_simple = np.array([[1, 1], [2, 2], [3, 1], [1, 3], [2, 3], [3, 3]])
+y_simple = np.array([0, 0, 0, 1, 1, 1])
+
+colors_simple = ['red' if y == 0 else 'green' for y in y_simple]
+plt.scatter(X_simple[:, 0], X_simple[:, 1], c=colors_simple, s=100, alpha=0.7)
+
+# Frontière de séparation possible
+x_line = np.linspace(0.5, 3.5, 100)
+y_line = 2.5 * np.ones_like(x_line)  # Ligne horizontale
+plt.plot(x_line, y_line, 'b-', linewidth=2, label='Frontière possible')
+
+plt.title('Problème Linéairement Séparable\\n(Possible avec une droite)')
+plt.xlabel('x₁')
+plt.ylabel('x₂')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Graphique 3: Évolution des erreurs
+plt.subplot(1, 3, 3)
+plt.plot(range(1, len(perceptron_xor.errors_history) + 1), 
+         perceptron_xor.errors_history, 'ro-')
+plt.xlabel('Époque')
+plt.ylabel('Nombre d\\'erreurs')
+plt.title('Échec de Convergence XOR')
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+print("📊 Visualisation du problème XOR terminée !")
+print("💡 Observation: Le perceptron ne peut tracer qu'une droite de séparation")`,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Théorème de convergence du perceptron",
+            content: `
+                        <p><strong>🎯 Théorème fondamental (Rosenblatt, 1962) :</strong></p>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>Si les données sont linéairement séparables, l'algorithme du perceptron converge en un nombre fini d'étapes vers une solution qui classe parfaitement tous les exemples d'entraînement.</strong>
+                        </div>
+                        
+                        <p><strong>📐 Preuve intuitive :</strong></p>
+                        
+                        <p><strong>1️⃣ Hypothèse :</strong> Il existe \\(\\vec{w}^*, b^*\\) tels que :</p>
+                        <ul>
+                            <li>Pour tout exemple positif : \\((\\vec{w}^*)^T \\vec{x}_i + b^* > \\gamma > 0\\)</li>
+                            <li>Pour tout exemple négatif : \\((\\vec{w}^*)^T \\vec{x}_i + b^* < -\\gamma < 0\\)</li>
+                        </ul>
+                        <p>où \\(\\gamma\\) est la <strong>marge de séparation</strong>.</p>
+                        
+                        <p><strong>2️⃣ Fonction de Lyapunov :</strong></p>
+                        <p>Considérons la distance entre les poids actuels et optimaux :</p>
+                        <p>$$V_t = ||\\vec{w}_t - \\vec{w}^*||^2 + (b_t - b^*)^2$$</p>
+                        
+                        <p><strong>3️⃣ Décroissance à chaque erreur :</strong></p>
+                        <p>Quand il y a une erreur, la mise à jour rapproche les poids de la solution optimale :</p>
+                        <p>$$V_{t+1} < V_t - \\text{constante positive}$$</p>
+                        
+                        <p><strong>4️⃣ Conclusion :</strong></p>
+                        <ul>
+                            <li>\\(V_t\\) décroît à chaque erreur</li>
+                            <li>\\(V_t \\geq 0\\) (distance toujours positive)</li>
+                            <li>Donc \\(V_t\\) converge → nombre fini d'erreurs → convergence</li>
+                        </ul>
+                        
+                        <p><strong>⏱️ Borne sur le nombre d'itérations :</strong></p>
+                        <p>$$\\text{Nombre d'erreurs} \\leq \\frac{R^2}{\\gamma^2}$$</p>
+                        <p>où R est le rayon de la boule contenant toutes les données.</p>
+                        
+                        <p><strong>💡 Remarque cruciale :</strong> Si les données ne sont PAS linéairement séparables, le perceptron ne converge jamais !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : analyse de séparabilité",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Déterminez si ces datasets sont linéairement séparables :</p>
+                        
+                        <p><strong>📊 Dataset 1 :</strong> Classification âge/salaire</p>
+                        <table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Âge</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Salaire (×100k)</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Senior (y)</th>
+                            </tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">25</td><td style="padding: 0.5rem; border: 1px solid #ddd;">3</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">30</td><td style="padding: 0.5rem; border: 1px solid #ddd;">5</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">35</td><td style="padding: 0.5rem; border: 1px solid #ddd;">7</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">40</td><td style="padding: 0.5rem; border: 1px solid #ddd;">9</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                        </table>
+                        
+                        <p><strong>📊 Dataset 2 :</strong> Classification circulaire</p>
+                        <table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+                            <tr style="background: #e74c3c; color: white;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">x₁</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">x₂</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Classe</th>
+                            </tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                        </table>
+                        
+                        <p><strong>📝 Pour chaque dataset :</strong></p>
+                        <ol>
+                            <li>Dessinez les points sur un graphique</li>
+                            <li>Essayez de tracer une droite de séparation</li>
+                            <li>Concluez sur la séparabilité linéaire</li>
+                            <li>Prédisez si le perceptron convergera</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('separability-analysis-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="separability-analysis-exercise" style="display: none;">
+                        <p><strong>Dataset 1 (âge/salaire) :</strong></p>
+                        <ul>
+                            <li>✅ <strong>Linéairement séparable</strong> : droite diagonale sépare junior (bas-gauche) des senior (haut-droite)</li>
+                            <li>✅ <strong>Perceptron convergera</strong> vers une solution parfaite</li>
+                            <li>📐 <strong>Frontière possible</strong> : âge + salaire > seuil</li>
+                        </ul>
+                        <p><strong>Dataset 2 (circulaire) :</strong></p>
+                        <ul>
+                            <li>❌ <strong>Non linéairement séparable</strong> : classe 1 au centre, classe 0 aux coins</li>
+                            <li>❌ <strong>Perceptron oscillera</strong> sans jamais converger</li>
+                            <li>🔧 <strong>Solution nécessaire</strong> : frontière circulaire (x₁² + x₂² < seuil)</li>
+                        </ul>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Perceptron multicouche : solution au XOR",
+            description: "Montrons comment 2 perceptrons résolvent XOR :",
+            code: `# Solution XOR avec 2 perceptrons
+def perceptron_simple(x1, x2, w1, w2, b):
+    """Un perceptron simple"""
+    z = w1 * x1 + w2 * x2 + b
+    return 1 if z >= 0 else 0
+
+def resoudre_xor_multicouche(x1, x2):
+    """Résolution XOR avec 2 perceptrons + 1 perceptron de sortie"""
+    
+    # Couche cachée : 2 perceptrons
+    # Perceptron 1 : détecte x1 OU x2 (au moins un des deux)
+    h1 = perceptron_simple(x1, x2, w1=1, w2=1, b=-0.5)
+    
+    # Perceptron 2 : détecte x1 ET x2 (les deux ensemble)  
+    h2 = perceptron_simple(x1, x2, w1=1, w2=1, b=-1.5)
+    
+    # Couche de sortie : XOR = (x1 OU x2) ET NON(x1 ET x2)
+    sortie = perceptron_simple(h1, h2, w1=1, w2=-2, b=-0.5)
+    
+    return h1, h2, sortie
+
+print("🧠 RÉSOLUTION XOR AVEC RÉSEAU MULTICOUCHE")
+print("=" * 50)
+print("Entrée → Couche cachée → Sortie")
+
+for x1 in [0, 1]:
+    for x2 in [0, 1]:
+        h1, h2, sortie = resoudre_xor_multicouche(x1, x2)
+        attendu = x1 ^ x2  # XOR en Python
+        status = "✅" if sortie == attendu else "❌"
+        print(f"({x1},{x2}) → ({h1},{h2}) → {sortie} (attendu: {attendu}) {status}")
+
+print("\\n💡 EXPLICATION:")
+print("• Perceptron 1 (h1): détecte 'au moins un'")
+print("• Perceptron 2 (h2): détecte 'les deux ensemble'") 
+print("• Sortie: h1 ET NON(h2) = XOR !")
+print("\\n🚀 C'est le principe des réseaux de neurones multicouches !")`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Du perceptron aux réseaux modernes : l'évolution",
+            content: `
+                        <p><strong>🧬 Évolution du perceptron vers l'IA moderne :</strong></p>
+                        
+                        <p><strong>📈 Étapes historiques :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>1957 - Perceptron</strong> : premier neurone artificiel</li>
+                            <li>🧠 <strong>1986 - Rétropropagation</strong> : entraînement des réseaux multicouches</li>
+                            <li>🔥 <strong>2006 - Deep Learning</strong> : réseaux très profonds</li>
+                            <li>🤖 <strong>2017 - Transformers</strong> : révolution du NLP</li>
+                            <li>💬 <strong>2022 - ChatGPT</strong> : IA conversationnelle grand public</li>
+                        </ul>
+                        
+                        <p><strong>🔧 Améliorations successives :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Fonctions d'activation</strong> : seuil → sigmoïde → ReLU → attention</li>
+                            <li>🧠 <strong>Architectures</strong> : 1 couche → multicouches → CNN → RNN → Transformers</li>
+                            <li>📊 <strong>Optimisation</strong> : règle simple → gradient descent → Adam → techniques avancées</li>
+                            <li>🎨 <strong>Régularisation</strong> : aucune → dropout → batch norm → techniques modernes</li>
+                        </ul>
+                        
+                        <p><strong>🌟 Applications modernes :</strong></p>
+                        <ul>
+                            <li>🖼️ <strong>Vision</strong> : reconnaissance d'objets, voitures autonomes</li>
+                            <li>💬 <strong>Langage</strong> : ChatGPT, traduction automatique</li>
+                            <li>🎵 <strong>Audio</strong> : reconnaissance vocale, génération musicale</li>
+                            <li>🎮 <strong>Jeux</strong> : AlphaGo, IA de jeux vidéo</li>
+                            <li>🧬 <strong>Sciences</strong> : découverte de médicaments, prédiction de protéines</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Le perceptron de 1957 contient déjà tous les ingrédients conceptuels de l'IA moderne ! Les améliorations portent sur l'architecture, l'optimisation et la puissance de calcul, mais le principe fondamental reste le même.</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Réseaux de neurones multicouches pour résoudre les problèmes non-linéaires !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Pourquoi le perceptron ne peut-il pas résoudre le problème XOR ?",
+          options: [
+            "A) Il n'a pas assez de poids",
+            "B) Le taux d'apprentissage est trop faible",
+            "C) Le problème XOR n'est pas linéairement séparable",
+            "D) Il faut plus d'époques d'entraînement",
+          ],
+          correct: 2,
+          explanation:
+            "Le perceptron ne peut tracer qu'une droite de séparation (hyperplan linéaire). Le problème XOR nécessite une frontière non-linéaire pour séparer les classes, ce qui est impossible avec un seul perceptron. Il faut des réseaux multicouches.",
+        },
+        prevModule: "../ml/validation.html",
+        nextModule: "neural-networks.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

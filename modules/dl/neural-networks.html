@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Réseaux de Neurones | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧠 Deep Learning</span>
+          <span>›</span>
+          <span>Réseaux de Neurones</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🧠 Réseaux de Neurones : L'Architecture de l'Intelligence</h1>
+      <p class="subtitle">Module 4.2 - Deep Learning Fondamental</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Réseaux de Neurones</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant l'architecture qui a
+          révolutionné l'IA moderne.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="perceptron.html" class="nav-link" id="prev-link"
+          >← Module précédent : Perceptron</a
+        >
+        <a href="backpropagation.html" class="nav-link" id="next-link"
+          >Module suivant : Backpropagation →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Réseaux de Neurones
+      const moduleConfig = {
+        id: "dl-neural-networks",
+        title: "Réseaux de Neurones : L'Architecture de l'Intelligence",
+        category: "Deep Learning",
+        objectives: [
+          "Comprendre l'évolution du perceptron vers les réseaux multicouches",
+          "Maîtriser l'architecture et la propagation avant",
+          "Calculer manuellement les sorties d'un réseau simple",
+          "Comprendre les fonctions d'activation et leur rôle crucial",
+          "Implémenter un réseau de neurones from scratch",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "L'évolution révolutionnaire : du perceptron aux réseaux",
+            content: `
+                        <p>Les <strong>réseaux de neurones multicouches</strong> représentent le saut quantique qui a permis à l'IA de résoudre des problèmes impossibles pour un simple perceptron.</p>
+                        
+                        <p><strong>🔑 Révolution conceptuelle :</strong></p>
+                        <ul>
+                            <li>🧠 <strong>Perceptron</strong> : 1 neurone = 1 décision simple (ET, OU)</li>
+                            <li>🌐 <strong>Réseau multicouche</strong> : millions de neurones = intelligence complexe</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Problèmes résolus :</strong></p>
+                        <ul>
+                            <li>❌ <strong>XOR impossible</strong> → ✅ <strong>Toute fonction booléenne</strong></li>
+                            <li>❌ <strong>Séparation linéaire</strong> → ✅ <strong>Frontières complexes</strong></li>
+                            <li>❌ <strong>Problèmes simples</strong> → ✅ <strong>Reconnaissance d'images, langage, jeux</strong></li>
+                        </ul>
+                        
+                        <p><strong>🚀 Applications révolutionnaires :</strong></p>
+                        <ul>
+                            <li>🖼️ <strong>Vision</strong> : reconnaissance faciale, diagnostic médical</li>
+                            <li>💬 <strong>Langage</strong> : traduction, ChatGPT, assistants vocaux</li>
+                            <li>🎮 <strong>Jeux</strong> : AlphaGo, échecs, poker</li>
+                            <li>🚗 <strong>Autonomie</strong> : voitures, drones, robots</li>
+                            <li>🎨 <strong>Créativité</strong> : art, musique, écriture</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Les réseaux de neurones ne sont pas juste "plusieurs perceptrons" - ils créent une <strong>hiérarchie de concepts</strong> qui permet l'apprentissage de représentations complexes.</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie de l'équipe médicale sénégalaise",
+            content: `
+                        <p>Imaginez le <strong>diagnostic médical à l'hôpital Aristide Le Dantec</strong> à Dakar :</p>
+                        
+                        <p><strong>🏥 Équipe médicale hiérarchisée :</strong></p>
+                        <ul>
+                            <li>👩‍⚕️ <strong>Infirmières</strong> : observent les symptômes de base (fièvre, tension)</li>
+                            <li>👨‍⚕️ <strong>Médecins généralistes</strong> : combinent les observations (syndrome grippal ?)</li>
+                            <li>🔬 <strong>Spécialistes</strong> : analyses complexes (cardiologue, neurologue)</li>
+                            <li>👨‍⚕️ <strong>Chef de service</strong> : diagnostic final et traitement</li>
+                        </ul>
+                        
+                        <p><strong>🧠 Parallèle avec réseau de neurones :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Couche d'entrée</strong> : infirmières (données brutes)</li>
+                            <li>🔍 <strong>Couches cachées</strong> : médecins (extraction de caractéristiques)</li>
+                            <li>🎯 <strong>Couche de sortie</strong> : chef de service (décision finale)</li>
+                        </ul>
+                        
+                        <p><strong>💡 Processus hiérarchique :</strong></p>
+                        <ol>
+                            <li>📋 <strong>Niveau 1</strong> : "Température 39°C, pouls rapide"</li>
+                            <li>🔍 <strong>Niveau 2</strong> : "Syndrome infectieux probable"</li>
+                            <li>🎯 <strong>Niveau 3</strong> : "Paludisme : 85% de probabilité"</li>
+                        </ol>
+                        
+                        <p><strong>🌟 Chaque niveau ajoute de l'intelligence :</strong></p>
+                        <ul>
+                            <li>🔢 <strong>Données → Symptômes → Syndromes → Diagnostic</strong></li>
+                            <li>🧠 <strong>Simple → Complexe → Abstrait → Décision</strong></li>
+                        </ul>
+                        
+                        <p><strong>🎯 C'est exactement ce que fait un réseau de neurones :</strong> il construit une hiérarchie de concepts de plus en plus abstraits pour prendre des décisions intelligentes !</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Architecture formelle : couches et connexions",
+            content: `
+                        <p><strong>📐 Formalisation mathématique d'un réseau multicouche :</strong></p>
+                        
+                        <p><strong>🏗️ Structure générale :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Couche d'entrée :</strong> \\(\\vec{x} \\in \\mathbb{R}^{n_0}\\) (n₀ features)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Couche cachée 1 :</strong> \\(\\vec{h}^{(1)} \\in \\mathbb{R}^{n_1}\\) (n₁ neurones)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Couche cachée 2 :</strong> \\(\\vec{h}^{(2)} \\in \\mathbb{R}^{n_2}\\) (n₂ neurones)</li>
+                            <li style="margin-top: 0.5rem"><strong>• ... :</strong> autant de couches que nécessaire</li>
+                            <li style="margin-top: 0.5rem"><strong>• Couche de sortie :</strong> \\(\\vec{y} \\in \\mathbb{R}^{n_L}\\) (nₗ sorties)</li>
+                        </ul>
+                        
+                        <p><strong>🔗 Propagation avant (Forward Pass) :</strong></p>
+                        <p>Pour chaque couche \\(l\\) :</p>
+                        <p>$$\\vec{z}^{(l)} = W^{(l)} \\vec{h}^{(l-1)} + \\vec{b}^{(l)}$$</p>
+                        <p>$$\\vec{h}^{(l)} = \\sigma(\\vec{z}^{(l)})$$</p>
+                        
+                        <p><strong>🔍 Décryptage des formules :</strong></p>
+                        <ul>
+                            <li>\\(W^{(l)}\\) = <strong>matrice des poids</strong> (taille n_l × n_{l-1})</li>
+                            <li>\\(\\vec{b}^{(l)}\\) = <strong>vecteur des biais</strong> (taille n_l)</li>
+                            <li>\\(\\vec{z}^{(l)}\\) = <strong>combinaison linéaire</strong> (avant activation)</li>
+                            <li>\\(\\sigma\\) = <strong>fonction d'activation</strong> (non-linéarité)</li>
+                            <li>\\(\\vec{h}^{(l)}\\) = <strong>sortie activée</strong> (après non-linéarité)</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Notation compacte :</strong></p>
+                        <p>$$\\vec{y} = f_{\\theta}(\\vec{x}) = \\sigma_L(W^{(L)} \\sigma_{L-1}(W^{(L-1)} \\cdots \\sigma_1(W^{(1)} \\vec{x} + \\vec{b}^{(1)}) \\cdots + \\vec{b}^{(L-1)}) + \\vec{b}^{(L)})$$</p>
+                        
+                        <p><strong>💡 Où \\(\\theta = \\{W^{(1)}, \\vec{b}^{(1)}, W^{(2)}, \\vec{b}^{(2)}, ..., W^{(L)}, \\vec{b}^{(L)}\\}\\) représente tous les paramètres du réseau.</strong></p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel : réseau 2-3-1",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong> Réseau pour prédire le prix d'un terrain à Dakar</p>
+                        
+                        <p><strong>🏗️ Architecture :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Entrée</strong> : [surface_m², distance_centre] → 2 neurones</li>
+                            <li>🧠 <strong>Couche cachée</strong> : 3 neurones (détecteurs de patterns)</li>
+                            <li>🎯 <strong>Sortie</strong> : prix_millions_fcfa → 1 neurone</li>
+                        </ul>
+                        
+                        <p><strong>⚙️ Paramètres du réseau :</strong></p>
+                        <p>$$W^{(1)} = \\begin{bmatrix} 0.5 & 0.3 \\\\ -0.2 & 0.8 \\\\ 0.7 & -0.4 \\end{bmatrix}, \\quad \\vec{b}^{(1)} = \\begin{bmatrix} 0.1 \\\\ -0.2 \\\\ 0.3 \\end{bmatrix}$$</p>
+                        
+                        <p>$$W^{(2)} = \\begin{bmatrix} 0.6 & -0.3 & 0.9 \\end{bmatrix}, \\quad b^{(2)} = 0.2$$</p>
+                        
+                        <p><strong>📍 Exemple :</strong> Terrain de 500m² à 5km du centre</p>
+                        <p>$$\\vec{x} = \\begin{bmatrix} 500 \\\\ 5 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Calcul couche cachée :</strong></p>
+                        <p>$$\\vec{z}^{(1)} = W^{(1)} \\vec{x} + \\vec{b}^{(1)} = \\begin{bmatrix} 0.5 \\times 500 + 0.3 \\times 5 + 0.1 \\\\ -0.2 \\times 500 + 0.8 \\times 5 - 0.2 \\\\ 0.7 \\times 500 - 0.4 \\times 5 + 0.3 \\end{bmatrix} = \\begin{bmatrix} 251.6 \\\\ -96.2 \\\\ 348.3 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔄 Activation (sigmoid) :</strong></p>
+                        <p>$$\\vec{h}^{(1)} = \\sigma(\\vec{z}^{(1)}) = \\begin{bmatrix} \\sigma(251.6) \\\\ \\sigma(-96.2) \\\\ \\sigma(348.3) \\end{bmatrix} ≈ \\begin{bmatrix} 1.0 \\\\ 0.0 \\\\ 1.0 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🎯 Sortie finale :</strong></p>
+                        <p>$$z^{(2)} = W^{(2)} \\vec{h}^{(1)} + b^{(2)} = 0.6 \\times 1.0 - 0.3 \\times 0.0 + 0.9 \\times 1.0 + 0.2 = 1.7$$</p>
+                        <p>$$y = \\sigma(1.7) ≈ 0.85$$</p>
+                        
+                        <p><strong>💰 Interprétation :</strong> Le réseau prédit un prix de 0.85 × échelle = ~85 millions FCFA pour ce terrain.</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calcul manuel complet",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Réseau 2-2-1 pour classifier des emails (spam/pas spam) :</p>
+                        
+                        <p><strong>⚙️ Paramètres :</strong></p>
+                        <p>$$W^{(1)} = \\begin{bmatrix} 0.8 & -0.5 \\\\ -0.3 & 0.7 \\end{bmatrix}, \\quad \\vec{b}^{(1)} = \\begin{bmatrix} 0.2 \\\\ -0.1 \\end{bmatrix}$$</p>
+                        <p>$$W^{(2)} = \\begin{bmatrix} 1.2 & -0.8 \\end{bmatrix}, \\quad b^{(2)} = 0.3$$</p>
+                        
+                        <p><strong>📧 Email à analyser :</strong> [nb_mots_suspects=3, nb_liens=1]</p>
+                        <p>$$\\vec{x} = \\begin{bmatrix} 3 \\\\ 1 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>\\(\\vec{z}^{(1)}\\) (combinaisons linéaires couche cachée)</li>
+                            <li>\\(\\vec{h}^{(1)}\\) (activations couche cachée avec sigmoid)</li>
+                            <li>\\(z^{(2)}\\) (combinaison linéaire sortie)</li>
+                            <li>\\(y\\) (probabilité finale que ce soit un spam)</li>
+                            <li>Classification finale (spam si y > 0.5)</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('neural-network-manual-calculation')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="neural-network-manual-calculation" style="display: none;">
+                        <ol>
+                            <li><strong>Combinaisons linéaires :</strong><br>
+                                \\(z_1^{(1)} = 0.8 \\times 3 + (-0.5) \\times 1 + 0.2 = 2.4 - 0.5 + 0.2 = 2.1\\)<br>
+                                \\(z_2^{(1)} = (-0.3) \\times 3 + 0.7 \\times 1 + (-0.1) = -0.9 + 0.7 - 0.1 = -0.3\\)<br>
+                                Donc \\(\\vec{z}^{(1)} = \\begin{bmatrix} 2.1 \\\\ -0.3 \\end{bmatrix}\\)</li>
+                            <li><strong>Activations sigmoid :</strong><br>
+                                \\(h_1^{(1)} = \\sigma(2.1) = \\frac{1}{1 + e^{-2.1}} ≈ 0.891\\)<br>
+                                \\(h_2^{(1)} = \\sigma(-0.3) = \\frac{1}{1 + e^{0.3}} ≈ 0.426\\)<br>
+                                Donc \\(\\vec{h}^{(1)} = \\begin{bmatrix} 0.891 \\\\ 0.426 \\end{bmatrix}\\)</li>
+                            <li><strong>Sortie linéaire :</strong><br>
+                                \\(z^{(2)} = 1.2 \\times 0.891 + (-0.8) \\times 0.426 + 0.3 = 1.069 - 0.341 + 0.3 = 1.028\\)</li>
+                            <li><strong>Probabilité finale :</strong><br>
+                                \\(y = \\sigma(1.028) = \\frac{1}{1 + e^{-1.028}} ≈ 0.736\\)</li>
+                            <li><strong>Classification :</strong><br>
+                                0.736 > 0.5 → <strong>SPAM</strong> (73.6% de confiance)</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Fonctions d'activation : le secret de la non-linéarité",
+            content: `
+                        <p><strong>🤔 Pourquoi les fonctions d'activation sont-elles cruciales ?</strong></p>
+                        <p>Sans fonctions d'activation, un réseau de neurones multicouche serait équivalent à... un simple perceptron ! Les activations introduisent la <strong>non-linéarité</strong> qui permet l'apprentissage de patterns complexes.</p>
+                        
+                        <p><strong>⚠️ Démonstration du problème :</strong></p>
+                        <p>Sans activation : \\(\\vec{y} = W^{(2)}(W^{(1)} \\vec{x} + \\vec{b}^{(1)}) + \\vec{b}^{(2)} = \\underbrace{W^{(2)}W^{(1)}}_{W_{équivalent}} \\vec{x} + \\underbrace{W^{(2)}\\vec{b}^{(1)} + \\vec{b}^{(2)}}_{\\vec{b}_{équivalent}}\\)</p>
+                        <p>→ C'est juste une transformation linéaire ! Aucun gain par rapport au perceptron.</p>
+                        
+                        <p><strong>🎯 Fonctions d'activation principales :</strong></p>
+                        
+                        <p><strong>1️⃣ Sigmoid :</strong> \\(\\sigma(x) = \\frac{1}{1 + e^{-x}}\\)</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : sortie [0,1], interprétable comme probabilité</li>
+                            <li>❌ <strong>Problèmes</strong> : gradient qui disparaît, saturation</li>
+                            <li>🎯 <strong>Usage</strong> : couche de sortie pour classification binaire</li>
+                        </ul>
+                        
+                        <p><strong>2️⃣ Tanh :</strong> \\(\\tanh(x) = \\frac{e^x - e^{-x}}{e^x + e^{-x}}\\)</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : sortie [-1,1], centré sur 0</li>
+                            <li>❌ <strong>Problèmes</strong> : gradient qui disparaît aussi</li>
+                            <li>🎯 <strong>Usage</strong> : couches cachées (mieux que sigmoid)</li>
+                        </ul>
+                        
+                        <p><strong>3️⃣ ReLU :</strong> \\(\\text{ReLU}(x) = \\max(0, x)\\)</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : simple, pas de saturation, calcul rapide</li>
+                            <li>❌ <strong>Problèmes</strong> : "neurones morts" (sortie toujours 0)</li>
+                            <li>🎯 <strong>Usage</strong> : standard moderne pour couches cachées</li>
+                        </ul>
+                        
+                        <p><strong>4️⃣ Softmax :</strong> \\(\\text{softmax}(\\vec{z})_i = \\frac{e^{z_i}}{\\sum_{j=1}^K e^{z_j}}\\)</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : distribution de probabilité (somme = 1)</li>
+                            <li>🎯 <strong>Usage</strong> : classification multi-classe</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Dérivées des fonctions d'activation",
+            content: `
+                        <p><strong>🔧 Pour l'entraînement, nous devons calculer les dérivées :</strong></p>
+                        
+                        <p><strong>📐 Dérivée de Sigmoid :</strong></p>
+                        <p>$$\\frac{d}{dx}\\sigma(x) = \\frac{d}{dx}\\left(\\frac{1}{1 + e^{-x}}\\right)$$</p>
+                        
+                        <p><strong>🔍 Calcul détaillé :</strong></p>
+                        <p>Posons \\(u = 1 + e^{-x}\\), alors \\(\\sigma(x) = u^{-1}\\)</p>
+                        <p>$$\\frac{d\\sigma}{dx} = \\frac{d}{du}(u^{-1}) \\cdot \\frac{du}{dx} = -u^{-2} \\cdot (-e^{-x}) = \\frac{e^{-x}}{(1 + e^{-x})^2}$$</p>
+                        
+                        <p><strong>✨ Propriété remarquable :</strong></p>
+                        <p>$$\\sigma'(x) = \\frac{e^{-x}}{(1 + e^{-x})^2} = \\frac{1}{1 + e^{-x}} \\cdot \\frac{e^{-x}}{1 + e^{-x}} = \\sigma(x)(1 - \\sigma(x))$$</p>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>💡 Formule magique :</strong> \\(\\sigma'(x) = \\sigma(x)(1 - \\sigma(x))\\)<br>
+                            La dérivée s'exprime simplement en fonction de la valeur !
+                        </div>
+                        
+                        <p><strong>📐 Autres dérivées importantes :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Tanh :</strong> \\(\\tanh'(x) = 1 - \\tanh^2(x)\\)</li>
+                            <li style="margin-top: 0.5rem"><strong>• ReLU :</strong> \\(\\text{ReLU}'(x) = \\begin{cases} 1 & \\text{si } x > 0 \\\\ 0 & \\text{si } x \\leq 0 \\end{cases}\\)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Leaky ReLU :</strong> \\(\\text{LeakyReLU}'(x) = \\begin{cases} 1 & \\text{si } x > 0 \\\\ 0.01 & \\text{si } x \\leq 0 \\end{cases}\\)</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Pourquoi importantes ?</strong></p>
+                        <p>Ces dérivées sont utilisées dans l'algorithme de <strong>rétropropagation</strong> pour calculer comment ajuster les poids du réseau.</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation réseau de neurones from scratch",
+            description: "Créons un réseau de neurones complet :",
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+class ReseauNeurones:
+    def __init__(self, architecture):
+        """
+        Architecture: liste des tailles de couches
+        Ex: [2, 3, 1] = 2 entrées, 3 neurones cachés, 1 sortie
+        """
+        self.architecture = architecture
+        self.nb_couches = len(architecture)
+        self.poids = {}
+        self.biais = {}
+        
+        # Initialisation des poids (Xavier/Glorot)
+        for i in range(1, self.nb_couches):
+            taille_entree = architecture[i-1]
+            taille_sortie = architecture[i]
+            
+            # Initialisation Xavier pour éviter l'explosion/disparition des gradients
+            limite = np.sqrt(6 / (taille_entree + taille_sortie))
+            self.poids[i] = np.random.uniform(-limite, limite, (taille_sortie, taille_entree))
+            self.biais[i] = np.zeros((taille_sortie, 1))
+        
+        print(f"🧠 Réseau créé: {' → '.join(map(str, architecture))}")
+        print(f"📊 Paramètres totaux: {self.compter_parametres()}")
+    
+    def compter_parametres(self):
+        """Compter le nombre total de paramètres"""
+        total = 0
+        for i in range(1, self.nb_couches):
+            total += self.poids[i].size + self.biais[i].size
+        return total
+    
+    def sigmoid(self, x):
+        """Fonction sigmoid avec protection contre overflow"""
+        return 1 / (1 + np.exp(-np.clip(x, -500, 500)))
+    
+    def sigmoid_derivee(self, x):
+        """Dérivée de sigmoid"""
+        s = self.sigmoid(x)
+        return s * (1 - s)
+    
+    def propagation_avant(self, X):
+        """Propagation avant à travers le réseau"""
+        self.activations = {0: X}  # Stocker toutes les activations
+        self.z_values = {}  # Stocker les valeurs avant activation
+        
+        for i in range(1, self.nb_couches):
+            # Combinaison linéaire
+            self.z_values[i] = self.poids[i] @ self.activations[i-1] + self.biais[i]
+            
+            # Activation
+            if i == self.nb_couches - 1:  # Dernière couche
+                self.activations[i] = self.sigmoid(self.z_values[i])
+            else:  # Couches cachées
+                self.activations[i] = self.sigmoid(self.z_values[i])
+        
+        return self.activations[self.nb_couches - 1]
+    
+    def predire(self, X):
+        """Faire des prédictions"""
+        if X.ndim == 1:
+            X = X.reshape(-1, 1)
+        return self.propagation_avant(X)
+
+# Test du réseau
+print("🧠 CRÉATION D'UN RÉSEAU DE NEURONES")
+print("=" * 40)
+
+# Architecture pour classification de terrains
+reseau = ReseauNeurones([2, 4, 3, 1])  # 2 entrées, 2 couches cachées, 1 sortie
+
+# Test sur données de terrains dakarois
+terrains_test = np.array([
+    [500, 5],   # 500m², 5km du centre
+    [200, 2],   # 200m², 2km du centre  
+    [800, 8],   # 800m², 8km du centre
+    [300, 3]    # 300m², 3km du centre
+]).T
+
+print("🏠 Test sur 4 terrains:")
+for i, terrain in enumerate(terrains_test.T):
+    prediction = reseau.predire(terrain)
+    print(f"Terrain {i+1} ({terrain[0]}m², {terrain[1]}km): {prediction[0,0]:.3f}")`,
+          },
+          {
+            type: "code",
+            title: "Visualisation de l'architecture",
+            description: "Visualisons la structure de notre réseau :",
+            code: `def visualiser_architecture(architecture):
+    """Visualise l'architecture du réseau de neurones"""
+    fig, ax = plt.subplots(figsize=(12, 8))
+    
+    # Paramètres de visualisation
+    nb_couches = len(architecture)
+    max_neurones = max(architecture)
+    
+    # Positions des couches
+    x_positions = np.linspace(0, 10, nb_couches)
+    
+    # Couleurs par type de couche
+    couleurs = ['lightblue', 'lightgreen', 'lightgreen', 'lightcoral']
+    noms_couches = ['Entrée', 'Cachée 1', 'Cachée 2', 'Sortie']
+    
+    # Dessiner les neurones
+    for i, (x_pos, nb_neurones) in enumerate(zip(x_positions, architecture)):
+        # Positions verticales centrées
+        if nb_neurones == 1:
+            y_positions = [max_neurones / 2]
+        else:
+            y_positions = np.linspace(0, max_neurones, nb_neurones)
+        
+        # Dessiner les neurones
+        for y_pos in y_positions:
+            circle = plt.Circle((x_pos, y_pos), 0.3, 
+                              color=couleurs[min(i, 3)], 
+                              ec='black', linewidth=2)
+            ax.add_patch(circle)
+        
+        # Labels des couches
+        ax.text(x_pos, -1, f'{noms_couches[min(i, 3)]}\\n({nb_neurones})', 
+               ha='center', va='top', fontweight='bold')
+    
+    # Dessiner les connexions (échantillon)
+    for i in range(nb_couches - 1):
+        x1, x2 = x_positions[i], x_positions[i+1]
+        
+        # Positions des neurones
+        if architecture[i] == 1:
+            y1_positions = [max_neurones / 2]
+        else:
+            y1_positions = np.linspace(0, max_neurones, architecture[i])
+            
+        if architecture[i+1] == 1:
+            y2_positions = [max_neurones / 2]
+        else:
+            y2_positions = np.linspace(0, max_neurones, architecture[i+1])
+        
+        # Dessiner quelques connexions représentatives
+        for y1 in y1_positions[::max(1, len(y1_positions)//3)]:
+            for y2 in y2_positions[::max(1, len(y2_positions)//3)]:
+                ax.plot([x1+0.3, x2-0.3], [y1, y2], 'gray', alpha=0.3, linewidth=1)
+    
+    ax.set_xlim(-1, 11)
+    ax.set_ylim(-2, max_neurones + 1)
+    ax.set_aspect('equal')
+    ax.axis('off')
+    ax.set_title('Architecture du Réseau de Neurones [2-4-3-1]', fontsize=16, pad=20)
+    
+    plt.tight_layout()
+    plt.show()
+
+# Visualisation de notre réseau
+visualiser_architecture([2, 4, 3, 1])
+print("🎨 Architecture visualisée !")`,
+          },
+          {
+            type: "code",
+            title: "Comparaison des fonctions d'activation",
+            description: "Comparons visuellement les différentes activations :",
+            code: `# Comparaison des fonctions d'activation
+x = np.linspace(-5, 5, 100)
+
+# Calcul des fonctions
+sigmoid_vals = 1 / (1 + np.exp(-x))
+tanh_vals = np.tanh(x)
+relu_vals = np.maximum(0, x)
+leaky_relu_vals = np.where(x > 0, x, 0.01 * x)
+
+# Calcul des dérivées
+sigmoid_deriv = sigmoid_vals * (1 - sigmoid_vals)
+tanh_deriv = 1 - tanh_vals**2
+relu_deriv = np.where(x > 0, 1, 0)
+leaky_relu_deriv = np.where(x > 0, 1, 0.01)
+
+# Visualisation
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))
+
+# Fonctions d'activation
+ax1.plot(x, sigmoid_vals, 'b-', label='Sigmoid', linewidth=2)
+ax1.plot(x, tanh_vals, 'r-', label='Tanh', linewidth=2)
+ax1.plot(x, relu_vals, 'g-', label='ReLU', linewidth=2)
+ax1.plot(x, leaky_relu_vals, 'm-', label='Leaky ReLU', linewidth=2)
+ax1.set_title('Fonctions d\'Activation')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+ax1.set_xlabel('x')
+ax1.set_ylabel('f(x)')
+
+# Dérivées
+ax2.plot(x, sigmoid_deriv, 'b-', label="Sigmoid'", linewidth=2)
+ax2.plot(x, tanh_deriv, 'r-', label="Tanh'", linewidth=2)
+ax2.plot(x, relu_deriv, 'g-', label="ReLU'", linewidth=2)
+ax2.plot(x, leaky_relu_deriv, 'm-', label="Leaky ReLU'", linewidth=2)
+ax2.set_title('Dérivées des Activations')
+ax2.legend()
+ax2.grid(True, alpha=0.3)
+ax2.set_xlabel('x')
+ax2.set_ylabel("f'(x)")
+
+print("📊 Comparaison des activations terminée !")`,
+          },
+          {
+            type: "code",
+            title: "Problème du gradient qui disparaît",
+            description:
+              "Démonstrons le problème des gradients qui disparaissent :",
+            code: `# Simulation du problème du gradient qui disparaît
+def simuler_gradient_disparition():
+    """Simule la propagation du gradient dans un réseau profond"""
+    
+    # Réseau très profond avec sigmoid
+    nb_couches = 10
+    gradient_initial = 1.0
+    gradients = [gradient_initial]
+    
+    print("⚠️ SIMULATION: GRADIENT QUI DISPARAÎT")
+    print("=" * 45)
+    print("Réseau profond avec 10 couches sigmoid")
+    print()
+    
+    # Simulation de la rétropropagation
+    gradient_actuel = gradient_initial
+    
+    for couche in range(nb_couches, 0, -1):
+        # Dérivée sigmoid typique au centre (x=0) : σ'(0) = 0.25
+        derivee_activation = 0.25
+        
+        # Poids typique (initialisé autour de 0.5)
+        poids_moyen = 0.5
+        
+        # Le gradient se multiplie par ces facteurs
+        gradient_actuel *= derivee_activation * poids_moyen
+        gradients.append(gradient_actuel)
+        
+        print(f"Couche {couche}: gradient = {gradient_actuel:.6f}")
+        
+        if gradient_actuel < 1e-10:
+            print(f"💀 Gradient mort à la couche {couche} !")
+            break
+    
+    return gradients
+
+# Comparaison Sigmoid vs ReLU
+def comparer_activations_gradient():
+    """Compare l'impact des activations sur les gradients"""
+    couches = list(range(1, 11))
+    
+    # Sigmoid: gradient × 0.25 × 0.5 = × 0.125 par couche
+    gradients_sigmoid = [1.0 * (0.125 ** i) for i in range(10)]
+    
+    # ReLU: gradient × 1.0 × 0.5 = × 0.5 par couche  
+    gradients_relu = [1.0 * (0.5 ** i) for i in range(10)]
+    
+    plt.figure(figsize=(12, 6))
+    plt.semilogy(couches, gradients_sigmoid[1:], 'r-o', label='Sigmoid', linewidth=2)
+    plt.semilogy(couches, gradients_relu[1:], 'g-o', label='ReLU', linewidth=2)
+    plt.axhline(y=1e-6, color='black', linestyle='--', alpha=0.5, label='Seuil critique')
+    
+    plt.title('Disparition des Gradients selon l\'Activation')
+    plt.xlabel('Numéro de couche (depuis la sortie)')
+    plt.ylabel('Magnitude du gradient (échelle log)')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.show()
+    
+    print("📉 ReLU préserve mieux les gradients que Sigmoid !")
+
+# Exécution des simulations
+gradients = simuler_gradient_disparition()
+print()
+comparer_activations_gradient()`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : choix d'activation selon le problème",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Pour chaque problème, choisissez la meilleure fonction d'activation et justifiez :</p>
+                        
+                        <ol>
+                            <li><strong>Classification binaire</strong> : email spam/pas spam</li>
+                            <li><strong>Régression</strong> : prédiction prix immobilier (toujours positif)</li>
+                            <li><strong>Classification 5 classes</strong> : reconnaissance de chiffres 0-4</li>
+                            <li><strong>Couches cachées</strong> : réseau profond (20 couches)</li>
+                            <li><strong>Prédiction température</strong> : peut être négative ou positive</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('activation-choice-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="activation-choice-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Classification binaire :</strong> <strong>Sigmoid</strong> en sortie<br>
+                                <em>Justification :</em> Sortie [0,1] interprétable comme probabilité</li>
+                            <li><strong>Régression positive :</strong> <strong>ReLU</strong> en sortie<br>
+                                <em>Justification :</em> Garantit des valeurs ≥ 0, pas de saturation</li>
+                            <li><strong>Classification 5 classes :</strong> <strong>Softmax</strong> en sortie<br>
+                                <em>Justification :</em> Distribution de probabilité (somme = 1)</li>
+                            <li><strong>Couches cachées profondes :</strong> <strong>ReLU</strong> ou <strong>Leaky ReLU</strong><br>
+                                <em>Justification :</em> Évite la disparition des gradients</li>
+                            <li><strong>Température (+ ou -) :</strong> <strong>Linéaire</strong> (pas d'activation) en sortie<br>
+                                <em>Justification :</em> Permet toute valeur réelle</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Entraînement sur données réelles",
+            description: "Entraînons notre réseau sur un problème concret :",
+            code: `# Génération de données synthétiques réalistes
+np.random.seed(42)
+
+def generer_donnees_immobilier(n_samples=200):
+    """Génère des données immobilières réalistes pour Dakar"""
+    
+    # Variables d'entrée
+    surface = np.random.uniform(100, 1000, n_samples)  # m²
+    distance_centre = np.random.uniform(1, 15, n_samples)  # km
+    
+    # Fonction complexe non-linéaire pour le prix
+    # Prix dépend de surface² et 1/distance (plus proche = plus cher)
+    prix_base = (surface * 0.8 + 1000 / (distance_centre + 0.5)) / 1000
+    
+    # Ajout de non-linéarité (quartiers huppés)
+    bonus_quartier = np.where((surface > 500) & (distance_centre < 5), 0.5, 0)
+    prix_normalise = (prix_base + bonus_quartier) / 2  # Normalisation [0,1]
+    
+    # Ajout de bruit réaliste
+    bruit = np.random.normal(0, 0.05, n_samples)
+    prix_final = np.clip(prix_normalise + bruit, 0, 1)
+    
+    return np.column_stack([surface, distance_centre]), prix_final
+
+# Génération des données
+X, y = generer_donnees_immobilier(150)
+print(f"📊 Dataset généré: {X.shape[0]} terrains")
+print(f"Surface moyenne: {X[:, 0].mean():.0f}m²")
+print(f"Distance moyenne: {X[:, 1].mean():.1f}km")
+print(f"Prix moyen: {y.mean():.2f} (normalisé)")
+
+# Normalisation des entrées
+X_norm = (X - X.mean(axis=0)) / X.std(axis=0)
+
+# Visualisation des données
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+
+# Scatter plot 3D projeté
+scatter = ax1.scatter(X[:, 0], X[:, 1], c=y, cmap='viridis', alpha=0.7)
+ax1.set_xlabel('Surface (m²)')
+ax1.set_ylabel('Distance centre (km)')
+ax1.set_title('Données Immobilières Dakar')
+plt.colorbar(scatter, ax=ax1, label='Prix (normalisé)')
+
+# Distribution des prix
+ax2.hist(y, bins=20, alpha=0.7, color='skyblue', edgecolor='black')
+ax2.set_xlabel('Prix (normalisé)')
+ax2.set_ylabel('Nombre de terrains')
+ax2.set_title('Distribution des Prix')
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+print("📈 Données visualisées - prêtes pour l'entraînement !")`,
+          },
+          {
+            type: "code",
+            title: "Entraînement simple (sans backprop)",
+            description:
+              "Testons notre réseau avec des poids fixes optimisés :",
+            code: `# Test avec poids optimisés manuellement
+reseau_immobilier = ReseauNeurones([2, 6, 4, 1])
+
+# Optimisation manuelle des poids (simulation d'entraînement)
+# En réalité, ceci serait fait par backpropagation
+reseau_immobilier.poids[1] = np.array([
+    [ 0.8, -0.6],  # Neurone 1: surface+, distance-
+    [-0.3,  0.9],  # Neurone 2: surface-, distance+
+    [ 0.7,  0.2],  # Neurone 3: surface+, distance+
+    [-0.1, -0.8],  # Neurone 4: surface-, distance-
+    [ 0.9, -0.3],  # Neurone 5: surface+, distance-
+    [ 0.4,  0.7]   # Neurone 6: surface+, distance+
+])
+
+reseau_immobilier.poids[2] = np.array([
+    [ 0.8, -0.2,  0.6, -0.3],  # Combinaison complexe 1
+    [-0.4,  0.9, -0.1,  0.7],  # Combinaison complexe 2
+    [ 0.6,  0.3,  0.8, -0.5],  # Combinaison complexe 3
+    [ 0.2, -0.6,  0.4,  0.9]   # Combinaison complexe 4
+])
+
+reseau_immobilier.poids[3] = np.array([[0.9, -0.3, 0.8, 0.6]])
+
+# Test sur échantillon
+echantillon_indices = np.random.choice(len(X), 10, replace=False)
+X_test = X_norm[echantillon_indices]
+y_test = y[echantillon_indices]
+
+print("🏠 TEST SUR ÉCHANTILLON DE TERRAINS")
+print("=" * 50)
+print(f"{'Surface':>8} {'Distance':>9} {'Prix réel':>10} {'Prédiction':>11} {'Erreur':>8}")
+print("-" * 50)
+
+erreurs = []
+for i in range(len(X_test)):
+    prediction = reseau_immobilier.predire(X_test[i].reshape(-1, 1))[0, 0]
+    erreur = abs(prediction - y_test[i])
+    erreurs.append(erreur)
+    
+    # Données originales pour affichage
+    surface_orig = X[echantillon_indices[i], 0]
+    distance_orig = X[echantillon_indices[i], 1]
+    
+    print(f"{surface_orig:8.0f} {distance_orig:9.1f} {y_test[i]:10.3f} {prediction:11.3f} {erreur:8.3f}")
+
+print("-" * 50)
+print(f"📊 Erreur moyenne: {np.mean(erreurs):.3f}")
+print(f"📈 Erreur max: {np.max(erreurs):.3f}")
+print(f"📉 Erreur min: {np.min(erreurs):.3f}")`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Défis et solutions des réseaux profonds",
+            content: `
+                        <p><strong>⚠️ Les réseaux de neurones profonds posent des défis uniques :</strong></p>
+                        
+                        <p><strong>🔴 Problème 1 : Gradient qui disparaît</strong></p>
+                        <ul>
+                            <li>📉 <strong>Symptôme</strong> : couches profondes n'apprennent plus</li>
+                            <li>🔧 <strong>Solutions</strong> : ReLU, normalisation, connexions résiduelles</li>
+                        </ul>
+                        
+                        <p><strong>🔴 Problème 2 : Surapprentissage</strong></p>
+                        <ul>
+                            <li>📊 <strong>Symptôme</strong> : performance parfaite sur train, mauvaise sur test</li>
+                            <li>🔧 <strong>Solutions</strong> : dropout, régularisation, early stopping</li>
+                        </ul>
+                        
+                        <p><strong>🔴 Problème 3 : Initialisation</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Symptôme</strong> : explosion ou disparition dès le début</li>
+                            <li>🔧 <strong>Solutions</strong> : Xavier, He, normalisation des poids</li>
+                        </ul>
+                        
+                        <p><strong>🔴 Problème 4 : Optimisation</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Symptôme</strong> : convergence lente ou vers minima locaux</li>
+                            <li>🔧 <strong>Solutions</strong> : Adam, momentum, learning rate scheduling</li>
+                        </ul>
+                        
+                        <p><strong>💡 Solutions modernes :</strong></p>
+                        <ul>
+                            <li>🏗️ <strong>Architectures</strong> : ResNet, DenseNet, Transformer</li>
+                            <li>🔧 <strong>Techniques</strong> : Batch Normalization, Dropout, Skip Connections</li>
+                            <li>⚙️ <strong>Optimiseurs</strong> : Adam, AdamW, RMSprop</li>
+                            <li>📊 <strong>Régularisation</strong> : L1/L2, Early Stopping, Data Augmentation</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : diagnostic de réseau",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Analysez ces 4 scénarios d'entraînement et diagnostiquez les problèmes :</p>
+                        
+                        <p><strong>📊 Scénario A :</strong></p>
+                        <ul>
+                            <li>Loss train : 0.8 → 0.1 → 0.05 → 0.02</li>
+                            <li>Loss validation : 0.8 → 0.3 → 0.4 → 0.6</li>
+                        </ul>
+                        
+                        <p><strong>📊 Scénario B :</strong></p>
+                        <ul>
+                            <li>Loss train : 0.8 → 0.7 → 0.65 → 0.6</li>
+                            <li>Loss validation : 0.8 → 0.7 → 0.65 → 0.6</li>
+                        </ul>
+                        
+                        <p><strong>📊 Scénario C :</strong></p>
+                        <ul>
+                            <li>Loss train : 0.8 → 0.8 → 0.8 → 0.8</li>
+                            <li>Gradients : 1.0 → 0.1 → 0.01 → 0.001</li>
+                        </ul>
+                        
+                        <p><strong>📊 Scénario D :</strong></p>
+                        <ul>
+                            <li>Loss train : 0.8 → 0.2 → 0.05 → 0.01</li>
+                            <li>Loss validation : 0.8 → 0.25 → 0.08 → 0.02</li>
+                        </ul>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('network-diagnosis-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="network-diagnosis-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Scénario A :</strong> <strong>Surapprentissage sévère</strong><br>
+                                <em>Symptômes :</em> Train continue de baisser, validation remonte<br>
+                                <em>Solutions :</em> Dropout, régularisation L2, early stopping</li>
+                            <li><strong>Scénario B :</strong> <strong>Sous-apprentissage</strong><br>
+                                <em>Symptômes :</em> Les deux loss stagnent à un niveau élevé<br>
+                                <em>Solutions :</em> Réseau plus complexe, learning rate plus élevé</li>
+                            <li><strong>Scénario C :</strong> <strong>Gradient qui disparaît</strong><br>
+                                <em>Symptômes :</em> Loss ne bouge pas, gradients → 0<br>
+                                <em>Solutions :</em> ReLU, normalisation, réseau moins profond</li>
+                            <li><strong>Scénario D :</strong> <strong>Entraînement optimal</strong><br>
+                                <em>Symptômes :</em> Les deux loss baissent ensemble<br>
+                                <em>Action :</em> Continuer l'entraînement !</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Réseaux de neurones : révolution de l'IA moderne",
+            content: `
+                        <p><strong>🚀 Les réseaux de neurones ont révolutionné notre monde :</strong></p>
+                        
+                        <p><strong>📱 Applications quotidiennes :</strong></p>
+                        <ul>
+                            <li>📸 <strong>Photos</strong> : reconnaissance automatique de visages</li>
+                            <li>🗣️ <strong>Voix</strong> : Siri, Alexa, Google Assistant</li>
+                            <li>🌐 <strong>Traduction</strong> : Google Translate en temps réel</li>
+                            <li>🛒 <strong>Recommandations</strong> : Netflix, Spotify, Amazon</li>
+                            <li>🚗 <strong>Navigation</strong> : optimisation de trajets en temps réel</li>
+                        </ul>
+                        
+                        <p><strong>🏥 Impact sociétal au Sénégal :</strong></p>
+                        <ul>
+                            <li>🏥 <strong>Santé</strong> : diagnostic automatique de maladies tropicales</li>
+                            <li>🌾 <strong>Agriculture</strong> : optimisation des cultures selon le climat</li>
+                            <li>📚 <strong>Éducation</strong> : personnalisation de l'apprentissage</li>
+                            <li>💰 <strong>Finance</strong> : détection de fraudes, crédit scoring</li>
+                            <li>🌍 <strong>Environnement</strong> : prédiction climatique, gestion des ressources</li>
+                        </ul>
+                        
+                        <p><strong>🔮 Évolution vers le Deep Learning :</strong></p>
+                        <ul>
+                            <li>🧠 <strong>Années 1980</strong> : réseaux simples (quelques couches)</li>
+                            <li>🚀 <strong>Années 2010</strong> : deep learning (dizaines de couches)</li>
+                            <li>🌟 <strong>Aujourd'hui</strong> : transformers (milliards de paramètres)</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Les réseaux de neurones ne sont pas juste un outil technique - ils représentent une nouvelle façon de <strong>programmer l'intelligence</strong>. Au lieu d'écrire des règles explicites, nous laissons le réseau découvrir les patterns dans les données !</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Backpropagation - l'algorithme magique qui permet aux réseaux d'apprendre automatiquement !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Pourquoi un réseau de neurones sans fonctions d'activation ne peut-il pas résoudre des problèmes non-linéaires ?",
+          options: [
+            "A) Il manque de neurones",
+            "B) Il devient équivalent à une transformation linéaire",
+            "C) Les poids sont mal initialisés",
+            "D) Il faut plus de données d'entraînement",
+          ],
+          correct: 1,
+          explanation:
+            "Sans fonctions d'activation, toutes les couches se combinent en une seule transformation linéaire. Peu importe le nombre de couches, le réseau ne peut créer que des frontières de décision linéaires, comme un simple perceptron.",
+        },
+        prevModule: "perceptron.html",
+        nextModule: "backpropagation.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

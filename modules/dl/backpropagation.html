@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Backpropagation | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧠 Deep Learning</span>
+          <span>›</span>
+          <span>Backpropagation</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🔄 Backpropagation : L'Algorithme Magique</h1>
+      <p class="subtitle">
+        Module 4.3 - L'Apprentissage Automatique des Réseaux
+      </p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Backpropagation</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant l'algorithme qui a rendu
+          possible l'IA moderne.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="neural-networks.html" class="nav-link" id="prev-link"
+          >← Module précédent : Réseaux de Neurones</a
+        >
+        <a href="cnn.html" class="nav-link" id="next-link"
+          >Module suivant : CNN →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Backpropagation
+      const moduleConfig = {
+        id: "dl-backpropagation",
+        title: "Backpropagation : L'Algorithme Magique",
+        category: "Deep Learning",
+        objectives: [
+          "Comprendre le problème fondamental : comment ajuster des millions de poids ?",
+          "Maîtriser la règle de dérivation en chaîne appliquée aux réseaux",
+          "Calculer manuellement la backpropagation sur un réseau simple",
+          "Comprendre pourquoi c'est l'algorithme le plus important de l'IA",
+          "Implémenter backpropagation from scratch avec gradient checking",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title:
+              "Le problème impossible : ajuster des millions de paramètres",
+            content: `
+                        <p>La <strong>backpropagation</strong> résout le problème le plus complexe de l'IA : comment ajuster automatiquement des millions (voire des milliards) de paramètres pour minimiser l'erreur ?</p>
+                        
+                        <p><strong>🤯 Ampleur du défi :</strong></p>
+                        <ul>
+                            <li>🧠 <strong>Réseau simple</strong> : 1000 paramètres à optimiser</li>
+                            <li>🖼️ <strong>ResNet-50</strong> : 25 millions de paramètres</li>
+                            <li>💬 <strong>GPT-3</strong> : 175 milliards de paramètres</li>
+                            <li>🤖 <strong>GPT-4</strong> : ~1.7 trillion de paramètres (estimation)</li>
+                        </ul>
+                        
+                        <p><strong>❌ Approches impossibles :</strong></p>
+                        <ul>
+                            <li>🎲 <strong>Essai-erreur aléatoire</strong> : 10^1000000000 combinaisons possibles</li>
+                            <li>🔍 <strong>Recherche exhaustive</strong> : plus d'atomes dans l'univers</li>
+                            <li>🧠 <strong>Ajustement manuel</strong> : impossible humainement</li>
+                        </ul>
+                        
+                        <p><strong>✅ Solution élégante : Backpropagation</strong></p>
+                        <ul>
+                            <li>📐 <strong>Mathématiquement optimale</strong> : utilise les gradients exacts</li>
+                            <li>⚡ <strong>Computationnellement efficace</strong> : O(nombre de paramètres)</li>
+                            <li>🎯 <strong>Automatiquement précise</strong> : pas d'approximation</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Impact révolutionnaire :</strong></p>
+                        <p>Sans backpropagation, pas de deep learning, pas de ChatGPT, pas de reconnaissance d'images, pas d'IA moderne ! C'est <strong>l'algorithme qui a changé le monde</strong>.</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie de l'orchestre symphonique sénégalais",
+            content: `
+                        <p>Imaginez que vous dirigez <strong>l'Orchestre National du Sénégal</strong> avec 100 musiciens pour jouer une mélodie parfaite :</p>
+                        
+                        <p><strong>🎵 Problème initial :</strong></p>
+                        <ul>
+                            <li>🎺 <strong>Chaque musicien</strong> = un paramètre du réseau</li>
+                            <li>🎼 <strong>Mélodie finale</strong> = sortie du réseau</li>
+                            <li>👂 <strong>Votre oreille</strong> = fonction de coût (mesure l'erreur)</li>
+                            <li>🎯 <strong>Objectif</strong> : harmonie parfaite (erreur minimale)</li>
+                        </ul>
+                        
+                        <p><strong>❌ Approche naïve impossible :</strong></p>
+                        <p>"Musicien 47, jouez plus fort ! Musicien 23, plus doucement !" → Chaos total avec 100 ajustements simultanés</p>
+                        
+                        <p><strong>✅ Approche backpropagation :</strong></p>
+                        <ol>
+                            <li>🎵 <strong>Écouter le résultat final</strong> (propagation avant)</li>
+                            <li>👂 <strong>Identifier l'erreur globale</strong> (fonction de coût)</li>
+                            <li>🔍 <strong>Remonter la chaîne</strong> : "Cette fausse note vient de quelle section ?"</li>
+                            <li>🎯 <strong>Ajuster précisément</strong> : "Violons : -2%, Cuivres : +5%"</li>
+                            <li>🔄 <strong>Répéter</strong> jusqu'à perfection</li>
+                        </ol>
+                        
+                        <p><strong>💡 Génie de l'algorithme :</strong></p>
+                        <ul>
+                            <li>🧠 <strong>Responsabilité calculée</strong> : chaque musicien sait exactement son impact</li>
+                            <li>⚡ <strong>Ajustement simultané</strong> : tous s'améliorent en même temps</li>
+                            <li>🎯 <strong>Convergence garantie</strong> : vers l'harmonie parfaite</li>
+                        </ul>
+                        
+                        <p><strong>🌟 C'est exactement ce que fait backpropagation :</strong> elle calcule la responsabilité exacte de chaque paramètre dans l'erreur finale et les ajuste tous simultanément de manière optimale !</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title:
+              "Formalisation rigoureuse : la règle de dérivation en chaîne",
+            content: `
+                        <p><strong>🔧 Backpropagation = application systématique de la règle de dérivation en chaîne</strong></p>
+                        
+                        <p><strong>📐 Rappel de la règle en chaîne (voir <a href="../math/derivatives.html">Module 1.4</a>) :</strong></p>
+                        <p>Si \\(y = f(g(x))\\), alors \\(\\frac{dy}{dx} = \\frac{df}{dg} \\cdot \\frac{dg}{dx}\\)</p>
+                        
+                        <p><strong>🧠 Application aux réseaux de neurones :</strong></p>
+                        <p>Pour un réseau \\(y = f_L(f_{L-1}(...f_2(f_1(\\vec{x}))...))\\), le gradient de la fonction de coût \\(\\mathcal{L}\\) par rapport aux poids \\(W^{(l)}\\) est :</p>
+                        
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial W^{(l)}} = \\frac{\\partial \\mathcal{L}}{\\partial \\vec{z}^{(l)}} \\cdot \\frac{\\partial \\vec{z}^{(l)}}{\\partial W^{(l)}}$$</p>
+                        
+                        <p><strong>🔍 Décryptage des termes :</strong></p>
+                        <ul>
+                            <li>\\(\\frac{\\partial \\mathcal{L}}{\\partial \\vec{z}^{(l)}}\\) = <strong>erreur qui "remonte"</strong> vers la couche l</li>
+                            <li>\\(\\frac{\\partial \\vec{z}^{(l)}}{\\partial W^{(l)}}\\) = <strong>impact local</strong> des poids sur leur sortie</li>
+                        </ul>
+                        
+                        <p><strong>🔄 Propagation récursive :</strong></p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial \\vec{z}^{(l)}} = \\frac{\\partial \\mathcal{L}}{\\partial \\vec{z}^{(l+1)}} \\cdot \\frac{\\partial \\vec{z}^{(l+1)}}{\\partial \\vec{h}^{(l)}} \\cdot \\frac{\\partial \\vec{h}^{(l)}}{\\partial \\vec{z}^{(l)}}$$</p>
+                        
+                        <p><strong>🎯 Où :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• \\(\\frac{\\partial \\vec{z}^{(l+1)}}{\\partial \\vec{h}^{(l)}} = (W^{(l+1)})^T\\)</strong> (poids de la couche suivante)</li>
+                            <li style="margin-top: 0.5rem"><strong>• \\(\\frac{\\partial \\vec{h}^{(l)}}{\\partial \\vec{z}^{(l)}} = \\sigma'(\\vec{z}^{(l)})\\)</strong> (dérivée de l'activation)</li>
+                            <li style="margin-top: 0.5rem"><strong>• \\(\\frac{\\partial \\vec{z}^{(l)}}{\\partial W^{(l)}} = (\\vec{h}^{(l-1)})^T\\)</strong> (activations de la couche précédente)</li>
+                        </ul>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>💡 Algorithme en 2 étapes :</strong><br>
+                            <strong>1️⃣ Forward Pass :</strong> Calculer toutes les activations de l'entrée vers la sortie<br>
+                            <strong>2️⃣ Backward Pass :</strong> Calculer tous les gradients de la sortie vers l'entrée
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Dérivation complète : étape par étape",
+            content: `
+                        <p><strong>📐 Dérivons backpropagation pour un réseau 2-2-1 :</strong></p>
+                        
+                        <p><strong>🏗️ Architecture :</strong></p>
+                        <ul>
+                            <li>\\(\\vec{x} \\in \\mathbb{R}^2\\) → \\(\\vec{h}^{(1)} \\in \\mathbb{R}^2\\) → \\(y \\in \\mathbb{R}\\)</li>
+                            <li>Fonction de coût : \\(\\mathcal{L} = \\frac{1}{2}(y - \\hat{y})^2\\)</li>
+                        </ul>
+                        
+                        <p><strong>🔄 Forward Pass :</strong></p>
+                        <p>$$\\vec{z}^{(1)} = W^{(1)} \\vec{x} + \\vec{b}^{(1)}$$</p>
+                        <p>$$\\vec{h}^{(1)} = \\sigma(\\vec{z}^{(1)})$$</p>
+                        <p>$$z^{(2)} = W^{(2)} \\vec{h}^{(1)} + b^{(2)}$$</p>
+                        <p>$$\\hat{y} = \\sigma(z^{(2)})$$</p>
+                        
+                        <p><strong>⬅️ Backward Pass :</strong></p>
+                        
+                        <p><strong>Étape 1 :</strong> Gradient de la sortie</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial \\hat{y}} = \\hat{y} - y$$</p>
+                        
+                        <p><strong>Étape 2 :</strong> Gradient de la dernière couche</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial z^{(2)}} = \\frac{\\partial \\mathcal{L}}{\\partial \\hat{y}} \\cdot \\frac{\\partial \\hat{y}}{\\partial z^{(2)}} = (\\hat{y} - y) \\cdot \\sigma'(z^{(2)})$$</p>
+                        
+                        <p><strong>Étape 3 :</strong> Gradients des poids de sortie</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial W^{(2)}} = \\frac{\\partial \\mathcal{L}}{\\partial z^{(2)}} \\cdot (\\vec{h}^{(1)})^T$$</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial b^{(2)}} = \\frac{\\partial \\mathcal{L}}{\\partial z^{(2)}}$$</p>
+                        
+                        <p><strong>Étape 4 :</strong> Propagation vers la couche cachée</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial \\vec{h}^{(1)}} = (W^{(2)})^T \\cdot \\frac{\\partial \\mathcal{L}}{\\partial z^{(2)}}$$</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial \\vec{z}^{(1)}} = \\frac{\\partial \\mathcal{L}}{\\partial \\vec{h}^{(1)}} \\odot \\sigma'(\\vec{z}^{(1)})$$</p>
+                        
+                        <p><strong>Étape 5 :</strong> Gradients des poids d'entrée</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial W^{(1)}} = \\frac{\\partial \\mathcal{L}}{\\partial \\vec{z}^{(1)}} \\cdot \\vec{x}^T$$</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial \\vec{b}^{(1)}} = \\frac{\\partial \\mathcal{L}}{\\partial \\vec{z}^{(1)}}$$</p>
+                        
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>🔑 Notation :</strong> \\(\\odot\\) = produit élément par élément (Hadamard)
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel complet : réseau 2-2-1",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong> Réseau pour prédire si un étudiant réussira (1) ou échouera (0) selon ses heures d'étude et de sommeil.</p>
+                        
+                        <p><strong>⚙️ Paramètres initiaux :</strong></p>
+                        <p>$$W^{(1)} = \\begin{bmatrix} 0.5 & 0.3 \\\\ -0.2 & 0.8 \\end{bmatrix}, \\quad \\vec{b}^{(1)} = \\begin{bmatrix} 0.1 \\\\ -0.1 \\end{bmatrix}$$</p>
+                        <p>$$W^{(2)} = \\begin{bmatrix} 0.7 & -0.4 \\end{bmatrix}, \\quad b^{(2)} = 0.2$$</p>
+                        
+                        <p><strong>📊 Données :</strong> Étudiant avec [heures_étude=6, heures_sommeil=8], résultat réel y=1 (réussite)</p>
+                        <p>$$\\vec{x} = \\begin{bmatrix} 6 \\\\ 8 \\end{bmatrix}, \\quad y = 1$$</p>
+                        
+                        <p><strong>➡️ Forward Pass :</strong></p>
+                        <p>$$\\vec{z}^{(1)} = \\begin{bmatrix} 0.5 \\times 6 + 0.3 \\times 8 + 0.1 \\\\ -0.2 \\times 6 + 0.8 \\times 8 - 0.1 \\end{bmatrix} = \\begin{bmatrix} 5.5 \\\\ 5.1 \\end{bmatrix}$$</p>
+                        
+                        <p>$$\\vec{h}^{(1)} = \\sigma(\\vec{z}^{(1)}) = \\begin{bmatrix} \\sigma(5.5) \\\\ \\sigma(5.1) \\end{bmatrix} ≈ \\begin{bmatrix} 0.996 \\\\ 0.994 \\end{bmatrix}$$</p>
+                        
+                        <p>$$z^{(2)} = 0.7 \\times 0.996 + (-0.4) \\times 0.994 + 0.2 = 0.697 - 0.398 + 0.2 = 0.499$$</p>
+                        
+                        <p>$$\\hat{y} = \\sigma(0.499) ≈ 0.622$$</p>
+                        
+                        <p><strong>📊 Erreur :</strong> \\(\\mathcal{L} = \\frac{1}{2}(0.622 - 1)^2 = \\frac{1}{2}(-0.378)^2 = 0.071\\)</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel : backward pass complet",
+            content: `
+                        <p><strong>⬅️ Backward Pass :</strong> Calculons tous les gradients</p>
+                        
+                        <p><strong>Étape 1 :</strong> Gradient de la sortie</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial \\hat{y}} = \\hat{y} - y = 0.622 - 1 = -0.378$$</p>
+                        
+                        <p><strong>Étape 2 :</strong> Gradient de z⁽²⁾</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial z^{(2)}} = \\frac{\\partial \\mathcal{L}}{\\partial \\hat{y}} \\cdot \\sigma'(z^{(2)}) = -0.378 \\times \\sigma(0.499)(1-\\sigma(0.499))$$</p>
+                        <p>$$= -0.378 \\times 0.622 \\times 0.378 = -0.089$$</p>
+                        
+                        <p><strong>Étape 3 :</strong> Gradients des poids de sortie</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial W^{(2)}} = \\frac{\\partial \\mathcal{L}}{\\partial z^{(2)}} \\cdot (\\vec{h}^{(1)})^T = -0.089 \\times \\begin{bmatrix} 0.996 & 0.994 \\end{bmatrix}$$</p>
+                        <p>$$= \\begin{bmatrix} -0.089 & -0.088 \\end{bmatrix}$$</p>
+                        
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial b^{(2)}} = -0.089$$</p>
+                        
+                        <p><strong>Étape 4 :</strong> Propagation vers couche cachée</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial \\vec{h}^{(1)}} = (W^{(2)})^T \\cdot \\frac{\\partial \\mathcal{L}}{\\partial z^{(2)}} = \\begin{bmatrix} 0.7 \\\\ -0.4 \\end{bmatrix} \\times (-0.089) = \\begin{bmatrix} -0.062 \\\\ 0.036 \\end{bmatrix}$$</p>
+                        
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial \\vec{z}^{(1)}} = \\frac{\\partial \\mathcal{L}}{\\partial \\vec{h}^{(1)}} \\odot \\sigma'(\\vec{z}^{(1)})$$</p>
+                        
+                        <p>Avec \\(\\sigma'(5.5) ≈ 0.004\\) et \\(\\sigma'(5.1) ≈ 0.006\\) :</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial \\vec{z}^{(1)}} = \\begin{bmatrix} -0.062 \\\\ 0.036 \\end{bmatrix} \\odot \\begin{bmatrix} 0.004 \\\\ 0.006 \\end{bmatrix} = \\begin{bmatrix} -0.0002 \\\\ 0.0002 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>Étape 5 :</strong> Gradients des poids d'entrée</p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial W^{(1)}} = \\frac{\\partial \\mathcal{L}}{\\partial \\vec{z}^{(1)}} \\cdot \\vec{x}^T = \\begin{bmatrix} -0.0002 \\\\ 0.0002 \\end{bmatrix} \\times \\begin{bmatrix} 6 & 8 \\end{bmatrix}$$</p>
+                        <p>$$= \\begin{bmatrix} -0.0012 & -0.0016 \\\\ 0.0012 & 0.0016 \\end{bmatrix}$$</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calcul manuel backpropagation",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Réseau 2-1-1 pour prédire le succès d'une startup (données normalisées) :</p>
+                        
+                        <p><strong>⚙️ Paramètres :</strong></p>
+                        <p>$$W^{(1)} = \\begin{bmatrix} 0.6 & -0.3 \\end{bmatrix}, \\quad b^{(1)} = 0.1$$</p>
+                        <p>$$W^{(2)} = \\begin{bmatrix} 0.8 \\end{bmatrix}, \\quad b^{(2)} = -0.2$$</p>
+                        
+                        <p><strong>📊 Données :</strong> [capital_initial=0.7, experience_fondateur=0.4], succès réel y=1</p>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>Forward pass complet (z⁽¹⁾, h⁽¹⁾, z⁽²⁾, ŷ)</li>
+                            <li>Fonction de coût L = ½(ŷ - y)²</li>
+                            <li>Backward pass : tous les gradients</li>
+                            <li>Mise à jour des poids avec α = 0.1</li>
+                            <li>Nouvelle prédiction après mise à jour</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('backprop-manual-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="backprop-manual-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Forward pass :</strong><br>
+                                z⁽¹⁾ = 0.6×0.7 + (-0.3)×0.4 + 0.1 = 0.42 - 0.12 + 0.1 = 0.4<br>
+                                h⁽¹⁾ = σ(0.4) ≈ 0.599<br>
+                                z⁽²⁾ = 0.8×0.599 + (-0.2) = 0.479 - 0.2 = 0.279<br>
+                                ŷ = σ(0.279) ≈ 0.569</li>
+                            <li><strong>Coût :</strong> L = ½(0.569 - 1)² = ½(-0.431)² = 0.093</li>
+                            <li><strong>Backward pass :</strong><br>
+                                ∂L/∂ŷ = 0.569 - 1 = -0.431<br>
+                                ∂L/∂z⁽²⁾ = -0.431 × 0.569 × 0.431 = -0.106<br>
+                                ∂L/∂W⁽²⁾ = -0.106 × 0.599 = -0.063<br>
+                                ∂L/∂h⁽¹⁾ = 0.8 × (-0.106) = -0.085<br>
+                                ∂L/∂z⁽¹⁾ = -0.085 × 0.599 × 0.401 = -0.020<br>
+                                ∂L/∂W⁽¹⁾ = -0.020 × [0.7, 0.4] = [-0.014, -0.008]</li>
+                            <li><strong>Mise à jour (α=0.1) :</strong><br>
+                                W⁽²⁾ ← 0.8 - 0.1×(-0.063) = 0.806<br>
+                                W⁽¹⁾ ← [0.6, -0.3] - 0.1×[-0.014, -0.008] = [0.601, -0.299]</li>
+                            <li><strong>Nouvelle prédiction :</strong> ŷ ≈ 0.573 (amélioration !)</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation backpropagation from scratch",
+            description: "Implémentons l'algorithme complet :",
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+class ReseauAvecBackprop:
+    def __init__(self, architecture, learning_rate=0.01):
+        """
+        Réseau de neurones avec backpropagation
+        architecture: [n_entree, n_cache1, n_cache2, ..., n_sortie]
+        """
+        self.architecture = architecture
+        self.lr = learning_rate
+        self.nb_couches = len(architecture)
+        
+        # Initialisation Xavier/Glorot
+        self.poids = {}
+        self.biais = {}
+        
+        for i in range(1, self.nb_couches):
+            fan_in, fan_out = architecture[i-1], architecture[i]
+            limite = np.sqrt(6 / (fan_in + fan_out))
+            
+            self.poids[i] = np.random.uniform(-limite, limite, (fan_out, fan_in))
+            self.biais[i] = np.zeros((fan_out, 1))
+        
+        print(f"🧠 Réseau créé: {' → '.join(map(str, architecture))}")
+        print(f"📊 Paramètres: {self.compter_parametres()}")
+        print(f"📈 Learning rate: {learning_rate}")
+    
+    def compter_parametres(self):
+        """Compter le nombre total de paramètres"""
+        total = 0
+        for i in range(1, self.nb_couches):
+            total += self.poids[i].size + self.biais[i].size
+        return total
+    
+    def sigmoid(self, x):
+        """Sigmoid avec protection overflow"""
+        return 1 / (1 + np.exp(-np.clip(x, -500, 500)))
+    
+    def sigmoid_derivee(self, x):
+        """Dérivée de sigmoid"""
+        s = self.sigmoid(x)
+        return s * (1 - s)
+    
+    def forward_pass(self, X):
+        """Propagation avant avec stockage pour backprop"""
+        self.activations = {0: X}
+        self.z_values = {}
+        
+        for i in range(1, self.nb_couches):
+            self.z_values[i] = self.poids[i] @ self.activations[i-1] + self.biais[i]
+            self.activations[i] = self.sigmoid(self.z_values[i])
+        
+        return self.activations[self.nb_couches - 1]
+    
+    def backward_pass(self, y_true):
+        """Backpropagation complète"""
+        m = y_true.shape[1]  # Nombre d'exemples
+        
+        # Gradients pour stockage
+        self.gradients_poids = {}
+        self.gradients_biais = {}
+        
+        # Gradient de la sortie (MSE)
+        dA = self.activations[self.nb_couches - 1] - y_true
+        
+        # Remonter couche par couche
+        for i in range(self.nb_couches - 1, 0, -1):
+            # Gradient avant activation
+            dZ = dA * self.sigmoid_derivee(self.z_values[i])
+            
+            # Gradients des paramètres
+            self.gradients_poids[i] = (1/m) * dZ @ self.activations[i-1].T
+            self.gradients_biais[i] = (1/m) * np.sum(dZ, axis=1, keepdims=True)
+            
+            # Gradient pour la couche précédente
+            if i > 1:
+                dA = self.poids[i].T @ dZ
+    
+    def mettre_a_jour_parametres(self):
+        """Mise à jour des poids et biais"""
+        for i in range(1, self.nb_couches):
+            self.poids[i] -= self.lr * self.gradients_poids[i]
+            self.biais[i] -= self.lr * self.gradients_biais[i]
+    
+    def entrainer_une_epoque(self, X, y):
+        """Une époque d'entraînement complète"""
+        # Forward pass
+        predictions = self.forward_pass(X)
+        
+        # Calcul du coût
+        cout = np.mean((predictions - y)**2)
+        
+        # Backward pass
+        self.backward_pass(y)
+        
+        # Mise à jour
+        self.mettre_a_jour_parametres()
+        
+        return cout, predictions
+    
+    def entrainer(self, X, y, epochs=1000, verbose=True):
+        """Entraînement complet avec suivi"""
+        couts = []
+        
+        if verbose:
+            print(f"🚀 ENTRAÎNEMENT - {epochs} époques")
+            print("=" * 40)
+        
+        for epoch in range(epochs):
+            cout, predictions = self.entrainer_une_epoque(X, y)
+            couts.append(cout)
+            
+            if verbose and (epoch % 100 == 0 or epoch < 10):
+                precision = np.mean((predictions > 0.5) == (y > 0.5)) * 100
+                print(f"Époque {epoch:4d}: Coût = {cout:.4f}, Précision = {precision:.1f}%")
+        
+        return couts
+
+# Test sur problème de classification simple
+print("🎯 TEST: CLASSIFICATION RÉUSSITE ÉTUDIANTS")
+print("=" * 50)
+
+# Génération de données synthétiques
+np.random.seed(42)
+n_samples = 100
+
+# Features: [heures_étude, heures_sommeil] normalisées
+heures_etude = np.random.uniform(0, 1, n_samples)
+heures_sommeil = np.random.uniform(0, 1, n_samples)
+
+# Target: réussite basée sur une règle complexe
+# Réussite si: étude élevée ET sommeil suffisant OU étude très élevée
+reussite = ((heures_etude > 0.6) & (heures_sommeil > 0.4)) | (heures_etude > 0.8)
+reussite = reussite.astype(float)
+
+# Préparation des données
+X = np.vstack([heures_etude, heures_sommeil])
+y = reussite.reshape(1, -1)
+
+print(f"📊 Dataset: {n_samples} étudiants")
+print(f"📈 Taux de réussite: {np.mean(reussite)*100:.1f}%")
+
+# Création et entraînement du réseau
+reseau = ReseauAvecBackprop([2, 4, 1], learning_rate=0.5)
+couts = reseau.entrainer(X, y, epochs=500, verbose=True)`,
+          },
+          {
+            type: "code",
+            title: "Visualisation de l'apprentissage",
+            description: "Visualisons comment le réseau apprend :",
+            code: `# Visualisation des résultats
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 12))
+
+# 1. Courbe d'apprentissage
+ax1.plot(couts, 'b-', linewidth=2)
+ax1.set_title('Courbe d\'Apprentissage')
+ax1.set_xlabel('Époque')
+ax1.set_ylabel('Coût (MSE)')
+ax1.grid(True, alpha=0.3)
+
+# 2. Données originales
+colors = ['red' if r == 0 else 'green' for r in reussite]
+ax2.scatter(heures_etude, heures_sommeil, c=colors, alpha=0.7)
+ax2.set_title('Données Originales')
+ax2.set_xlabel('Heures d\'étude (normalisées)')
+ax2.set_ylabel('Heures de sommeil (normalisées)')
+
+# 3. Prédictions du réseau
+predictions_finales = reseau.forward_pass(X)[0]
+ax3.scatter(heures_etude, heures_sommeil, c=predictions_finales, 
+           cmap='RdYlGn', alpha=0.7)
+ax3.set_title('Prédictions du Réseau')
+ax3.set_xlabel('Heures d\'étude')
+ax3.set_ylabel('Heures de sommeil')
+plt.colorbar(ax3.collections[0], ax=ax3, label='Probabilité de réussite')
+
+# 4. Frontière de décision
+xx, yy = np.meshgrid(np.linspace(0, 1, 50), np.linspace(0, 1, 50))
+grid_points = np.vstack([xx.ravel(), yy.ravel()])
+grid_predictions = reseau.forward_pass(grid_points)[0]
+
+ax4.contourf(xx, yy, grid_predictions.reshape(xx.shape), 
+            levels=20, cmap='RdYlGn', alpha=0.6)
+ax4.scatter(heures_etude, heures_sommeil, c=colors, alpha=0.8, edgecolors='black')
+ax4.set_title('Frontière de Décision Apprise')
+ax4.set_xlabel('Heures d\'étude')
+ax4.set_ylabel('Heures de sommeil')
+
+plt.tight_layout()
+plt.show()
+
+# Évaluation finale
+predictions_binaires = (predictions_finales > 0.5).astype(int)
+precision = np.mean(predictions_binaires == reussite) * 100
+print(f"\\n🎯 RÉSULTATS FINAUX:")
+print(f"📊 Précision finale: {precision:.1f}%")
+print(f"📉 Coût final: {couts[-1]:.4f}")
+print(f"🔄 Convergence: {'Oui' if couts[-1] < 0.1 else 'Non'}")`,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Gradient checking : vérifier nos calculs",
+            content: `
+                        <p><strong>🔍 Comment s'assurer que notre backpropagation est correcte ?</strong></p>
+                        <p>Le <strong>gradient checking</strong> compare nos gradients analytiques avec des gradients numériques calculés par approximation.</p>
+                        
+                        <p><strong>📐 Approximation numérique du gradient :</strong></p>
+                        <p>$$\\frac{\\partial \\mathcal{L}}{\\partial \\theta} ≈ \\frac{\\mathcal{L}(\\theta + \\epsilon) - \\mathcal{L}(\\theta - \\epsilon)}{2\\epsilon}$$</p>
+                        
+                        <p><strong>🔍 Où :</strong></p>
+                        <ul>
+                            <li>\\(\\theta\\) = <strong>paramètre à tester</strong> (un poids ou biais)</li>
+                            <li>\\(\\epsilon\\) = <strong>petite perturbation</strong> (typiquement 10⁻⁷)</li>
+                            <li>\\(\\mathcal{L}(\\theta ± \\epsilon)\\) = <strong>coût avec paramètre perturbé</strong></li>
+                        </ul>
+                        
+                        <p><strong>✅ Test de validité :</strong></p>
+                        <p>$$\\text{erreur relative} = \\frac{|\\text{gradient analytique} - \\text{gradient numérique}|}{|\\text{gradient analytique}| + |\\text{gradient numérique}|}$$</p>
+                        
+                        <p><strong>🎯 Critères d'acceptation :</strong></p>
+                        <ul>
+                            <li>✅ <strong>Excellent</strong> : erreur < 10⁻⁷</li>
+                            <li>👍 <strong>Bon</strong> : erreur < 10⁻⁵</li>
+                            <li>⚠️ <strong>Suspect</strong> : erreur < 10⁻³</li>
+                            <li>❌ <strong>Bug</strong> : erreur > 10⁻³</li>
+                        </ul>
+                        
+                        <p><strong>💡 Pourquoi crucial ?</strong></p>
+                        <p>Un bug dans backpropagation peut passer inaperçu (le réseau "apprend" quand même) mais sera beaucoup moins efficace. Le gradient checking détecte ces erreurs subtiles.</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation gradient checking",
+            description: "Vérifions la correction de notre backpropagation :",
+            code: `def gradient_checking(reseau, X, y, epsilon=1e-7):
+    """Vérifie la correction de la backpropagation"""
+    print("🔍 GRADIENT CHECKING")
+    print("=" * 30)
+    
+    # Forward + backward pour obtenir gradients analytiques
+    reseau.forward_pass(X)
+    reseau.backward_pass(y)
+    
+    # Test sur quelques paramètres représentatifs
+    parametres_test = [
+        ('W^(1)[0,0]', 1, 0, 0),  # Premier poids première couche
+        ('W^(2)[0,0]', 2, 0, 0),  # Premier poids deuxième couche
+        ('b^(1)[0]', 1, 0, None), # Premier biais première couche
+    ]
+    
+    for nom, couche, i, j in parametres_test:
+        # Gradient analytique
+        if j is None:  # Biais
+            grad_analytique = reseau.gradients_biais[couche][i, 0]
+            param_original = reseau.biais[couche][i, 0]
+        else:  # Poids
+            grad_analytique = reseau.gradients_poids[couche][i, j]
+            param_original = reseau.poids[couche][i, j]
+        
+        # Gradient numérique
+        # Coût avec +epsilon
+        if j is None:
+            reseau.biais[couche][i, 0] = param_original + epsilon
+        else:
+            reseau.poids[couche][i, j] = param_original + epsilon
+        
+        pred_plus = reseau.forward_pass(X)
+        cout_plus = np.mean((pred_plus - y)**2)
+        
+        # Coût avec -epsilon
+        if j is None:
+            reseau.biais[couche][i, 0] = param_original - epsilon
+        else:
+            reseau.poids[couche][i, j] = param_original - epsilon
+        
+        pred_moins = reseau.forward_pass(X)
+        cout_moins = np.mean((pred_moins - y)**2)
+        
+        # Restaurer valeur originale
+        if j is None:
+            reseau.biais[couche][i, 0] = param_original
+        else:
+            reseau.poids[couche][i, j] = param_original
+        
+        # Gradient numérique
+        grad_numerique = (cout_plus - cout_moins) / (2 * epsilon)
+        
+        # Erreur relative
+        erreur = abs(grad_analytique - grad_numerique) / (abs(grad_analytique) + abs(grad_numerique) + 1e-8)
+        
+        # Affichage
+        status = "✅" if erreur < 1e-5 else "⚠️" if erreur < 1e-3 else "❌"
+        print(f"{status} {nom}: Analytique={grad_analytique:.6f}, Numérique={grad_numerique:.6f}, Erreur={erreur:.2e}")
+    
+    print("\\n💡 Gradient checking terminé !")
+
+# Test du gradient checking
+print("\\n🧪 VÉRIFICATION DE LA BACKPROPAGATION")
+print("=" * 50)
+
+# Petit échantillon pour le test
+X_test = X[:, :5]  # 5 premiers exemples
+y_test = y[:, :5]
+
+gradient_checking(reseau, X_test, y_test)`,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Optimisation : au-delà du gradient descent simple",
+            content: `
+                        <p><strong>🚀 Backpropagation fournit les gradients, mais comment les utiliser optimalement ?</strong></p>
+                        
+                        <p><strong>📐 Gradient Descent classique :</strong></p>
+                        <p>$$\\theta_{t+1} = \\theta_t - \\alpha \\nabla_{\\theta} \\mathcal{L}(\\theta_t)$$</p>
+                        
+                        <p><strong>⚠️ Problèmes du GD simple :</strong></p>
+                        <ul>
+                            <li>🐌 <strong>Convergence lente</strong> : oscillations dans les vallées</li>
+                            <li>🎯 <strong>Minima locaux</strong> : peut rester bloqué</li>
+                            <li>📊 <strong>Learning rate fixe</strong> : pas adaptatif</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Momentum (amélioration 1) :</strong></p>
+                        <p>$$v_t = \\beta v_{t-1} + (1-\\beta) \\nabla_{\\theta} \\mathcal{L}(\\theta_t)$$</p>
+                        <p>$$\\theta_{t+1} = \\theta_t - \\alpha v_t$$</p>
+                        <p><strong>💡 Idée :</strong> "Mémoire" des gradients précédents pour éviter les oscillations</p>
+                        
+                        <p><strong>🧠 Adam (amélioration 2) :</strong></p>
+                        <p>$$m_t = \\beta_1 m_{t-1} + (1-\\beta_1) \\nabla_{\\theta} \\mathcal{L}$$</p>
+                        <p>$$v_t = \\beta_2 v_{t-1} + (1-\\beta_2) (\\nabla_{\\theta} \\mathcal{L})^2$$</p>
+                        <p>$$\\hat{m}_t = \\frac{m_t}{1-\\beta_1^t}, \\quad \\hat{v}_t = \\frac{v_t}{1-\\beta_2^t}$$</p>
+                        <p>$$\\theta_{t+1} = \\theta_t - \\frac{\\alpha}{\\sqrt{\\hat{v}_t} + \\epsilon} \\hat{m}_t$$</p>
+                        
+                        <p><strong>🔍 Composants d'Adam :</strong></p>
+                        <ul>
+                            <li>\\(m_t\\) = <strong>momentum</strong> (moyenne mobile du gradient)</li>
+                            <li>\\(v_t\\) = <strong>variance</strong> (moyenne mobile du gradient²)</li>
+                            <li>\\(\\hat{m}_t, \\hat{v}_t\\) = <strong>correction de biais</strong> (début d'entraînement)</li>
+                            <li>\\(\\frac{\\alpha}{\\sqrt{\\hat{v}_t} + \\epsilon}\\) = <strong>learning rate adaptatif</strong></li>
+                        </ul>
+                        
+                        <p><strong>🎯 Valeurs typiques :</strong> \\(\\beta_1 = 0.9\\), \\(\\beta_2 = 0.999\\), \\(\\epsilon = 10^{-8}\\)</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation optimiseur Adam",
+            description: "Implémentons l'optimiseur Adam complet :",
+            code: `class OptimiseurAdam:
+    def __init__(self, learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8):
+        self.lr = learning_rate
+        self.beta1 = beta1
+        self.beta2 = beta2
+        self.epsilon = epsilon
+        self.t = 0  # Compteur d'itérations
+        
+        # Moments pour chaque paramètre
+        self.m_poids = {}
+        self.v_poids = {}
+        self.m_biais = {}
+        self.v_biais = {}
+    
+    def initialiser(self, reseau):
+        """Initialiser les moments pour tous les paramètres"""
+        for i in range(1, reseau.nb_couches):
+            self.m_poids[i] = np.zeros_like(reseau.poids[i])
+            self.v_poids[i] = np.zeros_like(reseau.poids[i])
+            self.m_biais[i] = np.zeros_like(reseau.biais[i])
+            self.v_biais[i] = np.zeros_like(reseau.biais[i])
+    
+    def mettre_a_jour(self, reseau):
+        """Mise à jour Adam des paramètres"""
+        self.t += 1
+        
+        for i in range(1, reseau.nb_couches):
+            # Poids
+            grad_w = reseau.gradients_poids[i]
+            self.m_poids[i] = self.beta1 * self.m_poids[i] + (1 - self.beta1) * grad_w
+            self.v_poids[i] = self.beta2 * self.v_poids[i] + (1 - self.beta2) * grad_w**2
+            
+            # Correction de biais
+            m_hat = self.m_poids[i] / (1 - self.beta1**self.t)
+            v_hat = self.v_poids[i] / (1 - self.beta2**self.t)
+            
+            # Mise à jour
+            reseau.poids[i] -= self.lr * m_hat / (np.sqrt(v_hat) + self.epsilon)
+            
+            # Biais
+            grad_b = reseau.gradients_biais[i]
+            self.m_biais[i] = self.beta1 * self.m_biais[i] + (1 - self.beta1) * grad_b
+            self.v_biais[i] = self.beta2 * self.v_biais[i] + (1 - self.beta2) * grad_b**2
+            
+            m_hat_b = self.m_biais[i] / (1 - self.beta1**self.t)
+            v_hat_b = self.v_biais[i] / (1 - self.beta2**self.t)
+            
+            reseau.biais[i] -= self.lr * m_hat_b / (np.sqrt(v_hat_b) + self.epsilon)
+
+# Comparaison SGD vs Adam
+print("\\n⚔️ COMPARAISON: SGD vs ADAM")
+print("=" * 35)
+
+# Réseau avec SGD
+reseau_sgd = ReseauAvecBackprop([2, 4, 1], learning_rate=0.1)
+couts_sgd = reseau_sgd.entrainer(X, y, epochs=300, verbose=False)
+
+# Réseau avec Adam
+reseau_adam = ReseauAvecBackprop([2, 4, 1], learning_rate=0.001)
+optimiseur = OptimiseurAdam()
+optimiseur.initialiser(reseau_adam)
+
+couts_adam = []
+for epoch in range(300):
+    cout, _ = reseau_adam.entrainer_une_epoque(X, y)
+    optimiseur.mettre_a_jour(reseau_adam)
+    couts_adam.append(cout)
+
+# Visualisation comparative
+plt.figure(figsize=(12, 6))
+plt.plot(couts_sgd, 'b-', label='SGD', linewidth=2)
+plt.plot(couts_adam, 'r-', label='Adam', linewidth=2)
+plt.title('Comparaison Optimiseurs: SGD vs Adam')
+plt.xlabel('Époque')
+plt.ylabel('Coût')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.yscale('log')  # Échelle logarithmique pour mieux voir
+plt.show()
+
+print(f"📊 Coût final SGD: {couts_sgd[-1]:.4f}")
+print(f"📊 Coût final Adam: {couts_adam[-1]:.4f}")
+print(f"🚀 Adam converge {couts_sgd[-1]/couts_adam[-1]:.1f}x plus vite !")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : dérivation manuelle",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Pour un réseau 1-1-1 très simple avec fonction de coût MSE :</p>
+                        
+                        <p><strong>⚙️ Architecture :</strong></p>
+                        <ul>
+                            <li>\\(z^{(1)} = w_1 x + b_1\\)</li>
+                            <li>\\(h^{(1)} = \\sigma(z^{(1)})\\)</li>
+                            <li>\\(z^{(2)} = w_2 h^{(1)} + b_2\\)</li>
+                            <li>\\(\\hat{y} = \\sigma(z^{(2)})\\)</li>
+                            <li>\\(\\mathcal{L} = \\frac{1}{2}(\\hat{y} - y)^2\\)</li>
+                        </ul>
+                        
+                        <p><strong>📝 Dérivez analytiquement :</strong></p>
+                        <ol>
+                            <li>\\(\\frac{\\partial \\mathcal{L}}{\\partial w_2}\\) (poids de sortie)</li>
+                            <li>\\(\\frac{\\partial \\mathcal{L}}{\\partial b_2}\\) (biais de sortie)</li>
+                            <li>\\(\\frac{\\partial \\mathcal{L}}{\\partial w_1}\\) (poids d'entrée)</li>
+                            <li>\\(\\frac{\\partial \\mathcal{L}}{\\partial b_1}\\) (biais d'entrée)</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('manual-derivation-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="manual-derivation-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>\\(\\frac{\\partial \\mathcal{L}}{\\partial w_2}\\) :</strong><br>
+                                \\(\\frac{\\partial \\mathcal{L}}{\\partial w_2} = \\frac{\\partial \\mathcal{L}}{\\partial \\hat{y}} \\cdot \\frac{\\partial \\hat{y}}{\\partial z^{(2)}} \\cdot \\frac{\\partial z^{(2)}}{\\partial w_2}\\)<br>
+                                \\(= (\\hat{y} - y) \\cdot \\sigma'(z^{(2)}) \\cdot h^{(1)}\\)</li>
+                            <li><strong>\\(\\frac{\\partial \\mathcal{L}}{\\partial b_2}\\) :</strong><br>
+                                \\(\\frac{\\partial \\mathcal{L}}{\\partial b_2} = (\\hat{y} - y) \\cdot \\sigma'(z^{(2)}) \\cdot 1 = (\\hat{y} - y) \\cdot \\sigma'(z^{(2)})\\)</li>
+                            <li><strong>\\(\\frac{\\partial \\mathcal{L}}{\\partial w_1}\\) :</strong><br>
+                                \\(\\frac{\\partial \\mathcal{L}}{\\partial w_1} = \\frac{\\partial \\mathcal{L}}{\\partial \\hat{y}} \\cdot \\frac{\\partial \\hat{y}}{\\partial z^{(2)}} \\cdot \\frac{\\partial z^{(2)}}{\\partial h^{(1)}} \\cdot \\frac{\\partial h^{(1)}}{\\partial z^{(1)}} \\cdot \\frac{\\partial z^{(1)}}{\\partial w_1}\\)<br>
+                                \\(= (\\hat{y} - y) \\cdot \\sigma'(z^{(2)}) \\cdot w_2 \\cdot \\sigma'(z^{(1)}) \\cdot x\\)</li>
+                            <li><strong>\\(\\frac{\\partial \\mathcal{L}}{\\partial b_1}\\) :</strong><br>
+                                \\(\\frac{\\partial \\mathcal{L}}{\\partial b_1} = (\\hat{y} - y) \\cdot \\sigma'(z^{(2)}) \\cdot w_2 \\cdot \\sigma'(z^{(1)}) \\cdot 1\\)</li>
+                        </ol>
+                        <p><strong>💡 Pattern :</strong> Plus on s'éloigne de la sortie, plus la chaîne de dérivées s'allonge !</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Entraînement sur problème réel",
+            description: "Appliquons backpropagation à un problème concret :",
+            code: `# Problème réel: prédiction de succès de startups sénégalaises
+def generer_donnees_startups(n=200):
+    """Génère des données réalistes de startups"""
+    np.random.seed(42)
+    
+    # Features normalisées [0,1]
+    capital_initial = np.random.beta(2, 5, n)  # Plutôt faible (réaliste)
+    experience_fondateur = np.random.beta(3, 3, n)  # Distribution équilibrée
+    taille_marche = np.random.beta(4, 2, n)  # Plutôt élevée
+    
+    # Règle complexe pour le succès (non-linéaire)
+    # Succès si: (capital ET expérience) OU (marché énorme)
+    prob_succes = (
+        0.3 * capital_initial * experience_fondateur +  # Synergie capital-expérience
+        0.4 * taille_marche +                          # Impact marché
+        0.2 * (capital_initial > 0.7).astype(float) +  # Bonus gros capital
+        0.1 * (experience_fondateur > 0.8).astype(float)  # Bonus expert
+    )
+    
+    # Ajout de bruit réaliste
+    bruit = np.random.normal(0, 0.1, n)
+    prob_succes = np.clip(prob_succes + bruit, 0, 1)
+    
+    # Conversion en succès binaire
+    succes = (prob_succes > 0.5).astype(float)
+    
+    X = np.vstack([capital_initial, experience_fondateur, taille_marche])
+    return X, succes.reshape(1, -1), prob_succes
+
+# Génération des données
+X_startups, y_startups, prob_reelles = generer_donnees_startups(150)
+
+print("🚀 DATASET: STARTUPS SÉNÉGALAISES")
+print("=" * 40)
+print(f"📊 Nombre de startups: {X_startups.shape[1]}")
+print(f"📈 Taux de succès: {np.mean(y_startups)*100:.1f}%")
+print(f"💰 Capital moyen: {np.mean(X_startups[0])*100:.1f}%")
+print(f"🧠 Expérience moyenne: {np.mean(X_startups[1])*100:.1f}%")
+print(f"📊 Taille marché moyenne: {np.mean(X_startups[2])*100:.1f}%")
+
+# Entraînement avec Adam
+reseau_startups = ReseauAvecBackprop([3, 8, 4, 1], learning_rate=0.001)
+optimiseur_adam = OptimiseurAdam(learning_rate=0.01)
+optimiseur_adam.initialiser(reseau_startups)
+
+print(f"\\n🧠 Réseau pour startups: {reseau_startups.architecture}")
+print(f"📊 Paramètres totaux: {reseau_startups.compter_parametres()}")
+
+# Entraînement avec suivi
+couts_startups = []
+precisions = []
+
+for epoch in range(500):
+    cout, predictions = reseau_startups.entrainer_une_epoque(X_startups, y_startups)
+    optimiseur_adam.mettre_a_jour(reseau_startups)
+    
+    couts_startups.append(cout)
+    precision = np.mean((predictions > 0.5) == (y_startups > 0.5)) * 100
+    precisions.append(precision)
+    
+    if epoch % 100 == 0:
+        print(f"Époque {epoch:3d}: Coût = {cout:.4f}, Précision = {precision:.1f}%")
+
+print(f"\\n🎯 RÉSULTATS FINAUX:")
+print(f"📊 Précision finale: {precisions[-1]:.1f}%")
+print(f"📉 Coût final: {couts_startups[-1]:.4f}")`,
+          },
+          {
+            type: "code",
+            title: "Analyse des résultats",
+            description: "Analysons les performances de notre réseau :",
+            code: `# Visualisation des résultats d'entraînement
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 12))
+
+# 1. Courbes d'apprentissage
+ax1.plot(couts_startups, 'b-', linewidth=2, label='Coût')
+ax1.set_title('Évolution du Coût')
+ax1.set_xlabel('Époque')
+ax1.set_ylabel('Coût (MSE)')
+ax1.grid(True, alpha=0.3)
+ax1.legend()
+
+ax2.plot(precisions, 'g-', linewidth=2, label='Précision')
+ax2.set_title('Évolution de la Précision')
+ax2.set_xlabel('Époque')
+ax2.set_ylabel('Précision (%)')
+ax2.grid(True, alpha=0.3)
+ax2.legend()
+
+# 2. Prédictions vs réalité
+predictions_finales = reseau_startups.forward_pass(X_startups)[0]
+ax3.scatter(prob_reelles, predictions_finales, alpha=0.6)
+ax3.plot([0, 1], [0, 1], 'r--', label='Prédiction parfaite')
+ax3.set_title('Prédictions vs Réalité')
+ax3.set_xlabel('Probabilité réelle')
+ax3.set_ylabel('Prédiction du réseau')
+ax3.legend()
+ax3.grid(True, alpha=0.3)
+
+# 3. Distribution des erreurs
+erreurs = predictions_finales.flatten() - prob_reelles
+ax4.hist(erreurs, bins=20, alpha=0.7, color='skyblue', edgecolor='black')
+ax4.axvline(np.mean(erreurs), color='red', linestyle='--', 
+           label=f'Erreur moyenne: {np.mean(erreurs):.3f}')
+ax4.set_title('Distribution des Erreurs')
+ax4.set_xlabel('Erreur (prédiction - réalité)')
+ax4.set_ylabel('Fréquence')
+ax4.legend()
+ax4.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Analyse des cas extrêmes
+print("\\n🔍 ANALYSE DES CAS EXTRÊMES:")
+print("=" * 35)
+
+# Meilleures prédictions
+indices_tries = np.argsort(np.abs(erreurs))
+print("✅ 3 meilleures prédictions:")
+for i in range(3):
+    idx = indices_tries[i]
+    print(f"  Startup {idx}: Réel={prob_reelles[idx]:.3f}, Prédit={predictions_finales[0,idx]:.3f}, Erreur={erreurs[idx]:.3f}")
+
+print("\\n❌ 3 pires prédictions:")
+for i in range(3):
+    idx = indices_tries[-(i+1)]
+    print(f"  Startup {idx}: Réel={prob_reelles[idx]:.3f}, Prédit={predictions_finales[0,idx]:.3f}, Erreur={erreurs[idx]:.3f}")`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Backpropagation : l'algorithme qui a changé le monde",
+            content: `
+                        <p><strong>🌍 Impact révolutionnaire de la backpropagation :</strong></p>
+                        
+                        <p><strong>📅 Chronologie historique :</strong></p>
+                        <ul>
+                            <li>📚 <strong>1986</strong> : Rumelhart, Hinton & Williams formalisent l'algorithme</li>
+                            <li>🧠 <strong>1990s</strong> : Premiers succès sur problèmes simples</li>
+                            <li>💻 <strong>2000s</strong> : Limitations computationnelles</li>
+                            <li>🚀 <strong>2010s</strong> : Renaissance avec GPU et big data</li>
+                            <li>🌟 <strong>2020s</strong> : Transformers et LLMs révolutionnent tout</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Pourquoi révolutionnaire ?</strong></p>
+                        <ul>
+                            <li>🧮 <strong>Efficacité computationnelle</strong> : O(paramètres) au lieu de O(exponentiel)</li>
+                            <li>🎯 <strong>Précision mathématique</strong> : gradients exacts, pas d'approximation</li>
+                            <li>🔄 <strong>Généralité</strong> : fonctionne pour toute architecture différentiable</li>
+                            <li>⚡ <strong>Parallélisation</strong> : parfait pour les GPU modernes</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Applications qui ont changé le monde :</strong></p>
+                        <ul>
+                            <li>🖼️ <strong>Vision par ordinateur</strong> : reconnaissance faciale, diagnostic médical</li>
+                            <li>💬 <strong>Traitement du langage</strong> : traduction, ChatGPT, assistants vocaux</li>
+                            <li>🎮 <strong>IA de jeux</strong> : AlphaGo, AlphaStar, OpenAI Five</li>
+                            <li>🚗 <strong>Véhicules autonomes</strong> : Tesla, Waymo</li>
+                            <li>🎨 <strong>IA générative</strong> : DALL-E, Midjourney, Stable Diffusion</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Backpropagation n'est pas juste un algorithme technique - c'est <strong>l'algorithme qui a rendu possible l'IA moderne</strong>. Sans lui, pas de deep learning, pas de ChatGPT, pas de révolution IA !</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> CNN - comment appliquer ces réseaux à la vision par ordinateur !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Pourquoi la backpropagation utilise-t-elle la règle de dérivation en chaîne ?",
+          options: [
+            "A) Pour calculer plus rapidement",
+            "B) Pour propager l'erreur de la sortie vers l'entrée couche par couche",
+            "C) Pour éviter les calculs matriciels",
+            "D) Pour initialiser les poids correctement",
+          ],
+          correct: 1,
+          explanation:
+            "La backpropagation utilise la règle de dérivation en chaîne pour calculer comment l'erreur de sortie se propage vers chaque paramètre du réseau. Cela permet de calculer le gradient exact de la fonction de coût par rapport à chaque poids, même dans des réseaux très profonds.",
+        },
+        prevModule: "neural-networks.html",
+        nextModule: "cnn.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>
