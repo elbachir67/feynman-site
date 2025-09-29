@@ -45,7 +45,9 @@
     <!-- Contenu principal -->
     <div class="container">
       <h1>🎯 Classification</h1>
-      <p class="subtitle">Module 3.3 - Machine Learning</p>
+      <p class="subtitle">
+        Module 3.3 - Prédire des catégories avec la régression logistique
+      </p>
 
       <!-- Objectifs -->
       <div class="objectives">
@@ -71,7 +73,8 @@
       <div class="checkpoint">
         <h3>🎉 Checkpoint - Classification</h3>
         <p>
-          Vous maîtrisez maintenant la régression logistique et ses extensions.
+          Félicitations ! Vous maîtrisez maintenant la régression logistique et
+          la classification.
         </p>
         <button
           class="checkpoint-btn"
@@ -101,148 +104,665 @@
         title: "Classification",
         category: "Machine Learning",
         objectives: [
-          "Comprendre pourquoi on ne peut pas utiliser la régression directement",
+          "Comprendre pourquoi la régression linéaire ne fonctionne pas pour les catégories",
           "Maîtriser la fonction sigmoïde et son rôle crucial",
-          "Dériver et comprendre l'entropie croisée",
-          "Comprendre la régularisation et son importance",
-          "Généraliser au cas multi-classe avec softmax",
+          "Dériver complètement la régression logistique",
+          "Comprendre l'entropie croisée et pourquoi elle est convexe",
+          "Appliquer la régularisation pour éviter l'overfitting",
+          "Généraliser au multi-classe avec softmax",
         ],
         content: [
           {
             type: "concept",
             icon: "💡",
-            title: "Le problème : prédire des catégories",
+            title: "Le problème fondamental : prédire des catégories",
             content: `
-                        <p><strong>La classification prédit une classe discrète, pas une valeur continue.</strong></p>
+                        <p>La <strong>classification</strong> prédit des <strong>catégories discrètes</strong>, pas des valeurs continues. C'est un changement de paradigme par rapport à la régression !</p>
                         
-                        <p>Exemple médical : une tumeur est maligne (1) ou bénigne (0). Pas 0.7 maligne.</p>
+                        <p><strong>🔑 Différence cruciale :</strong></p>
+                        <ul>
+                            <li>📈 <strong>Régression</strong> : "Cette maison coûte 45 millions FCFA" (nombre)</li>
+                            <li>🎯 <strong>Classification</strong> : "Cet email est un spam" (catégorie)</li>
+                        </ul>
                         
-                        <p><strong>Pourquoi pas la régression linéaire ?</strong> Testons avec y ∈ {0, 1} :</p>
+                        <p><strong>🤖 Applications concrètes :</strong></p>
+                        <ul>
+                            <li>📧 <strong>Détection de spam</strong> : spam ou pas spam</li>
+                            <li>🏥 <strong>Diagnostic médical</strong> : maladie A, B ou C</li>
+                            <li>🎬 <strong>Recommandations</strong> : aimera ou n'aimera pas</li>
+                            <li>🖼️ <strong>Vision par ordinateur</strong> : chat, chien, oiseau</li>
+                            <li>💬 <strong>Analyse de sentiment</strong> : positif, négatif, neutre</li>
+                        </ul>
                         
-                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>Problème fatal :</strong> y = ax + b peut donner n'importe quelle valeur !<br><br>
-                            • Tumeur 1mm → y = -0.2 (probabilité négative ?)<br>
-                            • Tumeur 100mm → y = 1.8 (probabilité > 100% ?)<br><br>
-                            
-                            On a besoin d'une fonction bornée entre 0 et 1.
-                        </div>
+                        <p><strong>⚠️ Problème avec la régression linéaire :</strong></p>
+                        <p>Si on code les catégories en nombres (spam=1, pas spam=0), la régression linéaire peut prédire 0.7, 1.3, -0.2... Que signifie "0.7 spam" ?</p>
                         
-                        <p><strong>L'idée :</strong> Transformer la sortie linéaire en probabilité P(y=1|x).</p>
+                        <p><strong>💡 Solution :</strong> Transformer la sortie en <strong>probabilité</strong> entre 0 et 1 !</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie du médecin et du diagnostic",
+            content: `
+                        <p>Imaginez un <strong>médecin expérimenté</strong> qui examine un patient :</p>
+                        
+                        <p><strong>🩺 Le processus mental :</strong></p>
+                        <ol>
+                            <li>📋 <strong>Collecte des symptômes</strong> : fièvre, toux, fatigue...</li>
+                            <li>🧠 <strong>Calcul mental</strong> : "Ces symptômes correspondent à..."</li>
+                            <li>⚖️ <strong>Évaluation des probabilités</strong> : "85% grippe, 10% rhume, 5% autre"</li>
+                            <li>🎯 <strong>Décision finale</strong> : "C'est probablement une grippe"</li>
+                        </ol>
+                        
+                        <p><strong>🤖 C'est exactement ce que fait la classification :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Données d'entrée</strong> = symptômes du patient</li>
+                            <li>🧮 <strong>Calcul linéaire</strong> = combinaison pondérée des symptômes</li>
+                            <li>🎯 <strong>Fonction sigmoïde</strong> = transformation en probabilité</li>
+                            <li>⚖️ <strong>Seuil de décision</strong> = "si probabilité > 50%, alors grippe"</li>
+                        </ul>
+                        
+                        <p><strong>💡 La différence :</strong></p>
+                        <p>Le médecin utilise son expérience, l'IA utilise les <strong>mathématiques</strong> pour arriver au même type de raisonnement probabiliste !</p>
                     `,
           },
           {
             type: "mathematique",
             icon: "∑",
-            title: "La sigmoïde : le cœur de la solution",
+            title: "Pourquoi la régression linéaire échoue",
             content: `
-                        <p><strong>La fonction sigmoïde transforme ℝ → (0,1) :</strong></p>
+                        <p><strong>🔍 Testons la régression linéaire sur un problème de classification :</strong></p>
+                        
+                        <p><strong>Problème :</strong> Prédire si un étudiant réussit (y=1) ou échoue (y=0) selon ses heures d'étude.</p>
+                        
+                        <p><strong>Données d'exemple :</strong></p>
+                        <table style="margin: 1rem auto; text-align: center; border-collapse: collapse;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.5rem; border: 1px solid #ddd;">Heures d'étude</th>
+                                <th style="padding: 0.5rem; border: 1px solid #ddd;">Résultat</th>
+                            </tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0 (échec)</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">4</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0 (échec)</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">6</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1 (réussite)</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">8</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1 (réussite)</td></tr>
+                        </table>
+                        
+                        <p><strong>❌ Problèmes de la régression linéaire :</strong></p>
+                        
+                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>1. Prédictions impossibles :</strong><br>
+                            • Pour 0 heure : ŷ = -0.4 (probabilité négative ?)<br>
+                            • Pour 12 heures : ŷ = 1.6 (probabilité > 100% ?)<br><br>
+                            
+                            <strong>2. Seuil arbitraire :</strong><br>
+                            • Si ŷ > 0.5 → réussite, sinon échec<br>
+                            • Mais pourquoi 0.5 ? Pourquoi pas 0.3 ou 0.7 ?<br><br>
+                            
+                            <strong>3. Sensibilité aux outliers :</strong><br>
+                            • Un étudiant exceptionnel (20h, réussite) décale toute la droite<br>
+                            • Fausses prédictions pour les cas normaux
+                        </div>
+                        
+                        <p><strong>✅ Solution :</strong> Utiliser une fonction qui transforme ℝ → (0,1) : la <strong>sigmoïde</strong> !</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "La sigmoïde : transformation magique",
+            content: `
+                        <p><strong>La fonction sigmoïde résout élégamment tous les problèmes :</strong></p>
                         
                         <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
                             $$\\sigma(z) = \\frac{1}{1 + e^{-z}}$$
                             
-                            <strong>Propriétés essentielles :</strong><br>
-                            • \\(\\lim_{z \\to -\\infty} \\sigma(z) = 0\\) et \\(\\lim_{z \\to +\\infty} \\sigma(z) = 1\\)<br>
-                            • \\(\\sigma(0) = 0.5\\) (point d'inflexion)<br>
+                            <strong>Propriétés remarquables :</strong><br>
+                            • \\(\\lim_{z \\to -\\infty} \\sigma(z) = 0\\) (jamais négatif)<br>
+                            • \\(\\lim_{z \\to +\\infty} \\sigma(z) = 1\\) (jamais > 1)<br>
+                            • \\(\\sigma(0) = 0.5\\) (point d'équilibre)<br>
                             • Strictement croissante (préserve l'ordre)<br>
-                            • Symétrique : \\(\\sigma(-z) = 1 - \\sigma(z)\\)
+                            • Forme de "S" lisse (pas de saut brutal)
                         </div>
                         
-                        <p><strong>LA propriété cruciale (dérivée) :</strong></p>
+                        <p><strong>🔍 Valeurs remarquables :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li>• \\(\\sigma(-2) ≈ 0.12\\) → 12% de chance</li>
+                            <li>• \\(\\sigma(-1) ≈ 0.27\\) → 27% de chance</li>
+                            <li>• \\(\\sigma(0) = 0.50\\) → 50% de chance</li>
+                            <li>• \\(\\sigma(1) ≈ 0.73\\) → 73% de chance</li>
+                            <li>• \\(\\sigma(2) ≈ 0.88\\) → 88% de chance</li>
+                        </ul>
                         
-                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            $$\\frac{d\\sigma}{dz} = \\sigma(z) \\cdot (1 - \\sigma(z))$$
-                            
-                            <strong>Démonstration :</strong> Posons \\(\\sigma = (1 + e^{-z})^{-1}\\)<br><br>
-                            
-                            Par la règle de chaîne (<a href="../math/derivatives.html">Module 1.4</a>) :<br>
-                            $$\\frac{d\\sigma}{dz} = -(1 + e^{-z})^{-2} \\cdot (-e^{-z}) = \\frac{e^{-z}}{(1 + e^{-z})^2}$$
-                            
-                            Or : \\(\\sigma = \\frac{1}{1 + e^{-z}}\\) donc \\(1 - \\sigma = \\frac{e^{-z}}{1 + e^{-z}}\\)<br><br>
-                            
-                            Ainsi : \\(\\sigma(1 - \\sigma) = \\frac{1}{1 + e^{-z}} \\cdot \\frac{e^{-z}}{1 + e^{-z}} = \\frac{e^{-z}}{(1 + e^{-z})^2}\\) ✓
-                        </div>
+                        <p><strong>🔑 Propriété cruciale (dérivée) :</strong></p>
+                        <p>$$\\frac{d\\sigma}{dz} = \\sigma(z) \\cdot (1 - \\sigma(z))$$</p>
                         
-                        <p>Cette forme élégante va simplifier tous nos calculs d'optimisation !</p>
+                        <p><strong>💡 Pourquoi cette dérivée est géniale :</strong></p>
+                        <ul>
+                            <li>🧮 <strong>Calcul simple</strong> : pas besoin de recalculer l'exponentielle</li>
+                            <li>⚡ <strong>Efficacité</strong> : optimisation rapide des réseaux de neurones</li>
+                            <li>🎯 <strong>Stabilité numérique</strong> : évite les débordements</li>
+                        </ul>
                     `,
           },
           {
-            type: "mathematique",
-            icon: "∑",
-            title: "L'entropie croisée : pourquoi cette fonction de coût",
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : calculs manuels avec la sigmoïde",
             content: `
-                        <p><strong>Le modèle complet (régression logistique) :</strong></p>
-                        <p>$$P(y=1|\\vec{x}) = \\sigma(\\vec{w}^T\\vec{x} + b)$$</p>
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Un modèle de classification prédit la réussite d'un étudiant avec :</p>
+                        <p>$$z = 0.5 \\times \\text{heures_étude} - 2$$</p>
+                        <p>$$P(\\text{réussite}) = \\sigma(z) = \\frac{1}{1 + e^{-z}}$$</p>
                         
-                        <p><strong>Pourquoi pas l'erreur quadratique ?</strong></p>
-                        <p>Avec \\(J = \\sum(y_i - \\sigma(\\vec{w}^T\\vec{x}_i + b))^2\\), la fonction n'est pas convexe → minima locaux !</p>
+                        <p><strong>📝 Calculez à la main :</strong></p>
+                        <ol>
+                            <li>Probabilité de réussite pour 2 heures d'étude</li>
+                            <li>Probabilité de réussite pour 4 heures d'étude</li>
+                            <li>Probabilité de réussite pour 6 heures d'étude</li>
+                            <li>Combien d'heures faut-il pour avoir 50% de chance ?</li>
+                            <li>Combien d'heures faut-il pour avoir 90% de chance ?</li>
+                        </ol>
                         
-                        <p><strong>L'approche par maximum de vraisemblance :</strong></p>
-                        
-                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            Pour un exemple \\((\\vec{x}_i, y_i)\\), la probabilité d'observer \\(y_i\\) est :<br><br>
-                            
-                            $$P(y_i|\\vec{x}_i) = p_i^{y_i}(1-p_i)^{1-y_i}$$<br>
-                            où \\(p_i = \\sigma(\\vec{w}^T\\vec{x}_i + b)\\)<br><br>
-                            
-                            <strong>Vérification :</strong><br>
-                            • Si \\(y_i = 1\\) : \\(P = p_i\\) ✓<br>
-                            • Si \\(y_i = 0\\) : \\(P = 1 - p_i\\) ✓
-                        </div>
-                        
-                        <p><strong>La fonction de coût (entropie croisée binaire) :</strong></p>
-                        
-                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            En prenant le -log de la vraisemblance et en moyennant :<br><br>
-                            
-                            $$J(\\vec{w}, b) = -\\frac{1}{n}\\sum_{i=1}^{n} [y_i \\log(p_i) + (1-y_i) \\log(1-p_i)]$$<br><br>
-                            
-                            <strong>Cette fonction est convexe !</strong> (Un seul minimum global)<br><br>
-                            
-                            <strong>Gradient (après calcul avec règle de chaîne) :</strong><br>
-                            $$\\nabla_{\\vec{w}} J = \\frac{1}{n}\\sum_{i=1}^{n} (p_i - y_i) \\vec{x}_i$$<br>
-                            $$\\frac{\\partial J}{\\partial b} = \\frac{1}{n}\\sum_{i=1}^{n} (p_i - y_i)$$<br><br>
-                            
-                            Forme identique à la régression, mais avec \\(p_i = \\sigma(\\vec{w}^T\\vec{x}_i + b)\\) !
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('sigmoid-exercise-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="sigmoid-exercise-solution" style="display: none;">
+                        <ol>
+                            <li><strong>2 heures :</strong> z = 0.5×2 - 2 = -1 → σ(-1) = 1/(1+e) ≈ 0.27 → <strong>27%</strong></li>
+                            <li><strong>4 heures :</strong> z = 0.5×4 - 2 = 0 → σ(0) = 0.5 → <strong>50%</strong></li>
+                            <li><strong>6 heures :</strong> z = 0.5×6 - 2 = 1 → σ(1) = 1/(1+e⁻¹) ≈ 0.73 → <strong>73%</strong></li>
+                            <li><strong>50% de chance :</strong> σ(z) = 0.5 ⟺ z = 0 ⟺ 0.5h - 2 = 0 ⟺ <strong>h = 4 heures</strong></li>
+                            <li><strong>90% de chance :</strong> σ(z) = 0.9 ⟺ z ≈ 2.2 ⟺ 0.5h - 2 = 2.2 ⟺ <strong>h = 8.4 heures</strong></li>
+                        </ol>
                         </div>
                     `,
           },
           {
             type: "concept",
             icon: "💡",
-            title: "La régularisation : éviter le sur-apprentissage",
+            title: "Construction du modèle : régression logistique",
             content: `
-                        <p><strong>Le problème du sur-apprentissage :</strong></p>
+                        <p><strong>🎯 Modèle complet de régression logistique :</strong></p>
                         
-                        <p>Avec beaucoup de features, le modèle peut "mémoriser" les données d'entraînement au lieu de généraliser.</p>
+                        <p><strong>Étape 1 :</strong> Combinaison linéaire des features</p>
+                        <p>$$z = w_0 + w_1 x_1 + w_2 x_2 + ... + w_n x_n = \\vec{w}^T \\vec{x} + b$$</p>
+                        
+                        <p><strong>Étape 2 :</strong> Transformation en probabilité</p>
+                        <p>$$P(y=1|\\vec{x}) = \\sigma(z) = \\frac{1}{1 + e^{-(\\vec{w}^T \\vec{x} + b)}}$$</p>
+                        
+                        <p><strong>Étape 3 :</strong> Règle de décision</p>
+                        <p>$$\\hat{y} = \\begin{cases} 1 & \\text{si } P(y=1|\\vec{x}) \\geq 0.5 \\\\ 0 & \\text{sinon} \\end{cases}$$</p>
+                        
+                        <p><strong>🔑 Interprétation des paramètres :</strong></p>
+                        <ul>
+                            <li>\\(w_i > 0\\) : feature \\(x_i\\) <strong>augmente</strong> la probabilité de classe 1</li>
+                            <li>\\(w_i < 0\\) : feature \\(x_i\\) <strong>diminue</strong> la probabilité de classe 1</li>
+                            <li>\\(|w_i|\\) grand : feature \\(x_i\\) très <strong>influente</strong></li>
+                            <li>\\(b\\) : <strong>biais</strong> (probabilité quand toutes les features = 0)</li>
+                        </ul>
+                        
+                        <p><strong>📐 Frontière de décision :</strong></p>
+                        <p>La frontière où P(y=1) = 0.5 correspond à \\(\\vec{w}^T \\vec{x} + b = 0\\)</p>
+                        <p>C'est une <strong>droite</strong> (2D), un <strong>plan</strong> (3D), ou un <strong>hyperplan</strong> (nD) !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Problème concret : admission universitaire",
+            content: `
+                        <p><strong>🎓 Prédisons l'admission à l'UCAD selon 2 critères :</strong></p>
+                        
+                        <table style="margin: 1rem auto; text-align: center; border-collapse: collapse;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.5rem; border: 1px solid #ddd;">Note Bac</th>
+                                <th style="padding: 0.5rem; border: 1px solid #ddd;">Heures étude/sem</th>
+                                <th style="padding: 0.5rem; border: 1px solid #ddd;">Admis</th>
+                            </tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">12</td><td style="padding: 0.5rem; border: 1px solid #ddd;">10</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">14</td><td style="padding: 0.5rem; border: 1px solid #ddd;">15</td><td style="padding: 0.5rem; border: 1px solid #ddd;">0</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">16</td><td style="padding: 0.5rem; border: 1px solid #ddd;">20</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">18</td><td style="padding: 0.5rem; border: 1px solid #ddd;">25</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td></tr>
+                        </table>
+                        
+                        <p><strong>🎯 Modèle proposé :</strong></p>
+                        <p>$$P(\\text{admis}) = \\sigma(w_1 \\times \\text{note} + w_2 \\times \\text{heures} + b)$$</p>
+                        
+                        <p><strong>🔍 Avec régression linéaire (MAUVAIS) :</strong></p>
+                        <p>Droite : ŷ = 0.1×note + 0.05×heures - 2</p>
+                        <ul>
+                            <li>Note=10, heures=5 → ŷ = -0.75 (probabilité négative !)</li>
+                            <li>Note=20, heures=30 → ŷ = 1.5 (probabilité > 100% !)</li>
+                        </ul>
+                        
+                        <p><strong>✅ Avec régression logistique (BON) :</strong></p>
+                        <p>P(admis) = σ(0.1×note + 0.05×heures - 2)</p>
+                        <ul>
+                            <li>Note=10, heures=5 → P = σ(-0.75) ≈ 0.32 → <strong>32% de chance</strong></li>
+                            <li>Note=20, heures=30 → P = σ(1.5) ≈ 0.82 → <strong>82% de chance</strong></li>
+                        </ul>
+                        
+                        <p><strong>💡 Résultat :</strong> Toujours des probabilités valides entre 0 et 1 !</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Dérivation de l'entropie croisée",
+            content: `
+                        <p><strong>🤔 Pourquoi pas l'erreur quadratique (MSE) ?</strong></p>
+                        
+                        <p>Avec MSE : \\(J = \\frac{1}{2n}\\sum_{i=1}^{n}(y_i - \\sigma(\\vec{w}^T\\vec{x}_i + b))^2\\)</p>
+                        
+                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>❌ Problème fatal :</strong> Cette fonction n'est PAS convexe !<br><br>
+                            
+                            La sigmoïde crée des "plateaux" où le gradient devient très petit.<br>
+                            → Minima locaux multiples<br>
+                            → Optimisation difficile et instable<br>
+                            → Pas de garantie de convergence
+                        </div>
+                        
+                        <p><strong>✅ Solution : Maximum de vraisemblance</strong></p>
+                        
+                        <p><strong>Étape 1 :</strong> Modélisation probabiliste</p>
+                        <p>Pour un exemple \\((\\vec{x}_i, y_i)\\), la probabilité d'observer \\(y_i\\) est :</p>
+                        <p>$$P(y_i|\\vec{x}_i) = p_i^{y_i}(1-p_i)^{1-y_i}$$</p>
+                        <p>où \\(p_i = \\sigma(\\vec{w}^T\\vec{x}_i + b)\\)</p>
+                        
+                        <p><strong>Vérification :</strong></p>
+                        <ul>
+                            <li>Si \\(y_i = 1\\) : \\(P = p_i^1 \\times (1-p_i)^0 = p_i\\) ✓</li>
+                            <li>Si \\(y_i = 0\\) : \\(P = p_i^0 \\times (1-p_i)^1 = 1-p_i\\) ✓</li>
+                        </ul>
+                        
+                        <p><strong>Étape 2 :</strong> Vraisemblance totale</p>
+                        <p>$$L(\\vec{w}, b) = \\prod_{i=1}^{n} P(y_i|\\vec{x}_i) = \\prod_{i=1}^{n} p_i^{y_i}(1-p_i)^{1-y_i}$$</p>
+                        
+                        <p><strong>Étape 3 :</strong> Log-vraisemblance (plus pratique)</p>
+                        <p>$$\\ell(\\vec{w}, b) = \\log L = \\sum_{i=1}^{n} [y_i \\log(p_i) + (1-y_i) \\log(1-p_i)]$$</p>
+                        
+                        <p><strong>Étape 4 :</strong> Fonction de coût (entropie croisée)</p>
+                        <p>$$J(\\vec{w}, b) = -\\frac{1}{n} \\ell(\\vec{w}, b) = -\\frac{1}{n}\\sum_{i=1}^{n} [y_i \\log(p_i) + (1-y_i) \\log(1-p_i)]$$</p>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>🎉 Cette fonction est convexe !</strong><br>
+                            → Un seul minimum global<br>
+                            → Convergence garantie<br>
+                            → Optimisation stable et efficace
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : construction de la fonction de coût",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Avec nos 4 étudiants et le modèle \\(P(\\text{admis}) = \\sigma(w_1 \\times \\text{note} + w_2 \\times \\text{heures} + b)\\)</p>
+                        
+                        <p><strong>📝 Supposons :</strong> \\(w_1 = 0.2\\), \\(w_2 = 0.1\\), \\(b = -3\\)</p>
+                        
+                        <p><strong>Calculez :</strong></p>
+                        <ol>
+                            <li>Les prédictions \\(p_i\\) pour chaque étudiant</li>
+                            <li>La log-vraisemblance totale</li>
+                            <li>L'entropie croisée (fonction de coût)</li>
+                            <li>Interprétez : ce modèle est-il bon ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('cost-function-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="cost-function-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Prédictions :</strong>
+                                <br>• Étudiant 1 : z = 0.2×12 + 0.1×10 - 3 = 0.4 → p₁ = σ(0.4) ≈ 0.60
+                                <br>• Étudiant 2 : z = 0.2×14 + 0.1×15 - 3 = 1.3 → p₂ = σ(1.3) ≈ 0.79
+                                <br>• Étudiant 3 : z = 0.2×16 + 0.1×20 - 3 = 2.2 → p₃ = σ(2.2) ≈ 0.90
+                                <br>• Étudiant 4 : z = 0.2×18 + 0.1×25 - 3 = 3.1 → p₄ = σ(3.1) ≈ 0.96</li>
+                            <li><strong>Log-vraisemblance :</strong>
+                                <br>ℓ = 0×ln(0.60) + (1-0)×ln(0.40) + 0×ln(0.79) + (1-0)×ln(0.21) + 1×ln(0.90) + 0×ln(0.10) + 1×ln(0.96) + 0×ln(0.04)
+                                <br>ℓ = ln(0.40) + ln(0.21) + ln(0.90) + ln(0.96) ≈ -0.92 - 1.56 - 0.11 - 0.04 = <strong>-2.63</strong></li>
+                            <li><strong>Entropie croisée :</strong>
+                                <br>J = -ℓ/n = -(-2.63)/4 = <strong>0.66</strong></li>
+                            <li><strong>Interprétation :</strong>
+                                <br>J = 0.66 est modéré. Un modèle parfait aurait J ≈ 0.
+                                <br>Le modèle fait quelques erreurs : prédit 60% pour un échec, 79% pour un échec.</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Calcul du gradient : optimisation automatique",
+            content: `
+                        <p><strong>🎯 Pour optimiser, nous devons calculer :</strong></p>
+                        <p>$$\\nabla_{\\vec{w}} J \\quad \\text{et} \\quad \\frac{\\partial J}{\\partial b}$$</p>
+                        
+                        <p><strong>📐 Dérivation étape par étape :</strong></p>
+                        
+                        <p><strong>Étape 1 :</strong> Dérivée de l'entropie croisée</p>
+                        <p>$$\\frac{\\partial J}{\\partial p_i} = -\\frac{1}{n}\\left[\\frac{y_i}{p_i} - \\frac{1-y_i}{1-p_i}\\right] = -\\frac{1}{n} \\cdot \\frac{y_i - p_i}{p_i(1-p_i)}$$</p>
+                        
+                        <p><strong>Étape 2 :</strong> Dérivée de la sigmoïde</p>
+                        <p>$$\\frac{\\partial p_i}{\\partial z_i} = \\frac{\\partial \\sigma(z_i)}{\\partial z_i} = \\sigma(z_i)(1-\\sigma(z_i)) = p_i(1-p_i)$$</p>
+                        
+                        <p><strong>Étape 3 :</strong> Règle de chaîne</p>
+                        <p>$$\\frac{\\partial J}{\\partial z_i} = \\frac{\\partial J}{\\partial p_i} \\cdot \\frac{\\partial p_i}{\\partial z_i} = -\\frac{1}{n} \\cdot \\frac{y_i - p_i}{p_i(1-p_i)} \\cdot p_i(1-p_i) = \\frac{p_i - y_i}{n}$$</p>
+                        
+                        <p><strong>Étape 4 :</strong> Gradients finaux</p>
+                        <p>$$\\frac{\\partial z_i}{\\partial w_j} = x_{ij} \\quad \\text{et} \\quad \\frac{\\partial z_i}{\\partial b} = 1$$</p>
+                        
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>🎉 Résultat final (forme élégante) :</strong><br><br>
+                            
+                            $$\\frac{\\partial J}{\\partial w_j} = \\frac{1}{n}\\sum_{i=1}^{n} (p_i - y_i) x_{ij}$$<br><br>
+                            
+                            $$\\frac{\\partial J}{\\partial b} = \\frac{1}{n}\\sum_{i=1}^{n} (p_i - y_i)$$<br><br>
+                            
+                            <strong>Forme vectorielle :</strong><br>
+                            $$\\nabla_{\\vec{w}} J = \\frac{1}{n} X^T (\\vec{p} - \\vec{y})$$<br><br>
+                            
+                            Identique à la régression linéaire, mais avec \\(\\vec{p} = \\sigma(X\\vec{w} + b)\\) !
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : calcul de gradient manuel",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Avec nos données d'admission et \\(w_1 = 0.2\\), \\(w_2 = 0.1\\), \\(b = -3\\) :</p>
+                        
+                        <p><strong>📝 Calculez le gradient :</strong></p>
+                        <ol>
+                            <li>Calculez \\(p_i - y_i\\) pour chaque étudiant</li>
+                            <li>Calculez \\(\\frac{\\partial J}{\\partial w_1}\\)</li>
+                            <li>Calculez \\(\\frac{\\partial J}{\\partial w_2}\\)</li>
+                            <li>Calculez \\(\\frac{\\partial J}{\\partial b}\\)</li>
+                            <li>Dans quelle direction faut-il modifier les poids pour réduire l'erreur ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('gradient-calculation-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="gradient-calculation-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Erreurs de prédiction :</strong>
+                                <br>• p₁ - y₁ = 0.60 - 0 = +0.60 (sur-estimation)
+                                <br>• p₂ - y₂ = 0.79 - 0 = +0.79 (sur-estimation)
+                                <br>• p₃ - y₃ = 0.90 - 1 = -0.10 (sous-estimation)
+                                <br>• p₄ - y₄ = 0.96 - 1 = -0.04 (sous-estimation)</li>
+                            <li><strong>∂J/∂w₁ :</strong>
+                                <br>= ¼[(0.60×12) + (0.79×14) + (-0.10×16) + (-0.04×18)]
+                                <br>= ¼[7.2 + 11.06 - 1.6 - 0.72] = ¼ × 15.94 = <strong>+3.99</strong></li>
+                            <li><strong>∂J/∂w₂ :</strong>
+                                <br>= ¼[(0.60×10) + (0.79×15) + (-0.10×20) + (-0.04×25)]
+                                <br>= ¼[6 + 11.85 - 2 - 1] = ¼ × 14.85 = <strong>+3.71</strong></li>
+                            <li><strong>∂J/∂b :</strong>
+                                <br>= ¼[0.60 + 0.79 + (-0.10) + (-0.04)] = ¼ × 1.25 = <strong>+0.31</strong></li>
+                            <li><strong>Direction d'optimisation :</strong>
+                                <br>Tous les gradients sont positifs → il faut <strong>diminuer</strong> w₁, w₂ et b
+                                <br>Mise à jour : w₁ ← w₁ - α×3.99, w₂ ← w₂ - α×3.71, b ← b - α×0.31</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation complète from scratch",
+            description: "Implémentons la régression logistique de A à Z :",
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+class RegressionLogistique:
+    """Régression logistique implémentée from scratch"""
+    
+    def __init__(self, learning_rate=0.01, max_iterations=1000):
+        self.lr = learning_rate
+        self.max_iter = max_iterations
+        self.weights = None
+        self.bias = None
+        self.costs = []
+    
+    def sigmoid(self, z):
+        """Fonction sigmoïde avec protection contre overflow"""
+        # Clip z pour éviter overflow
+        z = np.clip(z, -500, 500)
+        return 1 / (1 + np.exp(-z))
+    
+    def fit(self, X, y):
+        """Entraînement du modèle"""
+        n_samples, n_features = X.shape
+        
+        # Initialisation des paramètres
+        self.weights = np.zeros(n_features)
+        self.bias = 0
+        
+        print(f"🎯 ENTRAÎNEMENT RÉGRESSION LOGISTIQUE")
+        print(f"Données : {n_samples} exemples, {n_features} features")
+        print(f"Paramètres : lr={self.lr}, max_iter={self.max_iter}")
+        print("-" * 50)
+        
+        # Descente de gradient
+        for i in range(self.max_iter):
+            # Prédictions
+            z = X.dot(self.weights) + self.bias
+            predictions = self.sigmoid(z)
+            
+            # Fonction de coût (entropie croisée)
+            cost = self.compute_cost(y, predictions)
+            self.costs.append(cost)
+            
+            # Gradients
+            dw = (1/n_samples) * X.T.dot(predictions - y)
+            db = (1/n_samples) * np.sum(predictions - y)
+            
+            # Mise à jour des paramètres
+            self.weights -= self.lr * dw
+            self.bias -= self.lr * db
+            
+            # Affichage périodique
+            if i % 200 == 0:
+                accuracy = self.accuracy(y, predictions > 0.5)
+                print(f"Itération {i:4d}: Coût={cost:.4f}, Précision={accuracy:.1%}")
+        
+        print(f"✅ Entraînement terminé !")
+        print(f"Poids finaux : {self.weights}")
+        print(f"Biais final : {self.bias:.4f}")
+    
+    def compute_cost(self, y_true, y_pred):
+        """Calcul de l'entropie croisée"""
+        # Protection contre log(0)
+        y_pred = np.clip(y_pred, 1e-15, 1 - 1e-15)
+        return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    
+    def predict_proba(self, X):
+        """Prédictions probabilistes"""
+        z = X.dot(self.weights) + self.bias
+        return self.sigmoid(z)
+    
+    def predict(self, X):
+        """Prédictions binaires"""
+        return (self.predict_proba(X) > 0.5).astype(int)
+    
+    def accuracy(self, y_true, y_pred):
+        """Calcul de la précision"""
+        return np.mean(y_true == y_pred)
+
+# Données d'admission UCAD
+X = np.array([[12, 10],  # Note bac, heures/semaine
+              [14, 15],
+              [16, 20], 
+              [18, 25],
+              [13, 12],
+              [15, 18],
+              [17, 22],
+              [19, 28]])
+
+y = np.array([0, 0, 1, 1, 0, 1, 1, 1])  # Admis (1) ou refusé (0)
+
+print("📊 DONNÉES D'ADMISSION UCAD")
+print("Note Bac | Heures/sem | Admis")
+print("-" * 30)
+for i in range(len(X)):
+    status = "✅ Oui" if y[i] == 1 else "❌ Non"
+    print(f"{X[i,0]:8.0f} | {X[i,1]:9.0f} | {status}")
+
+# Entraînement
+model = RegressionLogistique(learning_rate=0.1, max_iterations=1000)
+model.fit(X, y)`,
+          },
+          {
+            type: "code",
+            title: "Visualisation et analyse",
+            description:
+              "Visualisons la frontière de décision et les résultats :",
+            code: `# Évaluation finale
+predictions_proba = model.predict_proba(X)
+predictions_binaires = model.predict(X)
+accuracy_finale = model.accuracy(y, predictions_binaires)
+
+print(f"\\n📊 RÉSULTATS FINAUX")
+print(f"Précision : {accuracy_finale:.1%}")
+print("\\nPrédictions détaillées :")
+print("Étudiant | Réel | Proba | Prédiction")
+print("-" * 40)
+for i in range(len(X)):
+    reel = "Admis" if y[i] == 1 else "Refusé"
+    pred = "Admis" if predictions_binaires[i] == 1 else "Refusé"
+    print(f"{i+1:8d} | {reel:5s} | {predictions_proba[i]:5.1%} | {pred}")
+
+# Visualisation de la frontière de décision
+plt.figure(figsize=(12, 8))
+
+# Points de données
+colors = ['red' if label == 0 else 'green' for label in y]
+plt.scatter(X[:, 0], X[:, 1], c=colors, s=100, alpha=0.7)
+
+# Frontière de décision : w1*x1 + w2*x2 + b = 0
+# Donc x2 = -(w1*x1 + b) / w2
+x1_range = np.linspace(X[:, 0].min() - 1, X[:, 0].max() + 1, 100)
+x2_boundary = -(model.weights[0] * x1_range + model.bias) / model.weights[1]
+
+plt.plot(x1_range, x2_boundary, 'b-', linewidth=2, 
+         label=f'Frontière: {model.weights[0]:.2f}×note + {model.weights[1]:.2f}×heures + {model.bias:.2f} = 0')
+
+plt.xlabel('Note au Bac')
+plt.ylabel('Heures d\'étude par semaine')
+plt.title('Classification : Admission UCAD')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Ajouter les étiquettes
+for i in range(len(X)):
+    plt.annotate(f'{predictions_proba[i]:.0%}', 
+                (X[i, 0], X[i, 1]), 
+                xytext=(5, 5), textcoords='offset points', fontsize=8)
+
+plt.show()
+
+# Courbe d'apprentissage
+plt.figure(figsize=(10, 6))
+plt.plot(model.costs, 'b-', linewidth=2)
+plt.title('Courbe d\'Apprentissage - Entropie Croisée')
+plt.xlabel('Itérations')
+plt.ylabel('Coût (Entropie Croisée)')
+plt.grid(True, alpha=0.3)
+plt.show()
+
+print(f"\\n🎯 Interprétation des coefficients :")
+print(f"Note Bac (w₁={model.weights[0]:.3f}) : +1 point → +{model.weights[0]:.1%} de chance")
+print(f"Heures (w₂={model.weights[1]:.3f}) : +1h/sem → +{model.weights[1]:.1%} de chance")`,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Régularisation : contrôler la complexité",
+            content: `
+                        <p><strong>🤔 Problème du sur-apprentissage :</strong></p>
+                        <p>Avec beaucoup de features, le modèle peut "mémoriser" les données d'entraînement au lieu d'apprendre les vrais patterns.</p>
+                        
+                        <p><strong>💡 Solution :</strong> Pénaliser les poids trop grands avec la régularisation !</p>
+                        
+                        <p><strong>📐 Fonction de coût régularisée :</strong></p>
+                        <p>$$J_{reg}(\\vec{w}, b) = J(\\vec{w}, b) + \\lambda \\cdot R(\\vec{w})$$</p>
+                        
+                        <p><strong>🎯 Deux types principaux :</strong></p>
                         
                         <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>La solution : pénaliser les poids trop grands</strong><br><br>
+                            <strong>Régularisation L2 (Ridge) :</strong><br>
+                            $$R(\\vec{w}) = ||\\vec{w}||_2^2 = \\sum_{j=1}^{n} w_j^2$$<br><br>
                             
-                            On ajoute un terme de régularisation à J :<br>
-                            $$J_{reg}(\\vec{w}, b) = J(\\vec{w}, b) + \\lambda \\cdot R(\\vec{w})$$<br><br>
-                            
-                            où \\(\\lambda > 0\\) contrôle la force de régularisation.
+                            <strong>Effet :</strong> Réduit uniformément tous les poids<br>
+                            <strong>Gradient modifié :</strong> \\(\\nabla_{\\vec{w}} J_{reg} = \\nabla_{\\vec{w}} J + 2\\lambda\\vec{w}\\)<br>
+                            <strong>Interprétation :</strong> "Tire" tous les poids vers zéro
                         </div>
-                        
-                        <p><strong>Deux types principaux :</strong></p>
                         
                         <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>L2 (Ridge) :</strong> \\(R(\\vec{w}) = ||\\vec{w}||_2^2 = \\sum_{j} w_j^2\\)<br>
-                            • Réduit uniformément tous les poids<br>
-                            • Garde toutes les features<br>
-                            • Solution analytique modifiée : \\((X^TX + \\lambda I)^{-1}X^Ty\\)<br><br>
+                            <strong>Régularisation L1 (Lasso) :</strong><br>
+                            $$R(\\vec{w}) = ||\\vec{w}||_1 = \\sum_{j=1}^{n} |w_j|$$<br><br>
                             
-                            <strong>L1 (Lasso) :</strong> \\(R(\\vec{w}) = ||\\vec{w}||_1 = \\sum_{j} |w_j|\\)<br>
-                            • Force certains poids à exactement 0<br>
-                            • Sélection automatique de features<br>
-                            • Pas de solution analytique
+                            <strong>Effet :</strong> Force certains poids à exactement 0<br>
+                            <strong>Gradient modifié :</strong> \\(\\nabla_{\\vec{w}} J_{reg} = \\nabla_{\\vec{w}} J + \\lambda \\cdot \\text{sign}(\\vec{w})\\)<br>
+                            <strong>Interprétation :</strong> Sélection automatique de features
                         </div>
                         
-                        <p><strong>Interprétation bayésienne :</strong> La régularisation correspond à un prior sur les poids (L2 = gaussien, L1 = laplacien).</p>
+                        <p><strong>⚖️ Choix du paramètre λ :</strong></p>
+                        <ul>
+                            <li>λ = 0 : pas de régularisation (risque d'overfitting)</li>
+                            <li>λ petit : régularisation légère</li>
+                            <li>λ grand : régularisation forte (risque d'underfitting)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : impact de la régularisation",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Avec nos données d'admission, comparons 3 modèles :</p>
+                        <ul>
+                            <li><strong>Modèle A :</strong> λ = 0 (pas de régularisation)</li>
+                            <li><strong>Modèle B :</strong> λ = 0.1 (régularisation L2 légère)</li>
+                            <li><strong>Modèle C :</strong> λ = 1.0 (régularisation L2 forte)</li>
+                        </ul>
                         
-                        <p><strong>Impact sur le gradient :</strong><br>
-                        L2 : \\(\\nabla_{\\vec{w}} J_{reg} = \\nabla_{\\vec{w}} J + 2\\lambda\\vec{w}\\)<br>
-                        L1 : \\(\\nabla_{\\vec{w}} J_{reg} = \\nabla_{\\vec{w}} J + \\lambda \\cdot \\text{sign}(\\vec{w})\\)</p>
+                        <p><strong>📝 Prédisez :</strong></p>
+                        <ol>
+                            <li>Quel modèle aura les poids les plus grands ?</li>
+                            <li>Quel modèle aura la meilleure précision sur les données d'entraînement ?</li>
+                            <li>Quel modèle généralisera le mieux sur de nouvelles données ?</li>
+                            <li>Comment évolue la norme des poids avec λ ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('regularization-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="regularization-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Poids les plus grands :</strong> Modèle A (λ=0)
+                                <br>Sans régularisation, rien ne limite la croissance des poids</li>
+                            <li><strong>Meilleure précision train :</strong> Modèle A (λ=0)
+                                <br>Il peut "coller" parfaitement aux données d'entraînement</li>
+                            <li><strong>Meilleure généralisation :</strong> Modèle B (λ=0.1)
+                                <br>Équilibre optimal entre ajustement et simplicité</li>
+                            <li><strong>Évolution de ||w|| :</strong>
+                                <br>||w|| décroît quand λ augmente
+                                <br>λ=0 : ||w|| ≈ 3.2
+                                <br>λ=0.1 : ||w|| ≈ 2.1
+                                <br>λ=1.0 : ||w|| ≈ 0.8</li>
+                        </ol>
+                        </div>
                     `,
           },
           {
@@ -250,122 +770,331 @@
             icon: "∑",
             title: "Extension multi-classe : softmax",
             content: `
-                        <p><strong>Pour K classes (K > 2), on généralise avec softmax :</strong></p>
+                        <p><strong>🎯 Pour K classes (K > 2), on généralise avec softmax :</strong></p>
                         
-                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>Un vecteur de poids par classe :</strong><br>
-                            \\(\\vec{w}_1, \\vec{w}_2, ..., \\vec{w}_K\\) et \\(b_1, b_2, ..., b_K\\)<br><br>
-                            
-                            <strong>Scores (logits) :</strong><br>
-                            $$z_k = \\vec{w}_k^T\\vec{x} + b_k \\quad \\text{pour } k = 1, ..., K$$<br><br>
-                            
-                            <strong>Fonction softmax :</strong><br>
-                            $$P(y=k|\\vec{x}) = \\frac{e^{z_k}}{\\sum_{j=1}^{K} e^{z_j}}$$
-                        </div>
-                        
-                        <p><strong>Propriétés du softmax :</strong></p>
+                        <p><strong>📐 Architecture multi-classe :</strong></p>
                         <ul>
-                            <li>\\(\\sum_{k=1}^{K} P(y=k|\\vec{x}) = 1\\) (vraie distribution)</li>
-                            <li>\\(0 < P(y=k|\\vec{x}) < 1\\) pour tout k</li>
-                            <li>Invariant par translation : ajouter c à tous les \\(z_k\\) ne change rien</li>
-                            <li>Si K=2, équivalent à la sigmoïde</li>
+                            <li>Un vecteur de poids par classe : \\(\\vec{w}_1, \\vec{w}_2, ..., \\vec{w}_K\\)</li>
+                            <li>Un biais par classe : \\(b_1, b_2, ..., b_K\\)</li>
                         </ul>
                         
-                        <p><strong>Fonction de coût (entropie croisée catégorielle) :</strong></p>
+                        <p><strong>Étape 1 :</strong> Calcul des scores (logits)</p>
+                        <p>$$z_k = \\vec{w}_k^T\\vec{x} + b_k \\quad \\text{pour } k = 1, ..., K$$</p>
                         
-                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            Avec encodage one-hot : \\(y_i \\in \\{0,1\\}^K\\) où \\(\\sum_k y_{ik} = 1\\)<br><br>
+                        <p><strong>Étape 2 :</strong> Transformation softmax</p>
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            $$P(y=k|\\vec{x}) = \\frac{e^{z_k}}{\\sum_{j=1}^{K} e^{z_j}}$$<br><br>
                             
-                            $$J = -\\frac{1}{n}\\sum_{i=1}^{n} \\sum_{k=1}^{K} y_{ik} \\log(p_{ik})$$<br>
-                            où \\(p_{ik} = P(y=k|\\vec{x}_i)\\)<br><br>
-                            
-                            <strong>Gradient (forme vectorielle) :</strong><br>
-                            $$\\nabla_{\\vec{w}_k} J = \\frac{1}{n}\\sum_{i=1}^{n} (p_{ik} - y_{ik}) \\vec{x}_i$$<br><br>
-                            
-                            Même forme élégante qu'en binaire !
+                            <strong>Propriétés du softmax :</strong><br>
+                            • \\(\\sum_{k=1}^{K} P(y=k|\\vec{x}) = 1\\) (vraie distribution de probabilité)<br>
+                            • \\(0 < P(y=k|\\vec{x}) < 1\\) pour tout k<br>
+                            • Si K=2, équivalent à la sigmoïde<br>
+                            • Invariant par translation : ajouter c à tous les \\(z_k\\) ne change rien
                         </div>
                         
-                        <p><strong>Astuce numérique :</strong> Pour éviter overflow, calculer :<br>
-                        \\(\\log P(y=k|\\vec{x}) = z_k - \\log\\sum_j e^{z_j} = z_k - \\log\\sum_j e^{z_j - \\max_j z_j} - \\max_j z_j\\)</p>
+                        <p><strong>Étape 3 :</strong> Fonction de coût (entropie croisée catégorielle)</p>
+                        <p>Avec encodage one-hot : \\(\\vec{y}_i \\in \\{0,1\\}^K\\) où \\(\\sum_k y_{ik} = 1\\)</p>
+                        <p>$$J = -\\frac{1}{n}\\sum_{i=1}^{n} \\sum_{k=1}^{K} y_{ik} \\log(p_{ik})$$</p>
+                        
+                        <p><strong>🎉 Gradient (forme élégante) :</strong></p>
+                        <p>$$\\nabla_{\\vec{w}_k} J = \\frac{1}{n}\\sum_{i=1}^{n} (p_{ik} - y_{ik}) \\vec{x}_i$$</p>
+                        
+                        <p><strong>💡 Même forme qu'en binaire !</strong> La beauté des mathématiques.</p>
                     `,
           },
           {
             type: "exemple",
             icon: "💻",
-            title: "Application : classification binaire régularisée",
+            title: "Exercice : classification 3 classes",
             content: `
-                        <p><strong>Classifions avec régularisation L2 :</strong></p>
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Classifions les étudiants en 3 catégories selon leurs résultats :</p>
+                        <ul>
+                            <li><strong>Classe 0 :</strong> Échec (< 10/20)</li>
+                            <li><strong>Classe 1 :</strong> Passable (10-14/20)</li>
+                            <li><strong>Classe 2 :</strong> Bien (≥ 15/20)</li>
+                        </ul>
                         
-                        <table style="margin: 1rem auto; text-align: center;">
-                            <tr style="background: #3498db; color: white;">
-                                <th style="padding: 0.5rem;">x₁</th>
-                                <th style="padding: 0.5rem;">x₂</th>
-                                <th style="padding: 0.5rem;">y</th>
+                        <p><strong>Données :</strong> Note = 13, Heures = 18</p>
+                        <p><strong>Scores calculés :</strong> z₀ = -1.2, z₁ = 0.8, z₂ = -0.3</p>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>Les probabilités softmax pour chaque classe</li>
+                            <li>La prédiction finale (classe la plus probable)</li>
+                            <li>La confiance du modèle (probabilité max)</li>
+                            <li>Si la vraie classe est 1, calculez la perte</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('multiclass-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="multiclass-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Probabilités softmax :</strong>
+                                <br>Dénominateur : e⁻¹·² + e⁰·⁸ + e⁻⁰·³ ≈ 0.30 + 2.23 + 0.74 = 3.27
+                                <br>P(classe 0) = 0.30/3.27 ≈ <strong>0.09 (9%)</strong>
+                                <br>P(classe 1) = 2.23/3.27 ≈ <strong>0.68 (68%)</strong>
+                                <br>P(classe 2) = 0.74/3.27 ≈ <strong>0.23 (23%)</strong></li>
+                            <li><strong>Prédiction :</strong> Classe 1 (probabilité maximale = 68%)</li>
+                            <li><strong>Confiance :</strong> 68% (modérément confiant)</li>
+                            <li><strong>Perte :</strong> Si vraie classe = 1, alors y = [0, 1, 0]
+                                <br>Perte = -log(0.68) ≈ <strong>0.39</strong></li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation multi-classe complète",
+            description:
+              "Implémentons la classification multi-classe avec softmax :",
+            code: `class ClassificationMultiClasse:
+    """Classification multi-classe avec softmax"""
+    
+    def __init__(self, n_classes, learning_rate=0.01, max_iterations=1000):
+        self.n_classes = n_classes
+        self.lr = learning_rate
+        self.max_iter = max_iterations
+        self.weights = None
+        self.bias = None
+        self.costs = []
+    
+    def softmax(self, Z):
+        """Fonction softmax avec stabilité numérique"""
+        # Soustraction du max pour stabilité
+        Z_stable = Z - np.max(Z, axis=1, keepdims=True)
+        exp_Z = np.exp(Z_stable)
+        return exp_Z / np.sum(exp_Z, axis=1, keepdims=True)
+    
+    def one_hot_encode(self, y):
+        """Encodage one-hot"""
+        encoded = np.zeros((len(y), self.n_classes))
+        encoded[np.arange(len(y)), y] = 1
+        return encoded
+    
+    def fit(self, X, y):
+        """Entraînement multi-classe"""
+        n_samples, n_features = X.shape
+        
+        # Initialisation
+        self.weights = np.random.normal(0, 0.01, (n_features, self.n_classes))
+        self.bias = np.zeros(self.n_classes)
+        
+        # Encodage one-hot
+        y_encoded = self.one_hot_encode(y)
+        
+        print(f"🎯 CLASSIFICATION MULTI-CLASSE")
+        print(f"Classes : {self.n_classes}, Features : {n_features}")
+        print("-" * 40)
+        
+        for i in range(self.max_iter):
+            # Forward pass
+            Z = X.dot(self.weights) + self.bias
+            predictions = self.softmax(Z)
+            
+            # Coût (entropie croisée catégorielle)
+            cost = -np.mean(np.sum(y_encoded * np.log(predictions + 1e-15), axis=1))
+            self.costs.append(cost)
+            
+            # Gradients
+            dW = (1/n_samples) * X.T.dot(predictions - y_encoded)
+            db = (1/n_samples) * np.sum(predictions - y_encoded, axis=0)
+            
+            # Mise à jour
+            self.weights -= self.lr * dW
+            self.bias -= self.lr * db
+            
+            if i % 200 == 0:
+                accuracy = np.mean(np.argmax(predictions, axis=1) == y)
+                print(f"Itération {i:4d}: Coût={cost:.4f}, Précision={accuracy:.1%}")
+        
+        print("✅ Entraînement multi-classe terminé !")
+    
+    def predict_proba(self, X):
+        """Prédictions probabilistes"""
+        Z = X.dot(self.weights) + self.bias
+        return self.softmax(Z)
+    
+    def predict(self, X):
+        """Prédictions de classe"""
+        probas = self.predict_proba(X)
+        return np.argmax(probas, axis=1)
+
+# Test avec données de notes
+notes_data = np.array([[8, 5],   # Note, heures → Échec
+                      [12, 15],  # → Passable  
+                      [16, 25],  # → Bien
+                      [9, 8],    # → Échec
+                      [13, 18],  # → Passable
+                      [17, 30]]) # → Bien
+
+# Classes : 0=Échec, 1=Passable, 2=Bien
+classes = np.array([0, 1, 2, 0, 1, 2])
+
+# Entraînement
+model_multi = ClassificationMultiClasse(n_classes=3, learning_rate=0.1)
+model_multi.fit(notes_data, classes)
+
+# Test sur nouveaux étudiants
+nouveaux_etudiants = np.array([[11, 12],  # Cas limite
+                              [15, 22],  # Bon étudiant
+                              [7, 6]])   # Faible niveau
+
+probas = model_multi.predict_proba(nouveaux_etudiants)
+predictions = model_multi.predict(nouveaux_etudiants)
+
+print(f"\\n🎓 PRÉDICTIONS POUR NOUVEAUX ÉTUDIANTS")
+classes_noms = ['Échec', 'Passable', 'Bien']
+for i, (note, heures) in enumerate(nouveaux_etudiants):
+    print(f"\\nÉtudiant {i+1}: Note={note}, Heures={heures}")
+    print(f"Prédiction: {classes_noms[predictions[i]]}")
+    for j, classe in enumerate(classes_noms):
+        print(f"  {classe}: {probas[i,j]:.1%}")`,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Métriques d'évaluation : au-delà de la précision",
+            content: `
+                        <p><strong>🎯 La précision seule peut être trompeuse !</strong></p>
+                        
+                        <p><strong>📊 Exemple problématique :</strong></p>
+                        <p>Détection de fraude bancaire : 99% des transactions sont légitimes</p>
+                        <ul>
+                            <li>🤖 <strong>Modèle naïf</strong> : "Toutes les transactions sont légitimes"</li>
+                            <li>📈 <strong>Précision</strong> : 99% (excellent ?)</li>
+                            <li>❌ <strong>Problème</strong> : 0% des fraudes détectées !</li>
+                        </ul>
+                        
+                        <p><strong>🔍 Matrice de confusion (2×2) :</strong></p>
+                        <table style="margin: 1rem auto; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;"></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8f9fa;" colspan="2"><strong>Prédiction</strong></td>
                             </tr>
-                            <tr><td>1</td><td>2</td><td>0</td></tr>
-                            <tr><td>2</td><td>3</td><td>0</td></tr>
-                            <tr><td>3</td><td>1</td><td>1</td></tr>
-                            <tr><td>4</td><td>2</td><td>1</td></tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8f9fa;"><strong>Réalité</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Négatif</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Positif</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Négatif</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #d4edda;"><strong>VN</strong><br>Vrais Négatifs</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8d7da;"><strong>FP</strong><br>Faux Positifs</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Positif</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8d7da;"><strong>FN</strong><br>Faux Négatifs</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #d4edda;"><strong>VP</strong><br>Vrais Positifs</td>
+                            </tr>
                         </table>
                         
-                        <p><strong>Sans régularisation (λ=0) :</strong></p>
-                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            Après optimisation : \\(w_1 = 2.5, w_2 = -1.8, b = -1.2\\)<br>
-                            Norme des poids : \\(||\\vec{w}||_2 = \\sqrt{2.5^2 + 1.8^2} \\approx 3.08\\)
-                        </div>
+                        <p><strong>📐 Métriques dérivées :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Précision :</strong> $$\\text{Precision} = \\frac{VP}{VP + FP}$$ (parmi les positifs prédits, combien sont vrais ?)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Rappel :</strong> $$\\text{Recall} = \\frac{VP}{VP + FN}$$ (parmi les vrais positifs, combien sont détectés ?)</li>
+                            <li style="margin-top: 0.5rem"><strong>• F1-Score :</strong> $$F1 = 2 \\times \\frac{\\text{Precision} \\times \\text{Recall}}{\\text{Precision} + \\text{Recall}}$$ (moyenne harmonique)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Spécificité :</strong> $$\\text{Specificity} = \\frac{VN}{VN + FP}$$ (taux de vrais négatifs)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : calcul de métriques",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Un modèle de détection de spam a testé 1000 emails :</p>
                         
-                        <p><strong>Avec régularisation L2 (λ=0.5) :</strong></p>
-                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            Le gradient devient :<br>
-                            $$\\nabla_{\\vec{w}} J_{reg} = \\frac{1}{n}\\sum (p_i - y_i)\\vec{x}_i + \\lambda\\vec{w}$$<br><br>
-                            
-                            Après optimisation : \\(w_1 = 1.2, w_2 = -0.8, b = -0.7\\)<br>
-                            Norme des poids : \\(||\\vec{w}||_2 \\approx 1.44\\) (réduite de 53% !)<br><br>
-                            
-                            <strong>Impact :</strong> Modèle plus simple, moins sensible au bruit
-                        </div>
+                        <table style="margin: 1rem auto; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;"></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8f9fa;" colspan="2"><strong>Prédiction</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8f9fa;"><strong>Réalité</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Pas Spam</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Spam</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Pas Spam</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #d4edda;"><strong>920</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8d7da;"><strong>30</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Spam</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8d7da;"><strong>10</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #d4edda;"><strong>40</strong></td>
+                            </tr>
+                        </table>
                         
-                        <p><strong>Interprétation des coefficients :</strong></p>
-                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            • \\(w_1 = 1.2 > 0\\) : x₁ augmente → probabilité classe 1 augmente<br>
-                            • \\(w_2 = -0.8 < 0\\) : x₂ augmente → probabilité classe 1 diminue<br>
-                            • \\(|w_1| > |w_2|\\) : x₁ plus important que x₂<br><br>
-                            
-                            <strong>Frontière de décision :</strong> \\(1.2x_1 - 0.8x_2 - 0.7 = 0\\)<br>
-                            Soit : \\(x_2 = 1.5x_1 - 0.875\\)
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>Précision (Precision)</li>
+                            <li>Rappel (Recall)</li>
+                            <li>F1-Score</li>
+                            <li>Spécificité</li>
+                            <li>Ce modèle est-il bon pour détecter les spams ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('metrics-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="metrics-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Précision :</strong> VP/(VP+FP) = 40/(40+30) = 40/70 ≈ <strong>57%</strong>
+                                <br>Parmi les emails classés spam, 57% le sont vraiment</li>
+                            <li><strong>Rappel :</strong> VP/(VP+FN) = 40/(40+10) = 40/50 = <strong>80%</strong>
+                                <br>80% des vrais spams sont détectés</li>
+                            <li><strong>F1-Score :</strong> 2×(0.57×0.80)/(0.57+0.80) = 2×0.456/1.37 ≈ <strong>67%</strong></li>
+                            <li><strong>Spécificité :</strong> VN/(VN+FP) = 920/(920+30) = 920/950 ≈ <strong>97%</strong>
+                                <br>97% des vrais non-spams sont correctement identifiés</li>
+                            <li><strong>Évaluation :</strong> Modèle correct mais perfectible
+                                <br>• Bon rappel (80%) : détecte la plupart des spams
+                                <br>• Précision moyenne (57%) : trop de faux positifs
+                                <br>• Amélioration possible : ajuster le seuil ou plus de données</li>
+                        </ol>
                         </div>
                     `,
           },
           {
             type: "warning",
             icon: "⚠️",
-            title: "L'essentiel à retenir",
+            title: "Limites et extensions de la régression logistique",
             content: `
-                        <p><strong>Les concepts fondamentaux :</strong></p>
+                        <p><strong>⚠️ Hypothèses et limites :</strong></p>
                         
-                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>1. La sigmoïde transforme linéaire → probabilité</strong><br>
-                            Sans elle, pas de classification propre.<br><br>
-                            
-                            <strong>2. L'entropie croisée garantit la convexité</strong><br>
-                            Contrairement à MSE, un seul minimum global.<br><br>
-                            
-                            <strong>3. La régularisation contrôle la complexité</strong><br>
-                            Équilibre biais-variance via λ.<br><br>
-                            
-                            <strong>4. Softmax généralise naturellement</strong><br>
-                            De 2 à K classes, même principe.
-                        </div>
-                        
-                        <p><strong>Les pièges à éviter :</strong></p>
+                        <p><strong>🔍 Hypothèses du modèle :</strong></p>
                         <ul>
-                            <li>Classes déséquilibrées → pondérer les exemples</li>
-                            <li>Features à échelles différentes → normaliser</li>
-                            <li>Trop de features → régulariser</li>
-                            <li>Non-linéarité → ajouter features polynomiales ou kernel</li>
+                            <li>📊 <strong>Linéarité</strong> : relation linéaire entre features et log-odds</li>
+                            <li>🎯 <strong>Indépendance</strong> : observations indépendantes</li>
+                            <li>📈 <strong>Pas de multicolinéarité</strong> : features pas trop corrélées</li>
+                            <li>📋 <strong>Échantillon suffisant</strong> : au moins 10 exemples par feature</li>
                         </ul>
                         
-                        <p><strong>Pour aller plus loin :</strong> SVM (marges maximales), arbres de décision (non-linéaire), réseaux de neurones (compositions de sigmoïdes).</p>
+                        <p><strong>❌ Quand la régression logistique échoue :</strong></p>
+                        <ul>
+                            <li>🌀 <strong>Relations non-linéaires</strong> : patterns complexes (XOR)</li>
+                            <li>🔗 <strong>Interactions complexes</strong> : features qui se combinent</li>
+                            <li>📊 <strong>Classes non séparables</strong> : pas de frontière linéaire</li>
+                            <li>🎯 <strong>Données déséquilibrées</strong> : 99% classe A, 1% classe B</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Extensions et alternatives :</strong></p>
+                        <ul>
+                            <li>🔧 <strong>Features polynomiales</strong> : x, x², x³, xy pour non-linéarité</li>
+                            <li>🎯 <strong>SVM</strong> : marges maximales, kernel trick</li>
+                            <li>🌳 <strong>Arbres de décision</strong> : règles if-then naturelles</li>
+                            <li>🧠 <strong>Réseaux de neurones</strong> : compositions de sigmoïdes</li>
+                            <li>🎲 <strong>Naive Bayes</strong> : approche probabiliste pure</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> La régression logistique est simple, interprétable et efficace. C'est souvent le premier modèle à essayer ! Si elle ne suffit pas, on peut toujours complexifier.</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Clustering - découvrir des groupes cachés sans étiquettes !</p>
                     `,
           },
         ],
@@ -374,13 +1103,13 @@
             "🤔 Pourquoi la régularisation L1 peut-elle mettre des poids à exactement zéro, mais pas L2 ?",
           options: [
             "A) L1 est plus forte que L2",
-            "B) La dérivée de |w| a une discontinuité en 0 qui 'attrape' les poids",
+            "B) La dérivée de |w| a une discontinuité en 0 qui 'pousse' vers zéro",
             "C) C'est un bug de l'algorithme",
             "D) L2 met aussi des poids à zéro",
           ],
           correct: 1,
           explanation:
-            "La dérivée de L2 (w²) est 2w, qui tend vers 0 quand w→0 : le gradient diminue progressivement. La dérivée de L1 (|w|) est sign(w) = ±1, constante jusqu'à w=0 : le gradient 'pousse' avec force constante jusqu'à zéro. Géométriquement, L1 crée une contrainte en losange avec des 'coins' sur les axes (w=0), tandis que L2 crée une contrainte circulaire sans points privilégiés.",
+            "La dérivée de L2 (w²) est 2w, qui tend vers 0 quand w→0 : le gradient diminue progressivement. La dérivée de L1 (|w|) est sign(w) = ±1, constante jusqu'à w=0 : le gradient 'pousse' avec force constante vers zéro. Géométriquement, L1 crée une contrainte en losange avec des 'coins' sur les axes (w=0), tandis que L2 crée une contrainte circulaire sans points privilégiés.",
         },
         prevModule: "linear-regression.html",
         nextModule: "clustering.html",

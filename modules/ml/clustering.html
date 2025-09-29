@@ -44,8 +44,8 @@
 
     <!-- Contenu principal -->
     <div class="container">
-      <h1>🔍 Clustering</h1>
-      <p class="subtitle">Module 3.4 - Machine Learning</p>
+      <h1>🔍 Clustering : Découvrir des Groupes Cachés</h1>
+      <p class="subtitle">Module 3.4 - Apprentissage Non-Supervisé</p>
 
       <!-- Objectifs -->
       <div class="objectives">
@@ -71,8 +71,8 @@
       <div class="checkpoint">
         <h3>🎉 Checkpoint - Clustering</h3>
         <p>
-          Vous comprenez maintenant comment regrouper automatiquement des
-          données similaires.
+          Félicitations ! Vous maîtrisez maintenant l'art de découvrir des
+          structures cachées dans les données.
         </p>
         <button
           class="checkpoint-btn"
@@ -99,241 +99,753 @@
       // Configuration du module Clustering
       const moduleConfig = {
         id: "ml-clustering",
-        title: "Clustering",
+        title: "Clustering : Découvrir des Groupes Cachés",
         category: "Machine Learning",
         objectives: [
-          "Comprendre ce qu'est l'apprentissage non-supervisé",
+          "Comprendre le changement de paradigme : pas d'étiquettes",
           "Maîtriser complètement l'algorithme K-means",
+          "Calculer K-means à la main sur un exemple simple",
           "Comprendre pourquoi il converge mathématiquement",
-          "Savoir identifier ses limites fondamentales",
+          "Identifier ses limites et alternatives",
         ],
         content: [
           {
             type: "concept",
             icon: "💡",
-            title: "Le changement de paradigme : pas d'étiquettes",
+            title: "Le changement de paradigme : découvrir sans guide",
             content: `
-                        <p><strong>Jusqu'ici, nous avions toujours un "professeur" : les étiquettes y.</strong></p>
+                        <p>Le <strong>clustering</strong> marque une révolution conceptuelle : pour la première fois, la machine doit découvrir des patterns <strong>sans qu'on lui dise quoi chercher</strong>.</p>
                         
-                        <p>En clustering, on n'a que les données X. La machine doit découvrir seule s'il existe une structure.</p>
+                        <p><strong>🔑 Différence fondamentale :</strong></p>
+                        <ul>
+                            <li>📚 <strong>Apprentissage supervisé</strong> : "Voici des chats et des chiens étiquetés. Apprends à les distinguer."</li>
+                            <li>🔍 <strong>Apprentissage non-supervisé</strong> : "Voici des animaux. Y a-t-il des groupes naturels ?"</li>
+                        </ul>
                         
-                        <p>C'est comme trier des billes sans savoir qu'elles ont des couleurs différentes. On remarque qu'elles forment naturellement des groupes, et on les sépare.</p>
+                        <p><strong>🎯 Applications concrètes :</strong></p>
+                        <ul>
+                            <li>🛒 <strong>Segmentation clients</strong> : découvrir des profils d'acheteurs sans les connaître à l'avance</li>
+                            <li>🧬 <strong>Analyse génétique</strong> : identifier des sous-types de maladies</li>
+                            <li>📱 <strong>Réseaux sociaux</strong> : détecter des communautés d'intérêts</li>
+                            <li>🎵 <strong>Recommandations</strong> : grouper des utilisateurs aux goûts similaires</li>
+                            <li>🖼️ <strong>Compression d'images</strong> : regrouper les couleurs similaires</li>
+                        </ul>
                         
-                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>La différence fondamentale :</strong><br><br>
-                            • <strong>Supervisé :</strong> "Voici des chats et des chiens étiquetés. Apprends à les distinguer."<br>
-                            • <strong>Non-supervisé :</strong> "Voici des animaux. Y a-t-il des groupes naturels ?"<br><br>
-                            
-                            Le non-supervisé révèle la structure cachée des données.
-                        </div>
-                        
-                        <p><strong>Applications concrètes :</strong> Segmentation clients (sans connaître les segments à l'avance), compression d'images (regrouper les couleurs similaires), organisation de documents (thèmes émergents).</p>
+                        <p><strong>💡 Philosophie :</strong> Le clustering révèle la <strong>structure cachée</strong> des données. C'est comme être un explorateur qui découvre des territoires inconnus et y trouve des patterns naturels.</p>
                     `,
           },
           {
             type: "intuition",
             icon: "🧠",
-            title: "K-means : l'algorithme fondamental",
+            title: "L'analogie de l'organisation d'une bibliothèque",
             content: `
-                        <p><strong>L'idée est simple et élégante :</strong></p>
+                        <p>Imaginez que vous devez <strong>organiser une bibliothèque</strong> avec 10 000 livres mélangés, sans système de classification :</p>
                         
-                        <p>Si les données forment K groupes naturels, chaque groupe doit avoir un "centre de gravité". Si on connaît les centres, on peut assigner chaque point au centre le plus proche. Si on connaît les assignations, on peut calculer les centres.</p>
+                        <p><strong>🎯 Votre mission :</strong> Créer des sections logiques pour que les lecteurs trouvent facilement ce qu'ils cherchent.</p>
                         
-                        <p>C'est un problème de poule et œuf ! K-means le résout en alternant :</p>
+                        <p><strong>🔍 Votre approche naturelle :</strong></p>
+                        <ol>
+                            <li>📖 <strong>Observer</strong> : regarder les livres et noter leurs caractéristiques</li>
+                            <li>🎯 <strong>Grouper</strong> : mettre ensemble les livres qui se ressemblent</li>
+                            <li>🏷️ <strong>Ajuster</strong> : déplacer les livres mal classés</li>
+                            <li>🔄 <strong>Répéter</strong> jusqu'à obtenir des sections cohérentes</li>
+                        </ol>
                         
-                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>Les deux étapes qui se renforcent mutuellement :</strong><br><br>
-                            1. <strong>Assignation :</strong> chaque point rejoint le centre le plus proche<br>
-                            2. <strong>Recentrage :</strong> chaque centre se déplace au milieu de ses points<br><br>
-                            
-                            Répéter jusqu'à stabilité. C'est tout !
-                        </div>
+                        <p><strong>📚 Résultat final :</strong></p>
+                        <ul>
+                            <li>📖 <strong>Section Romans</strong> : livres avec histoires fictives</li>
+                            <li>🔬 <strong>Section Sciences</strong> : livres techniques et formules</li>
+                            <li>📚 <strong>Section Histoire</strong> : livres sur le passé</li>
+                            <li>🎨 <strong>Section Arts</strong> : livres avec beaucoup d'images</li>
+                        </ul>
                         
-                        <p><strong>Pourquoi "K-means" ?</strong> K = nombre de clusters (fixé), means = moyennes (les centres).</p>
-                        
-                        <p>L'algorithme trouve une partition qui minimise la dispersion interne des groupes. C'est optimal localement.</p>
+                        <p><strong>💡 C'est exactement ce que fait K-means :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Observer</strong> : analyser les caractéristiques des données</li>
+                            <li>🎯 <strong>Grouper</strong> : assigner chaque point au groupe le plus proche</li>
+                            <li>📍 <strong>Recentrer</strong> : déplacer le "centre" de chaque groupe</li>
+                            <li>🔄 <strong>Répéter</strong> jusqu'à stabilité</li>
+                        </ul>
                     `,
           },
           {
             type: "mathematique",
             icon: "∑",
-            title: "Formalisation mathématique rigoureuse",
+            title: "Formalisation rigoureuse du problème",
             content: `
-                        <p><strong>Posons le problème proprement :</strong></p>
+                        <p><strong>📐 Posons le problème mathématiquement :</strong></p>
                         
-                        <p>Données : \\(\\mathcal{X} = \\{\\vec{x}_1, ..., \\vec{x}_n\\}\\) avec \\(\\vec{x}_i \\in \\mathbb{R}^d\\)</p>
+                        <p><strong>Données :</strong> \\(\\mathcal{X} = \\{\\vec{x}_1, \\vec{x}_2, ..., \\vec{x}_n\\}\\) avec \\(\\vec{x}_i \\in \\mathbb{R}^d\\)</p>
                         
-                        <p>On cherche K centres \\(\\mathcal{M} = \\{\\vec{\\mu}_1, ..., \\vec{\\mu}_K\\}\\) et une fonction d'assignation \\(c: \\mathcal{X} \\to \\{1, ..., K\\}\\).</p>
+                        <p><strong>Objectif :</strong> Partitionner \\(\\mathcal{X}\\) en K clusters \\(C_1, C_2, ..., C_K\\)</p>
                         
-                        <p><strong>La fonction objectif (inertie) :</strong></p>
+                        <p><strong>🎯 Fonction objectif (inertie intra-cluster) :</strong></p>
+                        <p>$$J(\\mathcal{C}, \\mathcal{M}) = \\sum_{k=1}^{K} \\sum_{\\vec{x}_i \\in C_k} ||\\vec{x}_i - \\vec{\\mu}_k||^2$$</p>
                         
-                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            $$J(\\mathcal{M}, c) = \\sum_{i=1}^{n} ||\\vec{x}_i - \\vec{\\mu}_{c(i)}||^2$$
-                            
-                            où \\(||\\cdot||\\) est la norme euclidienne (<a href="../math/vectors.html">Module 1.1</a>).<br><br>
-                            
-                            <strong>Rappel :</strong> \\(||\\vec{u}||^2 = \\vec{u}^T\\vec{u} = \\sum_{j=1}^{d} u_j^2\\)<br><br>
-                            
-                            J mesure la somme totale des distances² de chaque point à son centre assigné.
-                        </div>
+                        <p><strong>🔍 Décryptage de la formule :</strong></p>
+                        <ul>
+                            <li>\\(\\mathcal{C} = \\{C_1, ..., C_K\\}\\) = <strong>partition des données</strong></li>
+                            <li>\\(\\mathcal{M} = \\{\\vec{\\mu}_1, ..., \\vec{\\mu}_K\\}\\) = <strong>centres des clusters</strong></li>
+                            <li>\\(||\\vec{x}_i - \\vec{\\mu}_k||^2\\) = <strong>distance² euclidienne</strong> (voir <a href="../math/vectors.html">Module 1.1</a>)</li>
+                            <li>\\(J\\) = <strong>somme totale des distances²</strong> de chaque point à son centre</li>
+                        </ul>
                         
-                        <p><strong>Le problème d'optimisation :</strong></p>
-                        <p>$$\\min_{\\mathcal{M}, c} J(\\mathcal{M}, c)$$</p>
+                        <p><strong>🎯 Problème d'optimisation :</strong></p>
+                        <p>$$\\min_{\\mathcal{C}, \\mathcal{M}} J(\\mathcal{C}, \\mathcal{M})$$</p>
                         
-                        <p>C'est NP-difficile ! Mais K-means trouve efficacement un minimum local.</p>
+                        <p><strong>⚠️ Complexité :</strong> Ce problème est <strong>NP-difficile</strong> ! Il y a \\(K^n\\) façons d'assigner n points à K clusters.</p>
                         
-                        <p><strong>Les deux sous-problèmes (plus simples) :</strong></p>
-                        
-                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>1. Assignation optimale (centres fixes) :</strong><br>
-                            $$c^*(\\vec{x}_i) = \\arg\\min_{k \\in \\{1,...,K\\}} ||\\vec{x}_i - \\vec{\\mu}_k||^2$$
-                            
-                            Trivial : choisir le centre le plus proche !<br><br>
-                            
-                            <strong>2. Centres optimaux (assignations fixes) :</strong><br>
-                            Pour le cluster k, minimiser : \\(\\sum_{i: c(i)=k} ||\\vec{x}_i - \\vec{\\mu}_k||^2\\)<br><br>
-                            
-                            Dérivons par rapport à \\(\\vec{\\mu}_k\\) (<a href="../math/derivatives.html">Module 1.4</a>) :<br>
-                            $$\\frac{\\partial}{\\partial \\vec{\\mu}_k} \\sum_{i \\in C_k} ||\\vec{x}_i - \\vec{\\mu}_k||^2 = -2\\sum_{i \\in C_k} (\\vec{x}_i - \\vec{\\mu}_k) = 0$$
-                            
-                            D'où : $$\\vec{\\mu}_k^* = \\frac{1}{|C_k|} \\sum_{i \\in C_k} \\vec{x}_i$$
-                            
-                            Le centre optimal est la moyenne arithmétique !
-                        </div>
+                        <p><strong>💡 Solution de K-means :</strong> Décomposer en deux sous-problèmes plus simples qui s'alternent.</p>
                     `,
           },
           {
             type: "mathematique",
             icon: "∑",
-            title: "Pourquoi K-means converge toujours",
+            title: "Les deux sous-problèmes de K-means",
             content: `
-                        <p><strong>Théorème de convergence :</strong></p>
+                        <p><strong>🧩 K-means résout le problème NP-difficile en l'alternant entre deux sous-problèmes simples :</strong></p>
+                        
+                        <p><strong>1️⃣ Assignation optimale (centres fixes) :</strong></p>
+                        <p>Pour chaque point \\(\\vec{x}_i\\), trouver le cluster qui minimise la distance :</p>
+                        <p>$$c^*(\\vec{x}_i) = \\arg\\min_{k \\in \\{1,...,K\\}} ||\\vec{x}_i - \\vec{\\mu}_k||^2$$</p>
                         
                         <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>K-means converge en un nombre fini d'itérations.</strong><br><br>
-                            
-                            <strong>Preuve :</strong><br><br>
-                            
-                            1. <strong>J diminue à chaque étape :</strong><br>
-                            • L'assignation choisit le centre minimisant la distance → J diminue ou reste stable<br>
-                            • Le recentrage minimise J pour les assignations fixes → J diminue ou reste stable<br><br>
-                            
-                            2. <strong>J est borné inférieurement :</strong><br>
-                            $$J \\geq 0$$ (somme de carrés)<br><br>
-                            
-                            3. <strong>Nombre fini de partitions :</strong><br>
-                            Il y a au plus \\(K^n\\) façons d'assigner n points à K clusters.<br><br>
-                            
-                            4. <strong>Conclusion :</strong><br>
-                            J décroît et est minorée → convergence<br>
-                            Nombre fini de partitions → convergence en temps fini ✓
+                            <strong>💡 Solution triviale :</strong> Choisir le centre le plus proche !<br>
+                            C'est un simple calcul de distances.
                         </div>
                         
-                        <p><strong>Complexité :</strong> \\(O(nKdI)\\) où I est le nombre d'itérations (typiquement < 100).</p>
+                        <p><strong>2️⃣ Centres optimaux (assignations fixes) :</strong></p>
+                        <p>Pour le cluster k, minimiser :</p>
+                        <p>$$\\sum_{\\vec{x}_i \\in C_k} ||\\vec{x}_i - \\vec{\\mu}_k||^2$$</p>
                         
-                        <p>C'est remarquablement efficace pour un problème NP-difficile !</p>
+                        <p><strong>🔧 Dérivation (voir <a href="../math/derivatives.html">Module 1.4</a>) :</strong></p>
+                        <p>$$\\frac{\\partial}{\\partial \\vec{\\mu}_k} \\sum_{\\vec{x}_i \\in C_k} ||\\vec{x}_i - \\vec{\\mu}_k||^2 = \\frac{\\partial}{\\partial \\vec{\\mu}_k} \\sum_{\\vec{x}_i \\in C_k} (\\vec{x}_i - \\vec{\\mu}_k)^T(\\vec{x}_i - \\vec{\\mu}_k)$$</p>
+                        
+                        <p>$$= -2\\sum_{\\vec{x}_i \\in C_k} (\\vec{x}_i - \\vec{\\mu}_k) = 0$$</p>
+                        
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>✅ Solution élégante :</strong><br>
+                            $$\\vec{\\mu}_k^* = \\frac{1}{|C_k|} \\sum_{\\vec{x}_i \\in C_k} \\vec{x}_i$$<br><br>
+                            
+                            Le centre optimal est la <strong>moyenne arithmétique</strong> des points du cluster !<br>
+                            C'est pourquoi on l'appelle "K-<strong>means</strong>".
+                        </div>
                     `,
           },
           {
             type: "exemple",
             icon: "💻",
-            title: "Calcul manuel sur un exemple simple",
+            title: "Calcul manuel complet sur 4 points",
             content: `
-                        <p><strong>Groupons 4 points en 2 clusters :</strong></p>
+                        <p><strong>📝 Exemple concret :</strong> Groupons 4 villes sénégalaises en 2 clusters selon leurs coordonnées économiques.</p>
                         
-                        <table style="margin: 1rem auto; text-align: center;">
+                        <p><strong>🏙️ Données :</strong> [PIB/habitant, Taux d'alphabétisation]</p>
+                        <table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
                             <tr style="background: #3498db; color: white;">
-                                <th style="padding: 0.5rem;">Point</th>
-                                <th style="padding: 0.5rem;">x₁</th>
-                                <th style="padding: 0.5rem;">x₂</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Ville</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">PIB/hab</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Alphabétisation</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Point</th>
                             </tr>
-                            <tr><td>A</td><td>1</td><td>1</td></tr>
-                            <tr><td>B</td><td>2</td><td>1</td></tr>
-                            <tr><td>C</td><td>4</td><td>3</td></tr>
-                            <tr><td>D</td><td>5</td><td>4</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">Dakar</td><td style="padding: 0.5rem; border: 1px solid #ddd;">4</td><td style="padding: 0.5rem; border: 1px solid #ddd;">3</td><td style="padding: 0.5rem; border: 1px solid #ddd;">A(4,3)</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">Thiès</td><td style="padding: 0.5rem; border: 1px solid #ddd;">3</td><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">B(3,2)</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">Kaolack</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">C(1,1)</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">Kolda</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">D(1,2)</td></tr>
                         </table>
                         
-                        <p><strong>Initialisation :</strong> Centres en A(1,1) et C(4,3)</p>
+                        <p><strong>🎯 Objectif :</strong> K=2 clusters (régions développées vs en développement)</p>
                         
-                        <p><strong>Itération 1 - Assignation :</strong></p>
+                        <p><strong>🚀 Initialisation :</strong> Centres en A(4,3) et C(1,1)</p>
+                        
+                        <p><strong>📊 Itération 1 - Assignation :</strong></p>
                         <div style="background: #f0f9ff; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            Distances au centre μ₁ = (1,1) :<br>
-                            • d(A, μ₁) = 0<br>
-                            • d(B, μ₁) = \\(\\sqrt{(2-1)^2 + (1-1)^2} = 1\\)<br>
-                            • d(C, μ₁) = \\(\\sqrt{(4-1)^2 + (3-1)^2} = \\sqrt{9+4} = \\sqrt{13} \\approx 3.6\\)<br>
-                            • d(D, μ₁) = \\(\\sqrt{(5-1)^2 + (4-1)^2} = \\sqrt{16+9} = 5\\)<br><br>
+                            <strong>Distances au centre μ₁ = (4,3) :</strong><br>
+                            • d(A, μ₁) = √[(4-4)² + (3-3)²] = 0<br>
+                            • d(B, μ₁) = √[(3-4)² + (2-3)²] = √[1+1] = √2 ≈ 1.41<br>
+                            • d(C, μ₁) = √[(1-4)² + (1-3)²] = √[9+4] = √13 ≈ 3.61<br>
+                            • d(D, μ₁) = √[(1-4)² + (2-3)²] = √[9+1] = √10 ≈ 3.16<br><br>
                             
-                            Distances au centre μ₂ = (4,3) :<br>
-                            • d(A, μ₂) = \\(\\sqrt{13} \\approx 3.6\\)<br>
-                            • d(B, μ₂) = \\(\\sqrt{8} \\approx 2.8\\)<br>
-                            • d(C, μ₂) = 0<br>
-                            • d(D, μ₂) = \\(\\sqrt{2} \\approx 1.4\\)<br><br>
+                            <strong>Distances au centre μ₂ = (1,1) :</strong><br>
+                            • d(A, μ₂) = √[(4-1)² + (3-1)²] = √[9+4] = √13 ≈ 3.61<br>
+                            • d(B, μ₂) = √[(3-1)² + (2-1)²] = √[4+1] = √5 ≈ 2.24<br>
+                            • d(C, μ₂) = √[(1-1)² + (1-1)²] = 0<br>
+                            • d(D, μ₂) = √[(1-1)² + (2-1)²] = 1<br><br>
                             
-                            <strong>Assignations :</strong> A→1, B→1, C→2, D→2
+                            <strong>🎯 Assignations :</strong> A→1, B→1, C→2, D→2
                         </div>
                         
-                        <p><strong>Itération 1 - Recentrage :</strong></p>
+                        <p><strong>📍 Itération 1 - Recentrage :</strong></p>
                         <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            μ₁ = moyenne(A, B) = ((1+2)/2, (1+1)/2) = (1.5, 1)<br>
-                            μ₂ = moyenne(C, D) = ((4+5)/2, (3+4)/2) = (4.5, 3.5)<br><br>
+                            <strong>Nouveau centre μ₁ :</strong><br>
+                            μ₁ = moyenne(A, B) = ((4+3)/2, (3+2)/2) = (3.5, 2.5)<br><br>
                             
-                            <strong>Inertie :</strong> J = 0.25 + 0.25 + 0.5 + 0.5 = 1.5
+                            <strong>Nouveau centre μ₂ :</strong><br>
+                            μ₂ = moyenne(C, D) = ((1+1)/2, (1+2)/2) = (1, 1.5)<br><br>
+                            
+                            <strong>📊 Inertie :</strong> J = 0.5 + 0.5 + 0 + 0.25 = 1.25
                         </div>
                         
-                        <p><strong>Itération 2 :</strong></p>
-                        <p>Avec les nouveaux centres, les assignations restent identiques.<br>
-                        Les centres ne bougent plus → <strong>Convergence !</strong></p>
+                        <p><strong>🔄 Itération 2 :</strong> Avec les nouveaux centres, recalculer les distances... Les assignations restent identiques → <strong>Convergence !</strong></p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calcul manuel K-means",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Soit 6 points à grouper en 2 clusters :</p>
+                        <p><strong>Points :</strong> A(1,1), B(2,1), C(1,2), D(5,5), E(6,5), F(5,6)</p>
+                        
+                        <p><strong>📝 Effectuez K-means manuellement :</strong></p>
+                        <ol>
+                            <li>Initialisez avec μ₁ = A(1,1) et μ₂ = D(5,5)</li>
+                            <li>Calculez toutes les distances pour l'assignation</li>
+                            <li>Assignez chaque point au centre le plus proche</li>
+                            <li>Recalculez les centres (moyennes)</li>
+                            <li>Répétez jusqu'à convergence</li>
+                            <li>Calculez l'inertie finale</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('kmeans-manual-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="kmeans-manual-exercise" style="display: none;">
+                        <p><strong>Itération 1 - Assignation :</strong></p>
+                        <ul>
+                            <li>A(1,1) : d(A,μ₁)=0, d(A,μ₂)=√32≈5.66 → Cluster 1</li>
+                            <li>B(2,1) : d(B,μ₁)=1, d(B,μ₂)=√25=5 → Cluster 1</li>
+                            <li>C(1,2) : d(C,μ₁)=1, d(C,μ₂)=√25=5 → Cluster 1</li>
+                            <li>D(5,5) : d(D,μ₁)=√32≈5.66, d(D,μ₂)=0 → Cluster 2</li>
+                            <li>E(6,5) : d(E,μ₁)=√41≈6.4, d(E,μ₂)=1 → Cluster 2</li>
+                            <li>F(5,6) : d(F,μ₁)=√41≈6.4, d(F,μ₂)=1 → Cluster 2</li>
+                        </ul>
+                        
+                        <p><strong>Recentrage :</strong></p>
+                        <ul>
+                            <li>μ₁ = ((1+2+1)/3, (1+1+2)/3) = (4/3, 4/3) ≈ (1.33, 1.33)</li>
+                            <li>μ₂ = ((5+6+5)/3, (5+5+6)/3) = (16/3, 16/3) ≈ (5.33, 5.33)</li>
+                        </ul>
+                        
+                        <p><strong>Itération 2 :</strong> Les assignations restent identiques → Convergence !</p>
+                        
+                        <p><strong>📊 Résultat final :</strong></p>
+                        <ul>
+                            <li>Cluster 1 : {A, B, C} centré en (1.33, 1.33)</li>
+                            <li>Cluster 2 : {D, E, F} centré en (5.33, 5.33)</li>
+                            <li>Inertie finale : J ≈ 2.67</li>
+                        </ul>
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Théorème de convergence : pourquoi ça marche toujours",
+            content: `
+                        <p><strong>🎯 Théorème fondamental :</strong></p>
                         
                         <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>Résultat final :</strong><br>
-                            • Cluster 1 : {A, B} centré en (1.5, 1)<br>
-                            • Cluster 2 : {C, D} centré en (4.5, 3.5)<br>
-                            • Inertie finale : J = 1.5
+                            <strong>K-means converge toujours en un nombre fini d'itérations.</strong>
+                        </div>
+                        
+                        <p><strong>📐 Preuve rigoureuse :</strong></p>
+                        
+                        <p><strong>1️⃣ J décroît à chaque étape :</strong></p>
+                        <ul>
+                            <li><strong>Assignation :</strong> Chaque point choisit le centre minimisant sa distance → J diminue ou reste stable</li>
+                            <li><strong>Recentrage :</strong> Chaque centre minimise J pour ses points assignés → J diminue ou reste stable</li>
+                        </ul>
+                        
+                        <p><strong>2️⃣ J est borné inférieurement :</strong></p>
+                        <p>$$J = \\sum_{k=1}^{K} \\sum_{\\vec{x}_i \\in C_k} ||\\vec{x}_i - \\vec{\\mu}_k||^2 \\geq 0$$</p>
+                        <p>Car c'est une somme de carrés (toujours ≥ 0)</p>
+                        
+                        <p><strong>3️⃣ Nombre fini de partitions :</strong></p>
+                        <p>Il y a au plus \\(K^n\\) façons d'assigner n points à K clusters.</p>
+                        
+                        <p><strong>4️⃣ Conclusion :</strong></p>
+                        <ul>
+                            <li>J décroît et est minorée → convergence assurée</li>
+                            <li>Nombre fini de partitions → convergence en temps fini</li>
+                        </ul>
+                        
+                        <p><strong>⏱️ Complexité :</strong> \\(O(nKdI)\\) où :</p>
+                        <ul>
+                            <li>n = nombre de points</li>
+                            <li>K = nombre de clusters</li>
+                            <li>d = dimension</li>
+                            <li>I = nombre d'itérations (typiquement < 100)</li>
+                        </ul>
+                        
+                        <p><strong>💡 Remarquable :</strong> Algorithme efficace pour un problème NP-difficile !</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation K-means from scratch",
+            description: "Implémentons K-means étape par étape :",
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+class KMeansFromScratch:
+    def __init__(self, k=2, max_iters=100, random_state=42):
+        self.k = k
+        self.max_iters = max_iters
+        self.random_state = random_state
+    
+    def fit(self, X):
+        """Entraîner K-means sur les données X"""
+        np.random.seed(self.random_state)
+        n_samples, n_features = X.shape
+        
+        # Initialisation aléatoire des centres
+        self.centroids = X[np.random.choice(n_samples, self.k, replace=False)]
+        
+        print(f"🎯 K-means avec K={self.k}")
+        print(f"📊 Données: {n_samples} points en dimension {n_features}")
+        print(f"🚀 Centres initiaux:")
+        for i, centroid in enumerate(self.centroids):
+            print(f"   μ{i+1} = ({centroid[0]:.2f}, {centroid[1]:.2f})")
+        
+        self.inertias = []
+        
+        for iteration in range(self.max_iters):
+            # Étape 1: Assignation
+            distances = np.sqrt(((X - self.centroids[:, np.newaxis])**2).sum(axis=2))
+            self.labels = np.argmin(distances, axis=0)
+            
+            # Étape 2: Recentrage
+            new_centroids = np.array([X[self.labels == k].mean(axis=0) for k in range(self.k)])
+            
+            # Calcul de l'inertie
+            inertia = sum(np.sum((X[self.labels == k] - new_centroids[k])**2) 
+                         for k in range(self.k))
+            self.inertias.append(inertia)
+            
+            # Vérification de convergence
+            if np.allclose(self.centroids, new_centroids):
+                print(f"✅ Convergence atteinte à l'itération {iteration + 1}")
+                break
+            
+            self.centroids = new_centroids
+            
+            if iteration < 5:  # Afficher les premières itérations
+                print(f"\\nItération {iteration + 1}:")
+                print(f"   Inertie: {inertia:.2f}")
+                for i, centroid in enumerate(self.centroids):
+                    print(f"   μ{i+1} = ({centroid[0]:.2f}, {centroid[1]:.2f})")
+        
+        return self
+    
+    def predict(self, X):
+        """Prédire les clusters pour de nouveaux points"""
+        distances = np.sqrt(((X - self.centroids[:, np.newaxis])**2).sum(axis=2))
+        return np.argmin(distances, axis=0)
+
+# Test avec données économiques sénégalaises
+donnees_villes = np.array([
+    [4, 3],  # Dakar
+    [3, 2],  # Thiès  
+    [1, 1],  # Kaolack
+    [1, 2],  # Kolda
+    [4, 2],  # Saint-Louis
+    [2, 1]   # Fatick
+])
+
+villes = ['Dakar', 'Thiès', 'Kaolack', 'Kolda', 'Saint-Louis', 'Fatick']
+
+# Entraînement
+kmeans = KMeansFromScratch(k=2)
+kmeans.fit(donnees_villes)
+
+print(f"\\n🏆 RÉSULTATS FINAUX:")
+for i, ville in enumerate(villes):
+    cluster = kmeans.labels[i]
+    print(f"{ville}: Cluster {cluster + 1}")
+
+print(f"\\n📊 Inertie finale: {kmeans.inertias[-1]:.2f}")`,
+          },
+          {
+            type: "code",
+            title: "Visualisation du clustering",
+            description: "Visualisons le processus K-means :",
+            code: `# Visualisation des résultats
+plt.figure(figsize=(12, 5))
+
+# Graphique 1: Données et clusters finaux
+plt.subplot(1, 2, 1)
+colors = ['red', 'blue', 'green', 'purple']
+for k in range(kmeans.k):
+    cluster_points = donnees_villes[kmeans.labels == k]
+    plt.scatter(cluster_points[:, 0], cluster_points[:, 1], 
+               c=colors[k], label=f'Cluster {k+1}', s=100, alpha=0.7)
+
+# Centres finaux
+plt.scatter(kmeans.centroids[:, 0], kmeans.centroids[:, 1], 
+           c='black', marker='x', s=200, linewidths=3, label='Centres')
+
+# Annotations des villes
+for i, ville in enumerate(villes):
+    plt.annotate(ville, (donnees_villes[i, 0], donnees_villes[i, 1]),
+                xytext=(5, 5), textcoords='offset points', fontsize=9)
+
+plt.xlabel('PIB/habitant (échelle)')
+plt.ylabel('Taux alphabétisation (échelle)')
+plt.title('Clustering des Villes Sénégalaises')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Graphique 2: Évolution de l'inertie
+plt.subplot(1, 2, 2)
+plt.plot(range(1, len(kmeans.inertias) + 1), kmeans.inertias, 'bo-')
+plt.xlabel('Itération')
+plt.ylabel('Inertie')
+plt.title('Convergence de K-means')
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+print("📈 Visualisation terminée !")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : choix du nombre de clusters K",
+            content: `
+                        <p><strong>🤔 Comment choisir K ?</strong> Utilisons la <strong>méthode du coude</strong> :</p>
+                        
+                        <p><strong>🎯 Principe :</strong> Tester différentes valeurs de K et choisir celle où l'inertie cesse de diminuer drastiquement.</p>
+                        
+                        <p><strong>📝 Exercice à résoudre :</strong></p>
+                        <p>Avec les mêmes 6 villes, testez K de 1 à 5 et trouvez le K optimal.</p>
+                        
+                        <p><strong>✅ Solution :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('elbow-method-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="elbow-method-exercise" style="display: none;">
+                        <p><strong>Calculs théoriques :</strong></p>
+                        <ul>
+                            <li><strong>K=1 :</strong> Tous les points dans un cluster → Inertie élevée</li>
+                            <li><strong>K=2 :</strong> Séparation naturelle → Inertie modérée</li>
+                            <li><strong>K=3 :</strong> Sur-segmentation → Inertie plus faible</li>
+                            <li><strong>K=6 :</strong> Chaque point = 1 cluster → Inertie = 0</li>
+                        </ul>
+                        <p><strong>🎯 K optimal :</strong> K=2 car il y a 2 groupes naturels (villes développées vs en développement)</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Méthode du coude en pratique",
+            description: "Implémentons la méthode du coude :",
+            code: `# Méthode du coude pour choisir K
+def methode_coude(X, k_max=6):
+    """Teste différentes valeurs de K et calcule l'inertie"""
+    inertias = []
+    K_values = range(1, k_max + 1)
+    
+    print("📊 MÉTHODE DU COUDE")
+    print("=" * 30)
+    
+    for k in K_values:
+        if k == 1:
+            # K=1: tous les points, centre = moyenne globale
+            centroid = X.mean(axis=0)
+            inertia = np.sum((X - centroid)**2)
+        else:
+            kmeans = KMeansFromScratch(k=k, max_iters=50)
+            kmeans.fit(X)
+            inertia = kmeans.inertias[-1]
+        
+        inertias.append(inertia)
+        print(f"K={k}: Inertie = {inertia:.2f}")
+    
+    return K_values, inertias
+
+# Test sur nos données
+K_values, inertias = methode_coude(donnees_villes)
+
+# Visualisation du coude
+plt.figure(figsize=(10, 6))
+plt.plot(K_values, inertias, 'bo-', linewidth=2, markersize=8)
+plt.xlabel('Nombre de clusters (K)')
+plt.ylabel('Inertie')
+plt.title('Méthode du Coude - Choix de K')
+plt.grid(True, alpha=0.3)
+
+# Marquer le coude optimal (K=2)
+plt.annotate('Coude optimal', xy=(2, inertias[1]), xytext=(3, inertias[1] + 2),
+            arrowprops=dict(arrowstyle='->', color='red', lw=2),
+            fontsize=12, color='red', fontweight='bold')
+
+plt.show()
+
+print(f"\\n🎯 K optimal suggéré: 2 (coude visible)")`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Limites fondamentales de K-means",
+            content: `
+                        <p><strong>⚠️ K-means fait des hypothèses fortes qui peuvent échouer :</strong></p>
+                        
+                        <p><strong>🔴 Hypothèse 1 : Clusters sphériques</strong></p>
+                        <ul>
+                            <li>✅ <strong>Fonctionne</strong> : groupes compacts et ronds</li>
+                            <li>❌ <strong>Échoue</strong> : formes allongées, en croissant, anneaux</li>
+                            <li>🔧 <strong>Cause</strong> : distance euclidienne crée des "boules"</li>
+                        </ul>
+                        
+                        <p><strong>🔴 Hypothèse 2 : Clusters de taille similaire</strong></p>
+                        <ul>
+                            <li>✅ <strong>Fonctionne</strong> : groupes équilibrés</li>
+                            <li>❌ <strong>Échoue</strong> : un gros groupe + plusieurs petits</li>
+                            <li>🔧 <strong>Cause</strong> : minimisation de l'inertie favorise l'équilibre</li>
+                        </ul>
+                        
+                        <p><strong>🔴 Hypothèse 3 : Variables de même échelle</strong></p>
+                        <ul>
+                            <li>✅ <strong>Fonctionne</strong> : âge [20-60] et salaire [20k-60k]</li>
+                            <li>❌ <strong>Échoue</strong> : âge [20-60] et salaire [20k-2M]</li>
+                            <li>🔧 <strong>Solution</strong> : normalisation obligatoire</li>
+                        </ul>
+                        
+                        <p><strong>🔴 Autres limitations :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>K fixé à l'avance</strong> : méthode du coude pour choisir</li>
+                            <li>🎲 <strong>Sensible à l'initialisation</strong> : K-means++ améliore</li>
+                            <li>📊 <strong>Sensible aux outliers</strong> : la moyenne n'est pas robuste</li>
+                            <li>📐 <strong>Frontières linéaires</strong> : hyperplans de séparation</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : impact de l'initialisation",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Testez l'impact de différentes initialisations sur le même dataset.</p>
+                        
+                        <p><strong>📝 Scénarios à tester :</strong></p>
+                        <ol>
+                            <li>Initialisation aléatoire normale</li>
+                            <li>Tous les centres au même point (0,0)</li>
+                            <li>Centres très éloignés des données</li>
+                            <li>Un centre au milieu des données</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('initialization-impact-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="initialization-impact-exercise" style="display: none;">
+                        <p><strong>Résultats attendus :</strong></p>
+                        <ol>
+                            <li><strong>Aléatoire normale :</strong> Convergence vers solution raisonnable</li>
+                            <li><strong>Même point :</strong> Tous les points assignés au même cluster → échec total</li>
+                            <li><strong>Très éloignés :</strong> Convergence lente, solution sous-optimale possible</li>
+                            <li><strong>Centre au milieu :</strong> Risque de solution déséquilibrée</li>
+                        </ol>
+                        <p><strong>💡 Conclusion :</strong> L'initialisation est cruciale ! C'est pourquoi K-means++ a été développé pour une initialisation intelligente.</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Comparaison avec d'autres algorithmes",
+            description: "Comparons K-means avec d'autres approches :",
+            code: `# Simulation de données avec formes différentes
+np.random.seed(42)
+
+# Dataset 1: Clusters sphériques (K-means excellent)
+cluster1 = np.random.normal([2, 2], 0.5, (30, 2))
+cluster2 = np.random.normal([6, 6], 0.5, (30, 2))
+data_spherique = np.vstack([cluster1, cluster2])
+
+# Dataset 2: Clusters allongés (K-means difficile)
+cluster1_long = np.random.normal([2, 2], [0.3, 1.5], (30, 2))
+cluster2_long = np.random.normal([6, 6], [1.5, 0.3], (30, 2))
+data_allonge = np.vstack([cluster1_long, cluster2_long])
+
+print("🔍 COMPARAISON TYPES DE DONNÉES")
+print("=" * 40)
+
+# Test K-means sur données sphériques
+kmeans_sphere = KMeansFromScratch(k=2)
+kmeans_sphere.fit(data_spherique)
+print(f"\\n✅ Données sphériques - Inertie finale: {kmeans_sphere.inertias[-1]:.2f}")
+
+# Test K-means sur données allongées
+kmeans_allonge = KMeansFromScratch(k=2)
+kmeans_allonge.fit(data_allonge)
+print(f"⚠️ Données allongées - Inertie finale: {kmeans_allonge.inertias[-1]:.2f}")
+
+# Visualisation comparative
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+
+# Données sphériques
+colors = ['red', 'blue']
+for k in range(2):
+    mask = kmeans_sphere.labels == k
+    ax1.scatter(data_spherique[mask, 0], data_spherique[mask, 1], 
+               c=colors[k], alpha=0.7, s=50)
+ax1.scatter(kmeans_sphere.centroids[:, 0], kmeans_sphere.centroids[:, 1], 
+           c='black', marker='x', s=200, linewidths=3)
+ax1.set_title('K-means sur Clusters Sphériques\\n(Excellent résultat)')
+ax1.grid(True, alpha=0.3)
+
+# Données allongées
+for k in range(2):
+    mask = kmeans_allonge.labels == k
+    ax2.scatter(data_allonge[mask, 0], data_allonge[mask, 1], 
+               c=colors[k], alpha=0.7, s=50)
+ax2.scatter(kmeans_allonge.centroids[:, 0], kmeans_allonge.centroids[:, 1], 
+           c='black', marker='x', s=200, linewidths=3)
+ax2.set_title('K-means sur Clusters Allongés\\n(Résultat sous-optimal)')
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+print("\\n💡 Observation: K-means divise artificiellement les clusters allongés !")`,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Alternatives à K-means : quand l'utiliser ?",
+            content: `
+                        <p><strong>🔧 Autres algorithmes de clustering :</strong></p>
+                        
+                        <p><strong>🎯 DBSCAN (Density-Based) :</strong></p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : formes arbitraires, détecte les outliers, K automatique</li>
+                            <li>❌ <strong>Inconvénients</strong> : sensible aux paramètres, densités variables</li>
+                            <li>🎯 <strong>Usage</strong> : données avec bruit, formes complexes</li>
+                        </ul>
+                        
+                        <p><strong>🌳 Clustering Hiérarchique :</strong></p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : dendrogramme, pas besoin de fixer K</li>
+                            <li>❌ <strong>Inconvénients</strong> : O(n³), difficile sur gros datasets</li>
+                            <li>🎯 <strong>Usage</strong> : exploration, petits datasets</li>
+                        </ul>
+                        
+                        <p><strong>📊 Gaussian Mixture Models (GMM) :</strong></p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : clusters elliptiques, assignation probabiliste</li>
+                            <li>❌ <strong>Inconvénients</strong> : plus complexe, suppose des gaussiennes</li>
+                            <li>🎯 <strong>Usage</strong> : données gaussiennes, incertitude d'assignation</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Guide de choix :</strong></p>
+                        <ul>
+                            <li>🔵 <strong>Clusters sphériques, K connu</strong> → K-means</li>
+                            <li>🟡 <strong>Formes complexes, outliers</strong> → DBSCAN</li>
+                            <li>🟢 <strong>Exploration, hiérarchie</strong> → Clustering hiérarchique</li>
+                            <li>🟣 <strong>Incertitude, ellipses</strong> → GMM</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : clustering de clients e-commerce",
+            content: `
+                        <p><strong>🎯 Exercice pratique complet :</strong></p>
+                        <p>Segmentez des clients d'un site e-commerce sénégalais selon leurs habitudes d'achat.</p>
+                        
+                        <p><strong>📊 Variables :</strong></p>
+                        <ul>
+                            <li>💰 <strong>Montant moyen par commande</strong> (milliers FCFA)</li>
+                            <li>📅 <strong>Fréquence d'achat</strong> (commandes/mois)</li>
+                            <li>⭐ <strong>Note de satisfaction</strong> (1-5)</li>
+                        </ul>
+                        
+                        <p><strong>📝 Étapes à suivre :</strong></p>
+                        <ol>
+                            <li>Normaliser les données (échelles différentes)</li>
+                            <li>Appliquer la méthode du coude</li>
+                            <li>Effectuer K-means avec K optimal</li>
+                            <li>Interpréter les segments découverts</li>
+                            <li>Proposer des stratégies marketing par segment</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solution :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('ecommerce-clustering-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="ecommerce-clustering-exercise" style="display: none;">
+                        <p><strong>Segments typiques attendus :</strong></p>
+                        <ul>
+                            <li>🏆 <strong>VIP</strong> : montant élevé, fréquence élevée, satisfaction élevée</li>
+                            <li>💰 <strong>Gros acheteurs occasionnels</strong> : montant élevé, fréquence faible</li>
+                            <li>🛒 <strong>Acheteurs réguliers</strong> : montant moyen, fréquence élevée</li>
+                            <li>😐 <strong>Clients à risque</strong> : montant faible, satisfaction faible</li>
+                        </ul>
+                        <p><strong>🎯 Stratégies :</strong></p>
+                        <ul>
+                            <li><strong>VIP</strong> → Programme de fidélité premium</li>
+                            <li><strong>Gros acheteurs</strong> → Notifications personnalisées</li>
+                            <li><strong>Réguliers</strong> → Offres de volume</li>
+                            <li><strong>À risque</strong> → Amélioration service client</li>
+                        </ul>
                         </div>
                     `,
           },
           {
             type: "warning",
             icon: "⚠️",
-            title: "La limite fondamentale de K-means",
+            title: "K-means en production : bonnes pratiques",
             content: `
-                        <p><strong>K-means fait une hypothèse implicite forte :</strong></p>
+                        <p><strong>🏭 Pour utiliser K-means en production :</strong></p>
                         
-                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
-                            <strong>Les clusters sont sphériques et de taille comparable.</strong><br><br>
-                            
-                            Pourquoi ? La distance euclidienne crée des "boules" autour des centres.<br>
-                            K-means partitionne l'espace par des hyperplans (frontières linéaires).<br><br>
-                            
-                            <strong>Conséquences :</strong><br>
-                            • Échoue sur des formes en croissant, anneaux, spirales<br>
-                            • Divise artificiellement les clusters allongés<br>
-                            • Sensible aux échelles différentes (→ normalisation cruciale)
-                        </div>
-                        
-                        <p><strong>Autres limitations :</strong></p>
+                        <p><strong>📋 Préparation des données :</strong></p>
                         <ul>
-                            <li><strong>K fixé à l'avance :</strong> Méthode du coude pour choisir</li>
-                            <li><strong>Sensible à l'initialisation :</strong> K-means++ améliore</li>
-                            <li><strong>Sensible aux outliers :</strong> La moyenne n'est pas robuste</li>
+                            <li>🧹 <strong>Nettoyage</strong> : supprimer les outliers extrêmes</li>
+                            <li>📊 <strong>Normalisation</strong> : StandardScaler ou MinMaxScaler</li>
+                            <li>🔍 <strong>Sélection de features</strong> : garder les variables pertinentes</li>
+                            <li>📈 <strong>Analyse exploratoire</strong> : comprendre les distributions</li>
                         </ul>
                         
-                        <p><strong>Pour aller plus loin :</strong> DBSCAN (densité), clustering hiérarchique (arbre), GMM (probabiliste).</p>
+                        <p><strong>⚙️ Optimisation de l'algorithme :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>K-means++</strong> : initialisation intelligente</li>
+                            <li>🔄 <strong>Plusieurs runs</strong> : prendre le meilleur résultat</li>
+                            <li>⏱️ <strong>Critère d'arrêt</strong> : tolérance sur le déplacement des centres</li>
+                            <li>💾 <strong>Mini-batch K-means</strong> : pour très gros datasets</li>
+                        </ul>
+                        
+                        <p><strong>📊 Validation des résultats :</strong></p>
+                        <ul>
+                            <li>📈 <strong>Silhouette score</strong> : qualité des clusters</li>
+                            <li>🎯 <strong>Inertie intra vs inter</strong> : séparation des groupes</li>
+                            <li>👁️ <strong>Visualisation</strong> : PCA pour projeter en 2D</li>
+                            <li>🧠 <strong>Interprétation métier</strong> : les clusters ont-ils du sens ?</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> K-means est simple et efficace, mais il faut comprendre ses limites pour l'utiliser à bon escient. Quand il fonctionne, c'est magique. Quand il échoue, il faut savoir pourquoi et choisir une alternative !</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Validation - comment s'assurer que nos clusters sont vraiment significatifs !</p>
                     `,
           },
         ],
         quiz: {
           question:
-            "🤔 Que se passe-t-il si on initialise tous les centres au même point ?",
+            "🤔 Que se passe-t-il si on initialise tous les centres K-means au même point (0,0) ?",
           options: [
-            "A) L'algorithme converge normalement",
+            "A) L'algorithme converge normalement vers la solution optimale",
             "B) L'algorithme ne peut pas démarrer car tous les points sont assignés au même cluster",
-            "C) L'algorithme diverge",
-            "D) On obtient K clusters équilibrés",
+            "C) L'algorithme diverge et ne converge jamais",
+            "D) On obtient automatiquement K clusters équilibrés",
           ],
           correct: 1,
           explanation:
-            "Si tous les centres sont identiques, tous les points sont assignés au même cluster initial. Lors du recentrage, tous les centres se déplacent au même point (la moyenne globale). L'algorithme est bloqué avec un seul cluster actif. C'est pourquoi l'initialisation est cruciale : il faut des centres distincts pour que K-means puisse séparer les données.",
+            "Si tous les centres sont identiques, tous les points sont assignés au même cluster initial. Lors du recentrage, tous les centres se déplacent vers la moyenne globale (même point). L'algorithme reste bloqué avec un seul cluster actif. C'est pourquoi une initialisation intelligente (K-means++) est cruciale.",
         },
         prevModule: "classification.html",
         nextModule: "validation.html",

@@ -72,7 +72,7 @@
         <h3>🎉 Checkpoint - Validation</h3>
         <p>
           Félicitations ! Vous savez maintenant évaluer rigoureusement vos
-          modèles ML.
+          modèles ML et éviter les pièges de l'overfitting.
         </p>
         <button
           class="checkpoint-btn"
@@ -102,10 +102,11 @@
         title: "Validation en Machine Learning",
         category: "Machine Learning",
         objectives: [
-          "Comprendre pourquoi la validation est critique",
-          "Maîtriser le split train/validation/test",
-          "Découvrir la validation croisée et ses variantes",
-          "Apprendre à détecter overfitting et underfitting",
+          "Comprendre pourquoi la validation est critique en ML",
+          "Maîtriser le split train/validation/test rigoureusement",
+          "Calculer manuellement la validation croisée k-fold",
+          "Détecter et diagnostiquer overfitting vs underfitting",
+          "Appliquer les bonnes pratiques de validation en production",
         ],
         content: [
           {
@@ -113,20 +114,29 @@
             icon: "💡",
             title: "Le piège fondamental du Machine Learning",
             content: `
-                        <p>Le Machine Learning cache un <strong>piège dangereux</strong> : un modèle peut avoir <strong>100% de précision</strong> sur vos données... et être <strong>complètement inutile</strong> en production !</p>
+                        <p>Le Machine Learning cache un <strong>piège mortel</strong> : un modèle peut avoir <strong>100% de précision</strong> sur vos données d'entraînement... et être <strong>complètement inutile</strong> en production !</p>
                         
-                        <p><strong>🔑 Le paradoxe :</strong></p>
-                        <p>Plus un modèle est complexe, plus il peut <strong>mémoriser</strong> les données au lieu de <strong>comprendre</strong> les patterns.</p>
+                        <p><strong>🔑 Le paradoxe central :</strong></p>
+                        <p>Plus un modèle est complexe, plus il peut <strong>mémoriser</strong> les données au lieu de <strong>comprendre</strong> les vrais patterns. C'est la différence entre un perroquet qui répète et un humain qui comprend.</p>
                         
-                        <p><strong>🎯 L'objectif ultime :</strong></p>
-                        <p>Créer un modèle qui <strong>généralise</strong> bien sur des données qu'il n'a <strong>jamais vues</strong>.</p>
+                        <p><strong>🎯 L'objectif ultime du ML :</strong></p>
+                        <p>Créer un modèle qui <strong>généralise</strong> bien sur des données qu'il n'a <strong>jamais vues</strong>. C'est exactement comme un étudiant qui doit réussir un examen sur des exercices inédits.</p>
                         
-                        <p><strong>💡 La validation est l'outil qui nous permet de :</strong></p>
+                        <p><strong>💡 La validation est l'outil scientifique qui nous permet de :</strong></p>
                         <ul>
-                            <li>✅ Mesurer la vraie performance</li>
-                            <li>🔍 Détecter les problèmes cachés</li>
-                            <li>⚖️ Équilibrer complexité et généralisation</li>
-                            <li>🎯 Choisir le meilleur modèle</li>
+                            <li>✅ <strong>Mesurer la vraie performance</strong> (pas l'illusion)</li>
+                            <li>🔍 <strong>Détecter les problèmes cachés</strong> (overfitting, data leakage)</li>
+                            <li>⚖️ <strong>Équilibrer complexité et généralisation</strong></li>
+                            <li>🎯 <strong>Choisir le meilleur modèle</strong> objectivement</li>
+                            <li>📊 <strong>Quantifier l'incertitude</strong> des prédictions</li>
+                        </ul>
+                        
+                        <p><strong>🤖 Applications critiques :</strong></p>
+                        <ul>
+                            <li>🏥 <strong>Diagnostic médical</strong> : éviter les faux diagnostics</li>
+                            <li>🚗 <strong>Voitures autonomes</strong> : sécurité des passagers</li>
+                            <li>💰 <strong>Finance</strong> : prédictions de risque fiables</li>
+                            <li>🎯 <strong>Recommandations</strong> : éviter les suggestions inappropriées</li>
                         </ul>
                     `,
           },
@@ -135,227 +145,837 @@
             icon: "🧠",
             title: "L'analogie de l'examen scolaire",
             content: `
-                        <p>Imaginez trois types d'étudiants face à un examen de mathématiques :</p>
+                        <p>Imaginez <strong>trois types d'étudiants</strong> face à un examen de mathématiques :</p>
                         
                         <p><strong>📚 L'étudiant "Overfitting" (surapprentissage) :</strong></p>
                         <ul>
-                            <li>🔖 Mémorise toutes les solutions des exercices du livre</li>
-                            <li>💯 Résout parfaitement les exercices qu'il a déjà vus</li>
-                            <li>❌ Échoue face à un nouvel exercice légèrement différent</li>
+                            <li>🔖 <strong>Stratégie</strong> : mémorise par cœur toutes les solutions du livre d'exercices</li>
+                            <li>💯 <strong>Performance train</strong> : résout parfaitement tous les exercices déjà vus</li>
+                            <li>❌ <strong>Performance test</strong> : échoue lamentablement face à un exercice légèrement différent</li>
+                            <li>🧠 <strong>Problème</strong> : mémorisation sans compréhension des concepts</li>
                         </ul>
                         
                         <p><strong>😴 L'étudiant "Underfitting" (sous-apprentissage) :</strong></p>
                         <ul>
-                            <li>📖 N'a pas assez étudié ou compris les concepts</li>
-                            <li>❌ Échoue même sur les exercices simples</li>
-                            <li>🤷 Modèle trop simple pour le problème</li>
+                            <li>📖 <strong>Stratégie</strong> : n'a pas assez étudié ou utilisé une méthode trop simpliste</li>
+                            <li>❌ <strong>Performance train</strong> : échoue même sur les exercices simples du cours</li>
+                            <li>❌ <strong>Performance test</strong> : échoue aussi sur l'examen</li>
+                            <li>🧠 <strong>Problème</strong> : modèle mental trop simple pour capturer la complexité</li>
                         </ul>
                         
                         <p><strong>🎯 L'étudiant "Optimal" :</strong></p>
                         <ul>
-                            <li>🧠 Comprend les concepts fondamentaux</li>
-                            <li>✅ Résout les exercices connus ET inconnus</li>
-                            <li>🔄 Sait adapter ses connaissances à de nouvelles situations</li>
+                            <li>🧠 <strong>Stratégie</strong> : comprend les concepts fondamentaux et s'entraîne sur des exercices variés</li>
+                            <li>✅ <strong>Performance train</strong> : résout correctement les exercices connus</li>
+                            <li>✅ <strong>Performance test</strong> : s'adapte aux nouveaux exercices en appliquant les concepts</li>
+                            <li>🎯 <strong>Succès</strong> : généralisation des connaissances</li>
                         </ul>
                         
-                        <p><strong>💡 C'est exactement ce qu'on cherche en ML : un modèle qui comprend, pas qui mémorise !</strong></p>
+                        <p><strong>💡 C'est exactement ce qu'on cherche en ML :</strong></p>
+                        <p>Un modèle qui <strong>comprend les patterns</strong> au lieu de <strong>mémoriser les exemples</strong> !</p>
                     `,
           },
           {
             type: "mathematique",
             icon: "∑",
-            title: "Train/Val/Test : la trinité sacrée",
+            title: "Train/Validation/Test : la trinité sacrée",
             content: `
-                        <p>La division des données en <strong>trois ensembles distincts</strong> est fondamentale :</p>
+                        <p>La division des données en <strong>trois ensembles distincts et disjoints</strong> est le fondement de toute validation rigoureuse :</p>
                         
-                        <p><strong>📊 La règle d'or :</strong></p>
-                        <p>$$\\text{Données} = \\text{Train} \\cup \\text{Validation} \\cup \\text{Test}$$</p>
-                        <p>avec $$\\text{Train} \\cap \\text{Validation} \\cap \\text{Test} = \\emptyset$$</p>
+                        <p><strong>📐 Formalisation mathématique :</strong></p>
+                        <p>$$\\mathcal{D} = \\mathcal{D}_{train} \\cup \\mathcal{D}_{val} \\cup \\mathcal{D}_{test}$$</p>
+                        <p>avec $$\\mathcal{D}_{train} \\cap \\mathcal{D}_{val} \\cap \\mathcal{D}_{test} = \\emptyset$$</p>
                         
                         <p><strong>🎯 Proportions classiques :</strong></p>
-                        <ul>
-                            <li>📚 <strong>Train (60-70%)</strong> : apprentissage des paramètres \\(\\theta\\)</li>
-                            <li>🔍 <strong>Validation (15-20%)</strong> : choix des hyperparamètres</li>
-                            <li>🎯 <strong>Test (15-20%)</strong> : évaluation finale non biaisée</li>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Train (60-70%) :</strong> $$|\\mathcal{D}_{train}| \\approx 0.6 \\times |\\mathcal{D}|$$</li>
+                            <li style="margin-top: 0.5rem"><strong>• Validation (15-20%) :</strong> $$|\\mathcal{D}_{val}| \\approx 0.2 \\times |\\mathcal{D}|$$</li>
+                            <li style="margin-top: 0.5rem"><strong>• Test (15-20%) :</strong> $$|\\mathcal{D}_{test}| \\approx 0.2 \\times |\\mathcal{D}|$$</li>
                         </ul>
                         
-                        <p><strong>⚠️ Le principe fondamental :</strong></p>
-                        <p>Le test set est <strong>sacré</strong> - on ne le touche qu'<strong>UNE SEULE FOIS</strong> à la toute fin !</p>
-                        
-                        <p><strong>📐 Mathématiquement :</strong></p>
-                        <p>Si \\(\\mathcal{L}_{train}\\) est l'erreur sur train et \\(\\mathcal{L}_{test}\\) sur test :</p>
+                        <p><strong>🔑 Rôles distincts et sacrés :</strong></p>
                         <ul>
-                            <li>\\(\\mathcal{L}_{train} \\ll \\mathcal{L}_{test}\\) → <strong>Overfitting</strong></li>
-                            <li>\\(\\mathcal{L}_{train} \\approx \\mathcal{L}_{test}\\) (élevées) → <strong>Underfitting</strong></li>
-                            <li>\\(\\mathcal{L}_{train} \\approx \\mathcal{L}_{test}\\) (faibles) → <strong>Optimal !</strong></li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "concept",
-            icon: "💡",
-            title: "Validation croisée : utiliser 100% des données",
-            content: `
-                        <p>La <strong>validation croisée k-fold</strong> est une technique élégante qui utilise <strong>toutes les données</strong> pour l'entraînement ET la validation !</p>
-                        
-                        <p><strong>🔄 Le principe :</strong></p>
-                        <p>Diviser les données en k parties égales, puis faire k expériences où chaque partie sert une fois de validation.</p>
-                        
-                        <p><strong>🎯 Algorithme étape par étape :</strong></p>
-                        <ol>
-                            <li>Diviser les données en k "folds" (plis)</li>
-                            <li>Pour chaque fold i :
-                                <ul>
-                                    <li>Fold i → validation</li>
-                                    <li>Autres folds → entraînement</li>
-                                    <li>Entraîner et calculer l'erreur \\(e_i\\)</li>
-                                </ul>
-                            </li>
-                            <li>Score final = moyenne des k erreurs</li>
-                        </ol>
-                        
-                        <p><strong>💡 Avantages clés :</strong></p>
-                        <ul>
-                            <li>✅ Utilise 100% des données</li>
-                            <li>📊 Donne une estimation robuste</li>
-                            <li>📈 Mesure la variance du modèle</li>
+                            <li>📚 <strong>Train</strong> : apprentissage des paramètres \\(\\theta\\) du modèle</li>
+                            <li>🔍 <strong>Validation</strong> : choix des hyperparamètres et architecture</li>
+                            <li>🎯 <strong>Test</strong> : évaluation finale <strong>non biaisée</strong> (une seule fois !)</li>
                         </ul>
                         
-                        <p><strong>🤔 Choix de k :</strong></p>
-                        <ul>
-                            <li><strong>k=5 ou 10</strong> : bon compromis temps/variance</li>
-                            <li><strong>k=n (LOOCV)</strong> : précis mais coûteux</li>
-                            <li><strong>k=2</strong> : rapide mais variance élevée</li>
+                        <p><strong>⚠️ Le principe fondamental inviolable :</strong></p>
+                        <div style="background: #ffebee; padding: 1rem; border-left: 4px solid #f44336; margin: 1rem 0;">
+                            <strong>Le test set est SACRÉ !</strong><br>
+                            On ne le touche qu'<strong>UNE SEULE FOIS</strong> à la toute fin, après avoir finalisé complètement le modèle.
+                        </div>
+                        
+                        <p><strong>📊 Diagnostic mathématique :</strong></p>
+                        <p>Si \\(\\mathcal{L}_{train}\\), \\(\\mathcal{L}_{val}\\), \\(\\mathcal{L}_{test}\\) sont les erreurs sur chaque ensemble :</p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Overfitting :</strong> $$\\mathcal{L}_{train} \\ll \\mathcal{L}_{val} \\approx \\mathcal{L}_{test}$$</li>
+                            <li style="margin-top: 0.5rem"><strong>• Underfitting :</strong> $$\\mathcal{L}_{train} \\approx \\mathcal{L}_{val} \\approx \\mathcal{L}_{test}$$ (toutes élevées)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Optimal :</strong> $$\\mathcal{L}_{train} \\approx \\mathcal{L}_{val} \\approx \\mathcal{L}_{test}$$ (toutes faibles)</li>
                         </ul>
-                    `,
-          },
-          {
-            type: "mathematique",
-            icon: "∑",
-            title: "Le dilemme biais-variance",
-            content: `
-                        <p>L'erreur totale d'un modèle se <strong>décompose mathématiquement</strong> en trois parties :</p>
-                        
-                        <p><strong>📐 La décomposition fondamentale :</strong></p>
-                        <p>$$\\text{Erreur Totale} = \\text{Biais}^2 + \\text{Variance} + \\text{Bruit}$$</p>
-                        
-                        <p><strong>🎯 Biais (Bias) :</strong></p>
-                        <p>Erreur due aux <strong>hypothèses simplificatrices</strong> du modèle</p>
-                        <ul>
-                            <li>Modèle trop simple pour capturer la complexité</li>
-                            <li>Exemple : utiliser une droite pour des données en forme de parabole</li>
-                            <li>Cause l'<strong>underfitting</strong></li>
-                        </ul>
-                        
-                        <p><strong>📊 Variance :</strong></p>
-                        <p>Sensibilité du modèle aux <strong>fluctuations</strong> dans les données d'entraînement</p>
-                        <ul>
-                            <li>Modèle trop complexe qui "colle" trop aux données</li>
-                            <li>Change beaucoup avec différents échantillons</li>
-                            <li>Cause l'<strong>overfitting</strong></li>
-                        </ul>
-                        
-                        <p><strong>🎲 Bruit irréductible :</strong></p>
-                        <p>Erreur intrinsèque aux données (mesures imprécises, aléatoire)</p>
-                        
-                        <p><strong>⚖️ Le trade-off :</strong></p>
-                        <p>Diminuer le biais augmente souvent la variance (et vice-versa). L'art est de trouver l'équilibre optimal !</p>
-                    `,
-          },
-          {
-            type: "intuition",
-            icon: "🧠",
-            title: "Détecter overfitting et underfitting",
-            content: `
-                        <p><strong>🔍 Comment reconnaître chaque problème ?</strong></p>
-                        
-                        <p><strong>🔴 Signes d'OVERFITTING :</strong></p>
-                        <ul>
-                            <li>📈 Erreur train très faible (< 5%)</li>
-                            <li>📉 Erreur validation beaucoup plus élevée (> 20%)</li>
-                            <li>📊 Grand écart train/validation qui augmente</li>
-                            <li>🎢 Courbe d'apprentissage qui diverge</li>
-                        </ul>
-                        
-                        <p><strong>🟡 Signes d'UNDERFITTING :</strong></p>
-                        <ul>
-                            <li>📊 Erreurs train ET validation élevées</li>
-                            <li>📈 Peu de différence train/validation</li>
-                            <li>📉 Performance médiocre même sur train</li>
-                            <li>🔄 Courbes qui stagnent rapidement</li>
-                        </ul>
-                        
-                        <p><strong>🟢 Signes d'un modèle OPTIMAL :</strong></p>
-                        <ul>
-                            <li>✅ Erreurs train et validation faibles</li>
-                            <li>📊 Petit écart train/validation (< 5%)</li>
-                            <li>📈 Courbes qui convergent</li>
-                            <li>🎯 Performance stable sur nouveaux données</li>
-                        </ul>
-                        
-                        <p><strong>💡 Règle pratique :</strong></p>
-                        <p>Si erreur_validation / erreur_train > 1.5 → probable overfitting !</p>
                     `,
           },
           {
             type: "exemple",
             icon: "💻",
-            title: "Validation pratique : prédiction de revenus",
-            description:
-              "Détectons l'overfitting avec une validation rigoureuse :",
+            title: "Exercice pratique : split manuel",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Vous avez un dataset de 1000 exemples de prédiction de salaires au Sénégal. Effectuez un split rigoureux.</p>
+                        
+                        <p><strong>📝 Données :</strong></p>
+                        <ul>
+                            <li>1000 profils : [âge, éducation, expérience, région] → salaire</li>
+                            <li>Répartition géographique : 40% Dakar, 30% autres régions, 30% rural</li>
+                            <li>Répartition sectorielle : 50% privé, 30% public, 20% informel</li>
+                        </ul>
+                        
+                        <p><strong>📋 Questions :</strong></p>
+                        <ol>
+                            <li>Combien d'exemples dans chaque ensemble (60/20/20) ?</li>
+                            <li>Faut-il faire un split aléatoire simple ?</li>
+                            <li>Comment préserver les proportions géographiques ?</li>
+                            <li>Quel ordre pour le split ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('split-exercise-solution')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="split-exercise-solution" style="display: none;">
+                        <ol>
+                            <li><strong>Répartition :</strong>
+                                <br>• Train : 600 exemples (60%)
+                                <br>• Validation : 200 exemples (20%)
+                                <br>• Test : 200 exemples (20%)</li>
+                            <li><strong>Split stratifié obligatoire :</strong>
+                                <br>❌ Split aléatoire simple risque de déséquilibrer les régions/secteurs
+                                <br>✅ Split stratifié préserve les proportions dans chaque ensemble</li>
+                            <li><strong>Proportions à préserver :</strong>
+                                <br>• Chaque ensemble doit avoir ~40% Dakar, 30% autres, 30% rural
+                                <br>• Et ~50% privé, 30% public, 20% informel</li>
+                            <li><strong>Ordre crucial :</strong>
+                                <br>1. D'abord séparer le test set (et ne plus y toucher !)
+                                <br>2. Puis diviser le reste en train/validation
+                                <br>3. Toute exploration/preprocessing sur train+val uniquement</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title:
+              "Validation croisée : utiliser 100% des données intelligemment",
+            content: `
+                        <p>La <strong>validation croisée k-fold</strong> est une technique mathématiquement élégante qui utilise <strong>toutes les données</strong> pour l'entraînement ET la validation, sans jamais "tricher".</p>
+                        
+                        <p><strong>🔄 Le principe génial :</strong></p>
+                        <p>Au lieu de "gaspiller" 20% des données pour la validation, on fait k expériences où chaque partie sert une fois de validation et k-1 fois d'entraînement.</p>
+                        
+                        <p><strong>📐 Algorithme mathématique :</strong></p>
+                        <ol>
+                            <li><strong>Partition :</strong> $$\\mathcal{D} = \\bigcup_{i=1}^{k} F_i$$ avec $$F_i \\cap F_j = \\emptyset$$ et $$|F_i| \\approx \\frac{|\\mathcal{D}|}{k}$$</li>
+                            <li><strong>Pour chaque fold i :</strong>
+                                <ul>
+                                    <li>$$\\mathcal{D}_{val}^{(i)} = F_i$$</li>
+                                    <li>$$\\mathcal{D}_{train}^{(i)} = \\bigcup_{j \\neq i} F_j$$</li>
+                                    <li>Entraîner $$h_i$$ sur $$\\mathcal{D}_{train}^{(i)}$$</li>
+                                    <li>Calculer $$e_i = \\text{Erreur}(h_i, \\mathcal{D}_{val}^{(i)})$$</li>
+                                </ul>
+                            </li>
+                            <li><strong>Score final :</strong> $$\\text{CV}_k = \\frac{1}{k} \\sum_{i=1}^{k} e_i$$</li>
+                        </ol>
+                        
+                        <p><strong>📊 Estimation de la variance :</strong></p>
+                        <p>$$\\text{Var}(\\text{CV}_k) = \\frac{1}{k(k-1)} \\sum_{i=1}^{k} (e_i - \\text{CV}_k)^2$$</p>
+                        
+                        <p><strong>💡 Avantages mathématiques :</strong></p>
+                        <ul>
+                            <li>✅ <strong>Utilisation optimale</strong> : 100% des données exploitées</li>
+                            <li>📊 <strong>Estimation robuste</strong> : moyenne de k expériences indépendantes</li>
+                            <li>📈 <strong>Mesure de variance</strong> : quantifie la stabilité du modèle</li>
+                            <li>🎯 <strong>Réduction du biais</strong> : moins dépendant d'une division particulière</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel de validation croisée 5-fold",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Effectuons une validation croisée 5-fold manuelle sur un petit dataset de prédiction de revenus.</p>
+                        
+                        <p><strong>📊 Dataset :</strong> 10 personnes avec [Années d'études, Salaire en milliers FCFA]</p>
+                        <table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">ID</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Études</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Salaire</th>
+                            </tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">1</td><td style="padding: 0.5rem; border: 1px solid #ddd;">12</td><td style="padding: 0.5rem; border: 1px solid #ddd;">300</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">16</td><td style="padding: 0.5rem; border: 1px solid #ddd;">450</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">3</td><td style="padding: 0.5rem; border: 1px solid #ddd;">14</td><td style="padding: 0.5rem; border: 1px solid #ddd;">380</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">4</td><td style="padding: 0.5rem; border: 1px solid #ddd;">18</td><td style="padding: 0.5rem; border: 1px solid #ddd;">520</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">5</td><td style="padding: 0.5rem; border: 1px solid #ddd;">10</td><td style="padding: 0.5rem; border: 1px solid #ddd;">250</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">6</td><td style="padding: 0.5rem; border: 1px solid #ddd;">15</td><td style="padding: 0.5rem; border: 1px solid #ddd;">400</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">7</td><td style="padding: 0.5rem; border: 1px solid #ddd;">13</td><td style="padding: 0.5rem; border: 1px solid #ddd;">350</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">8</td><td style="padding: 0.5rem; border: 1px solid #ddd;">17</td><td style="padding: 0.5rem; border: 1px solid #ddd;">480</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">9</td><td style="padding: 0.5rem; border: 1px solid #ddd;">11</td><td style="padding: 0.5rem; border: 1px solid #ddd;">280</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">10</td><td style="padding: 0.5rem; border: 1px solid #ddd;">19</td><td style="padding: 0.5rem; border: 1px solid #ddd;">550</td></tr>
+                        </table>
+                        
+                        <p><strong>📝 Effectuez la validation croisée 5-fold :</strong></p>
+                        <ol>
+                            <li>Divisez en 5 folds de 2 exemples chacun</li>
+                            <li>Pour chaque fold, calculez la régression linéaire sur les 8 autres</li>
+                            <li>Testez sur les 2 exemples du fold</li>
+                            <li>Calculez l'erreur MSE pour chaque fold</li>
+                            <li>Moyennez les 5 erreurs</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('cv-manual-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="cv-manual-exercise" style="display: none;">
+                        <p><strong>Division en folds :</strong></p>
+                        <ul>
+                            <li>Fold 1 : {1, 2} → Test sur (12,300) et (16,450)</li>
+                            <li>Fold 2 : {3, 4} → Test sur (14,380) et (18,520)</li>
+                            <li>Fold 3 : {5, 6} → Test sur (10,250) et (15,400)</li>
+                            <li>Fold 4 : {7, 8} → Test sur (13,350) et (17,480)</li>
+                            <li>Fold 5 : {9, 10} → Test sur (11,280) et (19,550)</li>
+                        </ul>
+                        
+                        <p><strong>Calculs (régression y = ax + b) :</strong></p>
+                        <p>Pour chaque fold, on trouve a ≈ 25-30 et b ≈ -50 à 0</p>
+                        <p>Erreurs typiques : MSE entre 500 et 2000 par fold</p>
+                        <p><strong>Score CV final :</strong> ~1200 (moyenne des 5 MSE)</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Le dilemme biais-variance : décomposition mathématique",
+            content: `
+                        <p>L'erreur totale d'un modèle se <strong>décompose mathématiquement</strong> en trois composantes indépendantes :</p>
+                        
+                        <p><strong>📐 La décomposition fondamentale :</strong></p>
+                        <p>$$\\mathbb{E}[(y - \\hat{f}(x))^2] = \\text{Biais}^2[\\hat{f}(x)] + \\text{Var}[\\hat{f}(x)] + \\sigma^2$$</p>
+                        
+                        <p><strong>🔍 Détail de chaque composante :</strong></p>
+                        
+                        <p><strong>1️⃣ Biais² (erreur systématique) :</strong></p>
+                        <p>$$\\text{Biais}^2[\\hat{f}(x)] = (\\mathbb{E}[\\hat{f}(x)] - f(x))^2$$</p>
+                        <ul>
+                            <li>Erreur due aux <strong>hypothèses simplificatrices</strong> du modèle</li>
+                            <li>Exemple : utiliser une droite pour des données paraboliques</li>
+                            <li>Cause l'<strong>underfitting</strong> (modèle trop simple)</li>
+                        </ul>
+                        
+                        <p><strong>2️⃣ Variance (sensibilité aux données) :</strong></p>
+                        <p>$$\\text{Var}[\\hat{f}(x)] = \\mathbb{E}[(\\hat{f}(x) - \\mathbb{E}[\\hat{f}(x)])^2]$$</p>
+                        <ul>
+                            <li>Sensibilité du modèle aux <strong>fluctuations</strong> dans les données d'entraînement</li>
+                            <li>Exemple : modèle qui change drastiquement avec quelques points différents</li>
+                            <li>Cause l'<strong>overfitting</strong> (modèle trop complexe)</li>
+                        </ul>
+                        
+                        <p><strong>3️⃣ Bruit irréductible :</strong></p>
+                        <p>$$\\sigma^2 = \\mathbb{E}[(y - f(x))^2]$$</p>
+                        <ul>
+                            <li>Erreur intrinsèque aux données (mesures imprécises, aléatoire)</li>
+                            <li>Incompressible par définition</li>
+                        </ul>
+                        
+                        <p><strong>⚖️ Le trade-off fondamental :</strong></p>
+                        <p>$$\\text{Biais} \\downarrow \\Rightarrow \\text{Variance} \\uparrow \\quad \\text{et vice-versa}$$</p>
+                        <p>L'art du ML est de trouver l'équilibre optimal qui minimise $$\\text{Biais}^2 + \\text{Variance}$$</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title:
+              "Détecter overfitting et underfitting : les signaux d'alarme",
+            content: `
+                        <p><strong>🔍 Comment diagnostiquer chaque problème avec précision ?</strong></p>
+                        
+                        <p><strong>🔴 OVERFITTING - Signaux d'alarme :</strong></p>
+                        <ul>
+                            <li>📈 <strong>Erreur train très faible</strong> (< 5% pour classification, R² > 0.95 pour régression)</li>
+                            <li>📉 <strong>Erreur validation beaucoup plus élevée</strong> (> 20% ou R² < 0.7)</li>
+                            <li>📊 <strong>Écart train/validation qui grandit</strong> avec la complexité du modèle</li>
+                            <li>🎢 <strong>Courbes d'apprentissage divergentes</strong> : train descend, validation monte</li>
+                            <li>⚠️ <strong>Règle pratique :</strong> Si $$\\frac{\\text{Erreur}_{val}}{\\text{Erreur}_{train}} > 1.5$$ → probable overfitting</li>
+                        </ul>
+                        
+                        <p><strong>🟡 UNDERFITTING - Signaux d'alarme :</strong></p>
+                        <ul>
+                            <li>❌ <strong>Erreurs train ET validation élevées</strong> (> 15% ou R² < 0.6)</li>
+                            <li>📊 <strong>Petit écart train/validation</strong> mais performances médiocres</li>
+                            <li>📉 <strong>Courbes plates</strong> : pas d'amélioration même avec plus d'epochs</li>
+                            <li>🔄 <strong>Stagnation rapide</strong> : convergence prématurée</li>
+                        </ul>
+                        
+                        <p><strong>🟢 MODÈLE OPTIMAL - Signaux positifs :</strong></p>
+                        <ul>
+                            <li>✅ <strong>Erreurs train et validation faibles</strong> (< 10% ou R² > 0.8)</li>
+                            <li>📊 <strong>Petit écart train/validation</strong> (< 5% de différence)</li>
+                            <li>📈 <strong>Courbes convergentes</strong> : se rapprochent vers une valeur stable</li>
+                            <li>🎯 <strong>Performance stable</strong> sur nouveaux échantillons</li>
+                        </ul>
+                        
+                        <p><strong>🔧 Solutions par problème :</strong></p>
+                        <ul>
+                            <li><strong>Overfitting</strong> → Régularisation (L1/L2), dropout, early stopping, plus de données</li>
+                            <li><strong>Underfitting</strong> → Modèle plus complexe, plus de features, moins de régularisation</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation validation croisée from scratch",
+            description: "Implémentons la validation croisée manuellement :",
             code: `import numpy as np
-from sklearn.model_selection import train_test_split, cross_val_score
+import matplotlib.pyplot as plt
+
+class ValidationCroisee:
+    """Implémentation manuelle de la validation croisée"""
+    
+    def __init__(self, k=5):
+        self.k = k
+        self.scores = []
+        self.models = []
+    
+    def split_kfold(self, X, y):
+        """Divise les données en k folds"""
+        n = len(X)
+        indices = np.arange(n)
+        np.random.shuffle(indices)  # Mélange aléatoire
+        
+        fold_size = n // self.k
+        folds = []
+        
+        for i in range(self.k):
+            start = i * fold_size
+            end = start + fold_size if i < self.k - 1 else n
+            test_indices = indices[start:end]
+            train_indices = np.concatenate([indices[:start], indices[end:]])
+            folds.append((train_indices, test_indices))
+        
+        return folds
+    
+    def regression_lineaire(self, X_train, y_train):
+        """Régression linéaire simple : y = ax + b"""
+        # Ajout de la colonne de biais (intercept)
+        X_with_bias = np.column_stack([np.ones(len(X_train)), X_train])
+        
+        # Solution analytique : θ = (X^T X)^(-1) X^T y
+        theta = np.linalg.inv(X_with_bias.T @ X_with_bias) @ X_with_bias.T @ y_train
+        return theta
+    
+    def predict(self, X_test, theta):
+        """Prédiction avec le modèle linéaire"""
+        X_with_bias = np.column_stack([np.ones(len(X_test)), X_test])
+        return X_with_bias @ theta
+    
+    def mse(self, y_true, y_pred):
+        """Erreur quadratique moyenne"""
+        return np.mean((y_true - y_pred) ** 2)
+    
+    def cross_validate(self, X, y):
+        """Effectue la validation croisée complète"""
+        folds = self.split_kfold(X, y)
+        
+        print(f"🔄 VALIDATION CROISÉE {self.k}-FOLD")
+        print("=" * 50)
+        
+        for i, (train_idx, test_idx) in enumerate(folds):
+            # Division train/test pour ce fold
+            X_train, X_test = X[train_idx], X[test_idx]
+            y_train, y_test = y[train_idx], y[test_idx]
+            
+            # Entraînement
+            theta = self.regression_lineaire(X_train, y_train)
+            self.models.append(theta)
+            
+            # Prédiction et évaluation
+            y_pred = self.predict(X_test, theta)
+            score = self.mse(y_test, y_pred)
+            self.scores.append(score)
+            
+            print(f"Fold {i+1}:")
+            print(f"  Train: {len(X_train)} exemples, Test: {len(X_test)} exemples")
+            print(f"  Modèle: y = {theta[1]:.2f}x + {theta[0]:.1f}")
+            print(f"  MSE: {score:.1f}")
+            print()
+        
+        # Statistiques finales
+        mean_score = np.mean(self.scores)
+        std_score = np.std(self.scores)
+        
+        print(f"📊 RÉSULTATS FINAUX:")
+        print(f"MSE moyen: {mean_score:.1f} ± {std_score:.1f}")
+        print(f"Scores individuels: {[round(s, 1) for s in self.scores]}")
+        
+        return mean_score, std_score
+
+# Test avec données sénégalaises : années d'études vs salaire
+np.random.seed(42)
+etudes = np.array([12, 16, 14, 18, 10, 15, 13, 17, 11, 19])
+salaires = np.array([300, 450, 380, 520, 250, 400, 350, 480, 280, 550])
+
+print("📚 DATASET: ÉTUDES vs SALAIRE (Sénégal)")
+print("Années d'études:", etudes)
+print("Salaires (milliers FCFA):", salaires)
+print()
+
+# Validation croisée
+cv = ValidationCroisee(k=5)
+mean_mse, std_mse = cv.cross_validate(etudes.reshape(-1, 1), salaires)`,
+          },
+          {
+            type: "code",
+            title: "Visualisation des résultats",
+            description: "Visualisons les résultats de la validation croisée :",
+            code: `# Visualisation des folds et modèles
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+
+# Graphique 1: Données et modèles de chaque fold
+ax1.scatter(etudes, salaires, c='red', s=100, alpha=0.7, label='Données réelles')
+
+# Ligne pour chaque modèle de fold
+x_range = np.linspace(etudes.min(), etudes.max(), 100)
+for i, theta in enumerate(cv.models):
+    y_pred_range = theta[0] + theta[1] * x_range
+    ax1.plot(x_range, y_pred_range, alpha=0.5, label=f'Modèle Fold {i+1}')
+
+ax1.set_xlabel('Années d\\'études')
+ax1.set_ylabel('Salaire (milliers FCFA)')
+ax1.set_title('Modèles de chaque Fold')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# Graphique 2: Distribution des scores MSE
+ax2.bar(range(1, len(cv.scores) + 1), cv.scores, 
+        color=['lightblue', 'lightgreen', 'lightyellow', 'lightcoral', 'lightpink'])
+ax2.axhline(y=mean_mse, color='red', linestyle='--', linewidth=2, 
+           label=f'Moyenne: {mean_mse:.1f}')
+ax2.set_xlabel('Fold')
+ax2.set_ylabel('MSE')
+ax2.set_title('Scores par Fold')
+ax2.legend()
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+print(f"📊 Analyse terminée !")
+print(f"Stabilité du modèle: {'Bonne' if std_mse < mean_mse * 0.3 else 'À améliorer'}")`,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Validation temporelle : le cas particulier crucial",
+            content: `
+                        <p><strong>⏰ Les données temporelles ont leurs propres règles sacrées !</strong></p>
+                        
+                        <p><strong>❌ L'erreur fatale (data leakage temporel) :</strong></p>
+                        <p>Utiliser des données du <strong>futur</strong> pour prédire le <strong>passé</strong> = triche involontaire qui fausse complètement l'évaluation !</p>
+                        
+                        <p><strong>🎯 Exemple concret :</strong></p>
+                        <p>Prédire le cours du FCFA en janvier 2024 en utilisant des données de mars 2024 → résultats artificiellement excellents mais inutiles en production.</p>
+                        
+                        <p><strong>✅ La bonne approche (Time Series Split) :</strong></p>
+                        <ul>
+                            <li>📅 <strong>Train</strong> : données historiques (ex: jan-juin 2023)</li>
+                            <li>🔍 <strong>Validation</strong> : période suivante (juillet-août 2023)</li>
+                            <li>🎯 <strong>Test</strong> : futur proche (septembre-octobre 2023)</li>
+                        </ul>
+                        
+                        <p><strong>🔄 Techniques spécialisées :</strong></p>
+                        
+                        <p><strong>1. Walk-Forward Validation :</strong></p>
+                        <ul>
+                            <li>Fenêtre glissante dans le temps</li>
+                            <li>Train sur [t-n, t], test sur [t+1, t+k]</li>
+                            <li>Avance d'une période et répète</li>
+                        </ul>
+                        
+                        <p><strong>2. Expanding Window :</strong></p>
+                        <ul>
+                            <li>Train grandit progressivement : [0, t], [0, t+1], [0, t+2]...</li>
+                            <li>Test toujours sur la période suivante</li>
+                            <li>Simule l'accumulation de données en production</li>
+                        </ul>
+                        
+                        <p><strong>3. Time Series Cross-Validation :</strong></p>
+                        <ul>
+                            <li>K-fold adapté au temporel</li>
+                            <li>Chaque fold respecte l'ordre chronologique</li>
+                            <li>Gaps entre train et test pour éviter le leakage</li>
+                        </ul>
+                        
+                        <p><strong>💡 Règle d'or temporelle :</strong></p>
+                        <div style="background: #fff3cd; padding: 1rem; border-left: 4px solid #ffc107; margin: 1rem 0;">
+                            <strong>Toujours respecter l'ordre chronologique :</strong><br>
+                            Passé → Présent → Futur<br>
+                            Jamais l'inverse !
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : validation temporelle manuelle",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Vous devez prédire les ventes mensuelles d'un magasin dakarois. Voici 12 mois de données :</p>
+                        
+                        <table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Mois</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Jan</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Fév</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Mar</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Avr</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Mai</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Jun</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>Ventes</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">45</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">48</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">52</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">55</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">58</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">62</td>
+                            </tr>
+                        </table>
+                        
+                        <table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Mois</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Jul</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Aoû</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Sep</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Oct</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Nov</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Déc</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>Ventes</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">65</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">68</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">64</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">60</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">55</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">50</td>
+                            </tr>
+                        </table>
+                        
+                        <p><strong>📝 Effectuez une validation temporelle :</strong></p>
+                        <ol>
+                            <li>Divisez en : Train (Jan-Août), Validation (Sep-Oct), Test (Nov-Déc)</li>
+                            <li>Entraînez un modèle linéaire sur Train</li>
+                            <li>Évaluez sur Validation pour ajuster</li>
+                            <li>Test final sur Nov-Déc</li>
+                            <li>Calculez les erreurs pour chaque ensemble</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('temporal-validation-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="temporal-validation-exercise" style="display: none;">
+                        <p><strong>Division temporelle :</strong></p>
+                        <ul>
+                            <li><strong>Train :</strong> Jan-Août (mois 1-8) → ventes [45,48,52,55,58,62,65,68]</li>
+                            <li><strong>Validation :</strong> Sep-Oct (mois 9-10) → ventes [64,60]</li>
+                            <li><strong>Test :</strong> Nov-Déc (mois 11-12) → ventes [55,50]</li>
+                        </ul>
+                        
+                        <p><strong>Modèle linéaire (y = ax + b) :</strong></p>
+                        <p>Sur train : a ≈ 3.1, b ≈ 42.5 → y = 3.1x + 42.5</p>
+                        
+                        <p><strong>Prédictions :</strong></p>
+                        <ul>
+                            <li>Sep (mois 9) : 3.1×9 + 42.5 = 70.4 (réel: 64) → erreur: 6.4</li>
+                            <li>Oct (mois 10) : 3.1×10 + 42.5 = 73.5 (réel: 60) → erreur: 13.5</li>
+                        </ul>
+                        
+                        <p><strong>Diagnostic :</strong> Le modèle linéaire ne capture pas la saisonnalité (baisse fin d'année)</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Détection automatique d'overfitting",
+            description: "Créons un système de détection automatique :",
+            code: `def detecter_overfitting(train_scores, val_scores, seuil_ratio=1.5, seuil_ecart=0.1):
+    """
+    Détecte automatiquement l'overfitting selon plusieurs critères
+    """
+    print("🔍 DIAGNOSTIC AUTOMATIQUE D'OVERFITTING")
+    print("=" * 45)
+    
+    # Critère 1: Ratio des erreurs
+    ratio_erreurs = val_scores[-1] / train_scores[-1] if train_scores[-1] > 0 else float('inf')
+    overfitting_ratio = ratio_erreurs > seuil_ratio
+    
+    # Critère 2: Écart absolu
+    ecart_absolu = val_scores[-1] - train_scores[-1]
+    overfitting_ecart = ecart_absolu > seuil_ecart
+    
+    # Critère 3: Tendance divergente (5 derniers points)
+    if len(train_scores) >= 5:
+        train_trend = np.mean(np.diff(train_scores[-5:]))  # Pente moyenne
+        val_trend = np.mean(np.diff(val_scores[-5:]))
+        overfitting_trend = train_trend < -0.01 and val_trend > 0.01
+    else:
+        overfitting_trend = False
+    
+    print(f"📊 Erreur train finale: {train_scores[-1]:.3f}")
+    print(f"📊 Erreur validation finale: {val_scores[-1]:.3f}")
+    print(f"📈 Ratio val/train: {ratio_erreurs:.2f} (seuil: {seuil_ratio})")
+    print(f"📉 Écart absolu: {ecart_absolu:.3f} (seuil: {seuil_ecart})")
+    
+    # Diagnostic final
+    nb_criteres = sum([overfitting_ratio, overfitting_ecart, overfitting_trend])
+    
+    if nb_criteres >= 2:
+        diagnostic = "🔴 OVERFITTING DÉTECTÉ"
+        recommandations = [
+            "• Réduire la complexité du modèle",
+            "• Ajouter de la régularisation (L1/L2)",
+            "• Augmenter les données d'entraînement",
+            "• Early stopping sur validation"
+        ]
+    elif nb_criteres == 1:
+        diagnostic = "🟡 OVERFITTING POSSIBLE"
+        recommandations = [
+            "• Surveiller l'évolution",
+            "• Tester avec plus de données",
+            "• Validation croisée pour confirmer"
+        ]
+    else:
+        diagnostic = "🟢 MODÈLE SAIN"
+        recommandations = [
+            "• Modèle bien équilibré",
+            "• Peut essayer légèrement plus de complexité",
+            "• Prêt pour la production"
+        ]
+    
+    print(f"\\n{diagnostic}")
+    print("\\n🔧 Recommandations:")
+    for rec in recommandations:
+        print(f"   {rec}")
+    
+    return diagnostic, nb_criteres
+
+# Test avec données simulées d'overfitting
+epochs = np.arange(1, 21)
+train_loss = 0.5 * np.exp(-0.3 * epochs) + 0.02  # Décroît exponentiellement
+val_loss = 0.3 * np.exp(-0.1 * epochs) + 0.15 + 0.01 * epochs  # Remonte après un moment
+
+print("🧪 TEST SUR DONNÉES SIMULÉES")
+diagnostic, severite = detecter_overfitting(train_loss, val_loss)
+
+# Visualisation
+plt.figure(figsize=(12, 6))
+plt.plot(epochs, train_loss, 'b-o', label='Train Loss', linewidth=2)
+plt.plot(epochs, val_loss, 'r-s', label='Validation Loss', linewidth=2)
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.title('Courbes d\\'apprentissage - Détection Overfitting')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Zone d'overfitting
+overfitting_start = np.argmin(val_loss)
+plt.axvline(x=overfitting_start + 1, color='orange', linestyle='--', 
+           label=f'Début overfitting (epoch {overfitting_start + 1})')
+plt.legend()
+plt.show()
+
+print(f"\\n⚠️ Overfitting détecté à partir de l'epoch {overfitting_start + 1}")`,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Métriques d'évaluation : choisir les bonnes armes",
+            content: `
+                        <p><strong>📏 Le choix de la métrique détermine le succès de votre projet !</strong></p>
+                        
+                        <p><strong>🔢 Pour la RÉGRESSION :</strong></p>
+                        
+                        <p><strong>1. Mean Squared Error (MSE) :</strong></p>
+                        <p>$$\\text{MSE} = \\frac{1}{n} \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2$$</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : différentiable, pénalise fortement les grosses erreurs</li>
+                            <li>❌ <strong>Inconvénients</strong> : sensible aux outliers, unité au carré</li>
+                            <li>🎯 <strong>Usage</strong> : optimisation, quand les grosses erreurs sont critiques</li>
+                        </ul>
+                        
+                        <p><strong>2. Mean Absolute Error (MAE) :</strong></p>
+                        <p>$$\\text{MAE} = \\frac{1}{n} \\sum_{i=1}^{n} |y_i - \\hat{y}_i|$$</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : robuste aux outliers, même unité que y</li>
+                            <li>❌ <strong>Inconvénients</strong> : non différentiable en 0</li>
+                            <li>🎯 <strong>Usage</strong> : données avec outliers, interprétation business</li>
+                        </ul>
+                        
+                        <p><strong>3. Coefficient de détermination (R²) :</strong></p>
+                        <p>$$R^2 = 1 - \\frac{\\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2}{\\sum_{i=1}^{n} (y_i - \\bar{y})^2} = 1 - \\frac{\\text{MSE}}{\\text{Var}(y)}$$</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : normalisé [0,1], proportion de variance expliquée</li>
+                            <li>❌ <strong>Inconvénients</strong> : peut être négatif si très mauvais modèle</li>
+                            <li>🎯 <strong>Usage</strong> : comparaison de modèles, communication</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Pour la CLASSIFICATION :</strong></p>
+                        
+                        <p><strong>Matrice de confusion :</strong></p>
+                        <p>$$\\begin{bmatrix} \\text{VP} & \\text{FN} \\\\ \\text{FP} & \\text{VN} \\end{bmatrix}$$</p>
+                        
+                        <p><strong>Métriques dérivées :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Précision :</strong> $$\\text{Precision} = \\frac{\\text{VP}}{\\text{VP + FP}}$$ (parmi les positifs prédits, combien sont vrais ?)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Rappel :</strong> $$\\text{Recall} = \\frac{\\text{VP}}{\\text{VP + FN}}$$ (parmi les vrais positifs, combien sont détectés ?)</li>
+                            <li style="margin-top: 0.5rem"><strong>• F1-Score :</strong> $$F1 = 2 \\times \\frac{\\text{Precision} \\times \\text{Recall}}{\\text{Precision} + \\text{Recall}}$$ (moyenne harmonique)</li>
+                            <li style="margin-top: 0.5rem"><strong>• Accuracy :</strong> $$\\text{Accuracy} = \\frac{\\text{VP + VN}}{\\text{VP + VN + FP + FN}}$$ (⚠️ trompeur si classes déséquilibrées)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : calcul manuel de métriques",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Un modèle de détection de spam sur emails sénégalais donne cette matrice de confusion :</p>
+                        
+                        <table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;"></th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;" colspan="2">Prédiction</th>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Réalité</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Spam</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Normal</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8f9fa;"><strong>Spam</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #d4edda;">85</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8d7da;">15</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8f9fa;"><strong>Normal</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #f8d7da;">10</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd; background: #d4edda;">890</td>
+                            </tr>
+                        </table>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>Précision pour la classe "Spam"</li>
+                            <li>Rappel pour la classe "Spam"</li>
+                            <li>F1-Score pour la classe "Spam"</li>
+                            <li>Accuracy globale</li>
+                            <li>Ce modèle est-il bon pour filtrer les spams ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('metrics-calculation-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="metrics-calculation-exercise" style="display: none;">
+                        <p><strong>Identification des valeurs :</strong></p>
+                        <ul>
+                            <li>VP (Vrais Positifs) = 85 (spams correctement détectés)</li>
+                            <li>FN (Faux Négatifs) = 15 (spams ratés)</li>
+                            <li>FP (Faux Positifs) = 10 (emails normaux classés spam)</li>
+                            <li>VN (Vrais Négatifs) = 890 (emails normaux bien classés)</li>
+                        </ul>
+                        
+                        <p><strong>Calculs :</strong></p>
+                        <ol>
+                            <li><strong>Précision :</strong> 85/(85+10) = 85/95 = 0.895 (89.5%)</li>
+                            <li><strong>Rappel :</strong> 85/(85+15) = 85/100 = 0.85 (85%)</li>
+                            <li><strong>F1-Score :</strong> 2×(0.895×0.85)/(0.895+0.85) = 0.872 (87.2%)</li>
+                            <li><strong>Accuracy :</strong> (85+890)/(85+15+10+890) = 975/1000 = 0.975 (97.5%)</li>
+                            <li><strong>Évaluation :</strong> Excellent modèle ! 89.5% des emails classés spam sont vraiment des spams, et 85% des vrais spams sont détectés.</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Validation complète avec détection d'overfitting",
+            description: "Implémentons un pipeline de validation complet :",
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error, r2_score
-import matplotlib.pyplot as plt
 
-# Données simulées : expérience vs salaire
+# Génération de données réalistes : prix immobilier Dakar
 np.random.seed(42)
-n_samples = 100
+n_samples = 200
 
-# Génération réaliste
-experience = np.random.uniform(0, 20, n_samples)  # Années d'expérience
-salaire_base = 25000  # Salaire de base (FCFA/mois × 1000)
-salaire = salaire_base + 3000 * experience + 150 * experience**2 - 5 * experience**3
-salaire += np.random.normal(0, 5000, n_samples)  # Bruit
+# Variables : surface (m²), distance centre (km), âge (années)
+surface = np.random.uniform(50, 300, n_samples)
+distance_centre = np.random.uniform(1, 25, n_samples)
+age_batiment = np.random.uniform(0, 30, n_samples)
 
-X = experience.reshape(-1, 1)
-y = salaire
+# Prix réaliste avec relation non-linéaire
+prix_base = 150000  # FCFA/m²
+prix = (prix_base * surface * 
+        (1.2 - 0.02 * distance_centre) *  # Effet distance
+        (1.1 - 0.01 * age_batiment) +     # Effet âge
+        np.random.normal(0, 20000, n_samples))  # Bruit
 
-print("=" * 60)
-print("💼 VALIDATION : PRÉDICTION DE SALAIRES")
-print("=" * 60)
+X = np.column_stack([surface, distance_centre, age_batiment])
+y = prix
 
-# 1. SPLIT DONNÉES
-X_train, X_temp, y_train, y_temp = train_test_split(
-    X, y, test_size=0.4, random_state=42
+print("🏠 VALIDATION COMPLÈTE - PRIX IMMOBILIER DAKAR")
+print("=" * 55)
+
+# 1. SPLIT INITIAL (garder test set sacré)
+X_temp, X_test, y_temp, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
 )
-X_val, X_test, y_val, y_test = train_test_split(
-    X_temp, y_temp, test_size=0.5, random_state=42
+X_train, X_val, y_train, y_val = train_test_split(
+    X_temp, y_temp, test_size=0.25, random_state=42  # 0.25 de 0.8 = 0.2 du total
 )
 
-print(f"\\n📊 Division des données :")
-print(f"   Train : {len(X_train)} échantillons")
-print(f"   Validation : {len(X_val)} échantillons")
-print(f"   Test : {len(X_test)} échantillons")
+print(f"📊 Division des données :")
+print(f"   Train : {len(X_train)} échantillons ({len(X_train)/len(X)*100:.0f}%)")
+print(f"   Validation : {len(X_val)} échantillons ({len(X_val)/len(X)*100:.0f}%)")
+print(f"   Test : {len(X_test)} échantillons ({len(X_test)/len(X)*100:.0f}%)")
 
-# 2. TEST DIFFÉRENTS DEGRÉS (complexité du modèle)
-degrees = range(1, 10)
+# 2. TEST DE COMPLEXITÉ (détection overfitting)
+degrees = range(1, 8)
 train_scores = []
 val_scores = []
 
 print(f"\\n🔍 Test de complexité (degré polynomial) :")
-print("-" * 40)
+print("-" * 45)
 
 for degree in degrees:
     # Transformation polynomiale
-    poly = PolynomialFeatures(degree)
+    poly = PolynomialFeatures(degree, include_bias=False)
     X_train_poly = poly.fit_transform(X_train)
     X_val_poly = poly.transform(X_val)
     
-    # Modèle
-    model = Ridge(alpha=0.01)
+    # Modèle avec régularisation légère
+    model = Ridge(alpha=1000)
     model.fit(X_train_poly, y_train)
     
     # Scores R²
@@ -365,230 +985,173 @@ for degree in degrees:
     train_scores.append(train_score)
     val_scores.append(val_score)
     
-    # Détection overfitting
-    ecart = train_score - val_score
-    status = "⚠️ OVERFITTING" if ecart > 0.15 else "✅ OK"
+    # Diagnostic automatique
+    ratio = (1 - val_score) / (1 - train_score) if train_score < 0.99 else float('inf')
+    status = "⚠️ OVERFITTING" if ratio > 2 else "✅ OK"
     
-    print(f"Degré {degree}: Train={train_score:.3f}, Val={val_score:.3f} {status}")
+    print(f"Degré {degree}: Train R²={train_score:.3f}, Val R²={val_score:.3f}, Ratio={ratio:.1f} {status}")
 
 # Meilleur degré
-best_degree = list(degrees)[np.argmax(val_scores)]
-print(f"\\n🏆 Meilleur degré : {best_degree}")
+best_degree = degrees[np.argmax(val_scores)]
+print(f"\\n🏆 Meilleur degré : {best_degree} (R² validation = {max(val_scores):.3f})")`,
+          },
+          {
+            type: "code",
+            title: "Validation croisée et évaluation finale",
+            description: "Finalisons avec validation croisée et test final :",
+            code: `from sklearn.model_selection import cross_val_score
 
 # 3. VALIDATION CROISÉE avec le meilleur degré
 print(f"\\n🔄 Validation croisée 5-fold (degré {best_degree}) :")
-print("-" * 40)
+print("-" * 45)
 
-poly_best = PolynomialFeatures(best_degree)
-X_all_poly = poly_best.fit_transform(np.vstack([X_train, X_val]))
-y_all = np.concatenate([y_train, y_val])
+poly_best = PolynomialFeatures(best_degree, include_bias=False)
+X_train_val_poly = poly_best.fit_transform(np.vstack([X_train, X_val]))
+y_train_val = np.concatenate([y_train, y_val])
 
-model_cv = Ridge(alpha=0.01)
-cv_scores = cross_val_score(model_cv, X_all_poly, y_all, cv=5, 
-                            scoring='r2')
+model_cv = Ridge(alpha=1000)
+cv_scores = cross_val_score(model_cv, X_train_val_poly, y_train_val, 
+                           cv=5, scoring='r2')
 
 for i, score in enumerate(cv_scores, 1):
     print(f"Fold {i}: R² = {score:.3f}")
 
-print(f"\\n📊 Score moyen : {cv_scores.mean():.3f} ± {cv_scores.std():.3f}")
+cv_mean = cv_scores.mean()
+cv_std = cv_scores.std()
+print(f"\\n📊 Score CV : {cv_mean:.3f} ± {cv_std:.3f}")
 
-# 4. ÉVALUATION FINALE
+# Intervalle de confiance à 95%
+ic_lower = cv_mean - 1.96 * cv_std / np.sqrt(5)
+ic_upper = cv_mean + 1.96 * cv_std / np.sqrt(5)
+print(f"📈 Intervalle confiance 95% : [{ic_lower:.3f}, {ic_upper:.3f}]")
+
+# 4. ÉVALUATION FINALE sur TEST SET (une seule fois !)
 print(f"\\n🎯 ÉVALUATION FINALE sur TEST SET :")
-print("=" * 60)
+print("=" * 55)
 
 X_test_poly = poly_best.transform(X_test)
-model_final = Ridge(alpha=0.01)
-model_final.fit(X_all_poly, y_all)
-y_pred = model_final.predict(X_test_poly)
+model_final = Ridge(alpha=1000)
+model_final.fit(X_train_val_poly, y_train_val)
+y_pred_test = model_final.predict(X_test_poly)
 
-test_r2 = r2_score(y_test, y_pred)
-test_rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+test_r2 = r2_score(y_test, y_pred_test)
+test_rmse = np.sqrt(mean_squared_error(y_test, y_pred_test))
+test_mae = np.mean(np.abs(y_test - y_pred_test))
 
 print(f"R² Test : {test_r2:.3f}")
 print(f"RMSE Test : {test_rmse:,.0f} FCFA")
+print(f"MAE Test : {test_mae:,.0f} FCFA")
 
-# Visualisation
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+# Diagnostic final
+if abs(test_r2 - cv_mean) < 2 * cv_std:
+    print("✅ Cohérence CV/Test : Modèle fiable")
+else:
+    print("⚠️ Écart CV/Test important : Possible problème")
+
+# Visualisation finale
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
 
 # Courbes de validation
-ax1.plot(degrees, train_scores, 'b-o', label='Train', linewidth=2)
-ax1.plot(degrees, val_scores, 'r-s', label='Validation', linewidth=2)
-ax1.axvline(best_degree, color='g', linestyle='--', alpha=0.5)
+ax1.plot(degrees, train_scores, 'b-o', label='Train R²', linewidth=2)
+ax1.plot(degrees, val_scores, 'r-s', label='Validation R²', linewidth=2)
+ax1.axvline(best_degree, color='g', linestyle='--', alpha=0.7, label=f'Optimal (degré {best_degree})')
 ax1.set_xlabel('Degré polynomial')
 ax1.set_ylabel('Score R²')
 ax1.set_title('Détection Overfitting/Underfitting')
 ax1.legend()
 ax1.grid(True, alpha=0.3)
 
-# Zone d'overfitting
-overfitting_zone = [i for i, (t, v) in enumerate(zip(train_scores, val_scores)) 
-                    if t - v > 0.15]
-if overfitting_zone:
-    ax1.axvspan(min(overfitting_zone) + 0.5, max(overfitting_zone) + 1.5, 
-                alpha=0.2, color='red', label='Zone Overfitting')
-
 # Prédictions vs Réel
-ax2.scatter(y_test, y_pred, alpha=0.6, s=50)
-ax2.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 
-         'r--', linewidth=2)
-ax2.set_xlabel('Salaire réel (FCFA)')
-ax2.set_ylabel('Salaire prédit (FCFA)')
+ax2.scatter(y_test/1000, y_pred_test/1000, alpha=0.6, s=50)
+ax2.plot([y_test.min()/1000, y_test.max()/1000], 
+         [y_test.min()/1000, y_test.max()/1000], 'r--', linewidth=2)
+ax2.set_xlabel('Prix réel (millions FCFA)')
+ax2.set_ylabel('Prix prédit (millions FCFA)')
 ax2.set_title(f'Prédictions Test (R²={test_r2:.3f})')
 ax2.grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.show()
 
-print(f"\\n💡 Conclusion :")
+print(f"\\n💡 Conclusion finale :")
 if test_r2 > 0.85:
-    print("   ✅ Modèle performant et bien généralisé !")
+    print("   ✅ Modèle excellent et bien généralisé !")
 elif test_r2 > 0.70:
-    print("   🟡 Modèle correct mais peut être amélioré")
+    print("   🟡 Modèle correct mais perfectible")
 else:
     print("   🔴 Modèle insuffisant, revoir l'approche")`,
           },
           {
-            type: "concept",
-            icon: "💡",
-            title: "Métriques d'évaluation : choisir les bonnes",
-            content: `
-                        <p><strong>📊 Pour la RÉGRESSION :</strong></p>
-                        
-                        <p><strong>MSE et RMSE :</strong></p>
-                        <ul>
-                            <li>MSE = moyenne des erreurs au carré</li>
-                            <li>RMSE = \\(\\sqrt{MSE}\\) (même unité que y)</li>
-                            <li>Pénalise fortement les grandes erreurs</li>
-                        </ul>
-                        
-                        <p><strong>MAE (Mean Absolute Error) :</strong></p>
-                        <ul>
-                            <li>Moyenne des erreurs absolues</li>
-                            <li>Robuste aux outliers</li>
-                            <li>Plus interprétable</li>
-                        </ul>
-                        
-                        <p><strong>R² (coefficient de détermination) :</strong></p>
-                        <ul>
-                            <li>Proportion de variance expliquée</li>
-                            <li>R²=1 : parfait, R²=0 : nul</li>
-                            <li>Peut être négatif si très mauvais !</li>
-                        </ul>
-                        
-                        <p><strong>🎯 Pour la CLASSIFICATION :</strong></p>
-                        
-                        <p><strong>Accuracy :</strong></p>
-                        <ul>
-                            <li>% de prédictions correctes</li>
-                            <li>⚠️ Trompeur si classes déséquilibrées</li>
-                        </ul>
-                        
-                        <p><strong>Precision & Recall :</strong></p>
-                        <ul>
-                            <li>Precision : parmi les positifs prédits, combien sont vrais ?</li>
-                            <li>Recall : parmi les vrais positifs, combien sont détectés ?</li>
-                        </ul>
-                        
-                        <p><strong>F1-Score :</strong></p>
-                        <ul>
-                            <li>Moyenne harmonique precision/recall</li>
-                            <li>Équilibre les deux métriques</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "intuition",
-            icon: "🧠",
-            title: "Validation temporelle : le cas particulier",
-            content: `
-                        <p><strong>⏰ Les données temporelles ont leurs propres règles !</strong></p>
-                        
-                        <p><strong>❌ L'erreur fatale :</strong></p>
-                        <p>Utiliser des données du <strong>futur</strong> pour prédire le <strong>passé</strong> = triche involontaire !</p>
-                        
-                        <p><strong>✅ La bonne approche :</strong></p>
-                        <ul>
-                            <li>📅 <strong>Train</strong> : données historiques (ex: jan-juin)</li>
-                            <li>🔍 <strong>Validation</strong> : période suivante (juillet-août)</li>
-                            <li>🎯 <strong>Test</strong> : futur proche (septembre-octobre)</li>
-                        </ul>
-                        
-                        <p><strong>🔄 Techniques spéciales :</strong></p>
-                        <ul>
-                            <li><strong>Walk-forward</strong> : fenêtre glissante dans le temps</li>
-                            <li><strong>Expanding window</strong> : train grandit progressivement</li>
-                            <li><strong>Time series split</strong> : k-fold adapté au temporel</li>
-                        </ul>
-                        
-                        <p><strong>💡 Règle d'or :</strong></p>
-                        <p>Toujours respecter l'ordre chronologique : passé → présent → futur !</p>
-                    `,
-          },
-          {
             type: "warning",
             icon: "⚠️",
-            title: "Pièges et bonnes pratiques",
+            title: "Pièges mortels et bonnes pratiques",
             content: `
-                        <p><strong>❌ PIÈGES COURANTS :</strong></p>
+                        <p><strong>❌ PIÈGES MORTELS à éviter absolument :</strong></p>
                         
                         <p><strong>1. Data Leakage (fuite de données) :</strong></p>
                         <ul>
-                            <li>Normaliser sur tout le dataset</li>
-                            <li>Sélection de features sur test set</li>
-                            <li>Information du futur dans le passé</li>
+                            <li>❌ <strong>Normaliser sur tout le dataset</strong> avant split</li>
+                            <li>❌ <strong>Sélection de features</strong> sur test set</li>
+                            <li>❌ <strong>Information du futur</strong> dans les prédictions passées</li>
+                            <li>❌ <strong>Preprocessing global</strong> avant division</li>
                         </ul>
                         
                         <p><strong>2. Mauvaise validation :</strong></p>
                         <ul>
-                            <li>Test set trop petit (< 15%)</li>
-                            <li>Pas de stratification sur classes rares</li>
-                            <li>Optimiser sur le test set</li>
+                            <li>❌ <strong>Test set trop petit</strong> (< 15%) → estimations peu fiables</li>
+                            <li>❌ <strong>Pas de stratification</strong> sur classes rares</li>
+                            <li>❌ <strong>Optimiser sur le test set</strong> → biais de sélection</li>
+                            <li>❌ <strong>Ignorer l'aspect temporel</strong> des données</li>
                         </ul>
                         
                         <p><strong>3. Métriques inappropriées :</strong></p>
                         <ul>
-                            <li>Accuracy seule sur données déséquilibrées</li>
-                            <li>Ignorer le contexte métier</li>
-                            <li>Se fier à une seule métrique</li>
+                            <li>❌ <strong>Accuracy seule</strong> sur données déséquilibrées (99% non-spam, 1% spam)</li>
+                            <li>❌ <strong>Ignorer le contexte métier</strong> (coût des erreurs différent)</li>
+                            <li>❌ <strong>Se fier à une seule métrique</strong></li>
                         </ul>
                         
-                        <p><strong>✅ BONNES PRATIQUES :</strong></p>
+                        <p><strong>✅ BONNES PRATIQUES incontournables :</strong></p>
                         
                         <p><strong>1. Pipeline rigoureux :</strong></p>
                         <ol>
-                            <li>Séparer test set dès le début</li>
-                            <li>Preprocessing dans le pipeline</li>
-                            <li>Cross-validation pour hyperparamètres</li>
-                            <li>Test final une seule fois</li>
+                            <li><strong>Séparer test set</strong> dès le début (et l'oublier !)</li>
+                            <li><strong>Preprocessing dans pipeline</strong> : fit sur train, transform sur val/test</li>
+                            <li><strong>Cross-validation</strong> pour hyperparamètres</li>
+                            <li><strong>Test final</strong> une seule fois</li>
                         </ol>
                         
-                        <p><strong>2. Validation adaptée :</strong></p>
+                        <p><strong>2. Validation adaptée au problème :</strong></p>
                         <ul>
-                            <li>K-fold avec k=5 ou 10</li>
-                            <li>Stratification si nécessaire</li>
-                            <li>Temporal split pour séries</li>
+                            <li>🔄 <strong>K-fold standard</strong> : k=5 ou 10 pour données IID</li>
+                            <li>📊 <strong>Stratified K-fold</strong> : préserver les proportions de classes</li>
+                            <li>⏰ <strong>Time series split</strong> : respecter l'ordre temporel</li>
+                            <li>👥 <strong>Group K-fold</strong> : éviter le leakage entre groupes liés</li>
                         </ul>
                         
                         <p><strong>💡 Conseil d'or :</strong></p>
-                        <p>Un modèle simple bien validé > modèle complexe mal évalué !</p>
+                        <div style="background: #d1ecf1; padding: 1rem; border-left: 4px solid #17a2b8; margin: 1rem 0;">
+                            <strong>Un modèle simple bien validé > modèle complexe mal évalué</strong><br><br>
+                            La validation rigoureuse est plus importante que l'algorithme choisi !
+                        </div>
                         
                         <p><strong>🔮 Prochaine étape :</strong></p>
-                        <p>Maintenant que vous savez valider, passons au Deep Learning avec le <strong>Perceptron</strong> !</p>
+                        <p>Maintenant que vous maîtrisez la validation, vous êtes prêt pour le <strong>Deep Learning</strong> ! Nous commencerons par le <strong>Perceptron</strong> - le neurone artificiel qui a tout changé.</p>
                     `,
           },
         ],
         quiz: {
           question:
-            "🤔 Votre modèle a 2% d'erreur sur train et 25% sur validation. Diagnostic ?",
+            "🤔 Votre modèle a 2% d'erreur sur train, 25% sur validation, et vous n'avez pas encore touché au test set. Que faire ?",
           options: [
-            "A) Underfitting - modèle trop simple",
-            "B) Overfitting - modèle mémorise les données",
-            "C) Données insuffisantes",
-            "D) Modèle optimal",
+            "A) Tester immédiatement sur le test set pour confirmer",
+            "B) Réduire la complexité du modèle ou ajouter de la régularisation",
+            "C) Augmenter la complexité pour améliorer le train",
+            "D) Changer de métrique d'évaluation",
           ],
           correct: 1,
           explanation:
-            "Grand écart train (2%) vs validation (25%) = overfitting classique ! Le modèle a mémorisé les données d'entraînement au lieu d'apprendre les patterns généralisables. Solutions : régularisation, dropout, ou modèle plus simple.",
+            "Grand écart train (2%) vs validation (25%) = overfitting classique ! Il faut réduire la complexité ou ajouter de la régularisation. Surtout PAS toucher au test set maintenant - il doit rester vierge jusqu'à la fin !",
         },
         prevModule: "clustering.html",
         nextModule: "../dl/perceptron.html",
