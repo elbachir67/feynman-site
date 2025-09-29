@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPT & BERT | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>💬 LLMs & IA Moderne</span>
+          <span>›</span>
+          <span>GPT & BERT</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🤖 GPT & BERT : Les Géants de l'IA Moderne</h1>
+      <p class="subtitle">Module 5.3 - Modèles de Langage Révolutionnaires</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - GPT & BERT</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant les modèles qui ont
+          révolutionné l'IA moderne.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="transformers.html" class="nav-link" id="prev-link"
+          >← Module précédent : Transformers</a
+        >
+        <a href="fine-tuning.html" class="nav-link" id="next-link"
+          >Module suivant : Fine-tuning →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module GPT & BERT
+      const moduleConfig = {
+        id: "llm-gpt-bert",
+        title: "GPT & BERT : Les Géants de l'IA Moderne",
+        category: "LLMs & IA Moderne",
+        objectives: [
+          "Comprendre la révolution GPT et BERT dans l'histoire de l'IA",
+          "Maîtriser les différences fondamentales entre les deux approches",
+          "Calculer manuellement les prédictions de chaque modèle",
+          "Comprendre les tâches spécialisées de chaque famille",
+          "Implémenter des versions simplifiées des deux architectures",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "La révolution 2018-2019 : deux géants émergent",
+            content: `
+                        <p>En l'espace de 18 mois, <strong>deux familles de modèles</strong> ont révolutionné l'intelligence artificielle et changé le monde pour toujours :</p>
+                        
+                        <p><strong>🤖 BERT (2018) :</strong> "Bidirectional Encoder Representations from Transformers"</p>
+                        <ul>
+                            <li>🏢 <strong>Google</strong> : révolutionne la recherche et la compréhension</li>
+                            <li>👁️ <strong>Vision bidirectionnelle</strong> : regarde dans les deux sens</li>
+                            <li>🎯 <strong>Spécialité</strong> : comprendre et analyser le texte</li>
+                        </ul>
+                        
+                        <p><strong>💬 GPT (2018-2019) :</strong> "Generative Pre-trained Transformer"</p>
+                        <ul>
+                            <li>🏢 <strong>OpenAI</strong> : révolutionne la génération et la conversation</li>
+                            <li>➡️ <strong>Vision unidirectionnelle</strong> : regarde seulement vers la gauche</li>
+                            <li>🎯 <strong>Spécialité</strong> : générer et converser naturellement</li>
+                        </ul>
+                        
+                        <p><strong>📊 Impact quantifié :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Recherche Google</strong> : +10% de pertinence grâce à BERT</li>
+                            <li>💬 <strong>ChatGPT</strong> : 100M utilisateurs en 2 mois (record mondial)</li>
+                            <li>💰 <strong>Marché IA</strong> : de 50B$ à 500B$ en 5 ans</li>
+                            <li>🌍 <strong>Langues supportées</strong> : de 10 à 100+ langues</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Ces deux approches complémentaires ont démocratisé l'IA et rendu possible l'intelligence artificielle générale que nous connaissons aujourd'hui.</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie de la lecture : deux stratégies opposées",
+            content: `
+                        <p>Imaginez deux étudiants sénégalais qui préparent le <strong>baccalauréat en français</strong> avec des stratégies opposées :</p>
+                        
+                        <p><strong>📚 Étudiant BERT (Bidirectionnel) :</strong></p>
+                        <ul>
+                            <li>📖 <strong>Lit tout le texte</strong> avant de répondre aux questions</li>
+                            <li>🔍 <strong>Analyse le contexte complet</strong> : début, milieu, fin</li>
+                            <li>🎯 <strong>Excellent pour</strong> : compréhension, analyse, questions précises</li>
+                            <li>⏰ <strong>Prend son temps</strong> : réfléchit avant de parler</li>
+                        </ul>
+                        
+                        <p><strong>💬 Étudiant GPT (Unidirectionnel) :</strong></p>
+                        <ul>
+                            <li>📝 <strong>Lit mot par mot</strong> et prédit le suivant</li>
+                            <li>➡️ <strong>Ne regarde jamais en arrière</strong> : seulement ce qu'il a déjà lu</li>
+                            <li>🎯 <strong>Excellent pour</strong> : écriture créative, conversation, génération</li>
+                            <li>⚡ <strong>Répond instantanément</strong> : génère au fur et à mesure</li>
+                        </ul>
+                        
+                        <p><strong>🎭 Exemple concret :</strong></p>
+                        <p><strong>Phrase :</strong> "Le président du Sénégal a annoncé une nouvelle politique économique pour ___"</p>
+                        
+                        <ul>
+                            <li>🤖 <strong>BERT</strong> : "Je vois toute la phrase, le mot manquant est probablement 'stimuler', 'développer' ou 'moderniser'"</li>
+                            <li>💬 <strong>GPT</strong> : "Basé sur ce que j'ai lu jusqu'ici, je continue logiquement avec 'stimuler la croissance et créer des emplois dans les secteurs prioritaires...'"</li>
+                        </ul>
+                        
+                        <p><strong>💡 Complémentarité parfaite :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>BERT</strong> = Sherlock Holmes (analyse minutieuse)</li>
+                            <li>🎨 <strong>GPT</strong> = Conteur traditionnel (narration fluide)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Architectures formelles : Encoder vs Decoder",
+            content: `
+                        <p><strong>📐 Formalisation des deux architectures :</strong></p>
+                        
+                        <p><strong>🤖 BERT (Encoder-only) :</strong></p>
+                        <p>$$\\text{BERT}(\\vec{x}) = \\text{Encoder}^{(L)}(\\text{Encoder}^{(L-1)}(...\\text{Encoder}^{(1)}(\\vec{x} + \\vec{p})))$$</p>
+                        
+                        <p><strong>🔍 Composants :</strong></p>
+                        <ul>
+                            <li>\\(\\vec{x}\\) = <strong>tokens d'entrée</strong> (phrase complète)</li>
+                            <li>\\(\\vec{p}\\) = <strong>encodage positionnel</strong> (voir <a href="attention.html">Module 5.1</a>)</li>
+                            <li>\\(\\text{Encoder}^{(l)}\\) = <strong>couche d'encodage</strong> (Self-Attention + FFN)</li>
+                            <li>\\(L\\) = <strong>nombre de couches</strong> (12 pour BERT-base, 24 pour BERT-large)</li>
+                        </ul>
+                        
+                        <p><strong>💬 GPT (Decoder-only) :</strong></p>
+                        <p>$$\\text{GPT}(\\vec{x}_{<t}) = \\text{Decoder}^{(L)}(\\text{Decoder}^{(L-1)}(...\\text{Decoder}^{(1)}(\\vec{x}_{<t} + \\vec{p})))$$</p>
+                        
+                        <p><strong>🔍 Différence cruciale :</strong></p>
+                        <ul>
+                            <li>\\(\\vec{x}_{<t}\\) = <strong>tokens jusqu'à la position t</strong> (masquage causal)</li>
+                            <li>\\(\\text{Decoder}^{(l)}\\) = <strong>couche de décodage</strong> (Masked Self-Attention + FFN)</li>
+                            <li><strong>Masque causal</strong> : \\(\\text{Attention}_{ij} = -\\infty\\) si \\(j > i\\)</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Différence fondamentale :</strong></p>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>BERT :</strong> Attention bidirectionnelle → voit tout le contexte<br>
+                            <strong>GPT :</strong> Attention causale → ne voit que le passé
+                        </div>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel : BERT vs GPT sur même phrase",
+            content: `
+                        <p><strong>📝 Comparons les deux approches sur la même phrase :</strong></p>
+                        <p><strong>Phrase :</strong> "Dakar est [MASK] capitale"</p>
+                        
+                        <p><strong>🤖 Approche BERT (bidirectionnelle) :</strong></p>
+                        <p>BERT voit : ["Dakar", "est", "[MASK]", "capitale"]</p>
+                        
+                        <p><strong>🔍 Calcul d'attention pour [MASK] :</strong></p>
+                        <p>Le token [MASK] peut regarder dans toutes les directions :</p>
+                        <ul>
+                            <li>Attention([MASK], "Dakar") = 0.4 → <em>ville importante</em></li>
+                            <li>Attention([MASK], "est") = 0.1 → <em>verbe de liaison</em></li>
+                            <li>Attention([MASK], "capitale") = 0.5 → <em>indice crucial !</em></li>
+                        </ul>
+                        <p><strong>🎯 Prédiction BERT :</strong> "la" (car "Dakar est **la** capitale")</p>
+                        
+                        <p><strong>💬 Approche GPT (unidirectionnelle) :</strong></p>
+                        <p>GPT génère mot par mot : "Dakar" → "est" → "la" → "capitale"</p>
+                        
+                        <p><strong>🔍 Calcul d'attention pour "la" :</strong></p>
+                        <p>Le token "la" ne peut regarder que vers la gauche :</p>
+                        <ul>
+                            <li>Attention("la", "Dakar") = 0.6 → <em>sujet principal</em></li>
+                            <li>Attention("la", "est") = 0.4 → <em>verbe précédent</em></li>
+                            <li>Attention("la", "capitale") = 0.0 → <em>interdit ! (futur)</em></li>
+                        </ul>
+                        <p><strong>🎯 Prédiction GPT :</strong> "la" (basé uniquement sur "Dakar est")</p>
+                        
+                        <p><strong>💡 Observation :</strong> Même résultat, mais processus complètement différent !</p>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Pré-entraînement : la révolution de l'apprentissage",
+            content: `
+                        <p><strong>🎯 Le pré-entraînement a révolutionné l'IA en créant des "cerveaux universels" :</strong></p>
+                        
+                        <p><strong>📚 Avant (2017) :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Modèles spécialisés</strong> : un modèle par tâche</li>
+                            <li>📊 <strong>Données étiquetées</strong> : besoin de millions d'exemples annotés</li>
+                            <li>⏰ <strong>Temps d'entraînement</strong> : mois pour chaque nouvelle tâche</li>
+                            <li>💰 <strong>Coût prohibitif</strong> : seules les GAFAM pouvaient se le permettre</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Après (2018+) :</strong></p>
+                        <ul>
+                            <li>🧠 <strong>Modèles universels</strong> : un cerveau pour toutes les tâches</li>
+                            <li>📖 <strong>Texte brut</strong> : apprentissage sur tout Internet</li>
+                            <li>⚡ <strong>Adaptation rapide</strong> : heures pour une nouvelle tâche</li>
+                            <li>🌍 <strong>Démocratisation</strong> : accessible aux startups et universités</li>
+                        </ul>
+                        
+                        <p><strong>🔑 Stratégies de pré-entraînement :</strong></p>
+                        
+                        <p><strong>🤖 BERT - Masked Language Modeling (MLM) :</strong></p>
+                        <ul>
+                            <li>🎭 <strong>Principe</strong> : masquer 15% des mots, deviner les mots cachés</li>
+                            <li>📚 <strong>Exemple</strong> : "Le [MASK] du Sénégal est Macky Sall" → prédire "président"</li>
+                            <li>🧠 <strong>Apprentissage</strong> : comprendre le contexte bidirectionnel</li>
+                        </ul>
+                        
+                        <p><strong>💬 GPT - Causal Language Modeling (CLM) :</strong></p>
+                        <ul>
+                            <li>📝 <strong>Principe</strong> : prédire le mot suivant dans une séquence</li>
+                            <li>📚 <strong>Exemple</strong> : "Le président du Sénégal" → prédire "est", "a", "vient"...</li>
+                            <li>🧠 <strong>Apprentissage</strong> : générer du texte cohérent et naturel</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Fonctions objectif : MLM vs CLM",
+            content: `
+                        <p><strong>📐 Formalisation des objectifs d'apprentissage :</strong></p>
+                        
+                        <p><strong>🤖 BERT - Masked Language Modeling :</strong></p>
+                        <p>$$\\mathcal{L}_{MLM} = -\\sum_{i \\in \\mathcal{M}} \\log P(x_i | \\vec{x}_{\\setminus i})$$</p>
+                        
+                        <p><strong>🔍 Décryptage :</strong></p>
+                        <ul>
+                            <li>\\(\\mathcal{M}\\) = <strong>ensemble des positions masquées</strong></li>
+                            <li>\\(x_i\\) = <strong>token masqué à prédire</strong></li>
+                            <li>\\(\\vec{x}_{\\setminus i}\\) = <strong>tous les autres tokens</strong> (contexte bidirectionnel)</li>
+                            <li>\\(P(x_i | \\vec{x}_{\\setminus i})\\) = <strong>probabilité du token</strong> sachant tout le contexte</li>
+                        </ul>
+                        
+                        <p><strong>💬 GPT - Causal Language Modeling :</strong></p>
+                        <p>$$\\mathcal{L}_{CLM} = -\\sum_{i=1}^{T} \\log P(x_i | x_1, x_2, ..., x_{i-1})$$</p>
+                        
+                        <p><strong>🔍 Décryptage :</strong></p>
+                        <ul>
+                            <li>\\(T\\) = <strong>longueur de la séquence</strong></li>
+                            <li>\\(x_i\\) = <strong>token à la position i</strong></li>
+                            <li>\\(x_1, ..., x_{i-1}\\) = <strong>contexte précédent uniquement</strong></li>
+                            <li>\\(P(x_i | x_{<i})\\) = <strong>probabilité du token</strong> sachant seulement le passé</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Différence cruciale :</strong></p>
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                            <strong>BERT :</strong> Optimise la compréhension (contexte complet)<br>
+                            <strong>GPT :</strong> Optimise la génération (prédiction séquentielle)
+                        </div>
+                        
+                        <p><strong>📊 Conséquences :</strong></p>
+                        <ul>
+                            <li><strong>BERT</strong> : excellent pour classification, Q&A, analyse</li>
+                            <li><strong>GPT</strong> : excellent pour génération, conversation, créativité</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Simulation BERT : Masked Language Modeling",
+            description: "Simulons comment BERT prédit les mots masqués :",
+            code: `import numpy as np
+
+class BERTSimple:
+    def __init__(self, vocab_size=1000, hidden_size=64):
+        """BERT simplifié pour démonstration"""
+        self.vocab_size = vocab_size
+        self.hidden_size = hidden_size
+        
+        # Vocabulaire simplifié (mots sénégalais + français)
+        self.vocab = {
+            'dakar': 0, 'senegal': 1, 'president': 2, 'capitale': 3,
+            'est': 4, 'la': 5, 'le': 6, 'une': 7, 'pays': 8,
+            'afrique': 9, 'ouest': 10, '[MASK]': 11, '[CLS]': 12, '[SEP]': 13
+        }
+        self.id_to_token = {v: k for k, v in self.vocab.items()}
+        
+        # Matrices d'embedding (simplifiées)
+        np.random.seed(42)
+        self.token_embeddings = np.random.normal(0, 0.1, (vocab_size, hidden_size))
+        self.position_embeddings = np.random.normal(0, 0.1, (512, hidden_size))
+        
+        print("🤖 BERT Simplifié initialisé")
+        print(f"Vocabulaire : {len(self.vocab)} mots")
+        print(f"Dimension cachée : {hidden_size}")
+    
+    def tokenize(self, phrase):
+        """Tokenisation simple"""
+        mots = phrase.lower().split()
+        tokens = []
+        for mot in mots:
+            if mot in self.vocab:
+                tokens.append(self.vocab[mot])
+            else:
+                tokens.append(self.vocab.get('[MASK]', 0))  # Token inconnu
+        return tokens
+    
+    def embed(self, token_ids):
+        """Création des embeddings"""
+        seq_len = len(token_ids)
+        
+        # Embeddings de tokens
+        token_emb = self.token_embeddings[token_ids]
+        
+        # Embeddings positionnels
+        pos_emb = self.position_embeddings[:seq_len]
+        
+        # Somme (comme dans BERT réel)
+        embeddings = token_emb + pos_emb
+        
+        return embeddings
+    
+    def attention_bidirectionnelle(self, embeddings):
+        """Attention bidirectionnelle simplifiée"""
+        seq_len, hidden_size = embeddings.shape
+        
+        # Matrices Q, K, V simplifiées
+        W_q = np.random.normal(0, 0.1, (hidden_size, hidden_size))
+        W_k = np.random.normal(0, 0.1, (hidden_size, hidden_size))
+        W_v = np.random.normal(0, 0.1, (hidden_size, hidden_size))
+        
+        Q = embeddings @ W_q
+        K = embeddings @ W_k  
+        V = embeddings @ W_v
+        
+        # Scores d'attention
+        scores = Q @ K.T / np.sqrt(hidden_size)
+        
+        # Softmax (pas de masque - bidirectionnel !)
+        attention_weights = np.exp(scores) / np.sum(np.exp(scores), axis=1, keepdims=True)
+        
+        # Sortie pondérée
+        output = attention_weights @ V
+        
+        return output, attention_weights
+    
+    def predire_masque(self, phrase_avec_masque):
+        """Prédire le token masqué"""
+        print(f"🎭 Phrase avec masque : '{phrase_avec_masque}'")
+        
+        # Tokenisation
+        tokens = self.tokenize(phrase_avec_masque)
+        print(f"Tokens : {[self.id_to_token[t] for t in tokens]}")
+        
+        # Position du masque
+        mask_pos = tokens.index(self.vocab['[MASK]'])
+        print(f"Position du masque : {mask_pos}")
+        
+        # Embeddings
+        embeddings = self.embed(tokens)
+        
+        # Attention bidirectionnelle
+        output, attention_weights = self.attention_bidirectionnelle(embeddings)
+        
+        # Analyse de l'attention pour le token masqué
+        print(f"\\n🔍 Attention du token masqué :")
+        for i, token_id in enumerate(tokens):
+            token = self.id_to_token[token_id]
+            attention_score = attention_weights[mask_pos, i]
+            print(f"  {token}: {attention_score:.3f}")
+        
+        # Simulation de prédiction (simplifiée)
+        candidats = ['la', 'une', 'notre', 'cette']
+        scores = np.random.random(len(candidats))
+        scores = scores / scores.sum()  # Normalisation
+        
+        print(f"\\n🎯 Prédictions possibles :")
+        for candidat, score in zip(candidats, scores):
+            print(f"  '{candidat}': {score:.3f}")
+        
+        meilleur = candidats[np.argmax(scores)]
+        print(f"\\n✅ Prédiction finale : '{meilleur}'")
+        
+        return meilleur, attention_weights
+
+# Test BERT
+bert = BERTSimple()
+print("🤖 TEST BERT - MASKED LANGUAGE MODELING")
+print("=" * 50)
+
+prediction, attention = bert.predire_masque("dakar est [MASK] capitale")`,
+          },
+          {
+            type: "code",
+            title: "Simulation GPT : génération autoregressive",
+            description: "Simulons comment GPT génère du texte mot par mot :",
+            code: `class GPTSimple:
+    def __init__(self, vocab_size=1000, hidden_size=64):
+        """GPT simplifié pour démonstration"""
+        self.vocab_size = vocab_size
+        self.hidden_size = hidden_size
+        
+        # Même vocabulaire que BERT
+        self.vocab = {
+            'dakar': 0, 'senegal': 1, 'president': 2, 'capitale': 3,
+            'est': 4, 'la': 5, 'le': 6, 'une': 7, 'pays': 8,
+            'afrique': 9, 'ouest': 10, 'belle': 11, 'ville': 12,
+            'moderne': 13, 'economique': 14, 'culturel': 15
+        }
+        self.id_to_token = {v: k for k, v in self.vocab.items()}
+        
+        # Matrices d'embedding
+        np.random.seed(42)
+        self.token_embeddings = np.random.normal(0, 0.1, (vocab_size, hidden_size))
+        self.position_embeddings = np.random.normal(0, 0.1, (512, hidden_size))
+        
+        print("💬 GPT Simplifié initialisé")
+    
+    def attention_causale(self, embeddings):
+        """Attention avec masque causal"""
+        seq_len, hidden_size = embeddings.shape
+        
+        # Matrices Q, K, V
+        W_q = np.random.normal(0, 0.1, (hidden_size, hidden_size))
+        W_k = np.random.normal(0, 0.1, (hidden_size, hidden_size))
+        W_v = np.random.normal(0, 0.1, (hidden_size, hidden_size))
+        
+        Q = embeddings @ W_q
+        K = embeddings @ W_k
+        V = embeddings @ W_v
+        
+        # Scores d'attention
+        scores = Q @ K.T / np.sqrt(hidden_size)
+        
+        # MASQUE CAUSAL : interdire de regarder le futur
+        mask = np.triu(np.ones((seq_len, seq_len)), k=1) * -1e9
+        scores_masques = scores + mask
+        
+        # Softmax avec masque
+        attention_weights = np.exp(scores_masques) / np.sum(np.exp(scores_masques), axis=1, keepdims=True)
+        
+        # Sortie pondérée
+        output = attention_weights @ V
+        
+        return output, attention_weights
+    
+    def generer_mot_suivant(self, contexte):
+        """Génère le mot suivant basé sur le contexte"""
+        print(f"📝 Contexte : '{contexte}'")
+        
+        # Tokenisation
+        tokens = self.tokenize(contexte)
+        print(f"Tokens : {[self.id_to_token[t] for t in tokens]}")
+        
+        # Embeddings
+        embeddings = self.embed(tokens)
+        
+        # Attention causale
+        output, attention_weights = self.attention_causale(embeddings)
+        
+        # Analyse de l'attention pour le dernier token
+        last_pos = len(tokens) - 1
+        print(f"\\n🔍 Attention du dernier token '{self.id_to_token[tokens[-1]]}' :")
+        for i, token_id in enumerate(tokens):
+            token = self.id_to_token[token_id]
+            attention_score = attention_weights[last_pos, i]
+            print(f"  {token}: {attention_score:.3f}")
+        
+        # Simulation de prédiction du mot suivant
+        candidats = ['est', 'la', 'une', 'belle', 'moderne']
+        scores = np.random.random(len(candidats))
+        scores = scores / scores.sum()
+        
+        print(f"\\n🎯 Mots suivants possibles :")
+        for candidat, score in zip(candidats, scores):
+            print(f"  '{candidat}': {score:.3f}")
+        
+        meilleur = candidats[np.argmax(scores)]
+        print(f"\\n✅ Mot généré : '{meilleur}'")
+        
+        return meilleur, attention_weights
+    
+    def tokenize(self, phrase):
+        """Tokenisation simple"""
+        mots = phrase.lower().split()
+        tokens = []
+        for mot in mots:
+            if mot in self.vocab:
+                tokens.append(self.vocab[mot])
+            else:
+                tokens.append(0)  # Token par défaut
+        return tokens
+    
+    def embed(self, token_ids):
+        """Création des embeddings"""
+        seq_len = len(token_ids)
+        token_emb = self.token_embeddings[token_ids]
+        pos_emb = self.position_embeddings[:seq_len]
+        return token_emb + pos_emb
+
+# Test GPT
+gpt = GPTSimple()
+print("\\n💬 TEST GPT - GÉNÉRATION AUTOREGRESSIVE")
+print("=" * 50)
+
+mot_suivant, attention = gpt.generer_mot_suivant("dakar est")`,
+          },
+          {
+            type: "code",
+            title: "Génération complète avec GPT",
+            description: "Simulons une génération complète de phrase :",
+            code: `def generation_complete(gpt_model, prompt_initial, max_tokens=5):
+    """Génération autoregressive complète"""
+    print(f"🚀 GÉNÉRATION AUTOREGRESSIVE")
+    print(f"Prompt initial : '{prompt_initial}'")
+    print("=" * 40)
+    
+    phrase_actuelle = prompt_initial
+    
+    for step in range(max_tokens):
+        print(f"\\nÉtape {step + 1}:")
+        print(f"Contexte actuel : '{phrase_actuelle}'")
+        
+        # Générer le mot suivant
+        mot_suivant, _ = gpt_model.generer_mot_suivant(phrase_actuelle)
+        
+        # Ajouter à la phrase
+        phrase_actuelle += " " + mot_suivant
+        print(f"→ Phrase étendue : '{phrase_actuelle}'")
+        
+        # Condition d'arrêt (simulation)
+        if mot_suivant in ['fin', 'stop', '.']:
+            print("🛑 Génération terminée (token de fin)")
+            break
+    
+    return phrase_actuelle
+
+# Test de génération
+phrase_finale = generation_complete(gpt, "le senegal", max_tokens=4)
+print(f"\\n🎯 PHRASE FINALE GÉNÉRÉE :")
+print(f"'{phrase_finale}'")
+
+# Comparaison des masques d'attention
+print(f"\\n🔍 COMPARAISON DES MASQUES D'ATTENTION")
+print("=" * 45)
+
+# Masque BERT (bidirectionnel - tout visible)
+masque_bert = np.ones((4, 4))
+print("🤖 Masque BERT (bidirectionnel) :")
+print("   0 1 2 3")
+for i in range(4):
+    print(f"{i}: {masque_bert[i].astype(int)}")
+
+print()
+
+# Masque GPT (causal - triangulaire inférieur)
+masque_gpt = np.tril(np.ones((4, 4)))
+print("💬 Masque GPT (causal) :")
+print("   0 1 2 3")
+for i in range(4):
+    print(f"{i}: {masque_gpt[i].astype(int)}")
+
+print("\\n💡 0 = masqué (invisible), 1 = visible")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calcul manuel des deux approches",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Phrase : "Le Sénégal [MASK] un pays"</p>
+                        <p>Tokens : [Le=0, Sénégal=1, [MASK]=2, un=3, pays=4]</p>
+                        
+                        <p><strong>📝 Calculez manuellement :</strong></p>
+                        <ol>
+                            <li><strong>BERT :</strong> Quels tokens le [MASK] peut-il voir ?</li>
+                            <li><strong>GPT :</strong> Si on génère à la position 2, quels tokens peut-on voir ?</li>
+                            <li><strong>Attention BERT :</strong> Calculez les scores d'attention pour [MASK]</li>
+                            <li><strong>Attention GPT :</strong> Calculez les scores pour la position 2</li>
+                            <li><strong>Prédictions :</strong> Quel mot chaque modèle prédirait-il ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('bert-gpt-comparison-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="bert-gpt-comparison-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>BERT - Vision bidirectionnelle :</strong><br>
+                                [MASK] peut voir : "Le" (0), "Sénégal" (1), "un" (3), "pays" (4)<br>
+                                → Contexte complet disponible</li>
+                            <li><strong>GPT - Vision causale :</strong><br>
+                                Position 2 peut voir : "Le" (0), "Sénégal" (1)<br>
+                                → Seulement le contexte précédent</li>
+                            <li><strong>Attention BERT :</strong><br>
+                                Attention([MASK], "Le") = 0.1<br>
+                                Attention([MASK], "Sénégal") = 0.4<br>
+                                Attention([MASK], "un") = 0.2<br>
+                                Attention([MASK], "pays") = 0.3</li>
+                            <li><strong>Attention GPT :</strong><br>
+                                Attention(pos2, "Le") = 0.3<br>
+                                Attention(pos2, "Sénégal") = 0.7<br>
+                                Attention(pos2, "un") = 0.0 (masqué)<br>
+                                Attention(pos2, "pays") = 0.0 (masqué)</li>
+                            <li><strong>Prédictions :</strong><br>
+                                <strong>BERT :</strong> "est" (grâce au contexte "un pays")<br>
+                                <strong>GPT :</strong> "est" (basé sur "Le Sénégal" uniquement)</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Spécialisations : tâches de chaque famille",
+            content: `
+                        <p><strong>🎯 Chaque famille excelle dans des domaines spécifiques :</strong></p>
+                        
+                        <p><strong>🤖 Famille BERT (Compréhension) :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Classification de texte</strong> : sentiment, spam, catégories</li>
+                            <li>❓ <strong>Question-Réponse</strong> : extraire des réponses de documents</li>
+                            <li>🏷️ <strong>Reconnaissance d'entités</strong> : noms, lieux, organisations</li>
+                            <li>🔍 <strong>Recherche sémantique</strong> : trouver des documents pertinents</li>
+                            <li>📝 <strong>Résumé extractif</strong> : sélectionner les phrases importantes</li>
+                            <li>🌐 <strong>Traduction</strong> : avec architecture encoder-decoder</li>
+                        </ul>
+                        
+                        <p><strong>💬 Famille GPT (Génération) :</strong></p>
+                        <ul>
+                            <li>✍️ <strong>Génération de texte</strong> : articles, histoires, poèmes</li>
+                            <li>💬 <strong>Conversation</strong> : chatbots, assistants virtuels</li>
+                            <li>🔄 <strong>Complétion de code</strong> : GitHub Copilot</li>
+                            <li>📝 <strong>Résumé génératif</strong> : réécrire avec ses propres mots</li>
+                            <li>🎨 <strong>Créativité</strong> : brainstorming, idées, scénarios</li>
+                            <li>🧠 <strong>Raisonnement</strong> : résolution de problèmes étape par étape</li>
+                        </ul>
+                        
+                        <p><strong>🇸🇳 Applications sénégalaises :</strong></p>
+                        <ul>
+                            <li>🤖 <strong>BERT-Wolof</strong> : comprendre les textes en langues nationales</li>
+                            <li>💬 <strong>GPT-Sénégal</strong> : assistant conversationnel culturellement adapté</li>
+                            <li>📚 <strong>Éducation</strong> : tuteur IA pour l'apprentissage du français</li>
+                            <li>🏛️ <strong>Administration</strong> : traitement automatique de documents officiels</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Évolution des tailles : de BERT-base à GPT-4",
+            content: `
+                        <p><strong>📊 Évolution spectaculaire des modèles (2018-2024) :</strong></p>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Modèle</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Année</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Paramètres</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Couches</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Dimension</th>
+                            </tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>BERT-base</strong></td><td style="padding: 0.5rem; border: 1px solid #ddd;">2018</td><td style="padding: 0.5rem; border: 1px solid #ddd;">110M</td><td style="padding: 0.5rem; border: 1px solid #ddd;">12</td><td style="padding: 0.5rem; border: 1px solid #ddd;">768</td></tr>
+                            <tr style="background: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>GPT-1</strong></td><td style="padding: 0.5rem; border: 1px solid #ddd;">2018</td><td style="padding: 0.5rem; border: 1px solid #ddd;">117M</td><td style="padding: 0.5rem; border: 1px solid #ddd;">12</td><td style="padding: 0.5rem; border: 1px solid #ddd;">768</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>BERT-large</strong></td><td style="padding: 0.5rem; border: 1px solid #ddd;">2018</td><td style="padding: 0.5rem; border: 1px solid #ddd;">340M</td><td style="padding: 0.5rem; border: 1px solid #ddd;">24</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1024</td></tr>
+                            <tr style="background: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>GPT-2</strong></td><td style="padding: 0.5rem; border: 1px solid #ddd;">2019</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1.5B</td><td style="padding: 0.5rem; border: 1px solid #ddd;">48</td><td style="padding: 0.5rem; border: 1px solid #ddd;">1600</td></tr>
+                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>GPT-3</strong></td><td style="padding: 0.5rem; border: 1px solid #ddd;">2020</td><td style="padding: 0.5rem; border: 1px solid #ddd;">175B</td><td style="padding: 0.5rem; border: 1px solid #ddd;">96</td><td style="padding: 0.5rem; border: 1px solid #ddd;">12288</td></tr>
+                            <tr style="background: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>GPT-4</strong></td><td style="padding: 0.5rem; border: 1px solid #ddd;">2023</td><td style="padding: 0.5rem; border: 1px solid #ddd;">~1.7T</td><td style="padding: 0.5rem; border: 1px solid #ddd;">~120</td><td style="padding: 0.5rem; border: 1px solid #ddd;">~20000</td></tr>
+                        </table>
+                        
+                        <p><strong>📈 Croissance exponentielle :</strong></p>
+                        <ul>
+                            <li>🚀 <strong>Paramètres</strong> : ×15 000 en 5 ans (110M → 1.7T)</li>
+                            <li>🧠 <strong>Capacités</strong> : de la classification simple au raisonnement complexe</li>
+                            <li>💰 <strong>Coût d'entraînement</strong> : de 1000$ à 100M$</li>
+                            <li>⚡ <strong>Puissance de calcul</strong> : de 1 GPU à 25 000 GPU</li>
+                        </ul>
+                        
+                        <p><strong>🔍 Lois d'échelle (Scaling Laws) :</strong></p>
+                        <p>$$\\text{Performance} \\propto \\text{Paramètres}^{\\alpha} \\times \\text{Données}^{\\beta} \\times \\text{Calcul}^{\\gamma}$$</p>
+                        
+                        <p><strong>💡 Découverte clé :</strong> Plus c'est gros, plus c'est intelligent ! (jusqu'à un certain point)</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Calcul de paramètres : anatomie d'un Transformer",
+            description: "Calculons le nombre de paramètres d'un modèle :",
+            code: `def calculer_parametres_transformer(vocab_size, seq_len, hidden_size, num_layers, num_heads):
+    """Calcule le nombre total de paramètres d'un Transformer"""
+    
+    print(f"🧮 CALCUL DE PARAMÈTRES - TRANSFORMER")
+    print("=" * 45)
+    print(f"Vocabulaire : {vocab_size:,}")
+    print(f"Séquence max : {seq_len}")
+    print(f"Dimension cachée : {hidden_size}")
+    print(f"Nombre de couches : {num_layers}")
+    print(f"Têtes d'attention : {num_heads}")
+    print()
+    
+    # 1. Embeddings
+    token_emb = vocab_size * hidden_size
+    pos_emb = seq_len * hidden_size
+    total_emb = token_emb + pos_emb
+    
+    print(f"📊 EMBEDDINGS :")
+    print(f"  Token embeddings : {vocab_size:,} × {hidden_size} = {token_emb:,}")
+    print(f"  Position embeddings : {seq_len} × {hidden_size} = {pos_emb:,}")
+    print(f"  Total embeddings : {total_emb:,}")
+    print()
+    
+    # 2. Une couche Transformer
+    # Attention multi-têtes
+    d_k = hidden_size // num_heads
+    attention_params = 4 * hidden_size * hidden_size  # Q, K, V, O
+    
+    # Feed-Forward Network (généralement 4x plus large)
+    ffn_size = 4 * hidden_size
+    ffn_params = hidden_size * ffn_size + ffn_size * hidden_size
+    
+    # Layer Normalization (2 par couche)
+    ln_params = 2 * 2 * hidden_size  # 2 LN × (scale + bias)
+    
+    params_par_couche = attention_params + ffn_params + ln_params
+    
+    print(f"🔧 UNE COUCHE TRANSFORMER :")
+    print(f"  Multi-Head Attention : 4 × {hidden_size} × {hidden_size} = {attention_params:,}")
+    print(f"  Feed-Forward : {hidden_size} × {ffn_size} × 2 = {ffn_params:,}")
+    print(f"  Layer Normalization : 2 × 2 × {hidden_size} = {ln_params:,}")
+    print(f"  Total par couche : {params_par_couche:,}")
+    print()
+    
+    # 3. Total du modèle
+    total_layers = num_layers * params_par_couche
+    
+    # 4. Tête de sortie (classification/génération)
+    output_head = hidden_size * vocab_size
+    
+    total_params = total_emb + total_layers + output_head
+    
+    print(f"🎯 TOTAL DU MODÈLE :")
+    print(f"  {num_layers} couches : {total_layers:,}")
+    print(f"  Tête de sortie : {hidden_size} × {vocab_size:,} = {output_head:,}")
+    print(f"  TOTAL GÉNÉRAL : {total_params:,} paramètres")
+    print()
+    
+    # Comparaison avec modèles réels
+    print(f"📊 COMPARAISON :")
+    if total_params < 1e9:
+        print(f"  Votre modèle : {total_params/1e6:.1f}M paramètres")
+        print(f"  Catégorie : Modèle léger (mobile/edge)")
+    elif total_params < 10e9:
+        print(f"  Votre modèle : {total_params/1e9:.1f}B paramètres")
+        print(f"  Catégorie : Modèle moyen (serveur)")
+    else:
+        print(f"  Votre modèle : {total_params/1e9:.1f}B paramètres")
+        print(f"  Catégorie : Modèle géant (datacenter)")
+    
+    return total_params
+
+# Calculs pour différentes tailles
+print("🔍 EXEMPLES DE CONFIGURATIONS")
+print("=" * 40)
+
+# Configuration BERT-base
+params_bert_base = calculer_parametres_transformer(
+    vocab_size=30000, seq_len=512, hidden_size=768, 
+    num_layers=12, num_heads=12
+)
+
+print("\\n" + "="*50)
+
+# Configuration GPT-2 small
+params_gpt2_small = calculer_parametres_transformer(
+    vocab_size=50000, seq_len=1024, hidden_size=768,
+    num_layers=12, num_heads=12
+)`,
+          },
+          {
+            type: "code",
+            title: "Comparaison pratique : même tâche, deux approches",
+            description: "Comparons BERT et GPT sur une tâche de sentiment :",
+            code: `class AnalyseSentiment:
+    def __init__(self):
+        # Phrases de test sénégalaises
+        self.phrases_test = [
+            "Dakar est une belle ville moderne",
+            "Les embouteillages à Dakar sont terribles",
+            "J'adore la cuisine sénégalaise",
+            "Le système de santé doit être amélioré",
+            "Les plages de Saly sont magnifiques"
+        ]
+        
+        # Sentiments réels (pour comparaison)
+        self.sentiments_reels = ['positif', 'négatif', 'positif', 'négatif', 'positif']
+    
+    def approche_bert(self, phrase):
+        """Simulation de l'approche BERT pour sentiment"""
+        print(f"🤖 BERT analyse : '{phrase}'")
+        
+        # BERT voit toute la phrase d'un coup
+        mots_positifs = ['belle', 'moderne', 'adore', 'magnifiques', 'excellent']
+        mots_negatifs = ['terribles', 'mauvais', 'problème', 'améliorer']
+        
+        score_positif = sum(1 for mot in mots_positifs if mot in phrase.lower())
+        score_negatif = sum(1 for mot in mots_negatifs if mot in phrase.lower())
+        
+        print(f"  Mots positifs détectés : {score_positif}")
+        print(f"  Mots négatifs détectés : {score_negatif}")
+        
+        if score_positif > score_negatif:
+            prediction = 'positif'
+            confiance = 0.8 + 0.1 * (score_positif - score_negatif)
+        elif score_negatif > score_positif:
+            prediction = 'négatif'
+            confiance = 0.8 + 0.1 * (score_negatif - score_positif)
+        else:
+            prediction = 'neutre'
+            confiance = 0.5
+        
+        print(f"  🎯 Prédiction : {prediction} (confiance: {confiance:.2f})")
+        return prediction, confiance
+    
+    def approche_gpt(self, phrase):
+        """Simulation de l'approche GPT pour sentiment"""
+        print(f"💬 GPT génère : '{phrase}' → ?")
+        
+        # GPT génère une continuation qui révèle le sentiment
+        continuations = {
+            'positif': [" C'est vraiment formidable", " Je recommande vivement", " Quelle merveille"],
+            'négatif': [" C'est décevant", " Il faut améliorer", " Quel problème"],
+            'neutre': [" C'est normal", " Rien d'exceptionnel", " Comme d'habitude"]
+        }
+        
+        # Simulation de génération
+        mots = phrase.lower().split()
+        if any(mot in ['belle', 'adore', 'magnifiques'] for mot in mots):
+            sentiment = 'positif'
+            continuation = continuations['positif'][0]
+            confiance = 0.85
+        elif any(mot in ['terribles', 'améliorer'] for mot in mots):
+            sentiment = 'négatif'
+            continuation = continuations['négatif'][0]
+            confiance = 0.80
+        else:
+            sentiment = 'neutre'
+            continuation = continuations['neutre'][0]
+            confiance = 0.60
+        
+        print(f"  Continuation générée : '{continuation}'")
+        print(f"  🎯 Sentiment inféré : {sentiment} (confiance: {confiance:.2f})")
+        return sentiment, confiance
+
+# Test comparatif
+analyseur = AnalyseSentiment()
+
+print("🔍 COMPARAISON BERT vs GPT - ANALYSE DE SENTIMENT")
+print("=" * 60)
+
+for i, phrase in enumerate(analyseur.phrases_test):
+    print(f"\\n📝 Phrase {i+1}: '{phrase}'")
+    print(f"✅ Sentiment réel : {analyseur.sentiments_reels[i]}")
+    print()
+    
+    # Test BERT
+    pred_bert, conf_bert = analyseur.approche_bert(phrase)
+    
+    print()
+    
+    # Test GPT
+    pred_gpt, conf_gpt = analyseur.approche_gpt(phrase)
+    
+    # Comparaison
+    print(f"\\n📊 Comparaison :")
+    print(f"  BERT : {pred_bert} ({conf_bert:.2f})")
+    print(f"  GPT  : {pred_gpt} ({conf_gpt:.2f})")
+    print(f"  Réel : {analyseur.sentiments_reels[i]}")
+    print("-" * 40)`,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Variantes et évolutions : l'arbre généalogique",
+            content: `
+                        <p><strong>🌳 L'arbre généalogique des modèles de langage :</strong></p>
+                        
+                        <p><strong>🤖 Famille BERT (Encodeurs) :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>BERT</strong> (2018) : l'ancêtre révolutionnaire</li>
+                            <li>⚡ <strong>RoBERTa</strong> (2019) : BERT optimisé (Facebook)</li>
+                            <li>🔬 <strong>DeBERTa</strong> (2020) : attention découplée (Microsoft)</li>
+                            <li>⚡ <strong>ELECTRA</strong> (2020) : entraînement plus efficace (Google)</li>
+                            <li>🌍 <strong>mBERT</strong> : multilingue (104 langues)</li>
+                        </ul>
+                        
+                        <p><strong>💬 Famille GPT (Décodeurs) :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>GPT-1</strong> (2018) : preuve de concept</li>
+                            <li>📈 <strong>GPT-2</strong> (2019) : "trop dangereux à publier"</li>
+                            <li>🚀 <strong>GPT-3</strong> (2020) : émergence de l'intelligence</li>
+                            <li>💬 <strong>ChatGPT</strong> (2022) : révolution conversationnelle</li>
+                            <li>🧠 <strong>GPT-4</strong> (2023) : intelligence quasi-humaine</li>
+                        </ul>
+                        
+                        <p><strong>🔄 Hybrides et innovations :</strong></p>
+                        <ul>
+                            <li>🎭 <strong>T5</strong> : "Text-to-Text Transfer Transformer" (Google)</li>
+                            <li>🌟 <strong>BART</strong> : BERT + GPT combinés (Facebook)</li>
+                            <li>🎯 <strong>PaLM</strong> : Pathways Language Model (Google)</li>
+                            <li>🤖 <strong>LaMDA</strong> : conversation spécialisée (Google)</li>
+                            <li>🦙 <strong>LLaMA</strong> : efficacité optimisée (Meta)</li>
+                        </ul>
+                        
+                        <p><strong>💡 Tendance actuelle :</strong> Convergence vers des modèles multimodaux (texte + images + code + audio)</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation : BERT vs GPT head-to-head",
+            description: "Comparons les deux architectures côte à côte :",
+            code: `class BERTvsGPT:
+    def __init__(self, vocab_size=100, hidden_size=32):
+        self.vocab_size = vocab_size
+        self.hidden_size = hidden_size
+        
+        # Vocabulaire partagé
+        self.vocab = {
+            'le': 0, 'senegal': 1, 'est': 2, 'un': 3, 'pays': 4,
+            'afrique': 5, 'ouest': 6, 'dakar': 7, 'capitale': 8,
+            '[MASK]': 9, '[CLS]': 10, '[SEP]': 11
+        }
+        self.id_to_token = {v: k for k, v in self.vocab.items()}
+        
+        print("🤖 Comparateur BERT vs GPT initialisé")
+    
+    def attention_bert(self, embeddings):
+        """Attention bidirectionnelle (BERT)"""
+        seq_len = embeddings.shape[0]
+        
+        # Pas de masque - attention complète
+        scores = np.random.random((seq_len, seq_len))
+        attention_weights = scores / scores.sum(axis=1, keepdims=True)
+        
+        print("🤖 BERT - Attention bidirectionnelle :")
+        print("Matrice d'attention (chaque ligne = un token) :")
+        for i in range(seq_len):
+            print(f"  Token {i}: {attention_weights[i].round(2)}")
+        
+        return attention_weights
+    
+    def attention_gpt(self, embeddings):
+        """Attention causale (GPT)"""
+        seq_len = embeddings.shape[0]
+        
+        # Masque causal - triangulaire inférieur
+        scores = np.random.random((seq_len, seq_len))
+        
+        # Application du masque causal
+        mask = np.triu(np.ones((seq_len, seq_len)), k=1)
+        scores_masques = np.where(mask == 1, -np.inf, scores)
+        
+        # Softmax avec masque
+        attention_weights = np.exp(scores_masques) / np.sum(np.exp(scores_masques), axis=1, keepdims=True)
+        
+        print("💬 GPT - Attention causale :")
+        print("Matrice d'attention (triangulaire inférieure) :")
+        for i in range(seq_len):
+            print(f"  Token {i}: {attention_weights[i].round(2)}")
+        
+        return attention_weights
+    
+    def comparer_sur_phrase(self, phrase):
+        """Compare BERT et GPT sur la même phrase"""
+        print(f"\\n📝 Phrase d'analyse : '{phrase}'")
+        print("=" * 50)
+        
+        # Tokenisation
+        tokens = phrase.lower().split()
+        token_ids = [self.vocab.get(token, 0) for token in tokens]
+        
+        print(f"Tokens : {tokens}")
+        print(f"IDs : {token_ids}")
+        
+        # Embeddings simulés
+        embeddings = np.random.normal(0, 0.1, (len(tokens), self.hidden_size))
+        
+        print(f"\\n🔍 COMPARAISON DES ATTENTIONS :")
+        print("-" * 30)
+        
+        # BERT
+        attention_bert = self.attention_bert(embeddings)
+        
+        print()
+        
+        # GPT
+        attention_gpt = self.attention_gpt(embeddings)
+        
+        return attention_bert, attention_gpt
+
+# Test comparatif
+comparateur = BERTvsGPT()
+att_bert, att_gpt = comparateur.comparer_sur_phrase("le senegal est un pays")
+
+print(f"\\n💡 OBSERVATIONS :")
+print(f"🤖 BERT : Chaque token voit tous les autres (matrice pleine)")
+print(f"💬 GPT : Chaque token ne voit que les précédents (triangulaire)")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : conception d'architectures spécialisées",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Pour chaque application, choisissez BERT ou GPT et justifiez votre choix :</p>
+                        
+                        <ol>
+                            <li><strong>Détection de fake news</strong> en wolof</li>
+                            <li><strong>Assistant conversationnel</strong> pour l'administration sénégalaise</li>
+                            <li><strong>Traduction automatique</strong> français ↔ wolof</li>
+                            <li><strong>Génération d'articles</strong> de presse automatique</li>
+                            <li><strong>Classification de documents</strong> juridiques</li>
+                            <li><strong>Chatbot éducatif</strong> pour l'apprentissage du français</li>
+                            <li><strong>Analyse de sentiment</strong> sur les réseaux sociaux</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('architecture-choice-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="architecture-choice-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Détection fake news :</strong> <strong>BERT</strong><br>
+                                <em>Justification :</em> Besoin d'analyser tout le contexte pour détecter les incohérences</li>
+                            <li><strong>Assistant conversationnel :</strong> <strong>GPT</strong><br>
+                                <em>Justification :</em> Génération de réponses naturelles et fluides</li>
+                            <li><strong>Traduction :</strong> <strong>Hybride (Encoder-Decoder)</strong><br>
+                                <em>Justification :</em> BERT pour comprendre + GPT pour générer</li>
+                            <li><strong>Génération d'articles :</strong> <strong>GPT</strong><br>
+                                <em>Justification :</em> Création de contenu long et cohérent</li>
+                            <li><strong>Classification juridique :</strong> <strong>BERT</strong><br>
+                                <em>Justification :</em> Analyse précise de documents complets</li>
+                            <li><strong>Chatbot éducatif :</strong> <strong>GPT</strong><br>
+                                <em>Justification :</em> Interaction naturelle et génération d'explications</li>
+                            <li><strong>Analyse sentiment :</strong> <strong>BERT</strong><br>
+                                <em>Justification :</em> Classification précise avec contexte complet</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Simulation d'entraînement : MLM vs CLM",
+            description: "Simulons les deux stratégies d'entraînement :",
+            code: `def simuler_entrainement_mlm():
+    """Simule l'entraînement BERT avec Masked Language Modeling"""
+    print("🤖 SIMULATION ENTRAÎNEMENT BERT (MLM)")
+    print("=" * 45)
+    
+    phrases = [
+        "dakar est la capitale du senegal",
+        "le senegal est en afrique ouest",
+        "la cuisine senegalaise est delicieuse"
+    ]
+    
+    for i, phrase in enumerate(phrases):
+        print(f"\\nÉpoque {i+1} - Phrase : '{phrase}'")
+        
+        # Masquage aléatoire (15% des tokens)
+        mots = phrase.split()
+        nb_masques = max(1, len(mots) // 4)  # ~25% pour la démo
+        positions_masquees = np.random.choice(len(mots), nb_masques, replace=False)
+        
+        phrase_masquee = mots.copy()
+        mots_cibles = []
+        
+        for pos in positions_masquees:
+            mots_cibles.append(mots[pos])
+            phrase_masquee[pos] = '[MASK]'
+        
+        print(f"  Phrase masquée : '{' '.join(phrase_masquee)}'")
+        print(f"  Cibles à prédire : {mots_cibles}")
+        
+        # Simulation de prédiction
+        predictions = []
+        for j, mot_cible in enumerate(mots_cibles):
+            # BERT utilise le contexte complet pour prédire
+            if mot_cible in ['dakar', 'senegal']:
+                prediction = mot_cible  # Bonne prédiction
+                loss = 0.1
+            else:
+                prediction = 'autre'  # Prédiction approximative
+                loss = 0.8
+            
+            predictions.append(prediction)
+            print(f"    [MASK] → '{prediction}' (loss: {loss:.1f})")
+        
+        loss_moyenne = np.mean([0.1 if p in mots_cibles else 0.8 for p in predictions])
+        print(f"  📊 Loss moyenne : {loss_moyenne:.2f}")
+
+def simuler_entrainement_clm():
+    """Simule l'entraînement GPT avec Causal Language Modeling"""
+    print("\\n💬 SIMULATION ENTRAÎNEMENT GPT (CLM)")
+    print("=" * 45)
+    
+    phrases = [
+        "dakar est la capitale du senegal",
+        "le senegal est en afrique ouest", 
+        "la cuisine senegalaise est delicieuse"
+    ]
+    
+    for i, phrase in enumerate(phrases):
+        print(f"\\nÉpoque {i+1} - Phrase : '{phrase}'")
+        
+        mots = phrase.split()
+        
+        # Prédiction séquentielle
+        for j in range(1, len(mots)):
+            contexte = ' '.join(mots[:j])
+            mot_cible = mots[j]
+            
+            # GPT prédit basé seulement sur le contexte précédent
+            if j == 1:  # Après "dakar"
+                prediction = 'est'
+                loss = 0.2
+            elif 'capitale' in contexte:
+                prediction = 'du'
+                loss = 0.1
+            else:
+                prediction = 'autre'
+                loss = 0.7
+            
+            print(f"  '{contexte}' → '{mot_cible}' (prédit: '{prediction}', loss: {loss:.1f})")
+        
+        loss_moyenne = 0.3  # Simulation
+        print(f"  📊 Loss moyenne : {loss_moyenne:.2f}")
+
+# Exécution des simulations
+simuler_entrainement_mlm()
+simuler_entrainement_clm()
+
+print(f"\\n💡 DIFFÉRENCES CLÉS :")
+print(f"🤖 BERT : Apprend à 'comprendre' en devinant les mots cachés")
+print(f"💬 GPT : Apprend à 'générer' en prédisant la suite logique")`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "L'héritage révolutionnaire : de 2018 à aujourd'hui",
+            content: `
+                        <p><strong>🌟 BERT et GPT ont créé l'IA moderne que nous connaissons :</strong></p>
+                        
+                        <p><strong>🤖 Héritage de BERT :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Google Search</strong> : compréhension des requêtes complexes</li>
+                            <li>📧 <strong>Gmail</strong> : classification automatique des emails</li>
+                            <li>🌐 <strong>Traduction</strong> : Google Translate plus précis</li>
+                            <li>📊 <strong>Analyse de données</strong> : extraction d'insights textuels</li>
+                            <li>🏥 <strong>Médecine</strong> : analyse de dossiers médicaux</li>
+                        </ul>
+                        
+                        <p><strong>💬 Héritage de GPT :</strong></p>
+                        <ul>
+                            <li>🤖 <strong>ChatGPT</strong> : révolution conversationnelle mondiale</li>
+                            <li>💻 <strong>GitHub Copilot</strong> : programmation assistée par IA</li>
+                            <li>✍️ <strong>Jasper, Copy.ai</strong> : génération de contenu marketing</li>
+                            <li>🎨 <strong>Créativité</strong> : écriture, brainstorming, scénarios</li>
+                            <li>📚 <strong>Éducation</strong> : tuteurs IA personnalisés</li>
+                        </ul>
+                        
+                        <p><strong>🌍 Impact sociétal quantifié :</strong></p>
+                        <ul>
+                            <li>💰 <strong>Économie</strong> : 4.4T$ de valeur ajoutée prévue d'ici 2030</li>
+                            <li>👥 <strong>Emplois</strong> : 300M d'emplois transformés</li>
+                            <li>🎓 <strong>Éducation</strong> : 1B d'étudiants avec accès à des tuteurs IA</li>
+                            <li>🏥 <strong>Santé</strong> : diagnostic IA dans 50% des hôpitaux</li>
+                            <li>🌍 <strong>Langues</strong> : préservation de 1000+ langues menacées</li>
+                        </ul>
+                        
+                        <p><strong>🇸🇳 Opportunités pour le Sénégal :</strong></p>
+                        <ul>
+                            <li>🗣️ <strong>Langues nationales</strong> : BERT-Wolof, GPT-Pulaar</li>
+                            <li>📚 <strong>Éducation</strong> : tuteurs IA adaptés au contexte local</li>
+                            <li>🏛️ <strong>Administration</strong> : automatisation des services publics</li>
+                            <li>🌾 <strong>Agriculture</strong> : conseils IA pour les agriculteurs</li>
+                            <li>💰 <strong>Finance</strong> : inclusion financière par l'IA</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> BERT et GPT ne sont pas juste des modèles - ils ont créé un <strong>nouveau paradigme</strong> où l'IA comprend et génère du langage naturel. Ils sont les ancêtres de toute l'IA conversationnelle moderne !</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Fine-tuning - comment adapter ces géants à vos besoins spécifiques !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Quelle est la différence principale entre l'entraînement de BERT et de GPT ?",
+          options: [
+            "A) BERT utilise plus de données",
+            "B) BERT prédit des mots masqués, GPT prédit le mot suivant",
+            "C) GPT est plus rapide à entraîner",
+            "D) BERT a plus de paramètres",
+          ],
+          correct: 1,
+          explanation:
+            "BERT utilise le Masked Language Modeling (prédire des mots cachés avec contexte bidirectionnel) tandis que GPT utilise le Causal Language Modeling (prédire le mot suivant avec contexte unidirectionnel). Cette différence fondamentale détermine leurs capacités respectives.",
+        },
+        prevModule: "transformers.html",
+        nextModule: "fine-tuning.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

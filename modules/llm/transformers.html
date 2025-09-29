@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transformers | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>💬 LLMs & IA Moderne</span>
+          <span>›</span>
+          <span>Transformers</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🔄 Transformers : L'Architecture qui a Révolutionné l'IA</h1>
+      <p class="subtitle">Module 5.2 - LLMs & IA Moderne</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Transformers</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant l'architecture qui a rendu
+          possible ChatGPT et toute l'IA moderne.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="attention.html" class="nav-link" id="prev-link"
+          >← Module précédent : Attention</a
+        >
+        <a href="gpt-bert.html" class="nav-link" id="next-link"
+          >Module suivant : GPT & BERT →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Transformers
+      const moduleConfig = {
+        id: "llm-transformers",
+        title: "Transformers : L'Architecture qui a Révolutionné l'IA",
+        category: "LLMs & IA Moderne",
+        objectives: [
+          "Comprendre pourquoi les Transformers ont révolutionné l'IA",
+          "Maîtriser l'architecture Encoder-Decoder complète",
+          "Calculer manuellement un bloc Transformer simple",
+          "Comprendre l'encodage positionnel et la normalisation",
+          "Implémenter un Transformer miniature from scratch",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title:
+              "La révolution Transformer : 2017, l'année qui a tout changé",
+            content: `
+                        <p>En 2017, l'article <strong>"Attention Is All You Need"</strong> de Google a déclenché la plus grande révolution de l'IA moderne. Les <strong>Transformers</strong> ont rendu possible ChatGPT, GPT-4, BERT, et tous les LLMs actuels.</p>
+                        
+                        <p><strong>🔑 Révolution conceptuelle :</strong></p>
+                        <ul>
+                            <li>❌ <strong>Avant 2017</strong> : RNN/LSTM séquentiels, lents, limités</li>
+                            <li>✅ <strong>Après 2017</strong> : Transformers parallèles, rapides, illimités</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Impact quantifié :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Vitesse</strong> : 10x plus rapide à entraîner</li>
+                            <li>🧠 <strong>Capacité</strong> : de 100M à 175B paramètres (GPT-3)</li>
+                            <li>📊 <strong>Performance</strong> : records battus dans tous les domaines</li>
+                            <li>🌍 <strong>Applications</strong> : langage, vision, code, science</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Pourquoi révolutionnaire ?</strong></p>
+                        <ul>
+                            <li>🔄 <strong>Parallélisation</strong> : traite tous les mots simultanément</li>
+                            <li>👁️ <strong>Attention globale</strong> : chaque mot "voit" tous les autres</li>
+                            <li>📏 <strong>Pas de limite</strong> : séquences de longueur arbitraire</li>
+                            <li>🎯 <strong>Transfert learning</strong> : un modèle, mille applications</li>
+                        </ul>
+                        
+                        <p><strong>🌟 Résultat :</strong> De la traduction automatique en 2017 à ChatGPT qui révolutionne le monde en 2023 !</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie de l'assemblée nationale sénégalaise",
+            content: `
+                        <p>Imaginez une <strong>session de l'Assemblée Nationale du Sénégal</strong> où 165 députés débattent d'un projet de loi :</p>
+                        
+                        <p><strong>🏛️ Méthode traditionnelle (RNN/LSTM) :</strong></p>
+                        <ul>
+                            <li>🗣️ <strong>Parole séquentielle</strong> : un député parle, les autres écoutent</li>
+                            <li>⏰ <strong>Mémoire limitée</strong> : difficile de se rappeler ce qui a été dit il y a 2h</li>
+                            <li>🐌 <strong>Lenteur</strong> : 165 interventions = 165 étapes séquentielles</li>
+                            <li>📉 <strong>Perte d'information</strong> : les premiers arguments sont oubliés</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Méthode Transformer :</strong></p>
+                        <ul>
+                            <li>👥 <strong>Débat simultané</strong> : tous les députés peuvent "s'écouter" en même temps</li>
+                            <li>🧠 <strong>Mémoire parfaite</strong> : chaque député a accès à TOUS les arguments précédents</li>
+                            <li>⚡ <strong>Parallélisme</strong> : traitement simultané de toutes les interventions</li>
+                            <li>🎯 <strong>Attention sélective</strong> : chaque député se concentre sur les arguments pertinents</li>
+                        </ul>
+                        
+                        <p><strong>💡 Résultat :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Décisions plus éclairées</strong> : prise en compte de tous les éléments</li>
+                            <li>⚡ <strong>Processus plus rapide</strong> : pas d'attente séquentielle</li>
+                            <li>🧠 <strong>Compréhension globale</strong> : vision d'ensemble du débat</li>
+                        </ul>
+                        
+                        <p><strong>🔑 C'est exactement ce que fait un Transformer :</strong> il permet à chaque mot de "débattre" avec tous les autres mots simultanément pour construire une compréhension globale du texte !</p>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title:
+              "Architecture Encoder-Decoder : la structure révolutionnaire",
+            content: `
+                        <p>L'architecture <strong>Transformer</strong> se compose de deux parties principales qui travaillent ensemble comme un système de traduction parfait.</p>
+                        
+                        <p><strong>🔍 Vue d'ensemble :</strong></p>
+                        <ul>
+                            <li>📥 <strong>Encoder</strong> : comprend et encode le texte d'entrée</li>
+                            <li>📤 <strong>Decoder</strong> : génère le texte de sortie mot par mot</li>
+                            <li>🔗 <strong>Cross-Attention</strong> : le decoder "regarde" l'encoder</li>
+                        </ul>
+                        
+                        <p><strong>🏗️ Structure détaillée :</strong></p>
+                        
+                        <p><strong>📥 ENCODER (6 couches identiques) :</strong></p>
+                        <ol>
+                            <li>🔤 <strong>Embeddings</strong> + encodage positionnel</li>
+                            <li>👁️ <strong>Multi-Head Self-Attention</strong></li>
+                            <li>➕ <strong>Connexion résiduelle</strong> + normalisation</li>
+                            <li>🧠 <strong>Feed-Forward Network</strong></li>
+                            <li>➕ <strong>Connexion résiduelle</strong> + normalisation</li>
+                        </ol>
+                        
+                        <p><strong>📤 DECODER (6 couches identiques) :</strong></p>
+                        <ol>
+                            <li>🔤 <strong>Embeddings</strong> + encodage positionnel</li>
+                            <li>👁️ <strong>Masked Multi-Head Self-Attention</strong></li>
+                            <li>➕ <strong>Connexion résiduelle</strong> + normalisation</li>
+                            <li>🔗 <strong>Multi-Head Cross-Attention</strong> (vers encoder)</li>
+                            <li>➕ <strong>Connexion résiduelle</strong> + normalisation</li>
+                            <li>🧠 <strong>Feed-Forward Network</strong></li>
+                            <li>➕ <strong>Connexion résiduelle</strong> + normalisation</li>
+                            <li>📊 <strong>Couche de sortie</strong> (probabilités des mots)</li>
+                        </ol>
+                        
+                        <p><strong>💡 Innovations clés :</strong></p>
+                        <ul>
+                            <li>🔄 <strong>Connexions résiduelles</strong> : évitent la disparition des gradients</li>
+                            <li>📊 <strong>Layer Normalization</strong> : stabilise l'entraînement</li>
+                            <li>🎭 <strong>Masquage</strong> : empêche de "tricher" en regardant le futur</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Formalisation mathématique complète",
+            content: `
+                        <p><strong>📐 Formalisons rigoureusement l'architecture Transformer :</strong></p>
+                        
+                        <p><strong>🔤 1. Embeddings et encodage positionnel :</strong></p>
+                        <p>$$\\vec{x}_i = \\text{Embedding}(\\text{token}_i) + \\text{PE}(i)$$</p>
+                        
+                        <p><strong>👁️ 2. Multi-Head Attention :</strong></p>
+                        <p>$$\\text{MultiHead}(Q, K, V) = \\text{Concat}(\\text{head}_1, ..., \\text{head}_h) W^O$$</p>
+                        <p>$$\\text{head}_i = \\text{Attention}(Q W_i^Q, K W_i^K, V W_i^V)$$</p>
+                        
+                        <p><strong>🧠 3. Feed-Forward Network :</strong></p>
+                        <p>$$\\text{FFN}(x) = \\max(0, x W_1 + b_1) W_2 + b_2$$</p>
+                        
+                        <p><strong>➕ 4. Connexions résiduelles :</strong></p>
+                        <p>$$\\text{output} = \\text{LayerNorm}(x + \\text{Sublayer}(x))$$</p>
+                        
+                        <p><strong>🏗️ 5. Bloc Encoder complet :</strong></p>
+                        <p>$$\\vec{z}_1 = \\text{LayerNorm}(\\vec{x} + \\text{MultiHead}(\\vec{x}, \\vec{x}, \\vec{x}))$$</p>
+                        <p>$$\\vec{z}_2 = \\text{LayerNorm}(\\vec{z}_1 + \\text{FFN}(\\vec{z}_1))$$</p>
+                        
+                        <p><strong>🎯 6. Bloc Decoder complet :</strong></p>
+                        <p>$$\\vec{y}_1 = \\text{LayerNorm}(\\vec{y} + \\text{MaskedMultiHead}(\\vec{y}, \\vec{y}, \\vec{y}))$$</p>
+                        <p>$$\\vec{y}_2 = \\text{LayerNorm}(\\vec{y}_1 + \\text{CrossAttention}(\\vec{y}_1, \\vec{z}, \\vec{z}))$$</p>
+                        <p>$$\\vec{y}_3 = \\text{LayerNorm}(\\vec{y}_2 + \\text{FFN}(\\vec{y}_2))$$</p>
+                        
+                        <p><strong>🔍 Dimensions typiques :</strong></p>
+                        <ul>
+                            <li>\\(d_{model} = 512\\) (dimension des embeddings)</li>
+                            <li>\\(h = 8\\) (nombre de têtes d'attention)</li>
+                            <li>\\(d_k = d_v = 64\\) (dimension par tête)</li>
+                            <li>\\(d_{ff} = 2048\\) (dimension feed-forward)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel : bloc Transformer simple",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong> Calculons un bloc Transformer sur 2 mots</p>
+                        
+                        <p><strong>🔤 Entrée :</strong> "Dakar belle" → 2 tokens</p>
+                        <p>$$X = \\begin{bmatrix} 0.1 & 0.2 & 0.3 & 0.4 \\\\ 0.5 & 0.6 & 0.7 & 0.8 \\end{bmatrix}_{2 \\times 4}$$</p>
+                        <p>(2 mots × 4 dimensions d'embedding)</p>
+                        
+                        <p><strong>👁️ Étape 1 : Self-Attention (1 tête) :</strong></p>
+                        <p>Matrices de projection (simplifiées) :</p>
+                        <p>$$W^Q = W^K = W^V = \\begin{bmatrix} 1 & 0 & 0 & 0 \\\\ 0 & 1 & 0 & 0 \\\\ 0 & 0 & 1 & 0 \\\\ 0 & 0 & 0 & 1 \\end{bmatrix}$$</p>
+                        
+                        <p>Donc \\(Q = K = V = X\\)</p>
+                        
+                        <p><strong>🔢 Calcul des scores d'attention :</strong></p>
+                        <p>$$\\text{Scores} = \\frac{QK^T}{\\sqrt{d_k}} = \\frac{XX^T}{\\sqrt{4}}$$</p>
+                        
+                        <p>$$QK^T = \\begin{bmatrix} 0.1 & 0.2 & 0.3 & 0.4 \\\\ 0.5 & 0.6 & 0.7 & 0.8 \\end{bmatrix} \\begin{bmatrix} 0.1 & 0.5 \\\\ 0.2 & 0.6 \\\\ 0.3 & 0.7 \\\\ 0.4 & 0.8 \\end{bmatrix}$$</p>
+                        
+                        <p>$$= \\begin{bmatrix} 0.01+0.04+0.09+0.16 & 0.05+0.12+0.21+0.32 \\\\ 0.05+0.12+0.21+0.32 & 0.25+0.36+0.49+0.64 \\end{bmatrix} = \\begin{bmatrix} 0.30 & 0.70 \\\\ 0.70 & 1.74 \\end{bmatrix}$$</p>
+                        
+                        <p>$$\\text{Scores} = \\frac{1}{2} \\begin{bmatrix} 0.30 & 0.70 \\\\ 0.70 & 1.74 \\end{bmatrix} = \\begin{bmatrix} 0.15 & 0.35 \\\\ 0.35 & 0.87 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>📊 Softmax par ligne :</strong></p>
+                        <p>Ligne 1 : \\(e^{0.15} = 1.16, e^{0.35} = 1.42\\) → \\([0.45, 0.55]\\)</p>
+                        <p>Ligne 2 : \\(e^{0.35} = 1.42, e^{0.87} = 2.39\\) → \\([0.37, 0.63]\\)</p>
+                        
+                        <p>$$\\text{Attention} = \\begin{bmatrix} 0.45 & 0.55 \\\\ 0.37 & 0.63 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🎯 Sortie attention :</strong></p>
+                        <p>$$\\text{Output} = \\text{Attention} \\times V = \\begin{bmatrix} 0.45 & 0.55 \\\\ 0.37 & 0.63 \\end{bmatrix} \\begin{bmatrix} 0.1 & 0.2 & 0.3 & 0.4 \\\\ 0.5 & 0.6 & 0.7 & 0.8 \\end{bmatrix}$$</p>
+                        
+                        <p>$$= \\begin{bmatrix} 0.32 & 0.42 & 0.52 & 0.62 \\\\ 0.35 & 0.45 & 0.55 & 0.65 \\end{bmatrix}$$</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation Transformer from scratch",
+            description: "Créons un Transformer miniature complet :",
+            code: `import numpy as np
+
+class TransformerBlock:
+    def __init__(self, d_model=4, n_heads=1, d_ff=8):
+        """
+        Bloc Transformer simplifié
+        d_model: dimension des embeddings
+        n_heads: nombre de têtes d'attention  
+        d_ff: dimension feed-forward
+        """
+        self.d_model = d_model
+        self.n_heads = n_heads
+        self.d_k = d_model // n_heads
+        self.d_ff = d_ff
+        
+        # Matrices d'attention (simplifiées à l'identité)
+        self.W_q = np.eye(d_model)
+        self.W_k = np.eye(d_model) 
+        self.W_v = np.eye(d_model)
+        self.W_o = np.eye(d_model)
+        
+        # Feed-forward network
+        self.W1 = np.random.randn(d_model, d_ff) * 0.1
+        self.b1 = np.zeros(d_ff)
+        self.W2 = np.random.randn(d_ff, d_model) * 0.1
+        self.b2 = np.zeros(d_model)
+        
+        print(f"🧠 Transformer Block créé:")
+        print(f"   d_model={d_model}, n_heads={n_heads}, d_ff={d_ff}")
+    
+    def layer_norm(self, x, epsilon=1e-6):
+        """Layer Normalization"""
+        mean = np.mean(x, axis=-1, keepdims=True)
+        std = np.std(x, axis=-1, keepdims=True)
+        return (x - mean) / (std + epsilon)
+    
+    def softmax(self, x, axis=-1):
+        """Softmax stable"""
+        exp_x = np.exp(x - np.max(x, axis=axis, keepdims=True))
+        return exp_x / np.sum(exp_x, axis=axis, keepdims=True)
+    
+    def attention(self, Q, K, V, mask=None):
+        """Mécanisme d'attention"""
+        # Calcul des scores
+        scores = np.matmul(Q, K.transpose()) / np.sqrt(self.d_k)
+        
+        # Application du masque si fourni
+        if mask is not None:
+            scores = np.where(mask == 0, -1e9, scores)
+        
+        # Softmax
+        attention_weights = self.softmax(scores)
+        
+        # Application aux valeurs
+        output = np.matmul(attention_weights, V)
+        
+        return output, attention_weights
+    
+    def feed_forward(self, x):
+        """Réseau feed-forward avec ReLU"""
+        # Première transformation linéaire + ReLU
+        hidden = np.maximum(0, np.matmul(x, self.W1) + self.b1)
+        
+        # Deuxième transformation linéaire
+        output = np.matmul(hidden, self.W2) + self.b2
+        
+        return output
+    
+    def forward(self, x):
+        """Propagation avant complète"""
+        print(f"\\n🔄 PROPAGATION AVANT")
+        print(f"Entrée shape: {x.shape}")
+        
+        # 1. Self-Attention
+        Q = np.matmul(x, self.W_q)
+        K = np.matmul(x, self.W_k) 
+        V = np.matmul(x, self.W_v)
+        
+        attn_output, attn_weights = self.attention(Q, K, V)
+        print(f"Attention weights:")
+        print(attn_weights.round(3))
+        
+        # 2. Connexion résiduelle + Layer Norm
+        x1 = self.layer_norm(x + attn_output)
+        print(f"Après attention + résiduelle: {x1.round(3)}")
+        
+        # 3. Feed-Forward
+        ff_output = self.feed_forward(x1)
+        
+        # 4. Connexion résiduelle + Layer Norm
+        x2 = self.layer_norm(x1 + ff_output)
+        print(f"Sortie finale: {x2.round(3)}")
+        
+        return x2, attn_weights
+
+# Test du Transformer Block
+print("🚀 TEST TRANSFORMER BLOCK")
+print("=" * 40)
+
+# Données d'entrée : 2 mots, 4 dimensions
+X = np.array([
+    [0.1, 0.2, 0.3, 0.4],  # "Dakar"
+    [0.5, 0.6, 0.7, 0.8]   # "belle"
+])
+
+transformer = TransformerBlock(d_model=4, n_heads=1, d_ff=8)
+output, attention = transformer.forward(X)
+
+print(f"\\n📊 RÉSUMÉ")
+print(f"Entrée: {X.shape}")
+print(f"Sortie: {output.shape}")
+print(f"Attention: chaque mot regarde tous les mots")`,
+          },
+          {
+            type: "code",
+            title: "Encodage positionnel sinusoïdal",
+            description:
+              "Implémentons l'encodage positionnel révolutionnaire :",
+            code: `def encodage_positionnel(seq_len, d_model):
+    """
+    Encodage positionnel sinusoïdal du paper original
+    Permet au modèle de comprendre l'ordre des mots
+    """
+    PE = np.zeros((seq_len, d_model))
+    
+    # Positions
+    position = np.arange(seq_len).reshape(-1, 1)
+    
+    # Fréquences
+    div_term = np.exp(np.arange(0, d_model, 2) * -(np.log(10000.0) / d_model))
+    
+    # Application des fonctions sin/cos
+    PE[:, 0::2] = np.sin(position * div_term)  # Indices pairs
+    PE[:, 1::2] = np.cos(position * div_term)  # Indices impairs
+    
+    return PE
+
+# Test de l'encodage positionnel
+print("📍 ENCODAGE POSITIONNEL")
+print("=" * 30)
+
+seq_length = 5
+d_model = 8
+PE = encodage_positionnel(seq_length, d_model)
+
+print(f"Séquence de {seq_length} mots, {d_model} dimensions:")
+print("Position | Encodage positionnel")
+print("-" * 40)
+for i in range(seq_length):
+    encodage_str = " ".join([f"{x:6.3f}" for x in PE[i]])
+    print(f"   {i}     | {encodage_str}")
+
+# Visualisation des patterns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 8))
+plt.imshow(PE.T, cmap='RdYlBu', aspect='auto')
+plt.colorbar(label='Valeur')
+plt.xlabel('Position dans la séquence')
+plt.ylabel('Dimension d\\'embedding')
+plt.title('Encodage Positionnel Sinusoïdal')
+plt.show()
+
+print("\\n💡 Observation: Chaque position a un 'code' unique !")
+print("   Les patterns sinusoïdaux permettent au modèle")
+print("   de comprendre les relations de distance entre mots.")`,
+          },
+          {
+            type: "code",
+            title: "Transformer complet pour traduction",
+            description:
+              "Assemblons un Transformer complet pour la traduction :",
+            code: `class TransformerSimple:
+    def __init__(self, vocab_size=100, d_model=8, n_heads=2, n_layers=2):
+        """Transformer simplifié pour traduction"""
+        self.vocab_size = vocab_size
+        self.d_model = d_model
+        self.n_heads = n_heads
+        self.n_layers = n_layers
+        
+        # Embeddings (simulés)
+        self.embedding = np.random.randn(vocab_size, d_model) * 0.1
+        
+        # Couches Transformer
+        self.encoder_layers = [TransformerBlock(d_model, n_heads) 
+                              for _ in range(n_layers)]
+        self.decoder_layers = [TransformerBlock(d_model, n_heads) 
+                              for _ in range(n_layers)]
+        
+        # Couche de sortie
+        self.output_projection = np.random.randn(d_model, vocab_size) * 0.1
+        
+        print(f"🌍 Transformer Traduction créé:")
+        print(f"   Vocabulaire: {vocab_size} mots")
+        print(f"   Modèle: {d_model}D, {n_heads} têtes, {n_layers} couches")
+    
+    def encode(self, input_ids):
+        """Encoder une séquence d'entrée"""
+        # Embeddings + encodage positionnel
+        seq_len = len(input_ids)
+        x = self.embedding[input_ids]  # Lookup embeddings
+        x += encodage_positionnel(seq_len, self.d_model)
+        
+        print(f"\\n📥 ENCODAGE")
+        print(f"Tokens: {input_ids}")
+        print(f"Embeddings shape: {x.shape}")
+        
+        # Passage dans les couches encoder
+        for i, layer in enumerate(self.encoder_layers):
+            print(f"\\n--- Couche Encoder {i+1} ---")
+            x, _ = layer.forward(x)
+        
+        return x
+    
+    def decode_step(self, decoder_input, encoder_output):
+        """Un pas de décodage"""
+        # Embeddings + encodage positionnel
+        seq_len = len(decoder_input)
+        x = self.embedding[decoder_input]
+        x += encodage_positionnel(seq_len, self.d_model)
+        
+        print(f"\\n📤 DÉCODAGE")
+        print(f"Tokens decoder: {decoder_input}")
+        
+        # Passage dans les couches decoder (simplifié)
+        for i, layer in enumerate(self.decoder_layers):
+            print(f"\\n--- Couche Decoder {i+1} ---")
+            x, _ = layer.forward(x)
+        
+        # Projection vers vocabulaire
+        logits = np.matmul(x[-1], self.output_projection)  # Dernier token
+        probas = self.softmax(logits)
+        
+        return probas
+    
+    def softmax(self, x):
+        """Softmax stable"""
+        exp_x = np.exp(x - np.max(x))
+        return exp_x / np.sum(exp_x)
+
+# Simulation de traduction Wolof → Français
+print("🌍 SIMULATION TRADUCTION WOLOF → FRANÇAIS")
+print("=" * 50)
+
+# Vocabulaires simplifiés
+vocab_wolof = ["<pad>", "<start>", "<end>", "Dakar", "mag", "na", "rafet"]
+vocab_francais = ["<pad>", "<start>", "<end>", "Dakar", "est", "très", "belle"]
+
+# Phrase: "Dakar mag na rafet" → "Dakar est très belle"
+phrase_wolof = [1, 3, 4, 5, 6]  # <start> Dakar mag na rafet
+phrase_francais = [1, 3, 4, 5, 6]  # <start> Dakar est très belle
+
+# Création du modèle
+transformer = TransformerSimple(vocab_size=len(vocab_wolof), 
+                               d_model=8, n_heads=2, n_layers=1)
+
+# Encodage de la phrase wolof
+encoder_output = transformer.encode(phrase_wolof)
+
+# Décodage (simulation d'un pas)
+decoder_input = [1, 3]  # <start> Dakar
+probas = transformer.decode_step(decoder_input, encoder_output)
+
+print(f"\\n🎯 PRÉDICTION DU MOT SUIVANT")
+print(f"Contexte: {[vocab_francais[i] for i in decoder_input]}")
+print(f"Probabilités:")
+for i, (mot, proba) in enumerate(zip(vocab_francais, probas)):
+    if proba > 0.05:  # Afficher seulement les probas significatives
+        print(f"   {mot}: {proba:.3f}")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calcul manuel Transformer",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Calculez manuellement un bloc Transformer sur 3 mots avec 1 tête d'attention.</p>
+                        
+                        <p><strong>📊 Données :</strong></p>
+                        <p>Phrase : "Sénégal est beau"</p>
+                        <p>$$X = \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\\\ 1 & 1 \\end{bmatrix}_{3 \\times 2}$$</p>
+                        
+                        <p><strong>⚙️ Paramètres :</strong></p>
+                        <p>$$W^Q = W^K = W^V = I_2 \\quad \\text{(matrices identité)}$$</p>
+                        
+                        <p><strong>📝 Calculez :</strong></p>
+                        <ol>
+                            <li>Les matrices Q, K, V</li>
+                            <li>Les scores d'attention \\(QK^T / \\sqrt{2}\\)</li>
+                            <li>Les poids d'attention (softmax par ligne)</li>
+                            <li>La sortie de l'attention</li>
+                            <li>Interprétez : quel mot "fait attention" à quels autres mots ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('transformer-manual-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="transformer-manual-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Q, K, V :</strong> Comme W = I, on a Q = K = V = X</li>
+                            <li><strong>Scores :</strong><br>
+                                \\(QK^T = XX^T = \\begin{bmatrix} 1 & 0 & 1 \\\\ 0 & 1 & 1 \\\\ 1 & 1 & 2 \\end{bmatrix}\\)<br>
+                                \\(\\text{Scores} = \\frac{1}{\\sqrt{2}} \\begin{bmatrix} 1 & 0 & 1 \\\\ 0 & 1 & 1 \\\\ 1 & 1 & 2 \\end{bmatrix} = \\begin{bmatrix} 0.71 & 0 & 0.71 \\\\ 0 & 0.71 & 0.71 \\\\ 0.71 & 0.71 & 1.41 \\end{bmatrix}\\)</li>
+                            <li><strong>Poids attention (softmax) :</strong><br>
+                                Ligne 1: [0.5, 0.25, 0.5] (normalisé)<br>
+                                Ligne 2: [0.25, 0.5, 0.5] (normalisé)<br>
+                                Ligne 3: [0.33, 0.33, 0.67] (normalisé)</li>
+                            <li><strong>Sortie :</strong> Combinaison pondérée des vecteurs V</li>
+                            <li><strong>Interprétation :</strong><br>
+                                - "Sénégal" fait attention à lui-même et "beau" (similarité)<br>
+                                - "est" fait attention surtout à lui-même et "beau"<br>
+                                - "beau" fait le plus attention à lui-même (mot le plus riche)</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Masquage causal : empêcher de tricher",
+            content: `
+                        <p><strong>🤔 Pourquoi le masquage est-il crucial ?</strong></p>
+                        <p>Dans la génération de texte, le modèle ne doit pas "voir le futur" ! Sinon, il tricherait en connaissant déjà la réponse.</p>
+                        
+                        <p><strong>🎯 Problème concret :</strong></p>
+                        <p>Générer : "Le Sénégal est un pays ___"</p>
+                        <ul>
+                            <li>❌ <strong>Sans masque</strong> : le modèle voit déjà "magnifique" et triche</li>
+                            <li>✅ <strong>Avec masque</strong> : le modèle ne voit que "Le Sénégal est un pays" et doit vraiment prédire</li>
+                        </ul>
+                        
+                        <p><strong>🎭 Masque causal (triangulaire inférieur) :</strong></p>
+                        <p>$$\\text{Mask} = \\begin{bmatrix} 1 & 0 & 0 & 0 \\\\ 1 & 1 & 0 & 0 \\\\ 1 & 1 & 1 & 0 \\\\ 1 & 1 & 1 & 1 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔍 Interprétation :</strong></p>
+                        <ul>
+                            <li>Position 0 : ne voit que lui-même</li>
+                            <li>Position 1 : voit positions 0 et 1</li>
+                            <li>Position 2 : voit positions 0, 1 et 2</li>
+                            <li>Position 3 : voit toutes les positions précédentes</li>
+                        </ul>
+                        
+                        <p><strong>⚙️ Application technique :</strong></p>
+                        <p>$$\\text{Scores masqués} = \\begin{cases} \\text{score}_{ij} & \\text{si mask}_{ij} = 1 \\\\ -\\infty & \\text{si mask}_{ij} = 0 \\end{cases}$$</p>
+                        
+                        <p><strong>💡 Résultat :</strong> Après softmax, les positions futures ont une probabilité de 0.</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation du masquage causal",
+            description: "Créons un masque causal et testons son effet :",
+            code: `def creer_masque_causal(seq_len):
+    """Crée un masque triangulaire inférieur"""
+    mask = np.tril(np.ones((seq_len, seq_len)))
+    return mask
+
+def attention_avec_masque(Q, K, V, mask=None):
+    """Attention avec masquage causal"""
+    # Calcul des scores
+    scores = np.matmul(Q, K.transpose()) / np.sqrt(Q.shape[-1])
+    
+    print(f"Scores avant masque:")
+    print(scores.round(3))
+    
+    # Application du masque
+    if mask is not None:
+        scores_masques = np.where(mask == 0, -1e9, scores)
+        print(f"\\nScores après masque:")
+        print(scores_masques.round(3))
+    else:
+        scores_masques = scores
+    
+    # Softmax
+    attention_weights = np.exp(scores_masques - np.max(scores_masques, axis=-1, keepdims=True))
+    attention_weights = attention_weights / np.sum(attention_weights, axis=-1, keepdims=True)
+    
+    print(f"\\nPoids d'attention finaux:")
+    print(attention_weights.round(3))
+    
+    # Application aux valeurs
+    output = np.matmul(attention_weights, V)
+    
+    return output, attention_weights
+
+# Test avec et sans masque
+print("🎭 TEST DU MASQUAGE CAUSAL")
+print("=" * 35)
+
+# Données : 4 mots
+X_test = np.array([
+    [1, 0, 0],  # "Le"
+    [0, 1, 0],  # "Sénégal" 
+    [0, 0, 1],  # "est"
+    [1, 1, 1]   # "beau"
+])
+
+Q = K = V = X_test
+seq_len = len(X_test)
+
+print("Phrase: 'Le Sénégal est beau'")
+print(f"Données shape: {X_test.shape}")
+
+# Sans masque (peut voir le futur)
+print("\\n🚫 SANS MASQUE (peut tricher):")
+output_sans, attn_sans = attention_avec_masque(Q, K, V, mask=None)
+
+# Avec masque causal
+print("\\n✅ AVEC MASQUE CAUSAL (pas de triche):")
+masque = creer_masque_causal(seq_len)
+print(f"Masque causal:")
+print(masque.astype(int))
+
+output_avec, attn_avec = attention_avec_masque(Q, K, V, mask=masque)
+
+print("\\n💡 Observation:")
+print("   Avec masque: chaque mot ne voit que les précédents")
+print("   → Génération de texte honnête !")`,
+          },
+          {
+            type: "code",
+            title: "Génération de texte avec Transformer",
+            description: "Simulons la génération de texte autoregressive :",
+            code: `def generer_texte_transformer(transformer, prompt_ids, vocab, max_length=10):
+    """
+    Génération de texte autoregressive
+    Le modèle génère un mot à la fois, en utilisant tous les mots précédents
+    """
+    print(f"🤖 GÉNÉRATION DE TEXTE AUTOREGRESSIVE")
+    print("=" * 45)
+    
+    # Commencer avec le prompt
+    sequence_generee = prompt_ids.copy()
+    
+    print(f"💭 Prompt initial: {[vocab[i] for i in prompt_ids]}")
+    
+    for step in range(max_length):
+        print(f"\\n--- Étape {step + 1} ---")
+        
+        # Encoder la séquence actuelle
+        encoder_output = transformer.encode(sequence_generee)
+        
+        # Prédire le prochain mot (simulation)
+        # En réalité, on passerait par le decoder avec masque causal
+        derniere_representation = encoder_output[-1]
+        logits = np.matmul(derniere_representation, transformer.output_projection)
+        probas = transformer.softmax(logits)
+        
+        # Sélection du mot le plus probable (greedy)
+        next_token = np.argmax(probas)
+        
+        # Affichage des top 3 candidats
+        top_indices = np.argsort(probas)[-3:][::-1]
+        print(f"Top 3 candidats:")
+        for i, idx in enumerate(top_indices):
+            if idx < len(vocab):
+                print(f"   {i+1}. {vocab[idx]}: {probas[idx]:.3f}")
+        
+        # Ajouter à la séquence
+        if next_token < len(vocab):
+            sequence_generee.append(next_token)
+            print(f"✅ Mot choisi: {vocab[next_token]}")
+            print(f"📝 Séquence: {[vocab[i] for i in sequence_generee]}")
+        
+        # Arrêt si token de fin
+        if next_token == 2:  # <end>
+            print("🏁 Génération terminée (token <end>)")
+            break
+    
+    return sequence_generee
+
+# Test de génération
+vocab_test = ["<pad>", "<start>", "<end>", "Dakar", "est", "une", "ville", "magnifique", "du", "Sénégal"]
+prompt = [1, 3]  # "<start> Dakar"
+
+# Simulation (avec un transformer très simple)
+transformer_gen = TransformerSimple(vocab_size=len(vocab_test), d_model=6, n_heads=1, n_layers=1)
+
+print("🎯 Test de génération:")
+sequence_finale = generer_texte_transformer(transformer_gen, prompt, vocab_test, max_length=5)
+
+print(f"\\n🎉 RÉSULTAT FINAL:")
+print(f"Texte généré: {' '.join([vocab_test[i] for i in sequence_finale])}")`,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Innovations clés des Transformers",
+            content: `
+                        <p><strong>🚀 Les Transformers introduisent 6 innovations révolutionnaires :</strong></p>
+                        
+                        <p><strong>1️⃣ Attention Is All You Need :</strong></p>
+                        <ul>
+                            <li>❌ <strong>Fini les RNN/LSTM</strong> : plus de traitement séquentiel</li>
+                            <li>✅ <strong>Attention pure</strong> : mécanisme unique et puissant</li>
+                            <li>⚡ <strong>Parallélisation</strong> : tous les mots traités simultanément</li>
+                        </ul>
+                        
+                        <p><strong>2️⃣ Multi-Head Attention :</strong></p>
+                        <ul>
+                            <li>👁️ <strong>Plusieurs perspectives</strong> : 8-16 têtes différentes</li>
+                            <li>🎯 <strong>Spécialisation</strong> : syntaxe, sémantique, relations</li>
+                            <li>🧠 <strong>Richesse</strong> : capture des nuances complexes</li>
+                        </ul>
+                        
+                        <p><strong>3️⃣ Encodage positionnel :</strong></p>
+                        <ul>
+                            <li>📍 <strong>Ordre préservé</strong> : sans récurrence</li>
+                            <li>🌊 <strong>Sinusoïdes</strong> : patterns mathématiques élégants</li>
+                            <li>♾️ <strong>Extrapolation</strong> : fonctionne sur séquences plus longues</li>
+                        </ul>
+                        
+                        <p><strong>4️⃣ Connexions résiduelles :</strong></p>
+                        <ul>
+                            <li>🛤️ <strong>Autoroutes d'information</strong> : gradients fluides</li>
+                            <li>🧠 <strong>Réseaux profonds</strong> : 12-96 couches possibles</li>
+                            <li>⚡ <strong>Entraînement stable</strong> : pas de disparition</li>
+                        </ul>
+                        
+                        <p><strong>5️⃣ Layer Normalization :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Stabilité</strong> : normalise les activations</li>
+                            <li>🎯 <strong>Convergence</strong> : entraînement plus rapide</li>
+                            <li>🔧 <strong>Robustesse</strong> : moins sensible à l'initialisation</li>
+                        </ul>
+                        
+                        <p><strong>6️⃣ Architecture modulaire :</strong></p>
+                        <ul>
+                            <li>🧩 <strong>Blocs identiques</strong> : facilite la mise à l'échelle</li>
+                            <li>🔄 <strong>Réutilisabilité</strong> : même bloc pour encoder/decoder</li>
+                            <li>🎛️ <strong>Flexibilité</strong> : adaptation à différents problèmes</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Layer Normalization : stabilisation mathématique",
+            content: `
+                        <p><strong>📊 Layer Normalization</strong> normalise les activations pour stabiliser l'entraînement des réseaux profonds.</p>
+                        
+                        <p><strong>📐 Formule mathématique :</strong></p>
+                        <p>Pour un vecteur \\(\\vec{x} \\in \\mathbb{R}^d\\) :</p>
+                        <p>$$\\text{LayerNorm}(\\vec{x}) = \\gamma \\odot \\frac{\\vec{x} - \\mu}{\\sigma} + \\beta$$</p>
+                        
+                        <p><strong>🔍 Composants :</strong></p>
+                        <ul>
+                            <li>\\(\\mu = \\frac{1}{d} \\sum_{i=1}^d x_i\\) = <strong>moyenne</strong> du vecteur</li>
+                            <li>\\(\\sigma = \\sqrt{\\frac{1}{d} \\sum_{i=1}^d (x_i - \\mu)^2}\\) = <strong>écart-type</strong></li>
+                            <li>\\(\\gamma, \\beta \\in \\mathbb{R}^d\\) = <strong>paramètres apprenables</strong></li>
+                            <li>\\(\\odot\\) = <strong>produit élément par élément</strong></li>
+                        </ul>
+                        
+                        <p><strong>🎯 Effet de la normalisation :</strong></p>
+                        <ul>
+                            <li>📊 <strong>Centrage</strong> : moyenne = 0</li>
+                            <li>📏 <strong>Mise à l'échelle</strong> : écart-type = 1</li>
+                            <li>🎛️ <strong>Réajustement</strong> : γ et β permettent de récupérer l'expressivité</li>
+                        </ul>
+                        
+                        <p><strong>💡 Différence avec Batch Normalization :</strong></p>
+                        <ul>
+                            <li><strong>Batch Norm</strong> : normalise sur le batch (axe des exemples)</li>
+                            <li><strong>Layer Norm</strong> : normalise sur les features (axe des dimensions)</li>
+                            <li><strong>Avantage</strong> : indépendant de la taille du batch</li>
+                        </ul>
+                        
+                        <p><strong>🔧 Pourquoi crucial dans les Transformers ?</strong></p>
+                        <ul>
+                            <li>🧠 <strong>Réseaux profonds</strong> : 12+ couches sans problème</li>
+                            <li>⚡ <strong>Gradients stables</strong> : pas d'explosion/disparition</li>
+                            <li>🎯 <strong>Convergence rapide</strong> : entraînement plus efficace</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation Layer Normalization",
+            description: "Implémentons et testons la Layer Normalization :",
+            code: `class LayerNormalization:
+    def __init__(self, d_model, epsilon=1e-6):
+        """
+        Layer Normalization pour Transformers
+        d_model: dimension des embeddings
+        epsilon: terme de stabilité numérique
+        """
+        self.d_model = d_model
+        self.epsilon = epsilon
+        
+        # Paramètres apprenables (initialisés)
+        self.gamma = np.ones(d_model)  # Facteur d'échelle
+        self.beta = np.zeros(d_model)  # Décalage
+        
+        print(f"📊 LayerNorm créée: d_model={d_model}")
+    
+    def forward(self, x):
+        """Normalisation avant"""
+        # Calcul des statistiques par vecteur
+        mean = np.mean(x, axis=-1, keepdims=True)
+        variance = np.var(x, axis=-1, keepdims=True)
+        std = np.sqrt(variance + self.epsilon)
+        
+        # Normalisation
+        x_normalized = (x - mean) / std
+        
+        # Réajustement avec paramètres apprenables
+        output = self.gamma * x_normalized + self.beta
+        
+        return output, mean, std
+
+# Test de Layer Normalization
+print("📊 TEST LAYER NORMALIZATION")
+print("=" * 35)
+
+# Données d'entrée (2 mots, 4 dimensions)
+X_test = np.array([
+    [10.0, 2.0, 0.5, -1.0],   # "Dakar" (valeurs déséquilibrées)
+    [0.1, 15.0, -5.0, 3.0]    # "belle" (échelles différentes)
+])
+
+print("Données avant normalisation:")
+print(X_test)
+print(f"Moyennes par mot: {np.mean(X_test, axis=1)}")
+print(f"Écarts-types par mot: {np.std(X_test, axis=1)}")
+
+# Application de LayerNorm
+layer_norm = LayerNormalization(d_model=4)
+X_normalized, moyennes, stds = layer_norm.forward(X_test)
+
+print(f"\\nDonnées après normalisation:")
+print(X_normalized.round(3))
+print(f"Nouvelles moyennes: {np.mean(X_normalized, axis=1).round(6)}")
+print(f"Nouveaux écarts-types: {np.std(X_normalized, axis=1).round(6)}")
+
+print(f"\\n💡 Effet: Chaque vecteur a maintenant moyenne≈0 et std≈1")
+print(f"   → Stabilité pour les couches suivantes !")`,
+          },
+          {
+            type: "code",
+            title: "Transformer complet avec toutes les innovations",
+            description:
+              "Assemblons un Transformer complet avec toutes les innovations :",
+            code: `class TransformerComplet:
+    def __init__(self, vocab_size=50, d_model=8, n_heads=2, n_layers=2, d_ff=16):
+        """Transformer complet avec toutes les innovations"""
+        self.vocab_size = vocab_size
+        self.d_model = d_model
+        self.n_heads = n_heads
+        self.n_layers = n_layers
+        self.d_ff = d_ff
+        
+        # Embeddings
+        self.embedding = np.random.randn(vocab_size, d_model) * 0.1
+        
+        # Couches
+        self.encoder_blocks = []
+        self.decoder_blocks = []
+        
+        for i in range(n_layers):
+            # Chaque bloc contient: Attention + LayerNorm + FFN + LayerNorm
+            encoder_block = {
+                'attention': TransformerBlock(d_model, n_heads, d_ff),
+                'layer_norm1': LayerNormalization(d_model),
+                'layer_norm2': LayerNormalization(d_model)
+            }
+            self.encoder_blocks.append(encoder_block)
+        
+        # Couche de sortie
+        self.output_projection = np.random.randn(d_model, vocab_size) * 0.1
+        
+        print(f"🏗️ TRANSFORMER COMPLET CRÉÉ")
+        print(f"   📚 Vocabulaire: {vocab_size} mots")
+        print(f"   🧠 Modèle: {d_model}D, {n_heads} têtes")
+        print(f"   🏗️ Architecture: {n_layers} couches")
+        print(f"   ⚙️ Feed-forward: {d_ff}D")
+        
+        # Calcul du nombre de paramètres
+        params_embedding = vocab_size * d_model
+        params_attention = n_layers * (4 * d_model * d_model)  # Q,K,V,O
+        params_ff = n_layers * (d_model * d_ff + d_ff * d_model)
+        params_norm = n_layers * 2 * (2 * d_model)  # gamma, beta
+        params_output = d_model * vocab_size
+        
+        total_params = params_embedding + params_attention + params_ff + params_norm + params_output
+        print(f"   📊 Paramètres totaux: {total_params:,}")
+    
+    def softmax(self, x):
+        """Softmax numérique stable"""
+        exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
+        return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+    
+    def forward_encoder(self, input_ids):
+        """Passage avant dans l'encoder"""
+        seq_len = len(input_ids)
+        
+        # Embeddings + encodage positionnel
+        x = self.embedding[input_ids]
+        x += encodage_positionnel(seq_len, self.d_model)
+        
+        print(f"\\n🔄 ENCODER FORWARD")
+        print(f"Input: {input_ids}")
+        print(f"Embeddings shape: {x.shape}")
+        
+        # Passage dans chaque bloc encoder
+        for i, block in enumerate(self.encoder_blocks):
+            print(f"\\n--- Bloc Encoder {i+1} ---")
+            
+            # Self-attention + connexion résiduelle + layer norm
+            attn_output, _ = block['attention'].forward(x)
+            x = block['layer_norm1'].forward(x + attn_output)[0]
+            
+            # Feed-forward + connexion résiduelle + layer norm  
+            ff_output = block['attention'].feed_forward(x)
+            x = block['layer_norm2'].forward(x + ff_output)[0]
+            
+            print(f"Sortie bloc {i+1}: {x.round(3)}")
+        
+        return x
+
+# Test du Transformer complet
+print("🚀 TEST TRANSFORMER COMPLET")
+print("=" * 40)
+
+# Vocabulaire sénégalais simplifié
+vocab_senegal = [
+    "<pad>", "<start>", "<end>", "Dakar", "Sénégal", "est", "belle", 
+    "ville", "Thiès", "magnifique", "pays", "Afrique", "teranga"
+]
+
+# Phrase test: "Dakar est belle ville"
+phrase_test = [3, 5, 6, 7]  # Indices dans le vocabulaire
+
+# Création et test
+transformer_complet = TransformerComplet(
+    vocab_size=len(vocab_senegal),
+    d_model=8, 
+    n_heads=2, 
+    n_layers=2,
+    d_ff=16
+)
+
+# Test de l'encoder
+encoder_output = transformer_complet.forward_encoder(phrase_test)
+
+print(f"\\n✅ ENCODAGE TERMINÉ")
+print(f"Phrase: {[vocab_senegal[i] for i in phrase_test]}")
+print(f"Représentation finale shape: {encoder_output.shape}")
+print(f"Le Transformer a créé une représentation riche de la phrase !")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : conception d'architecture Transformer",
+            content: `
+                        <p><strong>🎯 Exercice de conception :</strong></p>
+                        <p>Vous devez concevoir des architectures Transformer pour 5 applications différentes. Pour chaque cas, justifiez vos choix :</p>
+                        
+                        <ol>
+                            <li><strong>Traduction Wolof ↔ Français</strong> (phrases courtes, 20 mots max)</li>
+                            <li><strong>Résumé d'articles</strong> (articles longs, 1000 mots → 100 mots)</li>
+                            <li><strong>Chatbot sénégalais</strong> (conversations, réponses rapides)</li>
+                            <li><strong>Analyse de sentiment</strong> (tweets, classification binaire)</li>
+                            <li><strong>Génération de code Python</strong> (précision syntaxique cruciale)</li>
+                        </ol>
+                        
+                        <p><strong>🔧 Paramètres à choisir :</strong></p>
+                        <ul>
+                            <li>Taille du vocabulaire</li>
+                            <li>d_model (dimension des embeddings)</li>
+                            <li>Nombre de têtes d'attention</li>
+                            <li>Nombre de couches</li>
+                            <li>Architecture (encoder-only, decoder-only, encoder-decoder)</li>
+                        </ul>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('transformer-architecture-design')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="transformer-architecture-design" style="display: none;">
+                        <ol>
+                            <li><strong>Traduction Wolof ↔ Français :</strong><br>
+                                • Vocab: 10k (langues spécialisées)<br>
+                                • d_model: 256 (suffisant pour 2 langues)<br>
+                                • Têtes: 8 (relations syntaxiques complexes)<br>
+                                • Couches: 6 (standard pour traduction)<br>
+                                • Architecture: <strong>Encoder-Decoder</strong> (traduction = transformation)</li>
+                            <li><strong>Résumé d'articles :</strong><br>
+                                • Vocab: 30k (vocabulaire riche)<br>
+                                • d_model: 512 (comprendre nuances)<br>
+                                • Têtes: 16 (attention fine sur long texte)<br>
+                                • Couches: 12 (compression complexe)<br>
+                                • Architecture: <strong>Encoder-Decoder</strong> (transformation longue → courte)</li>
+                            <li><strong>Chatbot sénégalais :</strong><br>
+                                • Vocab: 15k (conversation + culture)<br>
+                                • d_model: 384 (équilibre performance/vitesse)<br>
+                                • Têtes: 6 (dialogue contextuel)<br>
+                                • Couches: 8 (compréhension conversationnelle)<br>
+                                • Architecture: <strong>Decoder-only</strong> (génération pure)</li>
+                            <li><strong>Analyse de sentiment :</strong><br>
+                                • Vocab: 20k (expressions variées)<br>
+                                • d_model: 128 (classification simple)<br>
+                                • Têtes: 4 (relations émotionnelles)<br>
+                                • Couches: 4 (pas besoin de profondeur)<br>
+                                • Architecture: <strong>Encoder-only</strong> (classification)</li>
+                            <li><strong>Génération de code :</strong><br>
+                                • Vocab: 5k (tokens de code)<br>
+                                • d_model: 768 (précision syntaxique)<br>
+                                • Têtes: 12 (structure de code complexe)<br>
+                                • Couches: 24 (logique de programmation)<br>
+                                • Architecture: <strong>Decoder-only</strong> (génération séquentielle)</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "L'héritage révolutionnaire des Transformers",
+            content: `
+                        <p><strong>🌟 Les Transformers ont créé l'IA moderne que nous connaissons :</strong></p>
+                        
+                        <p><strong>📈 Évolution fulgurante (2017-2024) :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>2017</strong> : Transformer original (traduction)</li>
+                            <li>🧠 <strong>2018</strong> : BERT (compréhension) + GPT-1 (génération)</li>
+                            <li>🚀 <strong>2019</strong> : GPT-2 (1.5B paramètres)</li>
+                            <li>🌟 <strong>2020</strong> : GPT-3 (175B paramètres)</li>
+                            <li>💬 <strong>2022</strong> : ChatGPT (révolution grand public)</li>
+                            <li>🧠 <strong>2023</strong> : GPT-4 (multimodal)</li>
+                            <li>🔮 <strong>2024</strong> : Modèles de 1T+ paramètres</li>
+                        </ul>
+                        
+                        <p><strong>🌍 Impact sur tous les domaines :</strong></p>
+                        <ul>
+                            <li>💬 <strong>Langage</strong> : ChatGPT, traduction, résumé</li>
+                            <li>🖼️ <strong>Vision</strong> : Vision Transformer (ViT)</li>
+                            <li>💻 <strong>Code</strong> : GitHub Copilot, CodeT5</li>
+                            <li>🧬 <strong>Science</strong> : AlphaFold, découverte de médicaments</li>
+                            <li>🎨 <strong>Créativité</strong> : DALL-E, Midjourney</li>
+                            <li>🎵 <strong>Musique</strong> : MuseNet, Jukebox</li>
+                        </ul>
+                        
+                        <p><strong>🇸🇳 Applications pour le Sénégal :</strong></p>
+                        <ul>
+                            <li>🗣️ <strong>Langues nationales</strong> : traduction automatique Wolof/Pulaar/Serer</li>
+                            <li>📚 <strong>Éducation</strong> : assistants pédagogiques en langues locales</li>
+                            <li>🏥 <strong>Santé</strong> : diagnostic automatique adapté au contexte local</li>
+                            <li>🌾 <strong>Agriculture</strong> : conseils personnalisés selon les régions</li>
+                            <li>💼 <strong>Administration</strong> : automatisation des services publics</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Les Transformers ne sont pas juste une amélioration technique - ils ont créé un <strong>nouveau paradigme</strong> où l'IA peut comprendre et générer du contenu avec une qualité quasi-humaine.</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> GPT & BERT - les deux familles de modèles qui ont conquis le monde !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Quelle est l'innovation principale des Transformers par rapport aux RNN/LSTM ?",
+          options: [
+            "A) Ils utilisent plus de paramètres",
+            "B) Ils traitent tous les mots en parallèle grâce à l'attention",
+            "C) Ils sont plus précis sur les tâches de classification",
+            "D) Ils consomment moins de mémoire",
+          ],
+          correct: 1,
+          explanation:
+            "L'innovation révolutionnaire est le traitement parallèle : au lieu de traiter les mots un par un (RNN), les Transformers utilisent l'attention pour que chaque mot 'regarde' tous les autres simultanément. Cela permet un entraînement beaucoup plus rapide et une meilleure capture des dépendances à long terme.",
+        },
+        prevModule: "attention.html",
+        nextModule: "gpt-bert.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

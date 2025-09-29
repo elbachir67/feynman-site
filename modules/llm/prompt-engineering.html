@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prompt Engineering | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>💬 LLMs & IA Moderne</span>
+          <span>›</span>
+          <span>Prompt Engineering</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>💭 Prompt Engineering : L'Art de Communiquer avec l'IA</h1>
+      <p class="subtitle">Module 5.5 - LLMs & IA Moderne</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Prompt Engineering</h3>
+        <p>
+          Félicitations ! Vous maîtrisez maintenant l'art de communiquer
+          efficacement avec l'IA moderne.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="fine-tuning.html" class="nav-link" id="prev-link"
+          >← Module précédent : Fine-tuning</a
+        >
+        <a href="../../index.html" class="nav-link" id="next-link"
+          >🏠 Retour à l'accueil</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Prompt Engineering
+      const moduleConfig = {
+        id: "llm-prompt-engineering",
+        title: "Prompt Engineering : L'Art de Communiquer avec l'IA",
+        category: "LLMs & IA Moderne",
+        objectives: [
+          "Comprendre pourquoi le prompt engineering est devenu crucial",
+          "Maîtriser les techniques de prompting avancées",
+          "Créer des prompts efficaces pour différents cas d'usage",
+          "Optimiser les interactions avec les LLMs modernes",
+          "Appliquer ces techniques au contexte sénégalais et africain",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title:
+              "La révolution du Prompt Engineering : nouveau métier, nouvelle science",
+            content: `
+                        <p>Le <strong>Prompt Engineering</strong> est devenu en 2023 l'une des compétences les plus recherchées au monde. C'est l'art de <strong>communiquer efficacement avec l'intelligence artificielle</strong> pour obtenir exactement ce que vous voulez.</p>
+                        
+                        <p><strong>📊 Impact économique révolutionnaire :</strong></p>
+                        <ul>
+                            <li>💰 <strong>Salaires</strong> : 200k-400k$ pour les experts prompt engineers</li>
+                            <li>🚀 <strong>Productivité</strong> : +300% pour les développeurs utilisant GitHub Copilot</li>
+                            <li>⏰ <strong>Temps</strong> : tâches de 8h réduites à 30 minutes</li>
+                            <li>🎯 <strong>Précision</strong> : 95% vs 60% selon la qualité du prompt</li>
+                        </ul>
+                        
+                        <p><strong>🔑 Pourquoi crucial maintenant ?</strong></p>
+                        <ul>
+                            <li>🧠 <strong>LLMs puissants</strong> : GPT-4, Claude, Gemini peuvent tout faire... si on sait demander</li>
+                            <li>💬 <strong>Interface naturelle</strong> : plus besoin de programmer, juste bien communiquer</li>
+                            <li>🎯 <strong>Démocratisation</strong> : tout le monde peut utiliser l'IA de pointe</li>
+                            <li>⚡ <strong>Efficacité</strong> : bon prompt = résultat parfait en 1 essai</li>
+                        </ul>
+                        
+                        <p><strong>🌍 Applications révolutionnaires :</strong></p>
+                        <ul>
+                            <li>📝 <strong>Rédaction</strong> : articles, emails, rapports automatiques</li>
+                            <li>💻 <strong>Programmation</strong> : génération de code complexe</li>
+                            <li>🎨 <strong>Créativité</strong> : art, musique, design sur mesure</li>
+                            <li>📊 <strong>Analyse</strong> : insights business instantanés</li>
+                            <li>🎓 <strong>Éducation</strong> : tuteurs IA personnalisés</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Le prompt engineering transforme l'IA d'un outil technique en <strong>assistant universel</strong>. C'est la différence entre utiliser 10% ou 90% du potentiel de l'IA !</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie du chef cuisinier et de l'assistant",
+            content: `
+                        <p>Imaginez que vous avez <strong>le meilleur chef cuisinier du monde</strong> comme assistant, mais il ne parle que français et vous devez lui expliquer exactement ce que vous voulez :</p>
+                        
+                        <p><strong>🍽️ Demande vague (mauvais prompt) :</strong></p>
+                        <p><em>"Fais-moi quelque chose de bon"</em></p>
+                        <p><strong>Résultat :</strong> Le chef est confus, fait n'importe quoi, vous êtes déçu.</p>
+                        
+                        <p><strong>🎯 Demande précise (bon prompt) :</strong></p>
+                        <p><em>"Prépare un thiéboudienne rouge pour 6 personnes, avec du poisson frais, légumes de saison, riz parfumé, sauce tomate épicée niveau moyen, présentation traditionnelle sénégalaise, prêt en 2h"</em></p>
+                        <p><strong>Résultat :</strong> Chef comprend parfaitement, exécute avec excellence.</p>
+                        
+                        <p><strong>💡 C'est exactement la différence entre :</strong></p>
+                        <ul>
+                            <li>🤖 <strong>Prompt vague</strong> : "Écris-moi un texte" → résultat générique</li>
+                            <li>🎯 <strong>Prompt expert</strong> : "Rédige un rapport de 500 mots sur l'impact économique du digital au Sénégal, avec 3 statistiques précises, ton professionnel, pour un public de décideurs politiques" → résultat parfait</li>
+                        </ul>
+                        
+                        <p><strong>🔑 Règle d'or :</strong> Plus vous êtes précis et structuré dans votre demande, plus l'IA vous donnera exactement ce que vous voulez !</p>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Les 7 piliers du prompt engineering efficace",
+            content: `
+                        <p><strong>🏗️ Structure d'un prompt parfait :</strong></p>
+                        
+                        <p><strong>1️⃣ Contexte (Context) :</strong></p>
+                        <p>Définir le cadre et le domaine d'expertise</p>
+                        <p><em>Exemple :</em> "Tu es un expert en économie sénégalaise avec 15 ans d'expérience..."</p>
+                        
+                        <p><strong>2️⃣ Tâche (Task) :</strong></p>
+                        <p>Spécifier clairement ce que vous voulez</p>
+                        <p><em>Exemple :</em> "Analyse l'impact du digital sur l'économie sénégalaise..."</p>
+                        
+                        <p><strong>3️⃣ Format (Format) :</strong></p>
+                        <p>Préciser la structure de sortie souhaitée</p>
+                        <p><em>Exemple :</em> "Sous forme de rapport structuré avec introduction, 3 parties, conclusion..."</p>
+                        
+                        <p><strong>4️⃣ Exemples (Examples) :</strong></p>
+                        <p>Donner des exemples concrets du résultat attendu</p>
+                        <p><em>Exemple :</em> "Comme cet exemple : [insérer exemple]..."</p>
+                        
+                        <p><strong>5️⃣ Contraintes (Constraints) :</strong></p>
+                        <p>Définir les limites et restrictions</p>
+                        <p><em>Exemple :</em> "Maximum 500 mots, ton professionnel, pas de jargon technique..."</p>
+                        
+                        <p><strong>6️⃣ Public (Audience) :</strong></p>
+                        <p>Spécifier pour qui c'est destiné</p>
+                        <p><em>Exemple :</em> "Pour des ministres sénégalais sans formation technique..."</p>
+                        
+                        <p><strong>7️⃣ Ton (Tone) :</strong></p>
+                        <p>Définir le style et l'approche</p>
+                        <p><em>Exemple :</em> "Ton optimiste mais réaliste, avec références culturelles sénégalaises..."</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Transformation d'un prompt : avant/après",
+            content: `
+                        <p><strong>❌ Prompt débutant (inefficace) :</strong></p>
+                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px; border-left: 4px solid #f44336;">
+                            <p><em>"Écris quelque chose sur l'agriculture au Sénégal"</em></p>
+                        </div>
+                        <p><strong>Problèmes :</strong> Vague, pas de contexte, format inconnu, public inconnu</p>
+                        
+                        <p><strong>✅ Prompt expert (efficace) :</strong></p>
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; border-left: 4px solid #4caf50;">
+                            <p><strong>Contexte :</strong> <em>"Tu es un agronome sénégalais expert en agriculture tropicale, spécialisé dans les cultures vivrières."</em></p>
+                            
+                            <p><strong>Tâche :</strong> <em>"Rédige un guide pratique pour améliorer les rendements de mil et sorgho dans la région de Kaolack."</em></p>
+                            
+                            <p><strong>Format :</strong> <em>"Structure : 1) Diagnostic actuel, 2) 5 techniques concrètes, 3) Planning de mise en œuvre, 4) Résultats attendus."</em></p>
+                            
+                            <p><strong>Public :</strong> <em>"Pour des agriculteurs avec niveau primaire, utilisant des méthodes traditionnelles."</em></p>
+                            
+                            <p><strong>Contraintes :</strong> <em>"Maximum 800 mots, langage simple, exemples concrets avec chiffres en FCFA, techniques applicables sans gros investissement."</em></p>
+                            
+                            <p><strong>Ton :</strong> <em>"Encourageant et pratique, avec respect des traditions locales."</em></p>
+                        </div>
+                        
+                        <p><strong>🎯 Résultat :</strong> Le prompt expert génère un guide précis, actionnable et adapté au contexte sénégalais !</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Générateur de prompts structurés",
+            description: "Créons un outil pour générer des prompts efficaces :",
+            code: `class GenerateurPrompts:
+    """Générateur de prompts structurés pour l'IA"""
+    
+    def __init__(self):
+        self.templates = {
+            'analyse': {
+                'contexte': "Tu es un expert en {domaine} avec {experience} ans d'expérience au Sénégal.",
+                'tache': "Analyse {sujet} en te concentrant sur {focus}.",
+                'format': "Structure ton analyse en : 1) Situation actuelle, 2) Défis identifiés, 3) Opportunités, 4) Recommandations.",
+                'contraintes': "Maximum {mots} mots, ton {ton}, avec exemples sénégalais concrets."
+            },
+            'creation': {
+                'contexte': "Tu es un créateur de contenu spécialisé en {domaine}.",
+                'tache': "Crée {type_contenu} sur le thème {theme}.",
+                'format': "Format : {structure}.",
+                'contraintes': "Style {style}, public {public}, durée {duree}."
+            },
+            'resolution': {
+                'contexte': "Tu es un consultant expert en résolution de problèmes {domaine}.",
+                'tache': "Résous ce problème : {probleme}.",
+                'format': "Méthode : 1) Analyse du problème, 2) Solutions possibles, 3) Plan d'action, 4) Métriques de succès.",
+                'contraintes': "Solutions réalistes pour le contexte sénégalais, budget limité."
+            }
+        }
+    
+    def generer_prompt(self, type_prompt, **kwargs):
+        """Génère un prompt structuré selon le type"""
+        if type_prompt not in self.templates:
+            return "Type de prompt non reconnu"
+        
+        template = self.templates[type_prompt]
+        prompt_parts = []
+        
+        # Construire le prompt section par section
+        for section, template_text in template.items():
+            try:
+                section_text = template_text.format(**kwargs)
+                prompt_parts.append(f"**{section.title()} :** {section_text}")
+            except KeyError as e:
+                prompt_parts.append(f"**{section.title()} :** [Paramètre manquant: {e}]")
+        
+        return "\\n\\n".join(prompt_parts)
+    
+    def exemples_parametres(self):
+        """Affiche des exemples de paramètres pour chaque type"""
+        exemples = {
+            'analyse': {
+                'domaine': 'économie digitale',
+                'experience': '10',
+                'sujet': 'l\\'impact des fintech au Sénégal',
+                'focus': 'l\\'inclusion financière',
+                'mots': '600',
+                'ton': 'professionnel et optimiste'
+            },
+            'creation': {
+                'domaine': 'marketing digital',
+                'type_contenu': 'une campagne publicitaire',
+                'theme': 'promotion du e-commerce local',
+                'structure': 'slogan + 3 visuels + call-to-action',
+                'style': 'moderne et authentique',
+                'public': 'jeunes urbains sénégalais',
+                'duree': 'campagne de 2 semaines'
+            },
+            'resolution': {
+                'domaine': 'agriculture',
+                'probleme': 'baisse des rendements de mil dans la région de Thiès'
+            }
+        }
+        return exemples
+
+# Test du générateur
+generateur = GenerateurPrompts()
+
+print("🛠️ GÉNÉRATEUR DE PROMPTS STRUCTURÉS")
+print("=" * 45)
+
+# Exemple 1: Analyse économique
+params_analyse = {
+    'domaine': 'économie digitale',
+    'experience': '15',
+    'sujet': 'l\\'essor des fintech au Sénégal',
+    'focus': 'l\\'inclusion financière des populations rurales',
+    'mots': '800',
+    'ton': 'professionnel avec exemples concrets'
+}
+
+prompt_analyse = generateur.generer_prompt('analyse', **params_analyse)
+print("📊 PROMPT D'ANALYSE ÉCONOMIQUE:")
+print(prompt_analyse)
+print()
+
+# Exemple 2: Création de contenu
+params_creation = {
+    'domaine': 'communication digitale',
+    'type_contenu': 'une série de posts LinkedIn',
+    'theme': 'success stories de startups sénégalaises',
+    'structure': '5 posts de 150 mots chacun avec call-to-action',
+    'style': 'inspirant et authentique',
+    'public': 'entrepreneurs africains',
+    'duree': 'série hebdomadaire'
+}
+
+prompt_creation = generateur.generer_prompt('creation', **params_creation)
+print("🎨 PROMPT DE CRÉATION:")
+print(prompt_creation)`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Techniques avancées : Chain of Thought",
+            content: `
+                        <p><strong>🧠 Chain of Thought (CoT) :</strong> Technique révolutionnaire qui améliore drastiquement les performances des LLMs en les forçant à "réfléchir étape par étape".</p>
+                        
+                        <p><strong>📊 Impact mesuré :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Problèmes mathématiques</strong> : +40% de réussite</li>
+                            <li>🧠 <strong>Raisonnement logique</strong> : +60% de précision</li>
+                            <li>📝 <strong>Problèmes complexes</strong> : +80% de qualité</li>
+                        </ul>
+                        
+                        <p><strong>❌ Sans Chain of Thought :</strong></p>
+                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px;">
+                            <p><strong>Prompt :</strong> <em>"Calcule le budget nécessaire pour digitaliser 50 écoles au Sénégal"</em></p>
+                            <p><strong>Réponse IA :</strong> <em>"Il faut environ 500 millions FCFA"</em> (réponse directe, pas de justification)</p>
+                        </div>
+                        
+                        <p><strong>✅ Avec Chain of Thought :</strong></p>
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px;">
+                            <p><strong>Prompt :</strong> <em>"Calcule le budget nécessaire pour digitaliser 50 écoles au Sénégal. Réfléchis étape par étape en détaillant tes calculs."</em></p>
+                            <p><strong>Réponse IA :</strong></p>
+                            <p><em>"Réflexion étape par étape :</em></p>
+                            <p><em>1) Équipement par école : 30 tablettes × 200k FCFA = 6M FCFA</em></p>
+                            <p><em>2) Infrastructure réseau : 2M FCFA par école</em></p>
+                            <p><em>3) Formation enseignants : 500k FCFA par école</em></p>
+                            <p><em>4) Maintenance annuelle : 1M FCFA par école</em></p>
+                            <p><em>5) Total par école : 9.5M FCFA</em></p>
+                            <p><em>6) Total 50 écoles : 475M FCFA"</em></p>
+                        </div>
+                        
+                        <p><strong>🎯 Mots-clés magiques pour CoT :</strong></p>
+                        <ul>
+                            <li><em>"Réfléchis étape par étape"</em></li>
+                            <li><em>"Détaille ton raisonnement"</em></li>
+                            <li><em>"Explique ta méthode"</em></li>
+                            <li><em>"Montre tes calculs"</em></li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Analyseur de qualité de prompts",
+            description:
+              "Créons un outil pour évaluer la qualité des prompts :",
+            code: `class AnalyseurPrompts:
+    """Analyse et évalue la qualité des prompts"""
+    
+    def __init__(self):
+        self.criteres = {
+            'clarte': {
+                'poids': 25,
+                'indicateurs': ['objectif clair', 'tâche spécifique', 'pas d\\'ambiguïté']
+            },
+            'contexte': {
+                'poids': 20,
+                'indicateurs': ['rôle défini', 'domaine précisé', 'expertise mentionnée']
+            },
+            'structure': {
+                'poids': 20,
+                'indicateurs': ['format spécifié', 'longueur définie', 'organisation claire']
+            },
+            'exemples': {
+                'poids': 15,
+                'indicateurs': ['exemples fournis', 'modèles donnés', 'références concrètes']
+            },
+            'contraintes': {
+                'poids': 10,
+                'indicateurs': ['limites définies', 'style précisé', 'public ciblé']
+            },
+            'specificite': {
+                'poids': 10,
+                'indicateurs': ['détails suffisants', 'contexte local', 'métriques précises']
+            }
+        }
+    
+    def analyser_prompt(self, prompt_text):
+        """Analyse un prompt et donne un score de qualité"""
+        prompt_lower = prompt_text.lower()
+        scores = {}
+        score_total = 0
+        
+        print(f"🔍 ANALYSE DE PROMPT")
+        print("=" * 40)
+        print(f"Texte analysé : {prompt_text[:100]}...")
+        print()
+        
+        for critere, config in self.criteres.items():
+            score_critere = 0
+            indicateurs_trouves = []
+            
+            # Vérifier chaque indicateur
+            for indicateur in config['indicateurs']:
+                mots_cles = self._extraire_mots_cles(indicateur)
+                if any(mot in prompt_lower for mot in mots_cles):
+                    score_critere += 1
+                    indicateurs_trouves.append(indicateur)
+            
+            # Normaliser le score (0-100)
+            score_normalise = (score_critere / len(config['indicateurs'])) * 100
+            scores[critere] = score_normalise
+            score_total += score_normalise * (config['poids'] / 100)
+            
+            # Affichage détaillé
+            emoji = "✅" if score_normalise > 60 else "⚠️" if score_normalise > 30 else "❌"
+            print(f"{emoji} {critere.title()}: {score_normalise:.0f}% (poids {config['poids']}%)")
+            if indicateurs_trouves:
+                print(f"   Trouvé: {', '.join(indicateurs_trouves)}")
+            print()
+        
+        return score_total, scores
+    
+    def _extraire_mots_cles(self, indicateur):
+        """Extrait les mots-clés d'un indicateur"""
+        mapping = {
+            'objectif clair': ['objectif', 'but', 'goal', 'veux', 'souhaite'],
+            'tâche spécifique': ['écris', 'analyse', 'crée', 'calcule', 'explique'],
+            'rôle défini': ['tu es', 'expert', 'spécialiste', 'consultant'],
+            'format spécifié': ['format', 'structure', 'mots', 'paragraphes'],
+            'exemples fournis': ['exemple', 'comme', 'modèle', 'référence'],
+            'style précisé': ['ton', 'style', 'professionnel', 'formel'],
+            'public ciblé': ['pour', 'audience', 'destiné', 'lecteurs'],
+            'contexte local': ['sénégal', 'dakar', 'afrique', 'local', 'fcfa']
+        }
+        return mapping.get(indicateur, [indicateur.split()[0]])
+    
+    def recommandations(self, scores):
+        """Donne des recommandations d'amélioration"""
+        print("💡 RECOMMANDATIONS D'AMÉLIORATION:")
+        print("-" * 35)
+        
+        for critere, score in scores.items():
+            if score < 50:
+                if critere == 'clarte':
+                    print("🎯 Clarté: Précisez exactement ce que vous voulez obtenir")
+                elif critere == 'contexte':
+                    print("👤 Contexte: Définissez le rôle et l'expertise de l'IA")
+                elif critere == 'structure':
+                    print("📋 Structure: Spécifiez le format de sortie souhaité")
+                elif critere == 'exemples':
+                    print("💡 Exemples: Ajoutez des exemples concrets du résultat attendu")
+                elif critere == 'contraintes':
+                    print("⚖️ Contraintes: Définissez les limites (longueur, style, public)")
+                elif critere == 'specificite':
+                    print("🔍 Spécificité: Ajoutez plus de détails et contexte local")
+
+# Test de l'analyseur
+analyseur = AnalyseurPrompts()
+
+# Prompt à analyser
+prompt_test = """
+Tu es un expert en économie numérique sénégalaise avec 10 ans d'expérience.
+Analyse l'impact des fintech sur l'inclusion financière au Sénégal.
+Rédige un rapport de 600 mots structuré en 4 parties pour des décideurs politiques.
+Ton professionnel avec exemples concrets et chiffres en FCFA.
+"""
+
+score, details = analyseur.analyser_prompt(prompt_test)
+print(f"📊 SCORE GLOBAL: {score:.1f}/100")
+print()
+analyseur.recommandations(details)`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Techniques avancées : Few-Shot Learning",
+            content: `
+                        <p><strong>🎯 Few-Shot Learning :</strong> Donner quelques exemples pour que l'IA comprenne le pattern exact que vous voulez.</p>
+                        
+                        <p><strong>📝 Exemple : Classification de sentiment en wolof</strong></p>
+                        
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 4px; border-left: 4px solid #007bff;">
+                            <p><strong>Prompt Few-Shot :</strong></p>
+                            <p><em>"Classe ces phrases wolof selon leur sentiment (Positif/Négatif/Neutre) :</em></p>
+                            <p><em>Exemples :</em></p>
+                            <p><em>- 'Dama bëgg Dakar' → Positif</em></p>
+                            <p><em>- 'Xarit yi dañu bon' → Positif</em></p>
+                            <p><em>- 'Dama soxla' → Négatif</em></p>
+                            <p><em>- 'Lu mu nekk?' → Neutre</em></p>
+                            <p><em>Maintenant classe : 'Ndax sa doom dafa rafet'"</em></p>
+                        </div>
+                        
+                        <p><strong>💡 Avantages du Few-Shot :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Précision</strong> : l'IA comprend exactement le format voulu</li>
+                            <li>⚡ <strong>Rapidité</strong> : pas besoin d'entraîner un modèle</li>
+                            <li>🔄 <strong>Adaptabilité</strong> : fonctionne pour n'importe quelle tâche</li>
+                            <li>🌍 <strong>Langues locales</strong> : excellent pour les langues peu représentées</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Générateur Few-Shot pour langues sénégalaises",
+            description:
+              "Créons un système Few-Shot pour les langues locales :",
+            code: `class FewShotSenegal:
+    """Générateur Few-Shot pour langues sénégalaises"""
+    
+    def __init__(self):
+        # Base d'exemples pour différentes tâches
+        self.exemples_base = {
+            'sentiment_wolof': [
+                ('Dama bëgg Dakar', 'Positif'),
+                ('Xarit yi dañu bon', 'Positif'),
+                ('Dama soxla', 'Négatif'),
+                ('Mu ngi def?', 'Neutre'),
+                ('Dama bëgg sa xarit', 'Positif')
+            ],
+            'traduction_wolof_francais': [
+                ('Nanga def?', 'Comment allez-vous ?'),
+                ('Dama bëgg café', 'Je veux du café'),
+                ('Xarit yi dañu dem', 'Les amis sont partis'),
+                ('Ndax sa doom dafa rafet', 'Votre enfant est beau')
+            ],
+            'classification_produits': [
+                ('Thiéboudienne rouge avec poisson frais', 'Cuisine'),
+                ('Boubou brodé traditionnel', 'Vêtement'),
+                ('Djembé artisanal en bois de caïlcédrat', 'Artisanat'),
+                ('Bissap bio en bouteille', 'Boisson')
+            ]
+        }
+    
+    def generer_prompt_few_shot(self, tache, nouveaux_exemples=None, nb_exemples=4):
+        """Génère un prompt Few-Shot pour une tâche donnée"""
+        
+        if tache not in self.exemples_base and not nouveaux_exemples:
+            return "Tâche non reconnue et pas d'exemples fournis"
+        
+        # Utiliser les exemples fournis ou ceux de la base
+        exemples = nouveaux_exemples if nouveaux_exemples else self.exemples_base[tache]
+        exemples_selectionnes = exemples[:nb_exemples]
+        
+        # Construction du prompt
+        prompt = f"Voici des exemples pour la tâche '{tache}' :\\n\\n"
+        
+        for i, (entree, sortie) in enumerate(exemples_selectionnes, 1):
+            prompt += f"Exemple {i}:\\n"
+            prompt += f"Entrée : {entree}\\n"
+            prompt += f"Sortie : {sortie}\\n\\n"
+        
+        prompt += "Maintenant, applique le même pattern à :"
+        
+        return prompt
+    
+    def tester_few_shot(self, tache, test_input):
+        """Teste un prompt Few-Shot"""
+        prompt = self.generer_prompt_few_shot(tache)
+        prompt_complet = f"{prompt}\\nEntrée : {test_input}\\nSortie :"
+        
+        print(f"🧪 TEST FEW-SHOT: {tache}")
+        print("=" * 50)
+        print(prompt_complet)
+        print()
+        
+        # Simulation de réponse (en réalité, on enverrait à l'IA)
+        if tache == 'sentiment_wolof':
+            return self._simuler_sentiment(test_input)
+        elif tache == 'traduction_wolof_francais':
+            return self._simuler_traduction(test_input)
+        else:
+            return "[Réponse simulée de l'IA]"
+    
+    def _simuler_sentiment(self, phrase):
+        """Simule une analyse de sentiment"""
+        mots_positifs = ['bëgg', 'rafet', 'bon', 'baax']
+        mots_negatifs = ['soxla', 'bon', 'metit']
+        
+        if any(mot in phrase.lower() for mot in mots_positifs):
+            return "Positif"
+        elif any(mot in phrase.lower() for mot in mots_negatifs):
+            return "Négatif"
+        else:
+            return "Neutre"
+    
+    def _simuler_traduction(self, phrase):
+        """Simule une traduction wolof-français"""
+        traductions = {
+            'nanga def': 'comment allez-vous',
+            'dama bëgg': 'je veux',
+            'sa doom': 'votre enfant',
+            'dafa rafet': 'il/elle est beau/belle'
+        }
+        
+        phrase_lower = phrase.lower()
+        for wolof, francais in traductions.items():
+            if wolof in phrase_lower:
+                return phrase_lower.replace(wolof, francais)
+        
+        return "[Traduction simulée]"
+
+# Test du système Few-Shot
+few_shot = FewShotSenegal()
+
+print("🌍 SYSTÈME FEW-SHOT POUR LANGUES SÉNÉGALAISES")
+print("=" * 50)
+
+# Test 1: Sentiment en wolof
+resultat1 = few_shot.tester_few_shot('sentiment_wolof', 'Dama bëgg sa mbind')
+print(f"Résultat simulé : {resultat1}")
+print()
+
+# Test 2: Traduction
+resultat2 = few_shot.tester_few_shot('traduction_wolof_francais', 'Nanga def ak sa doom?')
+print(f"Résultat simulé : {resultat2}")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Techniques avancées : Role Playing",
+            content: `
+                        <p><strong>🎭 Role Playing :</strong> Assigner un rôle spécifique à l'IA pour obtenir des réponses expertes et contextualisées.</p>
+                        
+                        <p><strong>🎯 Exemples de rôles efficaces :</strong></p>
+                        
+                        <p><strong>👨‍⚕️ Expert médical :</strong></p>
+                        <div style="background: #f0f8ff; padding: 1rem; border-radius: 4px;">
+                            <p><em>"Tu es le Dr. Fatou Sow, médecin chef du service de pédiatrie à l'hôpital Aristide Le Dantec avec 20 ans d'expérience en médecine tropicale. Tu connais parfaitement les pathologies courantes au Sénégal et les défis du système de santé local."</em></p>
+                        </div>
+                        
+                        <p><strong>💼 Consultant business :</strong></p>
+                        <div style="background: #f0f8ff; padding: 1rem; border-radius: 4px;">
+                            <p><em>"Tu es Amadou Diallo, consultant senior chez McKinsey Dakar, spécialisé dans la transformation digitale des entreprises ouest-africaines. Tu as accompagné 50+ entreprises sénégalaises dans leur digitalisation."</em></p>
+                        </div>
+                        
+                        <p><strong>🌾 Expert agricole :</strong></p>
+                        <div style="background: #f0f8ff; padding: 1rem; border-radius: 4px;">
+                            <p><em>"Tu es Mariama Ba, ingénieure agronome de l'ISRA (Institut Sénégalais de Recherches Agricoles) avec 15 ans d'expérience en amélioration des cultures vivrières. Tu connais parfaitement les sols, le climat et les pratiques agricoles du Sénégal."</em></p>
+                        </div>
+                        
+                        <p><strong>💡 Éléments d'un bon rôle :</strong></p>
+                        <ul>
+                            <li>👤 <strong>Nom et titre</strong> : crédibilité et personnalisation</li>
+                            <li>🏢 <strong>Institution</strong> : contexte professionnel</li>
+                            <li>📅 <strong>Expérience</strong> : niveau d'expertise</li>
+                            <li>🎯 <strong>Spécialisation</strong> : domaine précis</li>
+                            <li>🌍 <strong>Contexte local</strong> : connaissance du terrain</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Générateur de rôles contextualisés",
+            description:
+              "Créons des rôles d'experts sénégalais pour différents domaines :",
+            code: `class GenerateurRoles:
+    """Génère des rôles d'experts contextualisés pour le Sénégal"""
+    
+    def __init__(self):
+        self.domaines = {
+            'sante': {
+                'institutions': ['Hôpital Aristide Le Dantec', 'Hôpital Fann', 'CHU de Fann'],
+                'specialites': ['médecine tropicale', 'pédiatrie', 'gynécologie', 'cardiologie'],
+                'noms': ['Dr. Fatou Sow', 'Dr. Ousmane Diop', 'Dr. Aïssatou Fall']
+            },
+            'education': {
+                'institutions': ['UCAD', 'UGB', 'Ministère de l\\'Éducation'],
+                'specialites': ['pédagogie numérique', 'formation des enseignants', 'curriculum'],
+                'noms': ['Prof. Amadou Ba', 'Dr. Marième Sarr', 'Prof. Cheikh Sy']
+            },
+            'agriculture': {
+                'institutions': ['ISRA', 'ANCAR', 'Ministère de l\\'Agriculture'],
+                'specialites': ['cultures vivrières', 'irrigation', 'semences améliorées'],
+                'noms': ['Ing. Mariama Diallo', 'Dr. Ibrahima Kane', 'Ing. Khady Faye']
+            },
+            'technologie': {
+                'institutions': ['CTIC Dakar', 'Orange Digital Center', 'Sonatel Academy'],
+                'specialites': ['IA et data science', 'développement mobile', 'cybersécurité'],
+                'noms': ['Moussa Diop', 'Fatou Kiné Sarr', 'Alioune Badara Fall']
+            },
+            'finance': {
+                'institutions': ['BCEAO', 'Banque Mondiale Dakar', 'Wave'],
+                'specialites': ['fintech', 'inclusion financière', 'mobile money'],
+                'noms': ['Aminata Touré', 'Mamadou Lamine Diallo', 'Ndeye Fatou Diop']
+            }
+        }
+    
+    def generer_role(self, domaine, niveau_experience='senior'):
+        """Génère un rôle d'expert pour un domaine donné"""
+        if domaine not in self.domaines:
+            return f"Domaine '{domaine}' non reconnu"
+        
+        import random
+        random.seed(42)  # Pour la reproductibilité
+        
+        config = self.domaines[domaine]
+        nom = random.choice(config['noms'])
+        institution = random.choice(config['institutions'])
+        specialite = random.choice(config['specialites'])
+        
+        # Niveau d'expérience
+        experiences = {
+            'junior': '5',
+            'senior': '15', 
+            'expert': '25'
+        }
+        
+        experience = experiences.get(niveau_experience, '10')
+        
+        role = f"""Tu es {nom}, expert {niveau_experience} en {domaine} à {institution} avec {experience} ans d'expérience en {specialite}. 
+
+Tu connais parfaitement :
+- Le contexte sénégalais et ouest-africain
+- Les défis spécifiques de la région
+- Les solutions adaptées aux réalités locales
+- Les acteurs clés du secteur
+- Les contraintes budgétaires et culturelles
+
+Tu réponds avec expertise, pragmatisme et connaissance du terrain."""
+        
+        return role
+    
+    def tester_roles(self):
+        """Teste la génération de rôles pour tous les domaines"""
+        print("👥 GÉNÉRATION DE RÔLES D'EXPERTS SÉNÉGALAIS")
+        print("=" * 50)
+        
+        for domaine in self.domaines.keys():
+            print(f"\\n🎯 DOMAINE: {domaine.upper()}")
+            print("-" * 30)
+            role = self.generer_role(domaine, 'senior')
+            print(role)
+    
+    def prompt_avec_role(self, domaine, question, niveau='senior'):
+        """Génère un prompt complet avec rôle + question"""
+        role = self.generer_role(domaine, niveau)
+        prompt_complet = f"{role}\\n\\nQuestion : {question}"
+        return prompt_complet
+
+# Test du générateur de rôles
+generateur_roles = GenerateurRoles()
+
+print("🎭 TEST DU GÉNÉRATEUR DE RÔLES")
+print("=" * 40)
+
+# Exemple 1: Question santé
+question_sante = "Comment améliorer la vaccination infantile dans les zones rurales du Sénégal ?"
+prompt_sante = generateur_roles.prompt_avec_role('sante', question_sante)
+print("🏥 PROMPT SANTÉ:")
+print(prompt_sante[:200] + "...")
+print()
+
+# Exemple 2: Question tech
+question_tech = "Quelle stratégie IA pour une startup fintech sénégalaise ?"
+prompt_tech = generateur_roles.prompt_avec_role('technologie', question_tech)
+print("💻 PROMPT TECHNOLOGIE:")
+print(prompt_tech[:200] + "...")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Techniques avancées : Prompt Chaining",
+            content: `
+                        <p><strong>🔗 Prompt Chaining :</strong> Décomposer une tâche complexe en plusieurs prompts simples qui s'enchaînent.</p>
+                        
+                        <p><strong>🎯 Exemple : Création d'un business plan complet</strong></p>
+                        
+                        <p><strong>❌ Approche monolithique (inefficace) :</strong></p>
+                        <div style="background: #ffebee; padding: 1rem; border-radius: 4px;">
+                            <p><em>"Crée un business plan complet pour une startup fintech au Sénégal"</em></p>
+                            <p><strong>Problème :</strong> Trop vague, résultat générique et superficiel</p>
+                        </div>
+                        
+                        <p><strong>✅ Approche chaînée (efficace) :</strong></p>
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px;">
+                            <p><strong>Prompt 1 :</strong> <em>"Analyse le marché fintech sénégalais : acteurs, taille, opportunités"</em></p>
+                            <p><strong>Prompt 2 :</strong> <em>"Basé sur cette analyse [résultat 1], identifie 3 niches non exploitées"</em></p>
+                            <p><strong>Prompt 3 :</strong> <em>"Pour la niche [choix], définis le produit MVP et la proposition de valeur"</em></p>
+                            <p><strong>Prompt 4 :</strong> <em>"Crée le modèle économique et les projections financières"</em></p>
+                            <p><strong>Prompt 5 :</strong> <em>"Synthétise tout en business plan exécutif de 2 pages"</em></p>
+                        </div>
+                        
+                        <p><strong>🎯 Avantages du chaining :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Précision</strong> : chaque étape est optimisée</li>
+                            <li>🧠 <strong>Qualité</strong> : réflexion approfondie à chaque niveau</li>
+                            <li>🔄 <strong>Itération</strong> : possibilité d'ajuster en cours de route</li>
+                            <li>📊 <strong>Traçabilité</strong> : comprendre le raisonnement</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Système de Prompt Chaining automatisé",
+            description:
+              "Créons un système qui enchaîne automatiquement les prompts :",
+            code: `class PromptChainer:
+    """Système de chaînage automatique de prompts"""
+    
+    def __init__(self):
+        # Chaînes prédéfinies pour différents objectifs
+        self.chaines = {
+            'business_plan': [
+                {
+                    'nom': 'analyse_marche',
+                    'prompt': "Analyse le marché {secteur} au Sénégal : taille, acteurs principaux, tendances, opportunités. Format : 300 mots structurés.",
+                    'variables': ['secteur']
+                },
+                {
+                    'nom': 'identification_niche',
+                    'prompt': "Basé sur cette analyse de marché : {analyse_marche}\\n\\nIdentifie 3 niches spécifiques non exploitées avec fort potentiel. Pour chaque niche, explique : problème résolu, marché cible, avantage concurrentiel.",
+                    'variables': ['analyse_marche']
+                },
+                {
+                    'nom': 'definition_produit',
+                    'prompt': "Pour la niche '{niche_choisie}', définis :\\n1) Produit MVP détaillé\\n2) Proposition de valeur unique\\n3) Fonctionnalités core\\n4) Différenciation vs concurrence",
+                    'variables': ['niche_choisie']
+                },
+                {
+                    'nom': 'modele_economique',
+                    'prompt': "Crée le modèle économique pour ce produit : {definition_produit}\\n\\nInclus : sources de revenus, structure de coûts, projections 3 ans, seuil de rentabilité. Chiffres en FCFA.",
+                    'variables': ['definition_produit']
+                },
+                {
+                    'nom': 'synthese_executive',
+                    'prompt': "Synthétise en business plan exécutif de 2 pages :\\nMarché : {analyse_marche}\\nProduit : {definition_produit}\\nÉconomique : {modele_economique}\\n\\nFormat : Executive Summary pour investisseurs sénégalais.",
+                    'variables': ['analyse_marche', 'definition_produit', 'modele_economique']
+                }
+            ],
+            'strategie_marketing': [
+                {
+                    'nom': 'analyse_cible',
+                    'prompt': "Analyse la cible {public_cible} au Sénégal : démographie, comportements, habitudes digitales, pouvoir d'achat, canaux préférés.",
+                    'variables': ['public_cible']
+                },
+                {
+                    'nom': 'positionnement',
+                    'prompt': "Basé sur cette analyse : {analyse_cible}\\n\\nDéfinis le positionnement optimal : message clé, différenciation, promesse client, preuves de valeur.",
+                    'variables': ['analyse_cible']
+                },
+                {
+                    'nom': 'mix_marketing',
+                    'prompt': "Crée le mix marketing 4P adapté au Sénégal :\\nPositionnement : {positionnement}\\n\\nDétaille : Produit, Prix (FCFA), Place (distribution), Promotion (canaux locaux).",
+                    'variables': ['positionnement']
+                }
+            ]
+        }
+    
+    def executer_chaine(self, nom_chaine, variables_initiales):
+        """Exécute une chaîne de prompts"""
+        if nom_chaine not in self.chaines:
+            return f"Chaîne '{nom_chaine}' non trouvée"
+        
+        chaine = self.chaines[nom_chaine]
+        resultats = {}
+        variables_disponibles = variables_initiales.copy()
+        
+        print(f"🔗 EXÉCUTION CHAÎNE: {nom_chaine}")
+        print("=" * 50)
+        
+        for i, etape in enumerate(chaine, 1):
+            print(f"\\n📋 ÉTAPE {i}: {etape['nom']}")
+            print("-" * 30)
+            
+            # Vérifier que toutes les variables nécessaires sont disponibles
+            variables_manquantes = [v for v in etape['variables'] if v not in variables_disponibles]
+            
+            if variables_manquantes:
+                print(f"⚠️ Variables manquantes : {variables_manquantes}")
+                # En production, on demanderait à l'utilisateur ou on utiliserait des valeurs par défaut
+                for var in variables_manquantes:
+                    variables_disponibles[var] = f"[{var} à définir]"
+            
+            # Générer le prompt avec les variables
+            try:
+                prompt_genere = etape['prompt'].format(**variables_disponibles)
+                print(f"Prompt généré :")
+                print(f'"{prompt_genere}"')
+                
+                # Simulation de réponse IA (en production, on appellerait l'API)
+                reponse_simulee = f"[Réponse IA simulée pour {etape['nom']}]"
+                resultats[etape['nom']] = reponse_simulee
+                variables_disponibles[etape['nom']] = reponse_simulee
+                
+                print(f"\\n✅ Résultat stocké pour étapes suivantes")
+                
+            except KeyError as e:
+                print(f"❌ Erreur de formatage : {e}")
+                break
+        
+        return resultats
+    
+    def lister_chaines(self):
+        """Liste toutes les chaînes disponibles"""
+        print("📋 CHAÎNES DISPONIBLES:")
+        print("=" * 25)
+        for nom, chaine in self.chaines.items():
+            print(f"\\n🔗 {nom}:")
+            for i, etape in enumerate(chaine, 1):
+                print(f"   {i}. {etape['nom']}")
+
+# Test du système de chaînage
+chainer = PromptChainer()
+
+# Lister les chaînes disponibles
+chainer.lister_chaines()
+
+print("\\n" + "="*60)
+
+# Test d'exécution
+variables_test = {
+    'secteur': 'fintech et mobile money',
+    'public_cible': 'jeunes urbains 18-35 ans'
+}
+
+resultats = chainer.executer_chaine('business_plan', variables_test)
+
+print(f"\\n📊 RÉSULTATS FINAUX:")
+print(f"Étapes complétées : {len(resultats)}")
+for etape, resultat in resultats.items():
+    print(f"✅ {etape}: {resultat}")`,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Optimisation mathématique des prompts",
+            content: `
+                        <p><strong>📐 Comment optimiser mathématiquement un prompt ?</strong></p>
+                        
+                        <p><strong>🎯 Fonction objectif :</strong></p>
+                        <p>$$\\text{Score}(P) = w_1 \\cdot \\text{Pertinence}(P) + w_2 \\cdot \\text{Précision}(P) + w_3 \\cdot \\text{Complétude}(P) - w_4 \\cdot \\text{Longueur}(P)$$</p>
+                        
+                        <p><strong>🔍 Décryptage des composantes :</strong></p>
+                        <ul>
+                            <li>\\(\\text{Pertinence}(P)\\) = <strong>adéquation à l'objectif</strong> [0,1]</li>
+                            <li>\\(\\text{Précision}(P)\\) = <strong>spécificité des instructions</strong> [0,1]</li>
+                            <li>\\(\\text{Complétude}(P)\\) = <strong>couverture des aspects importants</strong> [0,1]</li>
+                            <li>\\(\\text{Longueur}(P)\\) = <strong>pénalité pour verbosité</strong> [0,1]</li>
+                            <li>\\(w_i\\) = <strong>poids d'importance</strong> selon le contexte</li>
+                        </ul>
+                        
+                        <p><strong>⚙️ Optimisation par A/B Testing :</strong></p>
+                        <p>$$P^* = \\arg\\max_{P \\in \\mathcal{P}} \\mathbb{E}[\\text{Score}(P, \\text{Réponse}_{LLM}(P))]$$</p>
+                        
+                        <p><strong>🔧 Algorithme d'optimisation :</strong></p>
+                        <ol>
+                            <li><strong>Génération</strong> : créer N variantes du prompt</li>
+                            <li><strong>Test</strong> : évaluer chaque variante sur M exemples</li>
+                            <li><strong>Sélection</strong> : garder les K meilleures</li>
+                            <li><strong>Mutation</strong> : créer de nouvelles variantes</li>
+                            <li><strong>Répétition</strong> : jusqu'à convergence</li>
+                        </ol>
+                        
+                        <p><strong>📊 Métriques d'évaluation :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• Taux de succès :</strong> $$\\frac{\\text{Réponses satisfaisantes}}{\\text{Total des tests}}$$</li>
+                            <li style="margin-top: 0.5rem"><strong>• Temps de réponse :</strong> $$\\mathbb{E}[\\text{Latence}_{LLM}(P)]$$</li>
+                            <li style="margin-top: 0.5rem"><strong>• Coût par requête :</strong> $$\\text{Tokens}(P) \\times \\text{Prix}_{token}$$</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Optimiseur de prompts par évolution",
+            description:
+              "Créons un système qui améliore automatiquement les prompts :",
+            code: `class OptimiseurPrompts:
+    """Optimise automatiquement les prompts par algorithme évolutionnaire"""
+    
+    def __init__(self):
+        # Composants modulaires pour construire des prompts
+        self.composants = {
+            'contextes': [
+                "Tu es un expert en {domaine}",
+                "En tant que spécialiste {domaine} au Sénégal",
+                "Tu es un consultant senior en {domaine}",
+                "En tant qu'expert reconnu en {domaine}"
+            ],
+            'taches': [
+                "Analyse {sujet}",
+                "Étudie en détail {sujet}",
+                "Examine {sujet}",
+                "Évalue {sujet}"
+            ],
+            'formats': [
+                "sous forme de rapport structuré",
+                "en liste à puces organisée",
+                "avec plan détaillé en 3 parties",
+                "sous forme d'analyse SWOT"
+            ],
+            'contraintes': [
+                "Maximum {mots} mots",
+                "Ton professionnel",
+                "Avec exemples concrets",
+                "Pour public {public}"
+            ]
+        }
+    
+    def generer_variante(self, prompt_base, mutations=2):
+        """Génère une variante du prompt en modifiant certains composants"""
+        import random
+        
+        # Décomposer le prompt base (simulation)
+        variante = prompt_base
+        
+        # Appliquer des mutations
+        for _ in range(mutations):
+            type_mutation = random.choice(['contexte', 'format', 'contrainte'])
+            
+            if type_mutation == 'contexte':
+                nouveau_contexte = random.choice(self.composants['contextes'])
+                # Simulation de remplacement
+                variante = f"[Contexte modifié] {variante}"
+            elif type_mutation == 'format':
+                nouveau_format = random.choice(self.composants['formats'])
+                variante = f"{variante} [Format: {nouveau_format}]"
+            else:
+                nouvelle_contrainte = random.choice(self.composants['contraintes'])
+                variante = f"{variante} [Contrainte: {nouvelle_contrainte}]"
+        
+        return variante
+    
+    def evaluer_prompt(self, prompt, criteres):
+        """Évalue un prompt selon des critères définis"""
+        score = 0
+        details = {}
+        
+        prompt_lower = prompt.lower()
+        
+        for critere, config in criteres.items():
+            score_critere = 0
+            
+            # Vérifier la présence de mots-clés
+            for mot_cle in config.get('mots_cles', []):
+                if mot_cle in prompt_lower:
+                    score_critere += 1
+            
+            # Normaliser et pondérer
+            score_normalise = min(score_critere / len(config.get('mots_cles', [1])), 1)
+            score_pondere = score_normalise * config.get('poids', 1)
+            
+            details[critere] = {
+                'score': score_normalise,
+                'score_pondere': score_pondere
+            }
+            score += score_pondere
+        
+        return score, details
+    
+    def optimiser_prompt(self, prompt_initial, criteres, generations=3, population=5):
+        """Optimise un prompt par algorithme évolutionnaire"""
+        print(f"🧬 OPTIMISATION ÉVOLUTIONNAIRE")
+        print("=" * 40)
+        print(f"Prompt initial : {prompt_initial[:100]}...")
+        print()
+        
+        # Population initiale
+        population = [prompt_initial]
+        for _ in range(population - 1):
+            variante = self.generer_variante(prompt_initial)
+            population.append(variante)
+        
+        meilleur_score = 0
+        meilleur_prompt = prompt_initial
+        
+        for generation in range(generations):
+            print(f"🧬 Génération {generation + 1}:")
+            
+            # Évaluer toute la population
+            scores_population = []
+            for i, prompt in enumerate(population):
+                score, _ = self.evaluer_prompt(prompt, criteres)
+                scores_population.append((score, prompt))
+                
+                if score > meilleur_score:
+                    meilleur_score = score
+                    meilleur_prompt = prompt
+            
+            # Trier par score
+            scores_population.sort(reverse=True)
+            
+            print(f"   Meilleur score : {scores_population[0][0]:.2f}")
+            print(f"   Score moyen : {sum(s[0] for s in scores_population)/len(scores_population):.2f}")
+            
+            # Sélection et reproduction pour prochaine génération
+            # Garder les 50% meilleurs, générer 50% de nouvelles variantes
+            moitie = len(population) // 2
+            survivants = [prompt for _, prompt in scores_population[:moitie]]
+            
+            nouvelle_population = survivants.copy()
+            while len(nouvelle_population) < len(population):
+                parent = random.choice(survivants)
+                enfant = self.generer_variante(parent)
+                nouvelle_population.append(enfant)
+            
+            population = nouvelle_population
+        
+        return meilleur_prompt, meilleur_score
+
+# Test de l'optimiseur
+optimiseur = OptimiseurPrompts()
+
+# Critères d'évaluation pour un prompt d'analyse économique
+criteres_economie = {
+    'expertise': {
+        'poids': 30,
+        'mots_cles': ['expert', 'spécialiste', 'expérience', 'consultant']
+    },
+    'contexte_local': {
+        'poids': 25,
+        'mots_cles': ['sénégal', 'dakar', 'afrique', 'local', 'fcfa']
+    },
+    'structure': {
+        'poids': 20,
+        'mots_cles': ['structure', 'format', 'parties', 'plan']
+    },
+    'precision': {
+        'poids': 15,
+        'mots_cles': ['précis', 'détaillé', 'spécifique', 'concret']
+    },
+    'public': {
+        'poids': 10,
+        'mots_cles': ['pour', 'destiné', 'audience', 'public']
+    }
+}
+
+prompt_test = "Analyse l'économie numérique au Sénégal"
+
+# Optimisation
+print("🎯 TEST D'OPTIMISATION")
+print("=" * 25)
+meilleur_prompt, score_final = optimiseur.optimiser_prompt(
+    prompt_test, criteres_economie, generations=3, population=4
+)
+
+print(f"\\n🏆 RÉSULTAT FINAL:")
+print(f"Score optimal : {score_final:.2f}")
+print(f"Meilleur prompt : {meilleur_prompt[:150]}...")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : optimisation de prompt",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Optimisez ce prompt pour obtenir un plan de développement rural :</p>
+                        
+                        <p><strong>Prompt initial :</strong></p>
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 4px; border: 1px solid #dee2e6;">
+                            <em>"Fais un plan pour développer les villages sénégalais"</em>
+                        </div>
+                        
+                        <p><strong>📝 Améliorez selon les 7 piliers :</strong></p>
+                        <ol>
+                            <li><strong>Contexte :</strong> Quel expert ? Quelle expérience ?</li>
+                            <li><strong>Tâche :</strong> Quel type de développement ? Quels objectifs ?</li>
+                            <li><strong>Format :</strong> Quelle structure ? Quelle longueur ?</li>
+                            <li><strong>Exemples :</strong> Quels modèles de référence ?</li>
+                            <li><strong>Contraintes :</strong> Quelles limites budgétaires/temporelles ?</li>
+                            <li><strong>Public :</strong> Qui va utiliser ce plan ?</li>
+                            <li><strong>Ton :</strong> Quel style de communication ?</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solution optimisée :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('prompt-optimization-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="prompt-optimization-exercise" style="display: none;">
+                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 4px; border-left: 4px solid #28a745;">
+                            <p><strong>Prompt optimisé :</strong></p>
+                            <p><em><strong>Contexte :</strong> "Tu es Dr. Mariama Diallo, experte en développement rural avec 20 ans d'expérience au Sénégal, ancienne coordinatrice de projets USAID et spécialiste des approches participatives."</em></p>
+                            
+                            <p><em><strong>Tâche :</strong> "Crée un plan de développement intégré pour 10 villages de la région de Fatick, axé sur : agriculture durable, accès à l'eau, éducation de base, et génération de revenus."</em></p>
+                            
+                            <p><em><strong>Format :</strong> "Plan structuré en 5 sections : 1) Diagnostic participatif, 2) Objectifs SMART, 3) Activités par secteur, 4) Timeline 3 ans, 5) Budget détaillé en FCFA."</em></p>
+                            
+                            <p><em><strong>Exemples :</strong> "Inspire-toi des succès de Keur Moussa (agriculture) et Mlomp (écotourisme) comme modèles de développement endogène."</em></p>
+                            
+                            <p><em><strong>Contraintes :</strong> "Budget maximum 500M FCFA, approche participative obligatoire, technologies appropriées, respect des traditions locales."</em></p>
+                            
+                            <p><em><strong>Public :</strong> "Pour les maires, chefs de village, et partenaires techniques (ONG, bailleurs)."</em></p>
+                            
+                            <p><em><strong>Ton :</strong> "Pragmatique et respectueux, avec références culturelles sérères, focus sur l'autonomisation des communautés."</em></p>
+                        </div>
+                        <p><strong>📊 Amélioration :</strong> De 20 mots vagues à 150 mots ultra-précis = +400% d'efficacité !</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Prompts spécialisés pour le contexte sénégalais",
+            content: `
+                        <p><strong>🇸🇳 Adapter les prompts au contexte sénégalais :</strong></p>
+                        
+                        <p><strong>🔑 Spécificités culturelles à intégrer :</strong></p>
+                        <ul>
+                            <li>🗣️ <strong>Langues</strong> : références wolof, pulaar, serer dans les exemples</li>
+                            <li>💰 <strong>Économie</strong> : montants en FCFA, réalités du pouvoir d'achat</li>
+                            <li>🌍 <strong>Géographie</strong> : régions, villes, spécificités climatiques</li>
+                            <li>🎭 <strong>Culture</strong> : valeurs, traditions, codes sociaux</li>
+                            <li>🏛️ <strong>Institutions</strong> : acteurs locaux, administrations, ONG</li>
+                        </ul>
+                        
+                        <p><strong>📝 Templates contextualisés :</strong></p>
+                        
+                        <p><strong>🏥 Santé publique :</strong></p>
+                        <div style="background: #f0f8ff; padding: 1rem; border-radius: 4px;">
+                            <p><em>"En tant que médecin de santé publique connaissant les réalités du système de santé sénégalais (districts sanitaires, cases de santé, référence-évacuation), les pathologies dominantes (paludisme, diarrhées, malnutrition), et les contraintes budgétaires (budget santé 6% PIB)..."</em></p>
+                        </div>
+                        
+                        <p><strong>🌾 Agriculture :</strong></p>
+                        <div style="background: #f0f8ff; padding: 1rem; border-radius: 4px;">
+                            <p><em>"En tant qu'agronome connaissant les systèmes de culture sénégalais (mil, sorgho, arachide, riz), les contraintes climatiques (saison sèche/hivernage), les pratiques traditionnelles, et les défis (changement climatique, accès aux intrants)..."</em></p>
+                        </div>
+                        
+                        <p><strong>💻 Tech/Digital :</strong></p>
+                        <div style="background: #f0f8ff; padding: 1rem; border-radius: 4px;">
+                            <p><em>"En tant qu'expert tech connaissant l'écosystème digital sénégalais (Orange, Sonatel, startups locales), les défis d'infrastructure (couverture réseau, électricité), et les usages locaux (mobile money, réseaux sociaux)..."</em></p>
+                        </div>
+                        
+                        <p><strong>💡 Résultat :</strong> Des réponses parfaitement adaptées au contexte local, avec des solutions réalistes et culturellement appropriées !</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Bibliothèque de prompts sénégalais",
+            description:
+              "Créons une bibliothèque de prompts optimisés pour le Sénégal :",
+            code: `class BibliothequePromptsSenegal:
+    """Collection de prompts optimisés pour le contexte sénégalais"""
+    
+    def __init__(self):
+        self.prompts = {
+            'analyse_economique': {
+                'description': 'Analyse économique sectorielle',
+                'template': """Tu es {expert_name}, économiste senior avec {experience} ans d'expérience en Afrique de l'Ouest, spécialisé en {specialite}. Tu connais parfaitement l'économie sénégalaise, ses acteurs clés, et les défis spécifiques de la région.
+
+Analyse l'impact de {sujet} sur l'économie sénégalaise en te concentrant sur {focus}.
+
+Structure ton analyse en :
+1) Situation actuelle (données chiffrées en FCFA)
+2) Opportunités identifiées (3 principales)
+3) Défis à surmonter (3 principaux)
+4) Recommandations concrètes (plan d'action)
+
+Format : Rapport de {mots} mots pour {public}.
+Ton : {ton} avec exemples sénégalais concrets.
+Inclus des références aux institutions locales pertinentes.""",
+                'variables': ['expert_name', 'experience', 'specialite', 'sujet', 'focus', 'mots', 'public', 'ton']
+            },
+            
+            'strategie_startup': {
+                'description': 'Stratégie pour startup tech sénégalaise',
+                'template': """Tu es {founder_name}, entrepreneur tech sénégalais ayant créé {nb_startups} startups dont {nb_succes} succès. Tu connais parfaitement l'écosystème tech dakarois, les investisseurs locaux, et les défis spécifiques aux startups africaines.
+
+Crée une stratégie complète pour une startup {secteur} au Sénégal ciblant {marche_cible}.
+
+Développe :
+1) Analyse de marché (taille, concurrence, barrières)
+2) Proposition de valeur unique adaptée au contexte local
+3) Modèle économique viable (revenus en FCFA)
+4) Stratégie de financement (business angels, fonds locaux)
+5) Plan de croissance 18 mois
+
+Contraintes : Budget initial {budget} FCFA, équipe de {equipe} personnes.
+Public : Investisseurs et partenaires techniques sénégalais.""",
+                'variables': ['founder_name', 'nb_startups', 'nb_succes', 'secteur', 'marche_cible', 'budget', 'equipe']
+            },
+            
+            'politique_publique': {
+                'description': 'Recommandations de politique publique',
+                'template': """Tu es {expert_name}, conseiller en politiques publiques avec {experience} ans d'expérience au Sénégal, ancien {poste} et expert en {domaine_expertise}. Tu connais parfaitement les rouages de l'administration sénégalaise et les contraintes budgétaires de l'État.
+
+Propose une politique publique pour {objectif_politique} au Sénégal.
+
+Structure ta proposition :
+1) Diagnostic de la situation actuelle (données officielles)
+2) Objectifs SMART à 5 ans
+3) Mesures concrètes (législatives, réglementaires, budgétaires)
+4) Plan de mise en œuvre (phases, responsabilités)
+5) Budget estimé et sources de financement
+6) Indicateurs de suivi et évaluation
+
+Format : Note de politique de {pages} pages pour le Cabinet du Premier Ministre.
+Ton : Institutionnel mais accessible, avec références aux priorités du PSE.""",
+                'variables': ['expert_name', 'experience', 'poste', 'domaine_expertise', 'objectif_politique', 'pages']
+            }
+        }
+    
+    def generer_prompt(self, type_prompt, **variables):
+        """Génère un prompt à partir d'un template"""
+        if type_prompt not in self.prompts:
+            return f"Type '{type_prompt}' non disponible"
+        
+        template = self.prompts[type_prompt]['template']
+        
+        try:
+            prompt_genere = template.format(**variables)
+            return prompt_genere
+        except KeyError as e:
+            return f"Variable manquante : {e}"
+    
+    def lister_prompts(self):
+        """Liste tous les prompts disponibles"""
+        print("📚 BIBLIOTHÈQUE DE PROMPTS SÉNÉGALAIS")
+        print("=" * 45)
+        
+        for nom, config in self.prompts.items():
+            print(f"\\n🎯 {nom.upper()}")
+            print(f"Description : {config['description']}")
+            print(f"Variables : {', '.join(config['variables'])}")
+    
+    def exemple_complet(self):
+        """Montre un exemple complet d'utilisation"""
+        variables_exemple = {
+            'expert_name': 'Dr. Amadou Diallo',
+            'experience': '15',
+            'specialite': 'économie digitale et fintech',
+            'sujet': 'l\\'expansion du mobile money',
+            'focus': 'l\\'inclusion financière des populations rurales',
+            'mots': '800',
+            'public': 'décideurs de la BCEAO et ministres',
+            'ton': 'analytique et prospectif'
+        }
+        
+        prompt_genere = self.generer_prompt('analyse_economique', **variables_exemple)
+        
+        print("💡 EXEMPLE COMPLET D'UTILISATION")
+        print("=" * 40)
+        print("Variables fournies :")
+        for var, val in variables_exemple.items():
+            print(f"  {var}: {val}")
+        
+        print(f"\\nPrompt généré :")
+        print(f'"{prompt_genere}"')
+
+# Test de la bibliothèque
+biblio = BibliothequePromptsSenegal()
+biblio.lister_prompts()
+print()
+biblio.exemple_complet()`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Éthique et bonnes pratiques du Prompt Engineering",
+            content: `
+                        <p><strong>⚖️ Le prompt engineering soulève des questions éthiques importantes :</strong></p>
+                        
+                        <p><strong>🔴 Risques à éviter :</strong></p>
+                        <ul>
+                            <li>🎭 <strong>Manipulation</strong> : prompts conçus pour tromper ou biaiser</li>
+                            <li>📊 <strong>Désinformation</strong> : génération de fausses informations crédibles</li>
+                            <li>🏷️ <strong>Stéréotypes</strong> : renforcement de biais culturels ou sociaux</li>
+                            <li>🔒 <strong>Confidentialité</strong> : extraction d'informations sensibles</li>
+                            <li>⚡ <strong>Automatisation excessive</strong> : remplacement non éthique du travail humain</li>
+                        </ul>
+                        
+                        <p><strong>✅ Bonnes pratiques :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Transparence</strong> : indiquer quand du contenu est généré par IA</li>
+                            <li>🔍 <strong>Vérification</strong> : toujours valider les informations factuelles</li>
+                            <li>🌍 <strong>Inclusivité</strong> : éviter les biais culturels ou de genre</li>
+                            <li>📚 <strong>Éducation</strong> : former les utilisateurs aux limites de l'IA</li>
+                            <li>⚖️ <strong>Responsabilité</strong> : assumer la responsabilité du contenu généré</li>
+                        </ul>
+                        
+                        <p><strong>🇸🇳 Spécificités pour le contexte sénégalais :</strong></p>
+                        <ul>
+                            <li>🗣️ <strong>Respect linguistique</strong> : valoriser les langues locales</li>
+                            <li>🎭 <strong>Sensibilité culturelle</strong> : respecter les valeurs traditionnelles</li>
+                            <li>📊 <strong>Données locales</strong> : privilégier les sources sénégalaises</li>
+                            <li>🤝 <strong>Collaboration</strong> : impliquer les experts locaux</li>
+                            <li>🎓 <strong>Formation</strong> : développer les compétences locales</li>
+                        </ul>
+                        
+                        <p><strong>💡 Règle d'or :</strong> Le prompt engineering doit <strong>augmenter les capacités humaines</strong>, pas les remplacer. L'objectif est de démocratiser l'accès à l'expertise, pas de la dévaloriser.</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : conception de prompts éthiques",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Pour chaque scénario, concevez un prompt éthique et efficace :</p>
+                        
+                        <ol>
+                            <li><strong>Analyse politique :</strong> Évaluer les politiques économiques du gouvernement sénégalais</li>
+                            <li><strong>Santé communautaire :</strong> Conseils médicaux pour zones rurales sans médecin</li>
+                            <li><strong>Éducation inclusive :</strong> Matériel pédagogique pour enfants avec handicap</li>
+                            <li><strong>Développement durable :</strong> Plan environnemental pour entreprise locale</li>
+                            <li><strong>Innovation sociale :</strong> Solution tech pour problème social spécifique</li>
+                        </ol>
+                        
+                        <p><strong>📋 Critères éthiques à respecter :</strong></p>
+                        <ul>
+                            <li>🎯 <strong>Objectivité</strong> : éviter les biais politiques</li>
+                            <li>🏥 <strong>Sécurité</strong> : ne pas remplacer l'expertise médicale</li>
+                            <li>🤝 <strong>Inclusivité</strong> : respecter toutes les différences</li>
+                            <li>🌍 <strong>Durabilité</strong> : solutions respectueuses de l'environnement</li>
+                            <li>⚖️ <strong>Justice sociale</strong> : bénéfice pour les plus vulnérables</li>
+                        </ul>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('ethical-prompts-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="ethical-prompts-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Analyse politique :</strong><br>
+                                <em>"Tu es un analyste politique indépendant spécialisé en Afrique de l'Ouest. Analyse OBJECTIVEMENT les politiques économiques du Sénégal 2019-2024 en te basant UNIQUEMENT sur des données factuelles (Banque Mondiale, ANSD, FMI). Évite tout jugement partisan. Structure : impacts mesurés, défis identifiés, recommandations techniques."</em></li>
+                            <li><strong>Santé communautaire :</strong><br>
+                                <em>"Tu es un médecin de santé publique créant du matériel éducatif pour agents de santé communautaire. Crée des fiches de PRÉVENTION et ORIENTATION (PAS de diagnostic) pour symptômes courants. TOUJOURS recommander la consultation médicale pour cas sérieux. Focus : quand consulter d'urgence vs soins de base."</em></li>
+                            <li><strong>Éducation inclusive :</strong><br>
+                                <em>"Tu es un pédagogue spécialisé en éducation inclusive, respectueux de TOUTES les différences. Crée du matériel pédagogique adapté aux enfants avec handicap, en valorisant leurs capacités uniques. Approche positive, langage respectueux, solutions pratiques pour enseignants avec ressources limitées."</em></li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title:
+              "L'avenir du Prompt Engineering : vers l'IA conversationnelle",
+            content: `
+                        <p><strong>🔮 L'évolution révolutionnaire du Prompt Engineering :</strong></p>
+                        
+                        <p><strong>📈 Tendances 2024-2030 :</strong></p>
+                        <ul>
+                            <li>🤖 <strong>IA multimodale</strong> : prompts texte + image + audio + vidéo</li>
+                            <li>🧠 <strong>Agents autonomes</strong> : IA qui décompose et exécute des tâches complexes</li>
+                            <li>🗣️ <strong>Conversation naturelle</strong> : fin des prompts "techniques"</li>
+                            <li>🎯 <strong>Personnalisation</strong> : IA qui apprend votre style de communication</li>
+                            <li>🌍 <strong>IA culturellement adaptée</strong> : compréhension fine des contextes locaux</li>
+                        </ul>
+                        
+                        <p><strong>🇸🇳 Impact pour le Sénégal :</strong></p>
+                        <ul>
+                            <li>🗣️ <strong>Langues locales</strong> : IA fluide en wolof, pulaar, serer</li>
+                            <li>🎓 <strong>Éducation démocratisée</strong> : tuteur IA pour chaque élève</li>
+                            <li>🏥 <strong>Santé accessible</strong> : diagnostic préliminaire en langues locales</li>
+                            <li>🌾 <strong>Agriculture optimisée</strong> : conseils personnalisés par région</li>
+                            <li>💼 <strong>Entrepreneuriat facilité</strong> : assistant IA pour créer son business</li>
+                        </ul>
+                        
+                        <p><strong>💡 Compétences futures :</strong></p>
+                        <ul>
+                            <li>🧠 <strong>Pensée critique</strong> : évaluer et valider les réponses IA</li>
+                            <li>🎯 <strong>Définition de problèmes</strong> : savoir quoi demander à l'IA</li>
+                            <li>🤝 <strong>Collaboration homme-IA</strong> : orchestrer l'intelligence hybride</li>
+                            <li>⚖️ <strong>Éthique appliquée</strong> : utiliser l'IA de manière responsable</li>
+                            <li>🌍 <strong>Contextualisation</strong> : adapter l'IA aux réalités locales</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Vision 2030 :</strong></p>
+                        <p>Le prompt engineering évoluera vers une <strong>conversation naturelle</strong> où chaque Sénégalais pourra accéder à l'expertise mondiale dans sa langue, adaptée à son contexte, pour résoudre ses défis spécifiques.</p>
+                        
+                        <p><strong>🚀 Révolution démocratique :</strong> L'IA de pointe ne sera plus réservée aux grandes entreprises tech, mais accessible à chaque agriculteur, enseignant, entrepreneur, ou citoyen qui saura bien communiquer avec elle !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Quelle est la différence principale entre un prompt débutant et un prompt expert ?",
+          options: [
+            "A) Le prompt expert est plus long",
+            "B) Le prompt expert définit le contexte, la tâche, le format et les contraintes",
+            "C) Le prompt expert utilise des mots compliqués",
+            "D) Il n'y a pas de différence significative",
+          ],
+          correct: 1,
+          explanation:
+            "Un prompt expert structure clairement : le rôle de l'IA (contexte), ce qu'on veut exactement (tâche), comment on le veut (format), et les limites (contraintes). Cette structure permet d'obtenir des résultats précis et adaptés, contrairement aux prompts vagues qui donnent des réponses génériques.",
+        },
+        prevModule: "fine-tuning.html",
+        nextModule: "../../index.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

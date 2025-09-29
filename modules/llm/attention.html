@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mécanisme d'Attention | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>💬 LLMs & IA Moderne</span>
+          <span>›</span>
+          <span>Mécanisme d'Attention</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>👁️ Mécanisme d'Attention : La Révolution de l'IA Moderne</h1>
+      <p class="subtitle">
+        Module 5.1 - LLMs & Intelligence Artificielle Moderne
+      </p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Mécanisme d'Attention</h3>
+        <p>
+          Félicitations ! Vous comprenez maintenant le mécanisme qui a
+          révolutionné l'IA et rendu possible ChatGPT.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="../dl/rnn.html" class="nav-link" id="prev-link"
+          >← Module précédent : RNN/LSTM</a
+        >
+        <a href="transformers.html" class="nav-link" id="next-link"
+          >Module suivant : Transformers →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Attention
+      const moduleConfig = {
+        id: "llm-attention",
+        title: "Mécanisme d'Attention : La Révolution de l'IA Moderne",
+        category: "LLMs & IA Moderne",
+        objectives: [
+          "Comprendre pourquoi l'attention a révolutionné l'IA",
+          "Maîtriser le calcul manuel du mécanisme d'attention",
+          "Distinguer les différents types d'attention (self, cross, multi-head)",
+          "Comprendre comment l'attention permet la compréhension du langage",
+          "Voir le lien direct avec ChatGPT et les LLMs modernes",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "La révolution qui a changé l'IA pour toujours",
+            content: `
+                        <p>Le <strong>mécanisme d'attention</strong> est l'innovation qui a permis l'émergence de ChatGPT, GPT-4, et tous les LLMs modernes. C'est la différence entre une IA qui "lit" mot par mot et une IA qui "comprend" vraiment.</p>
+                        
+                        <p><strong>🔑 Révolution conceptuelle :</strong></p>
+                        <ul>
+                            <li>🤖 <strong>Avant (RNN/LSTM)</strong> : traitement séquentiel, mémoire limitée</li>
+                            <li>🧠 <strong>Après (Attention)</strong> : accès direct à toute l'information, compréhension globale</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Impact révolutionnaire :</strong></p>
+                        <ul>
+                            <li>💬 <strong>ChatGPT</strong> : conversations naturelles et contextuelles</li>
+                            <li>🌐 <strong>Traduction</strong> : Google Translate 10x plus précis</li>
+                            <li>🔍 <strong>Recherche</strong> : comprendre l'intention derrière les requêtes</li>
+                            <li>📝 <strong>Rédaction</strong> : génération de texte cohérent et créatif</li>
+                            <li>🧠 <strong>Raisonnement</strong> : résolution de problèmes complexes</li>
+                        </ul>
+                        
+                        <p><strong>📊 Chiffres impressionnants :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Parallélisation</strong> : 100x plus rapide que les RNN</li>
+                            <li>🧠 <strong>Contexte</strong> : peut "voir" des milliers de mots simultanément</li>
+                            <li>🎯 <strong>Précision</strong> : 95%+ sur des tâches de compréhension</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> L'attention ne traite plus le langage comme une séquence linéaire, mais comme un <strong>réseau de relations</strong> où chaque mot peut influencer tous les autres.</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie de la conversation au marché de Sandaga",
+            content: `
+                        <p>Imaginez une <strong>conversation animée au marché de Sandaga</strong> à Dakar :</p>
+                        
+                        <p><strong>🗣️ Phrase complexe :</strong></p>
+                        <p><em>"Le tissu bleu que ma sœur Aminata a acheté hier chez le marchand de la rue 10 était vraiment magnifique."</em></p>
+                        
+                        <p><strong>🧠 Comment votre cerveau comprend-il cette phrase ?</strong></p>
+                        
+                        <p><strong>❌ Approche séquentielle (comme RNN) :</strong></p>
+                        <ul>
+                            <li>Mot 1 : "Le" → aucune info</li>
+                            <li>Mot 2 : "tissu" → ok, on parle de tissu</li>
+                            <li>Mot 3 : "bleu" → tissu bleu</li>
+                            <li>...</li>
+                            <li>Mot 15 : "magnifique" → mais magnifique quoi déjà ? 🤔</li>
+                        </ul>
+                        
+                        <p><strong>✅ Approche attention (comme votre cerveau) :</strong></p>
+                        <ul>
+                            <li>👁️ <strong>Vision globale</strong> : lit toute la phrase d'un coup</li>
+                            <li>🔗 <strong>Connexions intelligentes</strong> : "magnifique" se rapporte à "tissu"</li>
+                            <li>🎯 <strong>Focus adaptatif</strong> : comprend que "Aminata" est l'acheteuse</li>
+                            <li>📍 <strong>Contexte spatial</strong> : "rue 10" précise le lieu</li>
+                        </ul>
+                        
+                        <p><strong>💡 C'est exactement ce que fait l'attention :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Regarder partout</strong> : accès simultané à tous les mots</li>
+                            <li>🎯 <strong>Focaliser intelligemment</strong> : identifier les relations importantes</li>
+                            <li>🧠 <strong>Comprendre globalement</strong> : saisir le sens complet</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Qu'est-ce que l'attention exactement ?",
+            content: `
+                        <p>L'<strong>attention</strong> est un mécanisme qui permet à un modèle de <strong>se concentrer sélectivement</strong> sur les parties les plus pertinentes de l'information disponible.</p>
+                        
+                        <p><strong>🔑 Idée fondamentale :</strong></p>
+                        <p>Au lieu de traiter toute l'information de manière égale, l'attention calcule des <strong>"poids d'importance"</strong> pour chaque élément et se concentre sur les plus importants.</p>
+                        
+                        <p><strong>🎯 Trois composants essentiels :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Query (Q)</strong> : "Qu'est-ce que je cherche ?"</li>
+                            <li>🗝️ <strong>Key (K)</strong> : "Qu'est-ce qui est disponible ?"</li>
+                            <li>💎 <strong>Value (V)</strong> : "Quelle est l'information utile ?"</li>
+                        </ul>
+                        
+                        <p><strong>🧠 Analogie de la bibliothèque :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Query</strong> : votre question "Livres sur l'IA au Sénégal"</li>
+                            <li>🗝️ <strong>Keys</strong> : titres et mots-clés de tous les livres</li>
+                            <li>💎 <strong>Values</strong> : contenu complet des livres</li>
+                            <li>⚖️ <strong>Attention</strong> : scores de pertinence pour chaque livre</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Résultat :</strong> Au lieu de lire tous les livres, vous vous concentrez sur les 3 plus pertinents avec des poids [0.6, 0.3, 0.1].</p>
+                        
+                        <p><strong>💡 En NLP :</strong> Pour comprendre "magnifique" dans notre phrase, l'attention regarde tous les mots et décide que "tissu" est le plus pertinent (poids élevé).</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Formalisation mathématique de l'attention",
+            content: `
+                        <p><strong>📐 Formule fondamentale de l'attention :</strong></p>
+                        <p>$$\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V$$</p>
+                        
+                        <p><strong>🔍 Décryptage étape par étape :</strong></p>
+                        
+                        <p><strong>1️⃣ Calcul des scores de similarité :</strong></p>
+                        <p>$$S = QK^T$$</p>
+                        <p>Chaque élément \\(S_{ij} = \\vec{q}_i \\cdot \\vec{k}_j\\) mesure la similarité entre la query i et la key j (voir <a href="../math/vectors.html">Module 1.1 - Vecteurs</a>)</p>
+                        
+                        <p><strong>2️⃣ Normalisation par la dimension :</strong></p>
+                        <p>$$S_{norm} = \\frac{S}{\\sqrt{d_k}}$$</p>
+                        <p>Division par \\(\\sqrt{d_k}\\) pour éviter que les scores deviennent trop grands (stabilité numérique)</p>
+                        
+                        <p><strong>3️⃣ Conversion en probabilités :</strong></p>
+                        <p>$$A = \\text{softmax}(S_{norm})$$</p>
+                        <p>Softmax transforme les scores en probabilités qui somment à 1 (voir <a href="../math/probability.html">Module 1.6 - Probabilités</a>)</p>
+                        
+                        <p><strong>4️⃣ Agrégation pondérée :</strong></p>
+                        <p>$$\\text{Output} = AV$$</p>
+                        <p>Combinaison des valeurs pondérées par les scores d'attention</p>
+                        
+                        <p><strong>🔑 Dimensions :</strong></p>
+                        <ul>
+                            <li>Q : (n_queries × d_k)</li>
+                            <li>K : (n_keys × d_k)</li>
+                            <li>V : (n_keys × d_v)</li>
+                            <li>Output : (n_queries × d_v)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel d'attention sur 3 mots",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong> Phrase "Aminata mange thiéboudienne"</p>
+                        
+                        <p><strong>🔢 Représentations vectorielles simplifiées (dimension 2) :</strong></p>
+                        <ul>
+                            <li>Aminata : [1, 0] (personne)</li>
+                            <li>mange : [0, 1] (action)</li>
+                            <li>thiéboudienne : [1, 1] (nourriture sénégalaise)</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Question :</strong> Pour comprendre "mange", sur quoi doit-on se concentrer ?</p>
+                        
+                        <p><strong>📐 Matrices Q, K, V (simplifiées) :</strong></p>
+                        <p>$$Q = K = V = \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\\\ 1 & 1 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Étape 1 - Scores de similarité :</strong></p>
+                        <p>$$S = QK^T = \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\\\ 1 & 1 \\end{bmatrix} \\begin{bmatrix} 1 & 0 & 1 \\\\ 0 & 1 & 1 \\end{bmatrix} = \\begin{bmatrix} 1 & 0 & 1 \\\\ 0 & 1 & 1 \\\\ 1 & 1 & 2 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Étape 2 - Normalisation (d_k = 2) :</strong></p>
+                        <p>$$S_{norm} = \\frac{S}{\\sqrt{2}} = \\begin{bmatrix} 0.71 & 0 & 0.71 \\\\ 0 & 0.71 & 0.71 \\\\ 0.71 & 0.71 & 1.41 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Étape 3 - Softmax (ligne 2 = "mange") :</strong></p>
+                        <p>Pour "mange" : scores [0, 0.71, 0.71]</p>
+                        <p>$$\\text{softmax}([0, 0.71, 0.71]) = [0.33, 0.33, 0.33]$$</p>
+                        
+                        <p><strong>💡 Interprétation :</strong> "mange" accorde une attention égale à "Aminata" et "thiéboudienne" - logique pour comprendre qui mange quoi !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calcul manuel complet",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Phrase : "Fatou aime Dakar"</p>
+                        
+                        <p><strong>🔢 Vecteurs (dimension 2) :</strong></p>
+                        <ul>
+                            <li>Fatou : [2, 0] (personne forte)</li>
+                            <li>aime : [1, 1] (sentiment)</li>
+                            <li>Dakar : [0, 2] (lieu important)</li>
+                        </ul>
+                        
+                        <p><strong>📝 Calculez l'attention pour chaque mot :</strong></p>
+                        <ol>
+                            <li>Matrice des scores S = QK^T</li>
+                            <li>Normalisation par √2</li>
+                            <li>Softmax pour chaque ligne</li>
+                            <li>Interprétez les résultats</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('attention-manual-calculation')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="attention-manual-calculation" style="display: none;">
+                        <ol>
+                            <li><strong>Scores S :</strong><br>
+                                $$S = \\begin{bmatrix} 2 & 0 \\\\ 1 & 1 \\\\ 0 & 2 \\end{bmatrix} \\begin{bmatrix} 2 & 1 & 0 \\\\ 0 & 1 & 2 \\end{bmatrix} = \\begin{bmatrix} 4 & 2 & 0 \\\\ 2 & 2 & 2 \\\\ 0 & 2 & 4 \\end{bmatrix}$$</li>
+                            <li><strong>Normalisation :</strong><br>
+                                $$S_{norm} = \\frac{S}{\\sqrt{2}} = \\begin{bmatrix} 2.83 & 1.41 & 0 \\\\ 1.41 & 1.41 & 1.41 \\\\ 0 & 1.41 & 2.83 \\end{bmatrix}$$</li>
+                            <li><strong>Softmax par ligne :</strong><br>
+                                • Fatou : [0.84, 0.16, 0.00] → se concentre sur elle-même<br>
+                                • aime : [0.33, 0.33, 0.33] → attention équilibrée<br>
+                                • Dakar : [0.00, 0.16, 0.84] → se concentre sur lui-même</li>
+                            <li><strong>Interprétation :</strong><br>
+                                • "Fatou" et "Dakar" s'auto-référencent (entités importantes)<br>
+                                • "aime" connecte équitablement Fatou et Dakar<br>
+                                • Le verbe fait le lien entre sujet et objet !</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Self-Attention : quand chaque mot regarde tous les autres",
+            content: `
+                        <p><strong>🤔 Qu'est-ce que la Self-Attention ?</strong></p>
+                        <p>La <strong>self-attention</strong> permet à chaque mot d'une phrase de "regarder" tous les autres mots (y compris lui-même) pour mieux se comprendre dans le contexte.</p>
+                        
+                        <p><strong>🔑 Différence cruciale :</strong></p>
+                        <ul>
+                            <li>🔄 <strong>Attention classique</strong> : une séquence regarde une autre séquence</li>
+                            <li>👁️ <strong>Self-attention</strong> : une séquence se regarde elle-même</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Exemple concret :</strong></p>
+                        <p><em>"Le président du Sénégal a visité l'université. Il était impressionné."</em></p>
+                        
+                        <p><strong>🧠 Self-attention résout l'ambiguïté :</strong></p>
+                        <ul>
+                            <li>❓ <strong>Question</strong> : "Il" fait référence à qui ?</li>
+                            <li>👁️ <strong>Self-attention</strong> : regarde tous les mots précédents</li>
+                            <li>🎯 <strong>Conclusion</strong> : "Il" = "président" (score d'attention élevé)</li>
+                        </ul>
+                        
+                        <p><strong>📊 Matrice d'attention résultante :</strong></p>
+                        <p>Chaque ligne montre sur quoi se concentre chaque mot :</p>
+                        <ul>
+                            <li>"Le" → [0.1, 0.7, 0.1, 0.1, ...] (se concentre sur "président")</li>
+                            <li>"président" → [0.1, 0.6, 0.1, 0.2, ...] (se concentre sur lui-même et "Sénégal")</li>
+                            <li>"Il" → [0.05, 0.8, 0.05, 0.1, ...] (forte attention sur "président")</li>
+                        </ul>
+                        
+                        <p><strong>💡 Révolution :</strong> Plus besoin de règles grammaticales explicites ! Le modèle découvre automatiquement les relations syntaxiques et sémantiques.</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Multi-Head Attention : plusieurs perspectives simultanées",
+            content: `
+                        <p><strong>🤔 Pourquoi une seule "tête" d'attention ne suffit-elle pas ?</strong></p>
+                        <p>Comme les humains, l'IA a besoin de <strong>plusieurs perspectives</strong> pour comprendre pleinement. Une tête peut se concentrer sur la syntaxe, une autre sur la sémantique, etc.</p>
+                        
+                        <p><strong>📐 Formalisation Multi-Head :</strong></p>
+                        <p>$$\\text{MultiHead}(Q, K, V) = \\text{Concat}(\\text{head}_1, ..., \\text{head}_h)W^O$$</p>
+                        
+                        <p><strong>🔍 Où chaque tête calcule :</strong></p>
+                        <p>$$\\text{head}_i = \\text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$</p>
+                        
+                        <p><strong>🔧 Matrices de projection :</strong></p>
+                        <ul style="list-style: none; padding-left: 0">
+                            <li><strong>• \\(W_i^Q\\)</strong> : projette Q dans l'espace de la tête i</li>
+                            <li><strong>• \\(W_i^K\\)</strong> : projette K dans l'espace de la tête i</li>
+                            <li><strong>• \\(W_i^V\\)</strong> : projette V dans l'espace de la tête i</li>
+                            <li><strong>• \\(W^O\\)</strong> : combine toutes les têtes</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Avantages du Multi-Head :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Spécialisation</strong> : chaque tête apprend un type de relation</li>
+                            <li>🧠 <strong>Richesse</strong> : capture multiple aspects simultanément</li>
+                            <li>⚡ <strong>Parallélisation</strong> : calcul simultané de toutes les têtes</li>
+                        </ul>
+                        
+                        <p><strong>💡 Exemple de spécialisation :</strong></p>
+                        <ul>
+                            <li><strong>Tête 1</strong> : relations sujet-verbe</li>
+                            <li><strong>Tête 2</strong> : relations verbe-objet</li>
+                            <li><strong>Tête 3</strong> : relations sémantiques</li>
+                            <li><strong>Tête 4</strong> : dépendances à long terme</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation attention from scratch",
+            description:
+              "Implémentons le mécanisme d'attention étape par étape :",
+            code: `import numpy as np
+
+class AttentionMechanism:
+    def __init__(self, d_model=4):
+        """
+        Mécanisme d'attention simple
+        d_model: dimension des embeddings
+        """
+        self.d_model = d_model
+        self.d_k = d_model  # Dimension des keys/queries
+        
+    def softmax(self, x):
+        """Fonction softmax stable numériquement"""
+        exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
+        return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+    
+    def attention(self, Q, K, V, mask=None):
+        """
+        Calcule l'attention entre Q, K, V
+        Q: queries (n_q, d_k)
+        K: keys (n_k, d_k)  
+        V: values (n_k, d_v)
+        """
+        print("🧠 CALCUL D'ATTENTION")
+        print("=" * 30)
+        
+        # Étape 1: Scores de similarité
+        scores = Q @ K.T
+        print("📊 Scores bruts (Q @ K^T):")
+        print(scores.round(2))
+        
+        # Étape 2: Normalisation
+        scores_norm = scores / np.sqrt(self.d_k)
+        print(f"\\n📏 Scores normalisés (÷√{self.d_k}):")
+        print(scores_norm.round(2))
+        
+        # Étape 3: Masquage (optionnel)
+        if mask is not None:
+            scores_norm = np.where(mask, scores_norm, -np.inf)
+        
+        # Étape 4: Softmax
+        attention_weights = self.softmax(scores_norm)
+        print("\\n⚖️ Poids d'attention (softmax):")
+        print(attention_weights.round(3))
+        
+        # Étape 5: Agrégation pondérée
+        output = attention_weights @ V
+        print("\\n🎯 Sortie finale (poids @ V):")
+        print(output.round(3))
+        
+        return output, attention_weights
+
+# Test avec phrase sénégalaise
+attention = AttentionMechanism(d_model=3)
+
+# Embeddings simplifiés pour "Fatou mange ceebu"
+# Dimension 3: [personne, action, nourriture]
+embeddings = np.array([
+    [1.0, 0.1, 0.0],  # Fatou (personne)
+    [0.1, 1.0, 0.1],  # mange (action)
+    [0.0, 0.2, 1.0]   # ceebu (nourriture sénégalaise)
+])
+
+mots = ["Fatou", "mange", "ceebu"]
+print("🇸🇳 ANALYSE: 'Fatou mange ceebu'")
+print("📊 Embeddings:")
+for i, mot in enumerate(mots):
+    print(f"  {mot}: {embeddings[i]}")
+
+print()
+
+# Self-attention: Q = K = V = embeddings
+output, weights = attention.attention(embeddings, embeddings, embeddings)
+
+print("\\n🔍 INTERPRÉTATION DES POIDS:")
+for i, mot_query in enumerate(mots):
+    print(f"\\n'{mot_query}' se concentre sur:")
+    for j, mot_key in enumerate(mots):
+        poids = weights[i, j]
+        if poids > 0.4:
+            niveau = "🔥 FORTE"
+        elif poids > 0.25:
+            niveau = "🔸 MOYENNE"
+        else:
+            niveau = "🔹 FAIBLE"
+        print(f"  {mot_key}: {poids:.3f} ({niveau})")`,
+          },
+          {
+            type: "code",
+            title: "Attention avec masquage",
+            description:
+              "Implémentons l'attention avec masquage pour les modèles génératifs :",
+            code: `def creer_masque_causal(taille):
+    """Crée un masque triangulaire pour empêcher de voir le futur"""
+    masque = np.tril(np.ones((taille, taille)))
+    return masque.astype(bool)
+
+# Test avec masquage causal (pour modèles génératifs comme GPT)
+print("🎭 ATTENTION AVEC MASQUAGE CAUSAL")
+print("=" * 40)
+
+# Phrase: "Dakar est belle"
+mots_dakar = ["Dakar", "est", "belle"]
+embeddings_dakar = np.array([
+    [1.0, 0.0, 0.1],  # Dakar (lieu)
+    [0.2, 1.0, 0.0],  # est (verbe)
+    [0.1, 0.3, 1.0]   # belle (adjectif)
+])
+
+print("📝 Phrase: 'Dakar est belle'")
+print("🎯 Objectif: Prédire le mot suivant sans voir le futur")
+
+# Masque causal
+masque = creer_masque_causal(3)
+print("\\n🎭 Masque causal:")
+print(masque.astype(int))
+print("(1 = visible, 0 = masqué)")
+
+# Attention avec masque
+output_masked, weights_masked = attention.attention(
+    embeddings_dakar, embeddings_dakar, embeddings_dakar, mask=masque
+)
+
+print("\\n🔍 ANALYSE AVEC MASQUAGE:")
+for i, mot in enumerate(mots_dakar):
+    print(f"\\n'{mot}' (position {i}) peut voir:")
+    for j, mot_visible in enumerate(mots_dakar):
+        if j <= i:  # Seulement les mots précédents + lui-même
+            poids = weights_masked[i, j]
+            print(f"  {mot_visible}: {poids:.3f}")
+        else:
+            print(f"  {mot_visible}: MASQUÉ 🚫")`,
+          },
+          {
+            type: "code",
+            title: "Multi-Head Attention simplifiée",
+            description: "Implémentons plusieurs têtes d'attention :",
+            code: `class MultiHeadAttention:
+    def __init__(self, d_model=6, num_heads=2):
+        self.d_model = d_model
+        self.num_heads = num_heads
+        self.d_k = d_model // num_heads  # Dimension par tête
+        
+        # Matrices de projection (simplifiées)
+        np.random.seed(42)
+        self.W_Q = np.random.randn(num_heads, d_model, self.d_k) * 0.1
+        self.W_K = np.random.randn(num_heads, d_model, self.d_k) * 0.1
+        self.W_V = np.random.randn(num_heads, d_model, self.d_k) * 0.1
+        self.W_O = np.random.randn(d_model, d_model) * 0.1
+        
+    def attention_head(self, Q, K, V, head_idx):
+        """Calcule l'attention pour une tête spécifique"""
+        # Projections
+        Q_proj = Q @ self.W_Q[head_idx]
+        K_proj = K @ self.W_K[head_idx]
+        V_proj = V @ self.W_V[head_idx]
+        
+        # Attention
+        scores = Q_proj @ K_proj.T / np.sqrt(self.d_k)
+        weights = np.exp(scores) / np.sum(np.exp(scores), axis=-1, keepdims=True)
+        output = weights @ V_proj
+        
+        return output, weights
+    
+    def forward(self, X):
+        """Calcul multi-head complet"""
+        print(f"🧠 MULTI-HEAD ATTENTION ({self.num_heads} têtes)")
+        print("=" * 40)
+        
+        heads_output = []
+        heads_weights = []
+        
+        for i in range(self.num_heads):
+            head_out, head_weights = self.attention_head(X, X, X, i)
+            heads_output.append(head_out)
+            heads_weights.append(head_weights)
+            
+            print(f"\\n👁️ TÊTE {i+1}:")
+            print("Poids d'attention:")
+            print(head_weights.round(3))
+        
+        # Concaténation des têtes
+        concat_heads = np.concatenate(heads_output, axis=-1)
+        
+        # Projection finale
+        output = concat_heads @ self.W_O
+        
+        return output, heads_weights
+
+# Test Multi-Head
+print("🇸🇳 TEST MULTI-HEAD: 'Thiéboudienne délicieuse tradition'")
+
+# Embeddings plus riches (dimension 6)
+embeddings_rich = np.array([
+    [1.0, 0.0, 0.8, 0.2, 0.0, 0.1],  # Thiéboudienne
+    [0.1, 0.9, 0.1, 0.8, 0.0, 0.0],  # délicieuse  
+    [0.2, 0.1, 1.0, 0.1, 0.9, 0.8]   # tradition
+])
+
+mots_rich = ["Thiéboudienne", "délicieuse", "tradition"]
+
+multi_head = MultiHeadAttention(d_model=6, num_heads=2)
+output_mh, weights_mh = multi_head.forward(embeddings_rich)
+
+print("\\n🎯 ANALYSE DES TÊTES:")
+print("Tête 1 pourrait se spécialiser dans: relations culinaires")
+print("Tête 2 pourrait se spécialiser dans: relations culturelles")`,
+          },
+          {
+            type: "code",
+            title: "Attention pour traduction automatique",
+            description: "Application pratique : traduction Wolof → Français :",
+            code: `# Simulation traduction Wolof → Français
+print("🌍 TRADUCTION AUTOMATIQUE: WOLOF → FRANÇAIS")
+print("=" * 50)
+
+# Phrase wolof: "Nanga def?" (Comment allez-vous?)
+mots_wolof = ["Nanga", "def", "?"]
+mots_francais = ["Comment", "allez-vous", "?"]
+
+# Embeddings simplifiés (dimension 4)
+# [salutation, verbe, politesse, ponctuation]
+embed_wolof = np.array([
+    [1.0, 0.2, 0.8, 0.0],  # Nanga (salutation polie)
+    [0.1, 1.0, 0.1, 0.0],  # def (verbe être/faire)
+    [0.0, 0.0, 0.0, 1.0]   # ? (ponctuation)
+])
+
+embed_francais = np.array([
+    [0.9, 0.1, 0.7, 0.0],  # Comment (question polie)
+    [0.2, 0.9, 0.8, 0.0],  # allez-vous (verbe + politesse)
+    [0.0, 0.0, 0.0, 1.0]   # ? (ponctuation)
+])
+
+print("📊 Embeddings Wolof:")
+for i, mot in enumerate(mots_wolof):
+    print(f"  {mot}: {embed_wolof[i]}")
+
+print("\\n📊 Embeddings Français:")
+for i, mot in enumerate(mots_francais):
+    print(f"  {mot}: {embed_francais[i]}")
+
+# Cross-attention: Wolof (K,V) → Français (Q)
+attention_trad = AttentionMechanism(d_model=4)
+output_trad, weights_trad = attention_trad.attention(
+    embed_francais,  # Q: ce qu'on veut générer
+    embed_wolof,     # K: ce qu'on a en source
+    embed_wolof      # V: information source
+)
+
+print("\\n🔗 ALIGNEMENT WOLOF → FRANÇAIS:")
+for i, mot_fr in enumerate(mots_francais):
+    print(f"\\n'{mot_fr}' s'aligne avec:")
+    for j, mot_wo in enumerate(mots_wolof):
+        poids = weights_trad[i, j]
+        if poids > 0.4:
+            niveau = "🎯 FORTE"
+        elif poids > 0.2:
+            niveau = "🔸 MOYENNE"
+        else:
+            niveau = "🔹 FAIBLE"
+        print(f"  '{mot_wo}': {poids:.3f} ({niveau})")
+
+print("\\n💡 Observation: 'Comment' s'aligne avec 'Nanga' (salutations)")
+print("💡 'allez-vous' s'aligne avec 'def' (verbes d'état)")`,
+          },
+          {
+            type: "code",
+            title: "Visualisation des patterns d'attention",
+            description: "Visualisons comment l'attention se concentre :",
+            code: `import matplotlib.pyplot as plt
+
+def visualiser_attention(weights, mots_source, mots_cible, titre):
+    """Visualise la matrice d'attention comme une heatmap"""
+    plt.figure(figsize=(10, 8))
+    
+    # Création de la heatmap
+    im = plt.imshow(weights, cmap='Blues', aspect='auto', vmin=0, vmax=1)
+    
+    # Configuration des axes
+    plt.xticks(range(len(mots_source)), mots_source, rotation=45)
+    plt.yticks(range(len(mots_cible)), mots_cible)
+    plt.xlabel('Mots source (Keys)', fontsize=12)
+    plt.ylabel('Mots cible (Queries)', fontsize=12)
+    plt.title(titre, fontsize=14, pad=20)
+    
+    # Ajout des valeurs dans les cellules
+    for i in range(len(mots_cible)):
+        for j in range(len(mots_source)):
+            plt.text(j, i, f'{weights[i, j]:.2f}', 
+                    ha='center', va='center', 
+                    color='white' if weights[i, j] > 0.5 else 'black',
+                    fontweight='bold')
+    
+    # Barre de couleur
+    plt.colorbar(im, label='Poids d\'attention')
+    plt.tight_layout()
+    plt.show()
+
+# Visualisation self-attention
+print("📊 VISUALISATION SELF-ATTENTION")
+visualiser_attention(weights, mots, mots, 
+                    "Self-Attention: 'Fatou aime Dakar'")
+
+# Visualisation cross-attention (traduction)
+print("\\n🌍 VISUALISATION CROSS-ATTENTION")
+visualiser_attention(weights_trad, mots_wolof, mots_francais,
+                    "Cross-Attention: Wolof → Français")
+
+print("\\n🎨 Heatmaps générées !")
+print("💡 Plus la couleur est foncée, plus l'attention est forte")`,
+          },
+          {
+            type: "code",
+            title: "Attention positionnelle",
+            description:
+              "Ajoutons l'encodage positionnel pour comprendre l'ordre :",
+            code: `def encodage_positionnel(seq_len, d_model):
+    """
+    Crée des encodages positionnels sinusoïdaux
+    Permet au modèle de comprendre l'ordre des mots
+    """
+    pos_encoding = np.zeros((seq_len, d_model))
+    
+    for pos in range(seq_len):
+        for i in range(0, d_model, 2):
+            # Fréquences différentes pour chaque dimension
+            freq = 1 / (10000 ** (i / d_model))
+            
+            pos_encoding[pos, i] = np.sin(pos * freq)
+            if i + 1 < d_model:
+                pos_encoding[pos, i + 1] = np.cos(pos * freq)
+    
+    return pos_encoding
+
+# Test encodage positionnel
+print("📍 ENCODAGE POSITIONNEL")
+print("=" * 30)
+
+seq_len = 5
+d_model = 4
+pos_enc = encodage_positionnel(seq_len, d_model)
+
+print("🔢 Encodages positionnels (5 positions, 4 dimensions):")
+print("Position | Dim0   | Dim1   | Dim2   | Dim3")
+print("-" * 45)
+for pos in range(seq_len):
+    print(f"{pos:8d} | {pos_enc[pos, 0]:6.3f} | {pos_enc[pos, 1]:6.3f} | {pos_enc[pos, 2]:6.3f} | {pos_enc[pos, 3]:6.3f}")
+
+# Visualisation
+plt.figure(figsize=(12, 6))
+for dim in range(d_model):
+    plt.plot(range(seq_len), pos_enc[:, dim], 'o-', label=f'Dimension {dim}')
+
+plt.xlabel('Position dans la séquence')
+plt.ylabel('Valeur d\'encodage')
+plt.title('Encodages Positionnels Sinusoïdaux')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+print("\\n💡 Chaque position a une 'signature' unique")
+print("🎯 Le modèle peut distinguer 'Aminata aime Fatou' de 'Fatou aime Aminata'")`,
+          },
+          {
+            type: "code",
+            title: "Application complète : analyse de sentiment",
+            description:
+              "Utilisons l'attention pour analyser le sentiment d'un texte :",
+            code: `class AnalyseurSentiment:
+    def __init__(self):
+        # Dictionnaire de mots avec polarité émotionnelle
+        self.lexique_sentiment = {
+            # Mots positifs sénégalais
+            "magnifique": 0.9, "excellent": 0.8, "délicieux": 0.8,
+            "teranga": 0.9, "accueillant": 0.7, "généreux": 0.7,
+            
+            # Mots négatifs
+            "mauvais": -0.8, "terrible": -0.9, "décevant": -0.6,
+            "cher": -0.4, "lent": -0.5, "sale": -0.7,
+            
+            # Mots neutres
+            "restaurant": 0.0, "service": 0.0, "prix": 0.0,
+            "nourriture": 0.1, "ambiance": 0.0
+        }
+    
+    def encoder_mots(self, phrase):
+        """Encode les mots avec sentiment + position"""
+        mots = phrase.lower().split()
+        embeddings = []
+        
+        for i, mot in enumerate(mots):
+            # Embedding basique: [sentiment, position_normalisée, longueur_mot]
+            sentiment = self.lexique_sentiment.get(mot, 0.0)
+            position = i / len(mots)  # Position relative
+            longueur = len(mot) / 10  # Longueur normalisée
+            
+            embedding = [sentiment, position, longueur]
+            embeddings.append(embedding)
+        
+        return np.array(embeddings), mots
+    
+    def analyser_avec_attention(self, phrase):
+        """Analyse le sentiment avec mécanisme d'attention"""
+        embeddings, mots = self.encoder_mots(phrase)
+        
+        print(f"📝 Phrase: '{phrase}'")
+        print("\\n📊 Embeddings [sentiment, position, longueur]:")
+        for i, mot in enumerate(mots):
+            print(f"  {mot}: {embeddings[i].round(3)}")
+        
+        # Self-attention pour comprendre les relations
+        attention_simple = AttentionMechanism(d_model=3)
+        output, weights = attention_simple.attention(embeddings, embeddings, embeddings)
+        
+        # Calcul du sentiment global pondéré
+        sentiments = embeddings[:, 0]  # Première dimension = sentiment
+        
+        # Moyenne pondérée par l'attention
+        sentiment_global = 0
+        for i in range(len(mots)):
+            # Poids d'attention moyen pour ce mot
+            poids_moyen = np.mean(weights[:, i])
+            sentiment_global += sentiments[i] * poids_moyen
+        
+        print(f"\\n🎯 ANALYSE FINALE:")
+        print(f"Sentiment global: {sentiment_global:.3f}")
+        
+        if sentiment_global > 0.3:
+            conclusion = "😊 POSITIF"
+        elif sentiment_global < -0.3:
+            conclusion = "😞 NÉGATIF"
+        else:
+            conclusion = "😐 NEUTRE"
+        
+        print(f"Classification: {conclusion}")
+        
+        return sentiment_global, weights
+
+# Test sur avis restaurant sénégalais
+analyseur = AnalyseurSentiment()
+
+print("🍽️ ANALYSE DE SENTIMENT - AVIS RESTAURANT")
+print("=" * 50)
+
+avis1 = "Le restaurant teranga était magnifique et délicieux"
+sentiment1, _ = analyseur.analyser_avec_attention(avis1)
+
+print("\\n" + "="*50)
+
+avis2 = "Service lent et nourriture décevante cher"
+sentiment2, _ = analyseur.analyser_avec_attention(avis2)
+
+print("\\n📊 COMPARAISON:")
+print(f"Avis 1: {sentiment1:.3f} ({'POSITIF' if sentiment1 > 0 else 'NÉGATIF'})")
+print(f"Avis 2: {sentiment2:.3f} ({'POSITIF' if sentiment2 > 0 else 'NÉGATIF'})")`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Pourquoi l'attention a révolutionné l'IA ?",
+            content: `
+                        <p><strong>🚀 L'attention a résolu les limitations fondamentales des architectures précédentes :</strong></p>
+                        
+                        <p><strong>❌ Problèmes des RNN/LSTM :</strong></p>
+                        <ul>
+                            <li>🐌 <strong>Traitement séquentiel</strong> : impossible de paralléliser</li>
+                            <li>🧠 <strong>Mémoire limitée</strong> : oubli des informations lointaines</li>
+                            <li>⏰ <strong>Dépendances longues</strong> : difficile de relier des éléments éloignés</li>
+                            <li>🔄 <strong>Gradient qui disparaît</strong> : même avec LSTM</li>
+                        </ul>
+                        
+                        <p><strong>✅ Solutions apportées par l'attention :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Parallélisation totale</strong> : tous les mots traités simultanément</li>
+                            <li>🧠 <strong>Mémoire illimitée</strong> : accès direct à toute la séquence</li>
+                            <li>🔗 <strong>Relations directes</strong> : connexion immédiate entre mots éloignés</li>
+                            <li>📈 <strong>Gradients stables</strong> : chemins directs pour la rétropropagation</li>
+                        </ul>
+                        
+                        <p><strong>🌟 Révolutions concrètes :</strong></p>
+                        <ul>
+                            <li>💬 <strong>ChatGPT</strong> : conversations cohérentes sur des milliers de mots</li>
+                            <li>🌐 <strong>Traduction</strong> : Google Translate 10x plus précis</li>
+                            <li>📝 <strong>Génération de texte</strong> : articles, code, poésie cohérents</li>
+                            <li>🔍 <strong>Compréhension</strong> : réponse à des questions complexes</li>
+                            <li>🎨 <strong>Créativité</strong> : génération d'images (DALL-E), musique</li>
+                        </ul>
+                        
+                        <p><strong>📊 Impact quantitatif :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Vitesse</strong> : 100x plus rapide que les RNN</li>
+                            <li>🎯 <strong>Précision</strong> : +30% sur les tâches de compréhension</li>
+                            <li>📏 <strong>Contexte</strong> : de 1000 à 100 000+ tokens</li>
+                            <li>🧠 <strong>Paramètres</strong> : de millions à milliards (GPT-4)</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> L'attention n'est pas juste une amélioration technique - c'est un <strong>changement de paradigme</strong> qui a permis à l'IA de vraiment "comprendre" le langage comme les humains.</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Transformers - l'architecture complète qui utilise l'attention pour créer l'IA moderne !</p>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : analyse d'attention sur phrase complexe",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Analysez cette phrase complexe avec self-attention :</p>
+                        <p><em>"Le président que les Sénégalais ont élu gouverne avec sagesse."</em></p>
+                        
+                        <p><strong>📝 Questions :</strong></p>
+                        <ol>
+                            <li>Identifiez les relations que l'attention devrait capturer</li>
+                            <li>Prédisez les poids d'attention élevés</li>
+                            <li>Expliquez comment l'attention résout l'ambiguïté de "que"</li>
+                            <li>Comparez avec l'approche RNN séquentielle</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('complex-attention-analysis')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="complex-attention-analysis" style="display: none;">
+                        <ol>
+                            <li><strong>Relations importantes :</strong><br>
+                                • "président" ↔ "élu" (qui a été élu ?)<br>
+                                • "que" ↔ "président" (référence du pronom relatif)<br>
+                                • "Sénégalais" ↔ "ont élu" (qui a élu ?)<br>
+                                • "gouverne" ↔ "président" (qui gouverne ?)<br>
+                                • "sagesse" ↔ "gouverne" (comment gouverne-t-il ?)</li>
+                            <li><strong>Poids élevés attendus :</strong><br>
+                                • "que" → "président" (0.8+)<br>
+                                • "ont" → "Sénégalais" (0.7+)<br>
+                                • "élu" → "président" (0.7+)<br>
+                                • "gouverne" → "président" (0.8+)</li>
+                            <li><strong>Résolution d'ambiguïté :</strong><br>
+                                L'attention permet à "que" de regarder directement "président" même s'ils sont séparés par d'autres mots. Plus besoin de mémoriser séquentiellement !</li>
+                            <li><strong>Avantage vs RNN :</strong><br>
+                                • RNN : doit mémoriser "président" pendant 6 étapes<br>
+                                • Attention : connexion directe instantanée<br>
+                                • Résultat : compréhension plus fiable et rapide</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Types d'attention et leurs applications",
+            content: `
+                        <p><strong>🎯 Il existe plusieurs variantes d'attention, chacune optimisée pour des tâches spécifiques :</strong></p>
+                        
+                        <p><strong>1️⃣ Self-Attention :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Principe</strong> : Q = K = V (même séquence)</li>
+                            <li>🎯 <strong>Usage</strong> : compréhension de texte, encodage</li>
+                            <li>💬 <strong>Exemple</strong> : BERT pour comprendre le contexte</li>
+                        </ul>
+                        
+                        <p><strong>2️⃣ Cross-Attention :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Principe</strong> : Q ≠ K = V (séquences différentes)</li>
+                            <li>🎯 <strong>Usage</strong> : traduction, résumé, question-réponse</li>
+                            <li>🌐 <strong>Exemple</strong> : traduction Wolof → Français</li>
+                        </ul>
+                        
+                        <p><strong>3️⃣ Masked Self-Attention :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Principe</strong> : masquer les mots futurs</li>
+                            <li>🎯 <strong>Usage</strong> : génération de texte</li>
+                            <li>💬 <strong>Exemple</strong> : GPT pour prédire le mot suivant</li>
+                        </ul>
+                        
+                        <p><strong>4️⃣ Multi-Head Attention :</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Principe</strong> : plusieurs têtes spécialisées</li>
+                            <li>🎯 <strong>Usage</strong> : capture multiple aspects</li>
+                            <li>🧠 <strong>Exemple</strong> : syntaxe + sémantique + pragmatique</li>
+                        </ul>
+                        
+                        <p><strong>🔮 Évolutions récentes :</strong></p>
+                        <ul>
+                            <li>⚡ <strong>Flash Attention</strong> : optimisation mémoire</li>
+                            <li>🎯 <strong>Sparse Attention</strong> : attention sélective</li>
+                            <li>🔄 <strong>Rotary Position Embedding</strong> : encodage positionnel amélioré</li>
+                            <li>🧠 <strong>Group Query Attention</strong> : efficacité pour gros modèles</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : conception d'attention spécialisée",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Pour chaque tâche, concevez le type d'attention optimal :</p>
+                        
+                        <ol>
+                            <li><strong>Résumé automatique</strong> : transformer un article long en résumé court</li>
+                            <li><strong>Chatbot conversationnel</strong> : répondre en tenant compte de l'historique</li>
+                            <li><strong>Correction grammaticale</strong> : corriger les erreurs dans un texte</li>
+                            <li><strong>Génération de code</strong> : écrire du Python à partir d'une description</li>
+                            <li><strong>Question-réponse</strong> : répondre à une question sur un texte</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('attention-design-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="attention-design-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Résumé automatique :</strong><br>
+                                <strong>Type :</strong> Cross-attention<br>
+                                <strong>Architecture :</strong> Q = résumé en cours, K = V = article complet<br>
+                                <strong>Objectif :</strong> Le résumé "interroge" l'article pour extraire l'essentiel</li>
+                            <li><strong>Chatbot conversationnel :</strong><br>
+                                <strong>Type :</strong> Self-attention + Cross-attention<br>
+                                <strong>Architecture :</strong> Self-attention sur l'historique + Cross-attention pour la réponse<br>
+                                <strong>Objectif :</strong> Comprendre le contexte conversationnel complet</li>
+                            <li><strong>Correction grammaticale :</strong><br>
+                                <strong>Type :</strong> Self-attention<br>
+                                <strong>Architecture :</strong> Encoder-decoder avec self-attention<br>
+                                <strong>Objectif :</strong> Comprendre les dépendances grammaticales longues</li>
+                            <li><strong>Génération de code :</strong><br>
+                                <strong>Type :</strong> Cross-attention + Masked self-attention<br>
+                                <strong>Architecture :</strong> Description (K,V) → Code (Q) avec masquage causal<br>
+                                <strong>Objectif :</strong> Traduire langage naturel en code structuré</li>
+                            <li><strong>Question-réponse :</strong><br>
+                                <strong>Type :</strong> Cross-attention bidirectionnelle<br>
+                                <strong>Architecture :</strong> Question ↔ Texte avec attention mutuelle<br>
+                                <strong>Objectif :</strong> Localiser la réponse dans le texte</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Dans le mécanisme d'attention, que représente la formule QK^T ?",
+          options: [
+            "A) La sortie finale du mécanisme",
+            "B) Les scores de similarité entre queries et keys",
+            "C) Les poids après softmax",
+            "D) L'agrégation des valeurs",
+          ],
+          correct: 1,
+          explanation:
+            "QK^T calcule les scores de similarité bruts entre chaque query et chaque key. C'est la première étape qui détermine quels éléments sont pertinents les uns pour les autres, avant la normalisation et le softmax.",
+        },
+        prevModule: "../dl/rnn.html",
+        nextModule: "transformers.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

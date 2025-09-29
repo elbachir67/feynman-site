@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fine-tuning | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <!-- Pyodide pour Python dans le navigateur -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>💬 LLMs & IA Moderne</span>
+          <span>›</span>
+          <span>Fine-tuning</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🎯 Fine-tuning : Adapter les Géants à vos Besoins</h1>
+      <p class="subtitle">Module 5.4 - Personnalisation de l'IA Moderne</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Quiz -->
+      <div class="quiz" id="module-quiz" style="display: none">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      </div>
+
+      <!-- Checkpoint -->
+      <div class="checkpoint">
+        <h3>🎉 Checkpoint - Fine-tuning</h3>
+        <p>
+          Félicitations ! Vous maîtrisez maintenant l'art d'adapter l'IA de
+          pointe à vos besoins spécifiques.
+        </p>
+        <button
+          class="checkpoint-btn"
+          id="checkpoint-btn"
+          onclick="completeCheckpoint()"
+        >
+          Marquer comme complété
+        </button>
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="gpt-bert.html" class="nav-link" id="prev-link"
+          >← Module précédent : GPT & BERT</a
+        >
+        <a href="prompt-engineering.html" class="nav-link" id="next-link"
+          >Module suivant : Prompt Engineering →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      // Configuration du module Fine-tuning
+      const moduleConfig = {
+        id: "llm-fine-tuning",
+        title: "Fine-tuning : Adapter les Géants à vos Besoins",
+        category: "LLMs & IA Moderne",
+        objectives: [
+          "Comprendre pourquoi le fine-tuning révolutionne l'IA accessible",
+          "Maîtriser les 4 types de fine-tuning et leurs applications",
+          "Calculer l'efficacité révolutionnaire de LoRA",
+          "Concevoir une stratégie de fine-tuning pour langues africaines",
+          "Estimer coûts et ressources pour projets réels",
+        ],
+        content: [
+          {
+            type: "concept",
+            icon: "💡",
+            title: "La révolution économique du fine-tuning",
+            content: `
+                        <p>Le <strong>fine-tuning</strong> a démocratisé l'IA de pointe en rendant accessible ce qui était réservé aux géants technologiques. C'est la différence entre construire une voiture from scratch et adapter une Tesla existante !</p>
+                        
+                        <p><strong>💰 Révolution économique quantifiée :</strong></p>
+                        <ul>
+                            <li>🏭 <strong>Entraînement complet GPT-3</strong> : 4.6M$ et 355 ans de calcul</li>
+                            <li>⚡ <strong>Fine-tuning GPT-3</strong> : 100$ et quelques heures</li>
+                            <li>📊 <strong>Ratio</strong> : 46 000x moins cher !</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Analogie de la formation médicale :</strong></p>
+                        <ul>
+                            <li>🏥 <strong>Formation générale</strong> : 8 ans d'études (pré-entraînement)</li>
+                            <li>🎯 <strong>Spécialisation</strong> : 2 ans en cardiologie (fine-tuning)</li>
+                            <li>💡 <strong>Résultat</strong> : expert en cardiologie sans refaire toute la médecine</li>
+                        </ul>
+                        
+                        <p><strong>🚀 Applications révolutionnaires :</strong></p>
+                        <ul>
+                            <li>🇸🇳 <strong>IA en wolof</strong> : adapter GPT pour les langues africaines</li>
+                            <li>🏥 <strong>IA médicale</strong> : spécialiser pour maladies tropicales</li>
+                            <li>⚖️ <strong>IA juridique</strong> : adapter au droit sénégalais</li>
+                            <li>📚 <strong>IA éducative</strong> : personnaliser pour le système éducatif local</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Le fine-tuning transforme un modèle généraliste en expert spécialisé, avec une fraction du coût et du temps d'un entraînement complet.</p>
+                    `,
+          },
+          {
+            type: "intuition",
+            icon: "🧠",
+            title: "L'analogie du médecin spécialiste sénégalais",
+            content: `
+                        <p>Imaginez <strong>Dr. Aminata Diallo</strong>, médecin généraliste à l'hôpital Le Dantec qui veut se spécialiser en cardiologie tropicale :</p>
+                        
+                        <p><strong>🎓 Option 1 - Recommencer from scratch :</strong></p>
+                        <ul>
+                            <li>📚 Refaire 8 ans d'études de médecine</li>
+                            <li>💰 Coût : 50 millions FCFA</li>
+                            <li>⏰ Temps : 8 ans</li>
+                            <li>🤔 <strong>Absurde !</strong> Elle connaît déjà la médecine de base</li>
+                        </ul>
+                        
+                        <p><strong>⚡ Option 2 - Spécialisation (fine-tuning) :</strong></p>
+                        <ul>
+                            <li>🎯 2 ans de formation spécialisée en cardiologie</li>
+                            <li>💰 Coût : 2 millions FCFA</li>
+                            <li>⏰ Temps : 2 ans</li>
+                            <li>✅ <strong>Intelligent !</strong> Elle garde ses connaissances et ajoute l'expertise</li>
+                        </ul>
+                        
+                        <p><strong>🧠 Parallèle avec l'IA :</strong></p>
+                        <ul>
+                            <li>🏥 <strong>Médecine générale</strong> = pré-entraînement (GPT connaît le langage)</li>
+                            <li>❤️ <strong>Cardiologie</strong> = fine-tuning (spécialisation médicale)</li>
+                            <li>🇸🇳 <strong>Maladies tropicales</strong> = adaptation culturelle (contexte sénégalais)</li>
+                        </ul>
+                        
+                        <p><strong>💡 Résultat :</strong> Dr. Diallo devient experte en cardiologie tropicale sans perdre ses connaissances générales. C'est exactement ce que fait le fine-tuning avec l'IA !</p>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "Les 4 types de fine-tuning : mathématiques et stratégies",
+            content: `
+                        <p><strong>🎯 Quatre approches avec complexités croissantes :</strong></p>
+                        
+                        <p><strong>1️⃣ Full Fine-tuning (Complet) :</strong></p>
+                        <p>On met à jour <strong>tous</strong> les paramètres du modèle :</p>
+                        <p>$$\\theta_{nouveau} = \\theta_{pré-entraîné} + \\Delta\\theta$$</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : performance maximale, adaptation totale</li>
+                            <li>❌ <strong>Inconvénients</strong> : coûteux, risque d'oubli catastrophique</li>
+                            <li>🎯 <strong>Usage</strong> : domaines très différents, gros budgets</li>
+                        </ul>
+                        
+                        <p><strong>2️⃣ Feature Extraction (Extraction) :</strong></p>
+                        <p>On <strong>gèle</strong> le modèle pré-entraîné et ajoute des couches :</p>
+                        <p>$$y = f_{nouveau}(f_{gelé}(x))$$</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : rapide, peu de données nécessaires</li>
+                            <li>❌ <strong>Inconvénients</strong> : adaptation limitée</li>
+                            <li>🎯 <strong>Usage</strong> : domaines similaires, prototypage rapide</li>
+                        </ul>
+                        
+                        <p><strong>3️⃣ Partial Fine-tuning (Partiel) :</strong></p>
+                        <p>On met à jour seulement les <strong>dernières couches</strong> :</p>
+                        <p>$$\\theta_{1:k} \\text{ gelés}, \\quad \\theta_{k+1:L} \\text{ mis à jour}$$</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : équilibre coût/performance</li>
+                            <li>❌ <strong>Inconvénients</strong> : choix de k délicat</li>
+                            <li>🎯 <strong>Usage</strong> : adaptation modérée, budgets moyens</li>
+                        </ul>
+                        
+                        <p><strong>4️⃣ LoRA (Low-Rank Adaptation) :</strong></p>
+                        <p>On approxime les changements par des matrices de <strong>faible rang</strong> :</p>
+                        <p>$$W_{nouveau} = W_{original} + \\Delta W = W + AB^T$$</p>
+                        <p>Où \\(A \\in \\mathbb{R}^{d \\times r}\\), \\(B \\in \\mathbb{R}^{d \\times r}\\) avec \\(r \\ll d\\)</p>
+                        <ul>
+                            <li>✅ <strong>Avantages</strong> : 99% moins de paramètres, performance proche du full</li>
+                            <li>❌ <strong>Inconvénients</strong> : plus complexe à implémenter</li>
+                            <li>🎯 <strong>Usage</strong> : standard moderne, optimal</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "mathematique",
+            icon: "∑",
+            title: "LoRA : révolution mathématique détaillée",
+            content: `
+                        <p><strong>🧮 LoRA exploite une propriété mathématique profonde :</strong></p>
+                        
+                        <p><strong>💡 Intuition clé :</strong> Les changements nécessaires lors du fine-tuning ont une <strong>structure de faible rang</strong>. On n'a pas besoin de modifier toute la matrice, juste sa "direction principale" !</p>
+                        
+                        <p><strong>📐 Décomposition mathématique :</strong></p>
+                        <p>Au lieu de stocker \\(\\Delta W \\in \\mathbb{R}^{d \\times d}\\) (d² paramètres), on stocke :</p>
+                        <p>$$\\Delta W = A \\cdot B^T$$</p>
+                        <p>Où \\(A \\in \\mathbb{R}^{d \\times r}\\) et \\(B \\in \\mathbb{R}^{d \\times r}\\) avec \\(r \\ll d\\)</p>
+                        
+                        <p><strong>🔢 Économie de paramètres :</strong></p>
+                        <ul>
+                            <li><strong>Matrice complète</strong> : \\(d^2\\) paramètres</li>
+                            <li><strong>LoRA</strong> : \\(2dr\\) paramètres</li>
+                            <li><strong>Ratio</strong> : \\(\\frac{2dr}{d^2} = \\frac{2r}{d}\\)</li>
+                        </ul>
+                        
+                        <p><strong>📊 Exemple concret :</strong></p>
+                        <p>Pour une matrice 4096×4096 (typique dans GPT) avec r=16 :</p>
+                        <ul>
+                            <li>🔴 <strong>Full</strong> : 4096² = 16.8M paramètres</li>
+                            <li>🟢 <strong>LoRA</strong> : 2×4096×16 = 131k paramètres</li>
+                            <li>⚡ <strong>Économie</strong> : 128x moins de paramètres !</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Propagation avant avec LoRA :</strong></p>
+                        <p>$$y = (W + AB^T)x = Wx + AB^Tx = Wx + A(B^Tx)$$</p>
+                        <p>On calcule d'abord \\(B^Tx\\), puis \\(A(\\cdot)\\), et on ajoute à \\(Wx\\).</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Implémentation LoRA from scratch",
+            description: "Créons une couche LoRA complète :",
+            code: `import numpy as np
+
+class LoRALayer:
+    def __init__(self, d_model, rank=16, alpha=32):
+        """
+        Couche LoRA (Low-Rank Adaptation)
+        
+        Args:
+            d_model: dimension du modèle
+            rank: rang de la décomposition (r)
+            alpha: facteur d'échelle
+        """
+        self.d_model = d_model
+        self.rank = rank
+        self.alpha = alpha
+        self.scaling = alpha / rank
+        
+        # Initialisation des matrices LoRA
+        # A: distribution normale, B: zéros (comme dans le papier original)
+        self.A = np.random.normal(0, 0.02, (d_model, rank))
+        self.B = np.zeros((d_model, rank))
+        
+        # Matrice originale (gelée)
+        self.W_original = np.random.normal(0, 0.02, (d_model, d_model))
+        
+        print(f"🧠 LoRA Layer créée:")
+        print(f"   Dimension: {d_model}×{d_model}")
+        print(f"   Rang: {rank}")
+        print(f"   Paramètres originaux: {d_model**2:,}")
+        print(f"   Paramètres LoRA: {2*d_model*rank:,}")
+        print(f"   Économie: {d_model**2 / (2*d_model*rank):.1f}x moins")
+    
+    def forward(self, x):
+        """Propagation avant avec LoRA"""
+        # Calcul standard
+        output_original = self.W_original @ x
+        
+        # Calcul LoRA: A @ (B^T @ x)
+        temp = self.B.T @ x  # (rank, batch)
+        delta_output = self.A @ temp  # (d_model, batch)
+        
+        # Combinaison avec facteur d'échelle
+        output_final = output_original + self.scaling * delta_output
+        
+        return output_final, output_original, delta_output
+    
+    def count_parameters(self):
+        """Compte les paramètres entraînables"""
+        return {
+            'original_frozen': self.d_model ** 2,
+            'lora_trainable': 2 * self.d_model * self.rank,
+            'total': self.d_model ** 2 + 2 * self.d_model * self.rank,
+            'reduction_factor': self.d_model ** 2 / (2 * self.d_model * self.rank)
+        }
+
+# Test de LoRA
+print("🧪 TEST DE LORA")
+print("=" * 30)
+
+# Création d'une couche LoRA
+lora = LoRALayer(d_model=512, rank=8, alpha=16)
+
+# Test sur un batch de données
+batch_size = 4
+x_test = np.random.normal(0, 1, (512, batch_size))
+
+# Propagation
+output, original, delta = lora.forward(x_test)
+
+print(f"\\n📊 RÉSULTATS:")
+print(f"Input shape: {x_test.shape}")
+print(f"Output shape: {output.shape}")
+print(f"Contribution LoRA moyenne: {np.mean(np.abs(delta)):.4f}")
+print(f"Contribution originale moyenne: {np.mean(np.abs(original)):.4f}")
+
+# Statistiques des paramètres
+stats = lora.count_parameters()
+print(f"\\n📈 ÉCONOMIE DE PARAMÈTRES:")
+for key, value in stats.items():
+    if isinstance(value, float):
+        print(f"{key}: {value:.1f}")
+    else:
+        print(f"{key}: {value:,}")`,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Calcul manuel LoRA sur matrice 3×3",
+            content: `
+                        <p><strong>📝 Exemple concret :</strong> Adaptons une petite matrice avec LoRA</p>
+                        
+                        <p><strong>🎯 Données :</strong></p>
+                        <ul>
+                            <li>Matrice originale \\(W \\in \\mathbb{R}^{3 \\times 3}\\)</li>
+                            <li>Rang LoRA : r = 2</li>
+                            <li>Facteur d'échelle : α = 4</li>
+                        </ul>
+                        
+                        <p><strong>📊 Matrices :</strong></p>
+                        <p>$$W = \\begin{bmatrix} 0.5 & 0.2 & 0.1 \\\\ 0.3 & 0.8 & 0.4 \\\\ 0.1 & 0.2 & 0.6 \\end{bmatrix}$$</p>
+                        
+                        <p>$$A = \\begin{bmatrix} 0.1 & 0.2 \\\\ 0.3 & 0.1 \\\\ 0.2 & 0.3 \\end{bmatrix}, \\quad B = \\begin{bmatrix} 0.2 & 0.1 \\\\ 0.1 & 0.3 \\\\ 0.3 & 0.2 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>🔢 Calcul de ΔW = AB^T :</strong></p>
+                        <p>$$AB^T = \\begin{bmatrix} 0.1 & 0.2 \\\\ 0.3 & 0.1 \\\\ 0.2 & 0.3 \\end{bmatrix} \\begin{bmatrix} 0.2 & 0.1 & 0.3 \\\\ 0.1 & 0.3 & 0.2 \\end{bmatrix}$$</p>
+                        
+                        <p>$$= \\begin{bmatrix} 0.1×0.2+0.2×0.1 & 0.1×0.1+0.2×0.3 & 0.1×0.3+0.2×0.2 \\\\ 0.3×0.2+0.1×0.1 & 0.3×0.1+0.1×0.3 & 0.3×0.3+0.1×0.2 \\\\ 0.2×0.2+0.3×0.1 & 0.2×0.1+0.3×0.3 & 0.2×0.3+0.3×0.2 \\end{bmatrix}$$</p>
+                        
+                        <p>$$= \\begin{bmatrix} 0.04 & 0.07 & 0.07 \\\\ 0.07 & 0.06 & 0.11 \\\\ 0.07 & 0.11 & 0.12 \\end{bmatrix}$$</p>
+                        
+                        <p><strong>⚡ Matrice finale avec scaling :</strong></p>
+                        <p>$$W_{final} = W + \\frac{\\alpha}{r} \\Delta W = W + \\frac{4}{2} \\Delta W = W + 2\\Delta W$$</p>
+                        
+                        <p><strong>📊 Économie de paramètres :</strong></p>
+                        <ul>
+                            <li>🔴 <strong>Full</strong> : 3² = 9 paramètres</li>
+                            <li>🟢 <strong>LoRA</strong> : 2×3×2 = 12 paramètres (A et B)</li>
+                            <li>💡 <strong>Paradoxe apparent</strong> : plus de paramètres pour ce petit exemple !</li>
+                            <li>🎯 <strong>Réalité</strong> : LoRA brille sur grandes matrices (4096×4096)</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice pratique : calcul LoRA complet",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Calculez l'économie de paramètres LoRA pour différentes tailles :</p>
+                        
+                        <p><strong>📝 Configurations à analyser :</strong></p>
+                        <ol>
+                            <li>Matrice 1024×1024, rang r=32</li>
+                            <li>Matrice 4096×4096, rang r=64</li>
+                            <li>Matrice 8192×8192, rang r=128</li>
+                            <li>Pour chaque cas : calculez le ratio d'économie et le nombre de paramètres</li>
+                        </ol>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('lora-calculation-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="lora-calculation-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>1024×1024, r=32 :</strong><br>
+                                • Full : 1024² = 1,048,576 paramètres<br>
+                                • LoRA : 2×1024×32 = 65,536 paramètres<br>
+                                • Économie : 16x moins (94% de réduction)</li>
+                            <li><strong>4096×4096, r=64 :</strong><br>
+                                • Full : 4096² = 16,777,216 paramètres<br>
+                                • LoRA : 2×4096×64 = 524,288 paramètres<br>
+                                • Économie : 32x moins (97% de réduction)</li>
+                            <li><strong>8192×8192, r=128 :</strong><br>
+                                • Full : 8192² = 67,108,864 paramètres<br>
+                                • LoRA : 2×8192×128 = 2,097,152 paramètres<br>
+                                • Économie : 32x moins (97% de réduction)</li>
+                        </ol>
+                        <p><strong>💡 Observation :</strong> Plus la matrice est grande, plus LoRA est efficace !</p>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Fine-tuning pour le wolof : projet concret",
+            description: "Créons un système de fine-tuning pour le wolof :",
+            code: `class WolofFineTuner:
+    def __init__(self, base_model_size="7B"):
+        """Système de fine-tuning pour modèles wolof"""
+        self.base_model_size = base_model_size
+        self.model_configs = {
+            "1B": {"params": 1e9, "layers": 24, "d_model": 2048},
+            "7B": {"params": 7e9, "layers": 32, "d_model": 4096}, 
+            "13B": {"params": 13e9, "layers": 40, "d_model": 5120},
+            "70B": {"params": 70e9, "layers": 80, "d_model": 8192}
+        }
+        
+        self.config = self.model_configs[base_model_size]
+        print(f"🤖 Configuration {base_model_size}:")
+        print(f"   Paramètres: {self.config['params']/1e9:.1f}B")
+        print(f"   Couches: {self.config['layers']}")
+        print(f"   Dimension: {self.config['d_model']}")
+    
+    def estimate_lora_params(self, rank=64, target_modules=["q", "k", "v", "o"]):
+        """Estime les paramètres LoRA nécessaires"""
+        d_model = self.config['d_model']
+        n_layers = self.config['layers']
+        
+        # Paramètres par couche d'attention
+        params_per_layer = len(target_modules) * 2 * d_model * rank
+        
+        # Total pour toutes les couches
+        total_lora_params = n_layers * params_per_layer
+        
+        # Pourcentage du modèle original
+        percentage = (total_lora_params / self.config['params']) * 100
+        
+        return {
+            'lora_params': total_lora_params,
+            'original_params': self.config['params'],
+            'percentage': percentage,
+            'reduction_factor': self.config['params'] / total_lora_params
+        }
+    
+    def estimate_training_cost(self, dataset_size=10000, epochs=3):
+        """Estime le coût d'entraînement"""
+        # Coûts approximatifs (GPU H100)
+        cost_per_hour = 2.5  # USD
+        
+        # Estimation temps basée sur la taille du modèle
+        base_time_hours = {
+            "1B": 2, "7B": 8, "13B": 16, "70B": 48
+        }
+        
+        time_hours = base_time_hours[self.base_model_size] * epochs
+        total_cost = time_hours * cost_per_hour
+        
+        return {
+            'time_hours': time_hours,
+            'cost_usd': total_cost,
+            'cost_fcfa': total_cost * 600,  # Approximation 1 USD = 600 FCFA
+            'dataset_size': dataset_size,
+            'epochs': epochs
+        }
+
+# Test du système
+print("🇸🇳 FINE-TUNING POUR LE WOLOF")
+print("=" * 40)
+
+# Configuration pour modèle 7B
+tuner = WolofFineTuner("7B")
+
+# Estimation LoRA
+lora_stats = tuner.estimate_lora_params(rank=64)
+print(f"\\n📊 PARAMÈTRES LORA:")
+print(f"Paramètres LoRA: {lora_stats['lora_params']:,}")
+print(f"Paramètres originaux: {lora_stats['original_params']/1e9:.1f}B")
+print(f"Pourcentage: {lora_stats['percentage']:.3f}%")
+print(f"Réduction: {lora_stats['reduction_factor']:.0f}x moins")
+
+# Estimation coût
+cost_stats = tuner.estimate_training_cost(dataset_size=50000, epochs=5)
+print(f"\\n💰 COÛT D'ENTRAÎNEMENT:")
+print(f"Temps: {cost_stats['time_hours']} heures")
+print(f"Coût: {cost_stats['cost_usd']}$ ({cost_stats['cost_fcfa']:,.0f} FCFA)")
+print(f"Dataset: {cost_stats['dataset_size']:,} exemples wolof")`,
+          },
+          {
+            type: "code",
+            title: "Dataset wolof pour fine-tuning",
+            description: "Créons un dataset formaté pour l'entraînement :",
+            code: `# Dataset d'exemple pour fine-tuning wolof
+dataset_wolof = [
+    {
+        "instruction": "Traduis en français",
+        "input": "Nanga def?",
+        "output": "Comment allez-vous ?"
+    },
+    {
+        "instruction": "Traduis en français", 
+        "input": "Maangi fi rekk",
+        "output": "Je suis juste ici"
+    },
+    {
+        "instruction": "Réponds en wolof",
+        "input": "Quel temps fait-il ?",
+        "output": "Ndaw bi dafa tang"
+    },
+    {
+        "instruction": "Explique en wolof",
+        "input": "Qu'est-ce que l'intelligence artificielle ?",
+        "output": "Intelligence artificielle bi mooy xam-xam bu njëkk ci ordinateur"
+    },
+    {
+        "instruction": "Traduis en wolof",
+        "input": "Bonjour, comment vous appelez-vous ?",
+        "output": "Asalaam aleekum, naka nga tudd?"
+    }
+]
+
+def formater_pour_entrainement(dataset):
+    """Formate le dataset pour l'entraînement"""
+    formatted_data = []
+    
+    for exemple in dataset:
+        # Format Alpaca standard
+        if exemple["input"]:
+            prompt = f"### Instruction:\\n{exemple['instruction']}\\n\\n### Input:\\n{exemple['input']}\\n\\n### Response:\\n"
+        else:
+            prompt = f"### Instruction:\\n{exemple['instruction']}\\n\\n### Response:\\n"
+        
+        formatted_data.append({
+            "prompt": prompt,
+            "completion": exemple["output"],
+            "full_text": prompt + exemple["output"]
+        })
+    
+    return formatted_data
+
+# Formatage du dataset
+dataset_formate = formater_pour_entrainement(dataset_wolof)
+
+print("📚 DATASET WOLOF FORMATÉ")
+print("=" * 35)
+print(f"Nombre d'exemples: {len(dataset_formate)}")
+print()
+
+# Affichage d'un exemple formaté
+print("📝 EXEMPLE FORMATÉ:")
+print(dataset_formate[0]["full_text"])
+print()
+
+# Statistiques du dataset
+total_chars = sum(len(ex["full_text"]) for ex in dataset_formate)
+avg_length = total_chars / len(dataset_formate)
+
+print(f"📊 STATISTIQUES:")
+print(f"Caractères totaux: {total_chars:,}")
+print(f"Longueur moyenne: {avg_length:.0f} caractères")
+print(f"Tokens estimés: {total_chars // 4:,} (approximation)")`,
+          },
+          {
+            type: "code",
+            title: "Évaluateur de performance culturelle",
+            description: "Créons un système d'évaluation spécialisé :",
+            code: `class EvaluateurCulturel:
+    def __init__(self):
+        """Évaluateur spécialisé pour IA culturellement adaptée"""
+        self.metriques_culturelles = {
+            "precision_linguistique": 0.0,
+            "respect_cultural": 0.0, 
+            "fluidite_naturelle": 0.0,
+            "coherence_contextuelle": 0.0
+        }
+        
+        # Expressions idiomatiques wolof
+        self.expressions_test = [
+            {"wolof": "Ku baax na", "sens": "Qui va bien", "contexte": "salutation"},
+            {"wolof": "Dëgg nga", "sens": "C'est vrai", "contexte": "confirmation"},
+            {"wolof": "Waaw, dëgg na", "sens": "Oui, c'est exact", "contexte": "accord"},
+            {"wolof": "Déedéet", "sens": "Doucement", "contexte": "patience"}
+        ]
+    
+    def evaluer_traduction(self, modele_reponse, reference):
+        """Évalue la qualité d'une traduction"""
+        scores = {}
+        
+        # Métrique 1: Exactitude lexicale (BLEU simplifié)
+        mots_modele = set(modele_reponse.lower().split())
+        mots_reference = set(reference.lower().split())
+        
+        if len(mots_reference) > 0:
+            precision = len(mots_modele.intersection(mots_reference)) / len(mots_reference)
+        else:
+            precision = 0.0
+        
+        scores["precision_lexicale"] = precision
+        
+        # Métrique 2: Longueur relative
+        ratio_longueur = len(modele_reponse) / max(len(reference), 1)
+        scores["ratio_longueur"] = min(ratio_longueur, 2.0)  # Cap à 2.0
+        
+        # Métrique 3: Présence de mots culturels
+        mots_culturels = ["asalaam", "aleekum", "inshallah", "barakallahu", "teranga"]
+        mots_culturels_detectes = sum(1 for mot in mots_culturels if mot in modele_reponse.lower())
+        scores["richesse_culturelle"] = mots_culturels_detectes / len(mots_culturels)
+        
+        return scores
+    
+    def tester_expressions_idiomatiques(self):
+        """Teste la compréhension des expressions wolof"""
+        print("🎭 TEST D'EXPRESSIONS IDIOMATIQUES")
+        print("=" * 40)
+        
+        for i, expr in enumerate(self.expressions_test):
+            # Simulation de réponse de modèle fine-tuné
+            reponses_simulees = [
+                "Cette personne va bien",
+                "Oui, c'est la vérité", 
+                "Exactement, je suis d'accord",
+                "Il faut prendre son temps"
+            ]
+            
+            print(f"Expression {i+1}: '{expr['wolof']}'")
+            print(f"   Sens attendu: {expr['sens']}")
+            print(f"   Contexte: {expr['contexte']}")
+            print(f"   Réponse modèle: {reponses_simulees[i]}")
+            
+            # Évaluation simple
+            score = self.evaluer_traduction(reponses_simulees[i], expr['sens'])
+            print(f"   Score: {score['precision_lexicale']:.2f}")
+            print()
+    
+    def rapport_final(self, scores_globaux):
+        """Génère un rapport d'évaluation final"""
+        print("📊 RAPPORT D'ÉVALUATION CULTURELLE")
+        print("=" * 45)
+        
+        moyenne = sum(scores_globaux.values()) / len(scores_globaux)
+        
+        for metrique, score in scores_globaux.items():
+            emoji = "🟢" if score > 0.8 else "🟡" if score > 0.6 else "🔴"
+            print(f"{emoji} {metrique}: {score:.2f}")
+        
+        print(f"\\n🎯 Score global: {moyenne:.2f}")
+        
+        if moyenne > 0.8:
+            print("✅ Modèle prêt pour production")
+        elif moyenne > 0.6:
+            print("⚠️ Améliorations nécessaires")
+        else:
+            print("❌ Fine-tuning insuffisant")
+
+# Test de l'évaluateur
+evaluateur = EvaluateurCulturel()
+evaluateur.tester_expressions_idiomatiques()
+
+# Simulation de scores finaux
+scores_test = {
+    "precision_linguistique": 0.85,
+    "respect_cultural": 0.78,
+    "fluidite_naturelle": 0.82,
+    "coherence_contextuelle": 0.79
+}
+
+evaluateur.rapport_final(scores_test)`,
+          },
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Stratégies de fine-tuning selon le contexte",
+            content: `
+                        <p><strong>🎯 Choisir la bonne stratégie selon vos contraintes :</strong></p>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                            <tr style="background: #3498db; color: white;">
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Contexte</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Stratégie</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Coût</th>
+                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Performance</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">🚀 <strong>Startup, prototype rapide</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Feature Extraction</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">💰 Très faible</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">⭐⭐⭐</td>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">🏢 <strong>Entreprise, budget moyen</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">LoRA</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">💰💰 Modéré</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">⭐⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">🏛️ <strong>Gouvernement, mission critique</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Full Fine-tuning</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">💰💰💰 Élevé</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">⭐⭐⭐⭐⭐</td>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">🎓 <strong>Recherche, expérimentation</strong></td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">Partial</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">💰💰 Moyen</td>
+                                <td style="padding: 0.5rem; border: 1px solid #ddd;">⭐⭐⭐⭐</td>
+                            </tr>
+                        </table>
+                        
+                        <p><strong>🔑 Facteurs de décision :</strong></p>
+                        <ul>
+                            <li>💰 <strong>Budget disponible</strong> : de 100$ à 100 000$</li>
+                            <li>⏰ <strong>Urgence</strong> : prototype en 1 jour vs production en 6 mois</li>
+                            <li>📊 <strong>Taille du dataset</strong> : 1000 vs 1M exemples</li>
+                            <li>🎯 <strong>Performance requise</strong> : démo vs système critique</li>
+                            <li>🔧 <strong>Expertise technique</strong> : équipe débutante vs experts</li>
+                        </ul>
+                        
+                        <p><strong>💡 Recommandation générale :</strong> Commencer par LoRA (meilleur rapport qualité/prix), puis évoluer selon les besoins.</p>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Planificateur de projet fine-tuning",
+            description: "Créons un planificateur complet de projet :",
+            code: `class PlanificateurFineTuning:
+    def __init__(self):
+        """Planificateur de projet fine-tuning"""
+        self.phases = {
+            "preparation": {"duree_jours": 7, "ressources": ["Data scientist", "Linguiste"]},
+            "collecte_donnees": {"duree_jours": 14, "ressources": ["Annotateurs", "Traducteurs"]},
+            "preprocessing": {"duree_jours": 5, "ressources": ["Data engineer"]},
+            "fine_tuning": {"duree_jours": 3, "ressources": ["ML engineer", "GPU"]},
+            "evaluation": {"duree_jours": 7, "ressources": ["Testeurs natifs", "Linguiste"]},
+            "deploiement": {"duree_jours": 5, "ressources": ["DevOps", "Infrastructure"]}
+        }
+    
+    def planifier_projet(self, nom_projet, langue_cible, taille_dataset):
+        """Planifie un projet de fine-tuning complet"""
+        print(f"📋 PLANIFICATION PROJET: {nom_projet}")
+        print(f"🎯 Langue cible: {langue_cible}")
+        print(f"📊 Taille dataset: {taille_dataset:,} exemples")
+        print("=" * 50)
+        
+        duree_totale = 0
+        cout_total = 0
+        
+        for phase, details in self.phases.items():
+            duree = details["duree_jours"]
+            
+            # Ajustement selon la taille du dataset
+            if phase == "collecte_donnees" and taille_dataset > 10000:
+                duree *= 2
+            elif phase == "fine_tuning" and taille_dataset > 50000:
+                duree *= 1.5
+            
+            duree_totale += duree
+            
+            # Estimation coût (approximatif)
+            cout_phase = duree * len(details["ressources"]) * 50000  # 50k FCFA/jour/ressource
+            cout_total += cout_phase
+            
+            print(f"📅 {phase.replace('_', ' ').title()}: {duree} jours")
+            print(f"   Ressources: {', '.join(details['ressources'])}")
+            print(f"   Coût estimé: {cout_phase:,} FCFA")
+            print()
+        
+        print(f"⏰ DURÉE TOTALE: {duree_totale} jours ({duree_totale/7:.1f} semaines)")
+        print(f"💰 COÛT TOTAL: {cout_total:,} FCFA ({cout_total/600:.0f}$)")
+        
+        return {
+            "duree_jours": duree_totale,
+            "cout_fcfa": cout_total,
+            "phases": self.phases
+        }
+    
+    def generer_timeline(self, plan):
+        """Génère une timeline visuelle"""
+        print("\\n📅 TIMELINE DU PROJET")
+        print("=" * 30)
+        
+        jour_actuel = 0
+        for phase, details in plan["phases"].items():
+            duree = details["duree_jours"]
+            debut = jour_actuel + 1
+            fin = jour_actuel + duree
+            
+            # Barre de progression visuelle
+            barre = "█" * (duree // 2) + "░" * max(0, 10 - duree // 2)
+            
+            print(f"Jour {debut:2d}-{fin:2d}: {phase.replace('_', ' ').title():15s} {barre}")
+            jour_actuel += duree
+
+# Test du planificateur
+planificateur = PlanificateurFineTuning()
+
+# Projet exemple: Assistant IA en wolof
+plan = planificateur.planifier_projet(
+    nom_projet="Assistant IA Wolof",
+    langue_cible="Wolof",
+    taille_dataset=25000
+)
+
+planificateur.generer_timeline(plan)`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "Défis spécifiques aux langues africaines",
+            content: `
+                        <p><strong>🌍 Le fine-tuning pour les langues africaines pose des défis uniques :</strong></p>
+                        
+                        <p><strong>🔴 Défi 1 : Rareté des données</strong></p>
+                        <ul>
+                            <li>📊 <strong>Anglais</strong> : milliards de textes disponibles</li>
+                            <li>📉 <strong>Wolof</strong> : quelques milliers de textes numérisés</li>
+                            <li>🔧 <strong>Solutions</strong> : augmentation de données, traduction automatique, collecte communautaire</li>
+                        </ul>
+                        
+                        <p><strong>🔴 Défi 2 : Diversité dialectale</strong></p>
+                        <ul>
+                            <li>🗣️ <strong>Wolof urbain</strong> (Dakar) vs <strong>wolof rural</strong> (Casamance)</li>
+                            <li>🔧 <strong>Solutions</strong> : datasets multi-dialectaux, modèles adaptatifs</li>
+                        </ul>
+                        
+                        <p><strong>🔴 Défi 3 : Code-switching</strong></p>
+                        <ul>
+                            <li>💬 <strong>Réalité</strong> : "Nanga def? Ça va bien?"</li>
+                            <li>🔧 <strong>Solutions</strong> : modèles multilingues, détection automatique</li>
+                        </ul>
+                        
+                        <p><strong>🔴 Défi 4 : Contexte culturel</strong></p>
+                        <ul>
+                            <li>🎭 <strong>Concepts uniques</strong> : "teranga", hiérarchie sociale, traditions</li>
+                            <li>🔧 <strong>Solutions</strong> : datasets culturellement riches, évaluation par natifs</li>
+                        </ul>
+                        
+                        <p><strong>💡 Opportunités :</strong></p>
+                        <ul>
+                            <li>🌟 <strong>Impact social</strong> : démocratiser l'IA en Afrique</li>
+                            <li>📚 <strong>Préservation culturelle</strong> : numériser les langues</li>
+                            <li>🎯 <strong>Innovation</strong> : techniques adaptées aux langues à faibles ressources</li>
+                        </ul>
+                    `,
+          },
+          {
+            type: "exemple",
+            icon: "💻",
+            title: "Exercice : conception de projets sénégalais",
+            content: `
+                        <p><strong>🎯 Exercice à résoudre :</strong></p>
+                        <p>Concevez une stratégie de fine-tuning pour chaque projet sénégalais :</p>
+                        
+                        <ol>
+                            <li><strong>Assistant santé en wolof</strong> : diagnostic de maladies tropicales</li>
+                            <li><strong>Chatbot éducatif</strong> : aide aux devoirs en français/wolof</li>
+                            <li><strong>Traducteur juridique</strong> : droit sénégalais français ↔ wolof</li>
+                            <li><strong>Assistant agricole</strong> : conseils cultures selon climat sahélien</li>
+                            <li><strong>Guide touristique IA</strong> : promotion patrimoine sénégalais</li>
+                        </ol>
+                        
+                        <p><strong>📝 Pour chaque projet, spécifiez :</strong></p>
+                        <ul>
+                            <li>Type de fine-tuning recommandé</li>
+                            <li>Taille de dataset nécessaire</li>
+                            <li>Budget estimé</li>
+                            <li>Défis spécifiques</li>
+                            <li>Métriques d'évaluation</li>
+                        </ul>
+                        
+                        <p><strong>✅ Solutions :</strong></p>
+                        <button class="btn btn-copy" onclick="toggleSolution('senegal-projects-exercise')" style="margin-bottom: 1rem;">
+                            👁️ Voir la solution
+                        </button>
+                        <div id="senegal-projects-exercise" style="display: none;">
+                        <ol>
+                            <li><strong>Assistant santé :</strong><br>
+                                • Stratégie : LoRA + données médicales<br>
+                                • Dataset : 15k consultations wolof/français<br>
+                                • Budget : 5M FCFA<br>
+                                • Défi : terminologie médicale en wolof<br>
+                                • Métrique : précision diagnostic + acceptation culturelle</li>
+                            <li><strong>Chatbot éducatif :</strong><br>
+                                • Stratégie : Partial fine-tuning<br>
+                                • Dataset : 30k Q&A pédagogiques<br>
+                                • Budget : 3M FCFA<br>
+                                • Défi : adaptation niveau scolaire<br>
+                                • Métrique : compréhension élèves + engagement</li>
+                            <li><strong>Traducteur juridique :</strong><br>
+                                • Stratégie : Full fine-tuning<br>
+                                • Dataset : 50k documents juridiques<br>
+                                • Budget : 15M FCFA<br>
+                                • Défi : précision terminologique critique<br>
+                                • Métrique : exactitude juridique + validation juristes</li>
+                            <li><strong>Assistant agricole :</strong><br>
+                                • Stratégie : LoRA + données climatiques<br>
+                                • Dataset : 20k conseils agricoles<br>
+                                • Budget : 4M FCFA<br>
+                                • Défi : variabilité climatique régionale<br>
+                                • Métrique : adoption agriculteurs + impact rendements</li>
+                            <li><strong>Guide touristique :</strong><br>
+                                • Stratégie : Feature extraction<br>
+                                • Dataset : 10k descriptions patrimoine<br>
+                                • Budget : 2M FCFA<br>
+                                • Défi : richesse culturelle et authenticité<br>
+                                • Métrique : satisfaction touristes + exactitude historique</li>
+                        </ol>
+                        </div>
+                    `,
+          },
+          {
+            type: "code",
+            title: "Optimiseur d'hyperparamètres",
+            description: "Créons un système d'optimisation automatique :",
+            code: `class OptimiseurHyperparametres:
+    def __init__(self):
+        """Optimiseur d'hyperparamètres pour fine-tuning"""
+        self.hyperparams_ranges = {
+            "learning_rate": [1e-5, 5e-5, 1e-4, 5e-4],
+            "batch_size": [4, 8, 16, 32],
+            "lora_rank": [8, 16, 32, 64],
+            "lora_alpha": [16, 32, 64, 128],
+            "epochs": [1, 2, 3, 5]
+        }
+        
+        self.resultats = []
+    
+    def evaluer_configuration(self, config):
+        """Simule l'évaluation d'une configuration"""
+        # Simulation basée sur des heuristiques réalistes
+        
+        # Learning rate optimal autour de 1e-4
+        lr_score = 1.0 - abs(np.log10(config["learning_rate"]) + 4) / 2
+        
+        # Batch size optimal autour de 16
+        bs_score = 1.0 - abs(config["batch_size"] - 16) / 16
+        
+        # Rank optimal autour de 32
+        rank_score = 1.0 - abs(config["lora_rank"] - 32) / 32
+        
+        # Alpha/rank ratio optimal autour de 2
+        ratio = config["lora_alpha"] / config["lora_rank"]
+        ratio_score = 1.0 - abs(ratio - 2) / 2
+        
+        # Epochs optimal autour de 3
+        epoch_score = 1.0 - abs(config["epochs"] - 3) / 3
+        
+        # Score global (moyenne pondérée)
+        score = (lr_score * 0.3 + bs_score * 0.2 + rank_score * 0.2 + 
+                ratio_score * 0.2 + epoch_score * 0.1)
+        
+        # Ajout de bruit réaliste
+        score += np.random.normal(0, 0.05)
+        score = np.clip(score, 0, 1)
+        
+        return score
+    
+    def recherche_grille(self, n_configs=20):
+        """Recherche par grille sur un échantillon"""
+        print("🔍 RECHERCHE D'HYPERPARAMÈTRES")
+        print("=" * 40)
+        
+        # Génération de configurations aléatoires
+        configs = []
+        for _ in range(n_configs):
+            config = {
+                param: np.random.choice(values) 
+                for param, values in self.hyperparams_ranges.items()
+            }
+            score = self.evaluer_configuration(config)
+            configs.append((config, score))
+        
+        # Tri par score décroissant
+        configs.sort(key=lambda x: x[1], reverse=True)
+        
+        print("🏆 TOP 5 CONFIGURATIONS:")
+        print("-" * 60)
+        
+        for i, (config, score) in enumerate(configs[:5]):
+            print(f"#{i+1} - Score: {score:.3f}")
+            for param, value in config.items():
+                print(f"   {param}: {value}")
+            print()
+        
+        return configs[0]  # Meilleure configuration
+    
+    def estimer_cout_config(self, config):
+        """Estime le coût d'une configuration"""
+        # Coût basé sur epochs, batch_size et learning_rate
+        cout_base = 100000  # FCFA
+        
+        # Facteurs multiplicatifs
+        facteur_epochs = config["epochs"]
+        facteur_batch = 32 / config["batch_size"]  # Plus petit batch = plus d'itérations
+        facteur_lr = 1.0  # Learning rate n'affecte pas le coût direct
+        
+        cout_total = cout_base * facteur_epochs * facteur_batch
+        
+        return {
+            "cout_fcfa": cout_total,
+            "cout_usd": cout_total / 600,
+            "temps_heures": config["epochs"] * 8 * facteur_batch
+        }
+
+# Test de l'optimiseur
+optimiseur = OptimiseurHyperparametres()
+
+# Recherche de la meilleure configuration
+meilleure_config, meilleur_score = optimiseur.recherche_grille(15)
+
+print("🎯 CONFIGURATION OPTIMALE TROUVÉE")
+print("=" * 40)
+print(f"Score: {meilleur_score:.3f}")
+
+# Estimation du coût
+cout_optimal = optimiseur.estimer_cout_config(meilleure_config)
+print(f"\\n💰 COÛT ESTIMÉ:")
+print(f"Prix: {cout_optimal['cout_fcfa']:,.0f} FCFA ({cout_optimal['cout_usd']:.0f}$)")
+print(f"Temps: {cout_optimal['temps_heures']:.0f} heures")`,
+          },
+          {
+            type: "warning",
+            icon: "⚠️",
+            title: "L'avenir du fine-tuning : IA personnalisée pour tous",
+            content: `
+                        <p><strong>🔮 Vision 2030 : Démocratisation totale de l'IA :</strong></p>
+                        
+                        <p><strong>🚀 Tendances révolutionnaires :</strong></p>
+                        <ul>
+                            <li>💰 <strong>Coûts divisés par 1000</strong> : fine-tuning à 1$ au lieu de 1000$</li>
+                            <li>⏰ <strong>Temps divisé par 100</strong> : 1 heure au lieu de 1 semaine</li>
+                            <li>🎯 <strong>Automatisation complète</strong> : fine-tuning en un clic</li>
+                            <li>📱 <strong>IA sur mobile</strong> : fine-tuning directement sur smartphone</li>
+                        </ul>
+                        
+                        <p><strong>🌍 Impact pour l'Afrique :</strong></p>
+                        <ul>
+                            <li>🗣️ <strong>Toutes les langues africaines</strong> : 2000+ langues avec leur IA</li>
+                            <li>🏥 <strong>Santé personnalisée</strong> : IA adaptée à chaque région</li>
+                            <li>🌾 <strong>Agriculture intelligente</strong> : conseils ultra-localisés</li>
+                            <li>📚 <strong>Éducation sur mesure</strong> : IA qui comprend chaque culture</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Techniques émergentes :</strong></p>
+                        <ul>
+                            <li>🧠 <strong>Few-shot fine-tuning</strong> : adaptation avec 10 exemples</li>
+                            <li>🔄 <strong>Continual learning</strong> : apprentissage sans oubli</li>
+                            <li>🎭 <strong>Persona fine-tuning</strong> : IA avec personnalités culturelles</li>
+                            <li>🌐 <strong>Federated fine-tuning</strong> : apprentissage distribué respectueux</li>
+                        </ul>
+                        
+                        <p><strong>💡 Point clé :</strong> Le fine-tuning transforme l'IA d'un outil généraliste occidental en assistant personnalisé qui comprend votre culture, votre langue, et vos besoins spécifiques.</p>
+                        
+                        <p><strong>🔮 Prochaine étape :</strong> Prompt Engineering - l'art de communiquer efficacement avec ces IA fine-tunées !</p>
+                    `,
+          },
+        ],
+        quiz: {
+          question:
+            "🤔 Pourquoi LoRA est-il révolutionnaire pour le fine-tuning de gros modèles ?",
+          options: [
+            "A) Il est plus rapide à entraîner",
+            "B) Il réduit drastiquement le nombre de paramètres à entraîner",
+            "C) Il donne de meilleurs résultats",
+            "D) Il ne nécessite pas de GPU",
+          ],
+          correct: 1,
+          explanation:
+            "LoRA révolutionne le fine-tuning en réduisant le nombre de paramètres entraînables de 99% grâce à la décomposition en matrices de faible rang. Au lieu d'entraîner 7 milliards de paramètres, on n'en entraîne que quelques millions, tout en gardant des performances proches du fine-tuning complet.",
+        },
+        prevModule: "gpt-bert.html",
+        nextModule: "prompt-engineering.html",
+      };
+
+      // Initialiser le module
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>
