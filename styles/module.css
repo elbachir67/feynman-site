@@ -705,6 +705,15 @@ h1 {
   background: #334155;
 }
 
+.btn-solution {
+  background: #8b5cf6;
+  color: white;
+}
+
+.btn-solution:hover:not(:disabled) {
+  background: #7c3aed;
+}
+
 .btn-check {
   background: var(--primary);
   color: white;

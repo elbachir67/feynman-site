@@ -285,6 +285,9 @@ class ModuleEngine {
       `;
     }
 
+    // Utiliser section.content ou section.question selon ce qui existe
+    const questionContent = section.content || section.question || "";
+
     return `
       <div class="box exercise">
         <div class="exercise-header">
@@ -292,7 +295,7 @@ class ModuleEngine {
           <span class="exercise-badge">Exercice obligatoire</span>
         </div>
         <div class="exercise-content">
-          ${section.question}
+          ${questionContent}
         </div>
         ${inputHTML}
         <div class="exercise-feedback" id="feedback-${index}"></div>
@@ -308,6 +311,9 @@ class ModuleEngine {
 
   // Créer un exercice de code
   createCodeExerciseSection(section, index) {
+    // Utiliser section.content ou section.instruction selon ce qui existe
+    const instructionContent = section.content || section.instruction || "";
+
     return `
       <div class="box exercise-code">
         <div class="exercise-header">
@@ -315,13 +321,16 @@ class ModuleEngine {
           <span class="exercise-badge">Défi code</span>
         </div>
         <div class="exercise-content">
-          ${section.instruction}
+          ${instructionContent}
         </div>
         <div class="code-container">
           <textarea class="code-editor" id="code-${index}">${section.starterCode || ""}</textarea>
           <div class="code-controls">
             <button class="btn btn-run" onclick="moduleEngine.runCodeExercise(${index})">
-              ▶ Tester
+              ▶ Tester mon code
+            </button>
+            <button class="btn btn-solution" onclick="moduleEngine.showSolution(${index})">
+              👁️ Voir solution
             </button>
             <button class="btn btn-reset" onclick="moduleEngine.resetCode('code-${index}', ${index})">
               ↺ Reset
@@ -386,16 +395,23 @@ class ModuleEngine {
     if (!input || !feedback) return;
 
     const userAnswer = parseFloat(input.value.replace(",", "."));
-    const correctAnswer = section.answer;
+    // Supporter les deux noms de propriété : correctAnswer ou answer
+    const correctAnswer = section.correctAnswer !== undefined ? section.correctAnswer : section.answer;
     const tolerance = section.tolerance || 0.01;
+
+    if (isNaN(userAnswer)) {
+      feedback.innerHTML = `<div class="feedback-warning">Entrez un nombre valide</div>`;
+      return;
+    }
 
     const isCorrect = Math.abs(userAnswer - correctAnswer) <= tolerance;
 
     if (isCorrect) {
       feedback.innerHTML = `<div class="feedback-correct">✓ Correct ! ${section.explanation || ""}</div>`;
       input.classList.add("correct");
-      this.unlockNextSection(sectionIndex);
+      input.disabled = true;
       this.completeSection(sectionIndex);
+      this.unlockNextSection(sectionIndex);
     } else {
       feedback.innerHTML = `<div class="feedback-incorrect">✗ Incorrect. Réessayez !</div>`;
       input.classList.add("incorrect");
@@ -414,23 +430,34 @@ class ModuleEngine {
       return;
     }
 
-    const isCorrect = this.selectedOption === section.correct;
+    // Supporter les deux noms de propriété : correctAnswer ou correct
+    const correctIndex = section.correctAnswer !== undefined ? section.correctAnswer : section.correct;
+    const isCorrect = this.selectedOption === correctIndex;
 
     options.forEach((opt, i) => {
       opt.classList.remove("correct", "incorrect");
-      if (i === section.correct) {
+      if (i === correctIndex) {
         opt.classList.add("correct");
       } else if (i === this.selectedOption && !isCorrect) {
         opt.classList.add("incorrect");
       }
+      // Désactiver les clics après validation
+      opt.style.pointerEvents = "none";
     });
 
     if (isCorrect) {
       feedback.innerHTML = `<div class="feedback-correct">✓ Excellent ! ${section.explanation || ""}</div>`;
-      this.unlockNextSection(sectionIndex);
       this.completeSection(sectionIndex);
+      this.unlockNextSection(sectionIndex);
     } else {
       feedback.innerHTML = `<div class="feedback-incorrect">✗ Incorrect. ${section.wrongExplanation || "Réessayez !"}</div>`;
+      // Réactiver les clics pour réessayer
+      setTimeout(() => {
+        options.forEach(opt => {
+          opt.style.pointerEvents = "auto";
+          opt.classList.remove("correct", "incorrect");
+        });
+      }, 1500);
     }
 
     this.selectedOption = undefined;
@@ -447,23 +474,34 @@ class ModuleEngine {
       return;
     }
 
-    const isCorrect = this.selectedQuizOption === section.correct;
+    // Supporter les deux noms de propriété : correctAnswer ou correct
+    const correctIndex = section.correctAnswer !== undefined ? section.correctAnswer : section.correct;
+    const isCorrect = this.selectedQuizOption === correctIndex;
 
     options.forEach((opt, i) => {
       opt.classList.remove("correct", "incorrect");
-      if (i === section.correct) {
+      if (i === correctIndex) {
         opt.classList.add("correct");
       } else if (i === this.selectedQuizOption && !isCorrect) {
         opt.classList.add("incorrect");
       }
+      // Désactiver les clics après validation
+      opt.style.pointerEvents = "none";
     });
 
     if (isCorrect) {
       feedback.innerHTML = `<div class="feedback-correct">✓ Parfait ! ${section.explanation || ""}</div>`;
-      this.unlockNextSection(sectionIndex);
       this.completeSection(sectionIndex);
+      this.unlockNextSection(sectionIndex);
     } else {
       feedback.innerHTML = `<div class="feedback-incorrect">✗ Pas tout à fait. ${section.wrongExplanation || "Relisez la section précédente."}</div>`;
+      // Réactiver les clics pour réessayer
+      setTimeout(() => {
+        options.forEach(opt => {
+          opt.style.pointerEvents = "auto";
+          opt.classList.remove("correct", "incorrect");
+        });
+      }, 1500);
     }
 
     this.selectedQuizOption = undefined;
@@ -650,21 +688,60 @@ plt.close('all')
     // D'abord exécuter le code
     await this.runCode(`code-${sectionIndex}`, `output-${sectionIndex}`);
 
-    // Puis vérifier si le résultat est correct
-    if (section.validate) {
+    // Vérifier si le résultat contient la sortie attendue
+    const output = outputElement.value;
+    const hasError = output.includes("❌") || output.includes("Erreur");
+
+    if (hasError) {
+      feedback.innerHTML = `<div class="feedback-incorrect">✗ Corrigez les erreurs dans votre code</div>`;
+      return;
+    }
+
+    // Vérifier avec expectedOutput si défini
+    if (section.expectedOutput) {
+      const isValid = output.includes(section.expectedOutput);
+
+      if (isValid) {
+        feedback.innerHTML = `<div class="feedback-correct">✓ Bravo ! Votre code fonctionne correctement !</div>`;
+        this.completeSection(sectionIndex);
+        this.unlockNextSection(sectionIndex);
+      } else {
+        feedback.innerHTML = `<div class="feedback-warning">⚠️ Le code s'exécute mais le résultat attendu n'est pas trouvé. Vérifiez votre implémentation.</div>`;
+      }
+    } else if (section.validate) {
+      // Ancienne méthode avec validate
       try {
         const isValid = await this.pyodide.runPythonAsync(section.validate);
 
         if (isValid) {
           feedback.innerHTML = `<div class="feedback-correct">✓ Bravo ! ${section.successMessage || "Code correct !"}</div>`;
-          this.unlockNextSection(sectionIndex);
           this.completeSection(sectionIndex);
+          this.unlockNextSection(sectionIndex);
         } else {
           feedback.innerHTML = `<div class="feedback-incorrect">✗ ${section.errorMessage || "Pas tout à fait. Vérifiez votre code."}</div>`;
         }
       } catch (e) {
         feedback.innerHTML = `<div class="feedback-incorrect">✗ Erreur dans le code</div>`;
       }
+    } else {
+      // Pas de validation spécifique, on valide si le code s'exécute sans erreur
+      feedback.innerHTML = `<div class="feedback-correct">✓ Code exécuté avec succès !</div>`;
+      this.completeSection(sectionIndex);
+      this.unlockNextSection(sectionIndex);
+    }
+  }
+
+  // Afficher la solution d'un exercice de code
+  showSolution(sectionIndex) {
+    const section = this.currentModule.content[sectionIndex];
+    const codeElement = document.getElementById(`code-${sectionIndex}`);
+
+    if (section.solution && codeElement) {
+      if (confirm("Voulez-vous voir la solution ? Cela remplacera votre code actuel.")) {
+        codeElement.value = section.solution;
+      }
+    } else {
+      alert("Pas de solution disponible pour cet exercice.");
     }
   }
 
