@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maximum de Vraisemblance | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧮 Mathématiques</span>
+          <span>›</span>
+          <span>Maximum de Vraisemblance</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🎯 Maximum de Vraisemblance</h1>
+      <p class="subtitle">Module 1.9 - La méthode d'estimation la plus utilisée en IA</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="random-variables.html" class="nav-link" id="prev-link"
+          >← Module précédent : Variables aléatoires</a
+        >
+        <a href="statistics.html" class="nav-link" id="next-link"
+          >Module suivant : Statistiques →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      const moduleConfig = {
+        id: "math-maximum-likelihood",
+        title: "Maximum de Vraisemblance",
+        category: "Mathématiques",
+        objectives: [
+          "Comprendre l'idée de la vraisemblance",
+          "Calculer la fonction de vraisemblance",
+          "Comprendre pourquoi on utilise la log-vraisemblance",
+          "Estimer des paramètres par maximum de vraisemblance",
+          "Faire le lien avec les fonctions de perte en IA",
+          "Implémenter MLE avec Python",
+        ],
+        content: [
+          // ===== SECTION 1: INTRODUCTION =====
+          {
+            type: "concept",
+            icon: "💡",
+            title: "L'idée fondamentale",
+            content: `
+              <p>Le <strong>Maximum de Vraisemblance</strong> (MLE - Maximum Likelihood Estimation) répond à cette question :</p>
+
+              <p style="font-size: 1.2em; text-align: center; margin: 1.5rem 0; padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+                "Quels paramètres rendent mes données observées les plus <strong>probables</strong> ?"
+              </p>
+
+              <p><strong>🎯 L'intuition :</strong></p>
+              <p>Imaginez que vous trouvez 7 piles sur 10 lancers de pièce. La pièce est-elle équilibrée (p = 0.5) ou biaisée ?</p>
+              <ul>
+                <li>Si p = 0.5 : P(7 piles sur 10) ≈ 11.7%</li>
+                <li>Si p = 0.7 : P(7 piles sur 10) ≈ 26.7%</li>
+                <li>Si p = 0.9 : P(7 piles sur 10) ≈ 5.7%</li>
+              </ul>
+              <p><strong>→ p = 0.7 rend les données les plus vraisemblables !</strong></p>
+
+              <p><strong>🤖 Pourquoi c'est fondamental en IA :</strong></p>
+              <ul>
+                <li>La <strong>régression logistique</strong> = MLE</li>
+                <li>L'entraînement des <strong>réseaux de neurones</strong> ≈ MLE</li>
+                <li>Les <strong>LLMs</strong> sont entraînés par MLE sur les séquences de mots</li>
+                <li>La <strong>cross-entropy loss</strong> = negative log-likelihood</li>
+              </ul>
+            `,
+          },
+
+          // ===== SECTION 2: VRAISEMBLANCE =====
+          {
+            type: "mathematique",
+            icon: "📊",
+            title: "La fonction de vraisemblance",
+            content: `
+              <p>La <strong>vraisemblance</strong> L(θ) mesure la probabilité d'observer nos données pour un paramètre θ donné.</p>
+
+              <p><strong>📐 Définition :</strong></p>
+              <p>$$L(\\theta) = P(\\text{données} | \\theta)$$</p>
+
+              <p><strong>📋 Pour des observations indépendantes x₁, x₂, ..., xₙ :</strong></p>
+              <p>$$L(\\theta) = P(x_1|\\theta) \\times P(x_2|\\theta) \\times ... \\times P(x_n|\\theta) = \\prod_{i=1}^{n} P(x_i|\\theta)$$</p>
+
+              <p><strong>🎯 Exemple : Lancer de pièce</strong></p>
+              <p>On observe : P, P, F, P, P, F, P (5 piles, 2 faces)</p>
+              <p>$$L(p) = p^5 \\times (1-p)^2$$</p>
+              <ul>
+                <li>L(0.5) = 0.5⁵ × 0.5² = 0.0078</li>
+                <li>L(0.7) = 0.7⁵ × 0.3² = 0.0151</li>
+                <li>L(0.71) = 0.71⁵ × 0.29² = 0.0152 ← maximum !</li>
+              </ul>
+
+              <p><strong>💡 Note importante :</strong></p>
+              <p>L(θ) n'est PAS une probabilité sur θ. C'est une fonction de θ qui mesure à quel point θ "explique" les données.</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 1 : Calculer une vraisemblance",
+            content: `
+              <p>On lance une pièce 4 fois et on obtient : P, P, P, F (3 piles, 1 face).</p>
+              <p>La vraisemblance est L(p) = p³(1-p).</p>
+              <p>Calculez L(0.8).</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0.1024,
+            tolerance: 0.001,
+            explanation: "L(0.8) = 0.8³ × 0.2 = 0.512 × 0.2 = 0.1024",
+            completesObjective: 1,
+          },
+
+          // ===== SECTION 3: LOG-VRAISEMBLANCE =====
+          {
+            type: "concept",
+            icon: "📈",
+            title: "Pourquoi la log-vraisemblance ?",
+            content: `
+              <p>En pratique, on maximise la <strong>log-vraisemblance</strong> plutôt que la vraisemblance.</p>
+
+              <p><strong>📐 Définition :</strong></p>
+              <p>$$\\ell(\\theta) = \\log L(\\theta) = \\log \\prod_{i=1}^{n} P(x_i|\\theta) = \\sum_{i=1}^{n} \\log P(x_i|\\theta)$$</p>
+
+              <p><strong>🔑 Avantages :</strong></p>
+              <ol>
+                <li><strong>Produit → Somme</strong> : les sommes sont plus faciles à dériver</li>
+                <li><strong>Stabilité numérique</strong> : évite les underflows (0.001¹⁰⁰⁰ ≈ 0)</li>
+                <li><strong>Même maximum</strong> : log est strictement croissante</li>
+                <li><strong>Interprétation</strong> : liée à l'entropie et à la théorie de l'information</li>
+              </ol>
+
+              <p><strong>🎯 Exemple : Pièce (5 piles, 2 faces)</strong></p>
+              <p>$$\\ell(p) = 5\\log(p) + 2\\log(1-p)$$</p>
+
+              <p><strong>🤖 En IA :</strong></p>
+              <p>La <strong>negative log-likelihood</strong> (NLL) est la fonction de perte la plus utilisée :</p>
+              <p>$$\\text{Loss} = -\\ell(\\theta) = -\\sum_{i} \\log P(x_i|\\theta)$$</p>
+              <p>Minimiser la NLL = Maximiser la vraisemblance !</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 2 : Log-vraisemblance",
+            content: `
+              <p>Pour notre pièce (3 piles, 1 face), la log-vraisemblance est :</p>
+              <p>ℓ(p) = 3·log(p) + 1·log(1-p)</p>
+              <p>Calculez ℓ(0.75). Utilisez log naturel (ln).</p>
+              <p>Rappel : ln(0.75) ≈ -0.288, ln(0.25) ≈ -1.386</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: -2.25,
+            tolerance: 0.05,
+            explanation: "ℓ(0.75) = 3×ln(0.75) + ln(0.25) = 3×(-0.288) + (-1.386) = -0.864 - 1.386 = -2.25",
+            completesObjective: 2,
+          },
+
+          // ===== SECTION 4: MAXIMISATION =====
+          {
+            type: "mathematique",
+            icon: "🔍",
+            title: "Trouver le maximum",
+            content: `
+              <p>Pour trouver le paramètre optimal θ̂, on résout :</p>
+
+              <p><strong>📐 Condition du premier ordre :</strong></p>
+              <p>$$\\frac{d\\ell(\\theta)}{d\\theta} = 0$$</p>
+
+              <p><strong>🎯 Exemple complet : Estimation de p</strong></p>
+              <p>Données : k piles sur n lancers</p>
+              <p>$$\\ell(p) = k\\log(p) + (n-k)\\log(1-p)$$</p>
+
+              <p><strong>Dérivation :</strong></p>
+              <p>$$\\frac{d\\ell}{dp} = \\frac{k}{p} - \\frac{n-k}{1-p} = 0$$</p>
+
+              <p><strong>Résolution :</strong></p>
+              <p>$$\\frac{k}{p} = \\frac{n-k}{1-p}$$</p>
+              <p>$$k(1-p) = p(n-k)$$</p>
+              <p>$$k - kp = np - kp$$</p>
+              <p>$$k = np$$</p>
+              <p>$$\\hat{p} = \\frac{k}{n}$$</p>
+
+              <p><strong>💡 Résultat intuitif :</strong></p>
+              <p>L'estimateur MLE de p est simplement la proportion observée !</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 3 : Estimateur MLE",
+            content: `
+              <p>On lance une pièce 100 fois et on obtient 62 piles.</p>
+              <p>Quel est l'estimateur MLE de p ?</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0.62,
+            tolerance: 0.001,
+            explanation: "p̂ = k/n = 62/100 = 0.62. C'est simplement la fréquence observée !",
+            completesObjective: 3,
+          },
+
+          // ===== SECTION 5: NORMALE =====
+          {
+            type: "mathematique",
+            icon: "🔔",
+            title: "MLE pour la distribution normale",
+            content: `
+              <p>Pour des données x₁, ..., xₙ suivant une loi normale N(μ, σ²) :</p>
+
+              <p><strong>📐 Vraisemblance :</strong></p>
+              <p>$$L(\\mu, \\sigma^2) = \\prod_{i=1}^{n} \\frac{1}{\\sqrt{2\\pi\\sigma^2}} e^{-\\frac{(x_i-\\mu)^2}{2\\sigma^2}}$$</p>
+
+              <p><strong>📐 Log-vraisemblance :</strong></p>
+              <p>$$\\ell(\\mu, \\sigma^2) = -\\frac{n}{2}\\log(2\\pi) - \\frac{n}{2}\\log(\\sigma^2) - \\frac{1}{2\\sigma^2}\\sum_{i=1}^{n}(x_i-\\mu)^2$$</p>
+
+              <p><strong>🎯 Estimateurs MLE :</strong></p>
+              <p>$$\\hat{\\mu} = \\frac{1}{n}\\sum_{i=1}^{n} x_i = \\bar{x}$$</p>
+              <p>$$\\hat{\\sigma}^2 = \\frac{1}{n}\\sum_{i=1}^{n}(x_i - \\bar{x})^2$$</p>
+
+              <p><strong>💡 Résultat :</strong></p>
+              <p>L'estimateur MLE de μ est la moyenne empirique, et celui de σ² est la variance empirique (avec n, pas n-1).</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 4 : MLE de la moyenne",
+            content: `
+              <p>On observe les données : {2, 4, 6, 8, 10}</p>
+              <p>En supposant qu'elles suivent une loi normale, quel est l'estimateur MLE de μ ?</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 6,
+            tolerance: 0,
+            explanation: "μ̂ = (2+4+6+8+10)/5 = 30/5 = 6. C'est simplement la moyenne !",
+            completesObjective: 3,
+          },
+
+          // ===== SECTION 6: LIEN AVEC L'IA =====
+          {
+            type: "concept",
+            icon: "🤖",
+            title: "MLE et fonctions de perte en IA",
+            content: `
+              <p>Les fonctions de perte classiques en IA sont des <strong>negative log-likelihoods</strong> !</p>
+
+              <p><strong>📊 1. Régression (MSE) :</strong></p>
+              <p>Si on suppose que y = f(x) + ε avec ε ~ N(0, σ²) :</p>
+              <p>$$-\\log P(y|x,\\theta) \\propto (y - f_\\theta(x))^2$$</p>
+              <p>→ Minimiser MSE = Maximiser la vraisemblance sous hypothèse gaussienne</p>
+
+              <p><strong>📊 2. Classification binaire (Binary Cross-Entropy) :</strong></p>
+              <p>Pour y ∈ {0, 1} et p = σ(f(x)) :</p>
+              <p>$$-\\log P(y|x) = -[y\\log(p) + (1-y)\\log(1-p)]$$</p>
+              <p>→ C'est exactement la NLL d'une Bernoulli !</p>
+
+              <p><strong>📊 3. Classification multi-classes (Cross-Entropy) :</strong></p>
+              <p>$$-\\log P(y|x) = -\\sum_{k} y_k \\log(p_k)$$</p>
+              <p>→ NLL d'une distribution catégorielle (softmax)</p>
+
+              <p><strong>📊 4. LLMs :</strong></p>
+              <p>$$\\text{Loss} = -\\sum_{t} \\log P(w_t | w_1, ..., w_{t-1})$$</p>
+              <p>→ NLL de la prédiction de chaque mot</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 5 : Cross-entropy",
+            content: `
+              <p>Un modèle de classification prédit P(classe=1) = 0.8.</p>
+              <p>La vraie classe est y = 1.</p>
+              <p>Calculez la binary cross-entropy : -[y·log(p) + (1-y)·log(1-p)]</p>
+              <p>Utilisez log naturel. ln(0.8) ≈ -0.223</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0.223,
+            tolerance: 0.01,
+            explanation: "BCE = -[1×ln(0.8) + 0×ln(0.2)] = -ln(0.8) = -(-0.223) = 0.223",
+            completesObjective: 4,
+          },
+
+          // ===== SECTION 7: CODE PYTHON =====
+          {
+            type: "code",
+            icon: "🐍",
+            title: "MLE en Python",
+            content: `
+              <p>Implémentons MLE pour estimer les paramètres d'une distribution normale :</p>
+            `,
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+from scipy.optimize import minimize
+
+# Générer des données
+np.random.seed(42)
+true_mu, true_sigma = 5, 2
+data = np.random.normal(true_mu, true_sigma, 100)
+
+print(f"📊 Vrais paramètres : μ = {true_mu}, σ = {true_sigma}")
+print(f"📊 Données générées : n = {len(data)}")
+
+# 1. Estimateurs MLE analytiques
+mu_mle = np.mean(data)
+sigma_mle = np.std(data)  # avec n, pas n-1
+
+print(f"\\n🎯 Estimateurs MLE analytiques :")
+print(f"   μ̂ = {mu_mle:.4f}")
+print(f"   σ̂ = {sigma_mle:.4f}")
+
+# 2. MLE par optimisation numérique
+def negative_log_likelihood(params, data):
+    mu, sigma = params
+    if sigma <= 0:
+        return np.inf
+    # Log-vraisemblance de la normale
+    n = len(data)
+    ll = -n/2 * np.log(2*np.pi) - n*np.log(sigma) - np.sum((data - mu)**2)/(2*sigma**2)
+    return -ll  # On minimise le négatif = maximiser
+
+result = minimize(negative_log_likelihood, x0=[0, 1], args=(data,), method='Nelder-Mead')
+mu_opt, sigma_opt = result.x
+
+print(f"\\n🔍 MLE par optimisation numérique :")
+print(f"   μ̂ = {mu_opt:.4f}")
+print(f"   σ̂ = {sigma_opt:.4f}")
+
+# 3. Visualisation
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# Histogramme + densité estimée
+ax1 = axes[0]
+ax1.hist(data, bins=20, density=True, alpha=0.7, label='Données')
+x = np.linspace(data.min()-1, data.max()+1, 100)
+ax1.plot(x, stats.norm.pdf(x, mu_mle, sigma_mle), 'r-', lw=2, label=f'MLE: N({mu_mle:.2f}, {sigma_mle:.2f}²)')
+ax1.plot(x, stats.norm.pdf(x, true_mu, true_sigma), 'g--', lw=2, label=f'Vrai: N({true_mu}, {true_sigma}²)')
+ax1.set_xlabel('x')
+ax1.set_ylabel('Densité')
+ax1.set_title('Estimation MLE de la distribution normale')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# Surface de vraisemblance
+ax2 = axes[1]
+mu_range = np.linspace(3, 7, 50)
+sigma_range = np.linspace(1, 3, 50)
+MU, SIGMA = np.meshgrid(mu_range, sigma_range)
+LL = np.zeros_like(MU)
+for i in range(len(sigma_range)):
+    for j in range(len(mu_range)):
+        LL[i,j] = -negative_log_likelihood([MU[i,j], SIGMA[i,j]], data)
+
+cs = ax2.contourf(MU, SIGMA, LL, levels=20, cmap='viridis')
+ax2.scatter([mu_mle], [sigma_mle], c='red', s=100, marker='*', label='MLE', zorder=5)
+ax2.scatter([true_mu], [true_sigma], c='white', s=100, marker='o', label='Vrai', zorder=5)
+ax2.set_xlabel('μ')
+ax2.set_ylabel('σ')
+ax2.set_title('Surface de log-vraisemblance')
+ax2.legend()
+plt.colorbar(cs, ax=ax2, label='Log-vraisemblance')
+
+plt.tight_layout()
+plt.savefig('mle_normal.png', dpi=100, bbox_inches='tight')
+plt.show()`,
+          },
+          {
+            type: "exercise-code",
+            icon: "💻",
+            title: "Exercice 6 : MLE pour Bernoulli",
+            content: `
+              <p>Implémentez l'estimation MLE pour une distribution de Bernoulli.</p>
+              <p>Vous avez des données binaires (0 ou 1) et devez estimer p.</p>
+            `,
+            starterCode: `import numpy as np
+
+np.random.seed(42)
+
+# Simuler des données de Bernoulli
+true_p = 0.7
+n = 1000
+data = np.random.binomial(1, true_p, n)  # 0 ou 1
+
+print(f"Vrai p : {true_p}")
+print(f"Données : {n} observations, {np.sum(data)} succès")
+
+# TODO: Calculer l'estimateur MLE de p
+# Rappel : p̂ = nombre de succès / nombre total
+p_mle = ___
+
+print(f"\\nEstimateur MLE : p̂ = {p_mle:.4f}")
+
+# TODO: Calculer la log-vraisemblance au point MLE
+# ℓ(p) = k*log(p) + (n-k)*log(1-p) où k = nombre de succès
+k = np.sum(data)
+log_likelihood = ___
+
+print(f"Log-vraisemblance : ℓ(p̂) = {log_likelihood:.2f}")`,
+            solution: `import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(42)
+
+# Simuler des données de Bernoulli
+true_p = 0.7
+n = 1000
+data = np.random.binomial(1, true_p, n)
+
+print(f"🎯 Vrai p : {true_p}")
+print(f"📊 Données : {n} observations, {np.sum(data)} succès")
+
+# Calculer l'estimateur MLE de p
+k = np.sum(data)
+p_mle = k / n
+
+print(f"\\n✅ Estimateur MLE : p̂ = {p_mle:.4f}")
+
+# Calculer la log-vraisemblance au point MLE
+log_likelihood = k * np.log(p_mle) + (n - k) * np.log(1 - p_mle)
+
+print(f"📈 Log-vraisemblance : ℓ(p̂) = {log_likelihood:.2f}")
+
+# Visualisation
+p_range = np.linspace(0.01, 0.99, 100)
+ll_values = k * np.log(p_range) + (n - k) * np.log(1 - p_range)
+
+plt.figure(figsize=(10, 5))
+plt.plot(p_range, ll_values, 'b-', linewidth=2, label='Log-vraisemblance')
+plt.axvline(p_mle, color='r', linestyle='--', label=f'MLE: p̂ = {p_mle:.3f}')
+plt.axvline(true_p, color='g', linestyle=':', label=f'Vrai: p = {true_p}')
+plt.scatter([p_mle], [log_likelihood], color='red', s=100, zorder=5)
+plt.xlabel('p')
+plt.ylabel('Log-vraisemblance ℓ(p)')
+plt.title('Estimation MLE de p pour une Bernoulli')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.savefig('mle_bernoulli.png', dpi=100, bbox_inches='tight')
+plt.show()
+
+print(f"\\n📊 Erreur d'estimation : |p̂ - p| = {abs(p_mle - true_p):.4f}")`,
+            expectedOutput: "Estimateur MLE",
+            completesObjective: 5,
+          },
+
+          // ===== SECTION 8: QUIZ FINAL =====
+          {
+            type: "quiz",
+            icon: "🎯",
+            title: "Quiz final : Maximum de Vraisemblance",
+            question: "Pourquoi les LLMs utilisent-ils la cross-entropy loss plutôt que la MSE pour prédire le prochain mot ?",
+            options: [
+              "La MSE est plus lente à calculer",
+              "La cross-entropy est la negative log-likelihood pour une distribution catégorielle (softmax), ce qui est approprié pour la classification sur un vocabulaire",
+              "La MSE ne fonctionne pas avec les GPUs",
+              "C'est uniquement pour des raisons historiques"
+            ],
+            correctAnswer: 1,
+            explanation: "Prédire le prochain mot = classification parmi V mots possibles. Le softmax donne une distribution de probabilité sur le vocabulaire, et la cross-entropy mesure à quel point cette distribution est proche de la vraie distribution (one-hot). C'est exactement la NLL d'une distribution catégorielle, donc c'est du MLE !",
+          },
+        ],
+        prevModule: "random-variables.html",
+        nextModule: "statistics.html",
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

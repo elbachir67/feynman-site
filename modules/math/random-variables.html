@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Variables Aléatoires | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧮 Mathématiques</span>
+          <span>›</span>
+          <span>Variables Aléatoires</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>🎲 Variables Aléatoires</h1>
+      <p class="subtitle">Module 1.8 - Espérance, variance et covariance</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="distributions.html" class="nav-link" id="prev-link"
+          >← Module précédent : Distributions</a
+        >
+        <a href="maximum-likelihood.html" class="nav-link" id="next-link"
+          >Module suivant : Maximum de vraisemblance →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      const moduleConfig = {
+        id: "math-random-variables",
+        title: "Variables Aléatoires",
+        category: "Mathématiques",
+        objectives: [
+          "Comprendre ce qu'est une variable aléatoire",
+          "Calculer l'espérance d'une variable aléatoire",
+          "Calculer et interpréter la variance",
+          "Comprendre la covariance et la corrélation",
+          "Maîtriser les propriétés de linéarité",
+          "Appliquer ces concepts avec Python",
+        ],
+        content: [
+          // ===== SECTION 1: INTRODUCTION =====
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Qu'est-ce qu'une variable aléatoire ?",
+            content: `
+              <p>Une <strong>variable aléatoire</strong> X est une fonction qui associe un nombre à chaque résultat d'une expérience aléatoire.</p>
+
+              <p><strong>🎲 Exemple concret :</strong></p>
+              <p>Expérience : lancer un dé</p>
+              <p>X = "valeur obtenue" est une variable aléatoire qui peut prendre les valeurs {1, 2, 3, 4, 5, 6}</p>
+
+              <p><strong>📊 Deux types :</strong></p>
+              <ul>
+                <li><strong>Discrète</strong> : valeurs dénombrables (1, 2, 3, ...)</li>
+                <li><strong>Continue</strong> : valeurs sur un intervalle (température, taille)</li>
+              </ul>
+
+              <p><strong>🤖 En IA, les variables aléatoires modélisent :</strong></p>
+              <ul>
+                <li>Les <strong>features</strong> d'un dataset (âge, salaire, ...)</li>
+                <li>Les <strong>prédictions</strong> d'un modèle</li>
+                <li>Les <strong>erreurs</strong> de prédiction</li>
+                <li>Les <strong>poids</strong> d'un réseau de neurones (avant entraînement)</li>
+              </ul>
+            `,
+          },
+
+          // ===== SECTION 2: ESPÉRANCE =====
+          {
+            type: "mathematique",
+            icon: "📊",
+            title: "L'espérance : la moyenne théorique",
+            content: `
+              <p>L'<strong>espérance</strong> E[X] est la valeur moyenne qu'on s'attend à obtenir sur un grand nombre d'expériences.</p>
+
+              <p><strong>📐 Formule (cas discret) :</strong></p>
+              <p>$$E[X] = \\sum_{i} x_i \\cdot P(X = x_i)$$</p>
+
+              <p><strong>📐 Formule (cas continu) :</strong></p>
+              <p>$$E[X] = \\int_{-\\infty}^{+\\infty} x \\cdot f(x) \\, dx$$</p>
+
+              <p><strong>🎲 Exemple : Dé équilibré</strong></p>
+              <p>$$E[X] = \\sum_{k=1}^{6} k \\cdot \\frac{1}{6} = \\frac{1+2+3+4+5+6}{6} = 3.5$$</p>
+
+              <p><strong>💡 Interprétation :</strong></p>
+              <p>Si on lance le dé un million de fois et qu'on fait la moyenne des résultats, on obtiendra ≈ 3.5</p>
+
+              <p><strong>🤖 En IA :</strong></p>
+              <ul>
+                <li>E[erreur] = erreur moyenne du modèle</li>
+                <li>E[gain] = gain moyen d'une stratégie de trading</li>
+                <li>E[récompense] = récompense moyenne en RL</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 1 : Calculer une espérance",
+            content: `
+              <p>Une variable X prend les valeurs suivantes :</p>
+              <ul>
+                <li>X = 0 avec probabilité 0.3</li>
+                <li>X = 5 avec probabilité 0.5</li>
+                <li>X = 10 avec probabilité 0.2</li>
+              </ul>
+              <p>Calculez E[X].</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 4.5,
+            tolerance: 0.01,
+            explanation: "E[X] = 0×0.3 + 5×0.5 + 10×0.2 = 0 + 2.5 + 2 = 4.5",
+            completesObjective: 1,
+          },
+          {
+            type: "mathematique",
+            icon: "✨",
+            title: "Propriétés de l'espérance (linéarité)",
+            content: `
+              <p>L'espérance a des propriétés très utiles :</p>
+
+              <p><strong>📋 Propriété 1 : Linéarité</strong></p>
+              <p>$$E[aX + b] = a \\cdot E[X] + b$$</p>
+              <p>L'espérance d'une transformation linéaire est la transformation de l'espérance.</p>
+
+              <p><strong>📋 Propriété 2 : Somme</strong></p>
+              <p>$$E[X + Y] = E[X] + E[Y]$$</p>
+              <p>Toujours vraie, même si X et Y sont dépendantes !</p>
+
+              <p><strong>📋 Propriété 3 : Produit (cas indépendant)</strong></p>
+              <p>Si X et Y sont <strong>indépendantes</strong> :</p>
+              <p>$$E[XY] = E[X] \\cdot E[Y]$$</p>
+
+              <p><strong>🎯 Exemple :</strong></p>
+              <p>Si X représente un score et Y = 2X + 3 est le score transformé :</p>
+              <p>E[Y] = 2·E[X] + 3</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 2 : Linéarité de l'espérance",
+            content: `
+              <p>Si E[X] = 10, calculez E[3X - 5].</p>
+              <p>Utilisez la propriété : E[aX + b] = aE[X] + b</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 25,
+            tolerance: 0,
+            explanation: "E[3X - 5] = 3×E[X] - 5 = 3×10 - 5 = 30 - 5 = 25",
+            completesObjective: 4,
+          },
+
+          // ===== SECTION 3: VARIANCE =====
+          {
+            type: "mathematique",
+            icon: "📏",
+            title: "La variance : mesurer la dispersion",
+            content: `
+              <p>La <strong>variance</strong> Var(X) mesure à quel point les valeurs s'écartent de l'espérance.</p>
+
+              <p><strong>📐 Définition :</strong></p>
+              <p>$$Var(X) = E[(X - E[X])^2]$$</p>
+              <p>C'est l'espérance du carré des écarts à la moyenne.</p>
+
+              <p><strong>📐 Formule de calcul (plus pratique) :</strong></p>
+              <p>$$Var(X) = E[X^2] - (E[X])^2$$</p>
+              <p>"Moyenne des carrés moins carré de la moyenne"</p>
+
+              <p><strong>📏 Écart-type :</strong></p>
+              <p>$$\\sigma_X = \\sqrt{Var(X)}$$</p>
+              <p>L'écart-type a la même unité que X, donc plus interprétable.</p>
+
+              <p><strong>🔍 Interprétation :</strong></p>
+              <ul>
+                <li>Var(X) = 0 → X est constant (pas d'incertitude)</li>
+                <li>Var(X) grand → X très dispersé (haute incertitude)</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 3 : Calculer une variance",
+            content: `
+              <p>X prend les valeurs {-1, +1} avec probabilité 0.5 chacune.</p>
+              <p>1. Calculez E[X]</p>
+              <p>2. Calculez E[X²]</p>
+              <p>3. En déduisez Var(X) = E[X²] - (E[X])²</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 1,
+            tolerance: 0.01,
+            explanation: "E[X] = (-1)×0.5 + 1×0.5 = 0. E[X²] = 1×0.5 + 1×0.5 = 1. Var(X) = 1 - 0² = 1",
+            completesObjective: 2,
+          },
+          {
+            type: "mathematique",
+            icon: "✨",
+            title: "Propriétés de la variance",
+            content: `
+              <p>La variance a des propriétés différentes de l'espérance :</p>
+
+              <p><strong>📋 Propriété 1 : Constante</strong></p>
+              <p>$$Var(aX + b) = a^2 \\cdot Var(X)$$</p>
+              <p>⚠️ La constante b disparaît, et a est au carré !</p>
+
+              <p><strong>📋 Propriété 2 : Somme (cas indépendant)</strong></p>
+              <p>Si X et Y sont <strong>indépendantes</strong> :</p>
+              <p>$$Var(X + Y) = Var(X) + Var(Y)$$</p>
+
+              <p><strong>⚠️ Attention :</strong> Si X et Y ne sont pas indépendantes :</p>
+              <p>$$Var(X + Y) = Var(X) + Var(Y) + 2 \\cdot Cov(X, Y)$$</p>
+
+              <p><strong>🎯 Exemple :</strong></p>
+              <p>Si Var(X) = 4, alors :</p>
+              <ul>
+                <li>Var(2X) = 4 × 4 = 16</li>
+                <li>Var(X + 10) = 4 (ajouter une constante ne change pas la variance)</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 4 : Propriétés de la variance",
+            content: `
+              <p>Si Var(X) = 9, calculez Var(2X + 5).</p>
+              <p>Rappel : Var(aX + b) = a²Var(X)</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 36,
+            tolerance: 0,
+            explanation: "Var(2X + 5) = 2² × Var(X) = 4 × 9 = 36. Le +5 n'a pas d'effet sur la variance.",
+            completesObjective: 4,
+          },
+
+          // ===== SECTION 4: COVARIANCE =====
+          {
+            type: "concept",
+            icon: "🔗",
+            title: "La covariance : mesurer les liens",
+            content: `
+              <p>La <strong>covariance</strong> mesure comment deux variables varient ensemble.</p>
+
+              <p><strong>📐 Définition :</strong></p>
+              <p>$$Cov(X, Y) = E[(X - E[X])(Y - E[Y])]$$</p>
+
+              <p><strong>📐 Formule de calcul :</strong></p>
+              <p>$$Cov(X, Y) = E[XY] - E[X] \\cdot E[Y]$$</p>
+
+              <p><strong>🔍 Interprétation :</strong></p>
+              <ul>
+                <li><strong>Cov(X,Y) > 0</strong> : quand X augmente, Y tend à augmenter</li>
+                <li><strong>Cov(X,Y) < 0</strong> : quand X augmente, Y tend à diminuer</li>
+                <li><strong>Cov(X,Y) = 0</strong> : pas de relation linéaire</li>
+              </ul>
+
+              <p><strong>💡 Propriété importante :</strong></p>
+              <p>$$Cov(X, X) = Var(X)$$</p>
+              <p>La covariance d'une variable avec elle-même est sa variance.</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 5 : Calculer une covariance",
+            content: `
+              <p>Soient X et Y avec :</p>
+              <ul>
+                <li>E[X] = 2, E[Y] = 3</li>
+                <li>E[XY] = 8</li>
+              </ul>
+              <p>Calculez Cov(X, Y) = E[XY] - E[X]·E[Y]</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 2,
+            tolerance: 0,
+            explanation: "Cov(X,Y) = E[XY] - E[X]·E[Y] = 8 - 2×3 = 8 - 6 = 2",
+            completesObjective: 3,
+          },
+
+          // ===== SECTION 5: CORRÉLATION =====
+          {
+            type: "mathematique",
+            icon: "📈",
+            title: "La corrélation : covariance normalisée",
+            content: `
+              <p>La <strong>corrélation</strong> est une version normalisée de la covariance, toujours entre -1 et +1.</p>
+
+              <p><strong>📐 Définition :</strong></p>
+              <p>$$\\rho_{X,Y} = \\frac{Cov(X, Y)}{\\sigma_X \\cdot \\sigma_Y} = \\frac{Cov(X, Y)}{\\sqrt{Var(X)} \\cdot \\sqrt{Var(Y)}}$$</p>
+
+              <p><strong>📊 Interprétation :</strong></p>
+              <ul>
+                <li><strong>ρ = +1</strong> : corrélation positive parfaite (Y = aX + b avec a > 0)</li>
+                <li><strong>ρ = -1</strong> : corrélation négative parfaite (Y = aX + b avec a < 0)</li>
+                <li><strong>ρ = 0</strong> : pas de corrélation linéaire</li>
+                <li><strong>|ρ| > 0.7</strong> : corrélation forte</li>
+                <li><strong>0.3 < |ρ| < 0.7</strong> : corrélation modérée</li>
+              </ul>
+
+              <p><strong>⚠️ Attention :</strong></p>
+              <p>Corrélation ≠ Causalité ! Deux variables peuvent être corrélées sans que l'une cause l'autre.</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 6 : Calculer une corrélation",
+            content: `
+              <p>Soient X et Y avec :</p>
+              <ul>
+                <li>Cov(X, Y) = 6</li>
+                <li>σ_X = 2 (écart-type de X)</li>
+                <li>σ_Y = 4 (écart-type de Y)</li>
+              </ul>
+              <p>Calculez le coefficient de corrélation ρ.</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0.75,
+            tolerance: 0.01,
+            explanation: "ρ = Cov(X,Y) / (σ_X × σ_Y) = 6 / (2 × 4) = 6/8 = 0.75. C'est une corrélation positive forte.",
+            completesObjective: 3,
+          },
+
+          // ===== SECTION 6: APPLICATION =====
+          {
+            type: "concept",
+            icon: "🤖",
+            title: "Applications en IA",
+            content: `
+              <p><strong>1. Compromis biais-variance :</strong></p>
+              <p>$$E[(y - \\hat{y})^2] = Biais^2 + Variance + Bruit$$</p>
+              <p>L'erreur quadratique moyenne se décompose en ces trois termes.</p>
+
+              <p><strong>2. Matrice de covariance :</strong></p>
+              <p>Pour un vecteur de features X = (X₁, X₂, ..., Xₙ), la matrice de covariance Σ contient toutes les covariances :</p>
+              <p>$$\\Sigma_{ij} = Cov(X_i, X_j)$$</p>
+              <p>Utilisée en PCA, LDA, et normalisation de données.</p>
+
+              <p><strong>3. Régularisation :</strong></p>
+              <p>Minimiser Var(θ) pour des paramètres plus stables.</p>
+
+              <p><strong>4. Bandit multi-bras :</strong></p>
+              <p>Explorer les options avec haute variance vs exploiter les options avec haute espérance.</p>
+            `,
+          },
+
+          // ===== SECTION 7: CODE PYTHON =====
+          {
+            type: "code",
+            icon: "🐍",
+            title: "Calculs avec NumPy",
+            content: `
+              <p>Calculons espérance, variance et covariance sur des données réelles :</p>
+            `,
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Simuler des données corrélées
+np.random.seed(42)
+n = 1000
+
+# X et Y corrélées (Y ≈ 2X + bruit)
+X = np.random.normal(50, 10, n)  # moyenne=50, écart-type=10
+bruit = np.random.normal(0, 5, n)
+Y = 2 * X + 30 + bruit
+
+print("📊 STATISTIQUES")
+print("=" * 50)
+
+# Espérances
+print(f"E[X] = {np.mean(X):.2f} (théorique: 50)")
+print(f"E[Y] = {np.mean(Y):.2f} (théorique: 2×50+30=130)")
+
+# Variances
+print(f"\\nVar(X) = {np.var(X):.2f} (théorique: 100)")
+print(f"σ_X = {np.std(X):.2f} (théorique: 10)")
+
+# Covariance et corrélation
+cov_matrix = np.cov(X, Y)
+print(f"\\nMatrice de covariance:")
+print(f"  Var(X)    Cov(X,Y)   {cov_matrix[0,0]:.1f}  {cov_matrix[0,1]:.1f}")
+print(f"  Cov(X,Y)  Var(Y)     {cov_matrix[1,0]:.1f}  {cov_matrix[1,1]:.1f}")
+
+correlation = np.corrcoef(X, Y)[0, 1]
+print(f"\\nCorrélation ρ(X,Y) = {correlation:.3f}")
+
+# Visualisation
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# Scatter plot
+axes[0].scatter(X, Y, alpha=0.5, s=10)
+axes[0].set_xlabel('X')
+axes[0].set_ylabel('Y')
+axes[0].set_title(f'Scatter plot (ρ = {correlation:.2f})')
+
+# Droite de régression
+z = np.polyfit(X, Y, 1)
+p = np.poly1d(z)
+x_line = np.linspace(X.min(), X.max(), 100)
+axes[0].plot(x_line, p(x_line), 'r-', linewidth=2, label=f'y = {z[0]:.1f}x + {z[1]:.1f}')
+axes[0].legend()
+axes[0].grid(True, alpha=0.3)
+
+# Histogrammes
+axes[1].hist(X, bins=30, alpha=0.5, label='X', density=True)
+axes[1].hist(Y, bins=30, alpha=0.5, label='Y', density=True)
+axes[1].set_xlabel('Valeur')
+axes[1].set_ylabel('Densité')
+axes[1].set_title('Distributions de X et Y')
+axes[1].legend()
+axes[1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('covariance_plot.png', dpi=100, bbox_inches='tight')
+plt.show()`,
+          },
+          {
+            type: "exercise-code",
+            icon: "💻",
+            title: "Exercice 7 : Vérifier les propriétés",
+            content: `
+              <p>Vérifiez expérimentalement que :</p>
+              <ul>
+                <li>E[X + Y] = E[X] + E[Y]</li>
+                <li>Var(2X) = 4 × Var(X)</li>
+                <li>Si X et Y sont indépendantes, Cov(X,Y) ≈ 0</li>
+              </ul>
+            `,
+            starterCode: `import numpy as np
+
+np.random.seed(42)
+n = 100000
+
+# Générer X et Y indépendantes
+X = np.random.normal(10, 3, n)  # moyenne=10, écart-type=3
+Y = np.random.normal(5, 2, n)   # moyenne=5, écart-type=2
+
+# TODO: Vérifier E[X + Y] = E[X] + E[Y]
+E_X = ___
+E_Y = ___
+E_X_plus_Y = ___
+print(f"E[X] + E[Y] = {E_X + E_Y:.2f}")
+print(f"E[X + Y] = {E_X_plus_Y:.2f}")
+
+# TODO: Vérifier Var(2X) = 4 * Var(X)
+Var_X = ___
+Var_2X = ___
+print(f"\\n4 * Var(X) = {4 * Var_X:.2f}")
+print(f"Var(2X) = {Var_2X:.2f}")
+
+# TODO: Vérifier que Cov(X, Y) ≈ 0 pour variables indépendantes
+cov_XY = ___
+print(f"\\nCov(X, Y) = {cov_XY:.4f} (devrait être ≈ 0)")`,
+            solution: `import numpy as np
+
+np.random.seed(42)
+n = 100000
+
+# Générer X et Y indépendantes
+X = np.random.normal(10, 3, n)  # moyenne=10, écart-type=3
+Y = np.random.normal(5, 2, n)   # moyenne=5, écart-type=2
+
+# Vérifier E[X + Y] = E[X] + E[Y]
+E_X = np.mean(X)
+E_Y = np.mean(Y)
+E_X_plus_Y = np.mean(X + Y)
+print("1️⃣ Linéarité de l'espérance :")
+print(f"   E[X] + E[Y] = {E_X:.4f} + {E_Y:.4f} = {E_X + E_Y:.4f}")
+print(f"   E[X + Y] = {E_X_plus_Y:.4f}")
+print(f"   ✓ Différence : {abs(E_X + E_Y - E_X_plus_Y):.6f}")
+
+# Vérifier Var(2X) = 4 * Var(X)
+Var_X = np.var(X)
+Var_2X = np.var(2 * X)
+print(f"\\n2️⃣ Propriété de la variance :")
+print(f"   4 × Var(X) = 4 × {Var_X:.4f} = {4 * Var_X:.4f}")
+print(f"   Var(2X) = {Var_2X:.4f}")
+print(f"   ✓ Différence : {abs(4 * Var_X - Var_2X):.6f}")
+
+# Vérifier que Cov(X, Y) ≈ 0 pour variables indépendantes
+cov_XY = np.cov(X, Y)[0, 1]
+print(f"\\n3️⃣ Covariance de variables indépendantes :")
+print(f"   Cov(X, Y) = {cov_XY:.6f}")
+print(f"   ✓ Proche de 0 ? {'Oui!' if abs(cov_XY) < 0.1 else 'Non'}")
+
+# Bonus : vérifier Var(X+Y) = Var(X) + Var(Y) si indépendantes
+Var_X_plus_Y = np.var(X + Y)
+print(f"\\n4️⃣ Bonus - Variance de la somme (indépendantes) :")
+print(f"   Var(X) + Var(Y) = {Var_X + np.var(Y):.4f}")
+print(f"   Var(X + Y) = {Var_X_plus_Y:.4f}")`,
+            expectedOutput: "Linéarité de l'espérance",
+            completesObjective: 5,
+          },
+
+          // ===== SECTION 8: QUIZ FINAL =====
+          {
+            type: "quiz",
+            icon: "🎯",
+            title: "Quiz final : Variables aléatoires",
+            question: "En machine learning, pourquoi préfère-t-on souvent minimiser l'erreur quadratique moyenne (MSE) plutôt que l'erreur absolue moyenne (MAE) ?",
+            options: [
+              "Le MSE est plus rapide à calculer",
+              "Le MSE pénalise davantage les grandes erreurs et sa dérivée est plus simple (linéaire)",
+              "Le MAE ne fonctionne pas avec les réseaux de neurones",
+              "C'est purement conventionnel, les deux sont équivalents"
+            ],
+            correctAnswer: 1,
+            explanation: "MSE = E[(y-ŷ)²] utilise le carré, ce qui pénalise plus les grandes erreurs. De plus, sa dérivée ∂MSE/∂ŷ = -2(y-ŷ) est linéaire et simple à calculer, facilitant l'optimisation par gradient. Le MAE a une dérivée discontinue en 0.",
+          },
+        ],
+        prevModule: "distributions.html",
+        nextModule: "maximum-likelihood.html",
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>

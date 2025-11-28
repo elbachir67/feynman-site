@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Distributions de Probabilités | IA4Ndada</title>
+
+    <!-- MathJax pour les formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
+    <link rel="stylesheet" href="../../styles/module.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <div class="nav-breadcrumb">
+          <a href="../../index.html">🏠 Accueil</a>
+          <span>›</span>
+          <span>🧮 Mathématiques</span>
+          <span>›</span>
+          <span>Distributions de Probabilités</span>
+        </div>
+        <div class="progress-indicator">
+          <span id="progress-text">Progression: 0%</span>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+      <h1>📊 Distributions de Probabilités</h1>
+      <p class="subtitle">Module 1.7 - Les formes que prennent le hasard</p>
+
+      <!-- Objectifs -->
+      <div class="objectives">
+        <h2>🎯 Objectifs d'apprentissage</h2>
+        <ul id="objectives-list">
+          <!-- Les objectifs seront ajoutés dynamiquement -->
+        </ul>
+      </div>
+
+      <!-- Contenu du module -->
+      <div id="module-content">
+        <!-- Le contenu sera ajouté dynamiquement -->
+      </div>
+
+      <!-- Navigation entre modules -->
+      <div class="module-nav">
+        <a href="probability.html" class="nav-link" id="prev-link"
+          >← Module précédent : Probabilités</a
+        >
+        <a href="random-variables.html" class="nav-link" id="next-link"
+          >Module suivant : Variables aléatoires →</a
+        >
+      </div>
+    </div>
+
+    <script src="../../scripts/module-engine.js"></script>
+    <script>
+      const moduleConfig = {
+        id: "math-distributions",
+        title: "Distributions de Probabilités",
+        category: "Mathématiques",
+        objectives: [
+          "Comprendre ce qu'est une distribution de probabilité",
+          "Maîtriser la distribution uniforme",
+          "Maîtriser la distribution de Bernoulli et binomiale",
+          "Maîtriser la distribution normale (Gaussienne)",
+          "Comprendre la distribution de Poisson",
+          "Visualiser et simuler des distributions avec Python",
+        ],
+        content: [
+          // ===== SECTION 1: INTRODUCTION =====
+          {
+            type: "concept",
+            icon: "💡",
+            title: "Qu'est-ce qu'une distribution de probabilité ?",
+            content: `
+              <p>Une <strong>distribution de probabilité</strong> décrit comment les probabilités sont réparties sur les différentes valeurs possibles d'une variable aléatoire.</p>
+
+              <p><strong>🎯 Pourquoi c'est crucial en IA ?</strong></p>
+              <ul>
+                <li><strong>Modélisation</strong> : On suppose que nos données suivent une certaine distribution</li>
+                <li><strong>Génération</strong> : Les LLMs génèrent des mots selon une distribution de probabilité</li>
+                <li><strong>Initialisation</strong> : Les poids des réseaux sont initialisés avec des distributions spécifiques</li>
+                <li><strong>Bruit</strong> : Le bruit dans les données est souvent modélisé par une distribution normale</li>
+              </ul>
+
+              <p><strong>📊 Deux types de distributions :</strong></p>
+              <ul>
+                <li><strong>Discrète</strong> : valeurs distinctes (lancer de dé, nombre d'emails)</li>
+                <li><strong>Continue</strong> : valeurs sur un intervalle (taille, température)</li>
+              </ul>
+            `,
+          },
+
+          // ===== SECTION 2: DISTRIBUTION UNIFORME =====
+          {
+            type: "mathematique",
+            icon: "📏",
+            title: "Distribution uniforme : l'égalité parfaite",
+            content: `
+              <p>Dans une <strong>distribution uniforme</strong>, toutes les valeurs ont la <strong>même probabilité</strong>.</p>
+
+              <p><strong>🎲 Uniforme discrète :</strong></p>
+              <p>Exemple : un dé équilibré</p>
+              <p>$$P(X = k) = \\frac{1}{n} \\text{ pour } k \\in \\{1, 2, ..., n\\}$$</p>
+
+              <p><strong>📏 Uniforme continue U(a, b) :</strong></p>
+              <p>$$f(x) = \\begin{cases} \\frac{1}{b-a} & \\text{si } a \\leq x \\leq b \\\\ 0 & \\text{sinon} \\end{cases}$$</p>
+
+              <p><strong>📊 Paramètres :</strong></p>
+              <ul>
+                <li>Espérance : \\(E[X] = \\frac{a+b}{2}\\)</li>
+                <li>Variance : \\(Var(X) = \\frac{(b-a)^2}{12}\\)</li>
+              </ul>
+
+              <p><strong>🤖 En IA :</strong></p>
+              <ul>
+                <li>Initialisation aléatoire des poids (Xavier, He)</li>
+                <li>Échantillonnage aléatoire pour le dropout</li>
+                <li>Génération de nombres aléatoires</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 1 : Distribution uniforme",
+            content: `
+              <p>Une variable X suit une distribution uniforme sur [0, 10].</p>
+              <p>Quelle est l'espérance E[X] ?</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 5,
+            tolerance: 0,
+            explanation: "E[X] = (a + b) / 2 = (0 + 10) / 2 = 5",
+            completesObjective: 1,
+          },
+
+          // ===== SECTION 3: DISTRIBUTION DE BERNOULLI =====
+          {
+            type: "mathematique",
+            icon: "🎯",
+            title: "Distribution de Bernoulli : succès ou échec",
+            content: `
+              <p>La <strong>distribution de Bernoulli</strong> modélise une expérience avec <strong>deux issues</strong> : succès (1) ou échec (0).</p>
+
+              <p><strong>📐 Définition :</strong></p>
+              <p>$$P(X = 1) = p \\quad \\text{et} \\quad P(X = 0) = 1 - p = q$$</p>
+
+              <p><strong>📊 Paramètres :</strong></p>
+              <ul>
+                <li>Espérance : \\(E[X] = p\\)</li>
+                <li>Variance : \\(Var(X) = p(1-p) = pq\\)</li>
+              </ul>
+
+              <p><strong>🎯 Exemples :</strong></p>
+              <ul>
+                <li>Un email est spam (1) ou non (0)</li>
+                <li>Un patient est malade (1) ou sain (0)</li>
+                <li>Un utilisateur clique (1) ou ne clique pas (0)</li>
+              </ul>
+
+              <p><strong>🤖 En IA :</strong></p>
+              <ul>
+                <li><strong>Classification binaire</strong> : la sortie d'un neurone sigmoïde</li>
+                <li><strong>Dropout</strong> : chaque neurone est gardé avec probabilité p</li>
+                <li><strong>A/B testing</strong> : conversion ou non</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 2 : Variance de Bernoulli",
+            content: `
+              <p>Un modèle de classification prédit "spam" avec probabilité p = 0.3.</p>
+              <p>Quelle est la variance de cette prédiction de Bernoulli ?</p>
+              <p>Rappel : Var(X) = p(1-p)</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0.21,
+            tolerance: 0.01,
+            explanation: "Var(X) = p(1-p) = 0.3 × 0.7 = 0.21",
+            completesObjective: 2,
+          },
+
+          // ===== SECTION 4: DISTRIBUTION BINOMIALE =====
+          {
+            type: "mathematique",
+            icon: "🎲",
+            title: "Distribution binomiale : compter les succès",
+            content: `
+              <p>La <strong>distribution binomiale</strong> compte le nombre de succès sur n essais de Bernoulli indépendants.</p>
+
+              <p><strong>📐 Formule :</strong></p>
+              <p>$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$</p>
+
+              <p>où \\(\\binom{n}{k} = \\frac{n!}{k!(n-k)!}\\) est le coefficient binomial.</p>
+
+              <p><strong>📊 Paramètres :</strong></p>
+              <ul>
+                <li>Espérance : \\(E[X] = np\\)</li>
+                <li>Variance : \\(Var(X) = np(1-p)\\)</li>
+              </ul>
+
+              <p><strong>🎯 Exemple :</strong></p>
+              <p>On lance 10 pièces (p = 0.5). Combien de piles en moyenne ?</p>
+              <p>E[X] = np = 10 × 0.5 = 5 piles</p>
+
+              <p><strong>🤖 En IA :</strong></p>
+              <ul>
+                <li>Nombre de prédictions correctes sur n tests</li>
+                <li>Nombre de clics sur n impressions publicitaires</li>
+                <li>Nombre de neurones actifs après dropout</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 3 : Espérance binomiale",
+            content: `
+              <p>Un modèle a 80% de précision (p = 0.8).</p>
+              <p>Sur 100 prédictions, combien seront correctes en moyenne ?</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 80,
+            tolerance: 0,
+            explanation: "E[X] = np = 100 × 0.8 = 80 prédictions correctes",
+            completesObjective: 2,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 4 : Coefficient binomial",
+            content: `
+              <p>Calculez le nombre de façons de choisir 2 éléments parmi 5.</p>
+              <p>C'est le coefficient binomial \\(\\binom{5}{2} = \\frac{5!}{2! \\times 3!}\\)</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 10,
+            tolerance: 0,
+            explanation: "C(5,2) = 5!/(2!×3!) = (5×4)/(2×1) = 20/2 = 10",
+            completesObjective: 2,
+          },
+
+          // ===== SECTION 5: DISTRIBUTION NORMALE =====
+          {
+            type: "concept",
+            icon: "🔔",
+            title: "Distribution normale : la reine des distributions",
+            content: `
+              <p>La <strong>distribution normale</strong> (ou Gaussienne) est la distribution la plus importante en statistiques et en IA.</p>
+
+              <p><strong>🔔 Pourquoi "normale" ?</strong></p>
+              <p>Le <strong>théorème central limite</strong> dit que la moyenne d'un grand nombre de variables aléatoires tend vers une distribution normale, quelle que soit la distribution originale !</p>
+
+              <p><strong>📐 Formule de densité :</strong></p>
+              <p>$$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}$$</p>
+
+              <p><strong>📊 Paramètres :</strong></p>
+              <ul>
+                <li>\\(\\mu\\) = moyenne (centre de la cloche)</li>
+                <li>\\(\\sigma\\) = écart-type (largeur de la cloche)</li>
+                <li>\\(\\sigma^2\\) = variance</li>
+              </ul>
+
+              <p><strong>📏 Notation :</strong> \\(X \\sim \\mathcal{N}(\\mu, \\sigma^2)\\)</p>
+            `,
+          },
+          {
+            type: "mathematique",
+            icon: "📊",
+            title: "La règle 68-95-99.7",
+            content: `
+              <p>Pour une distribution normale, les données se répartissent ainsi :</p>
+
+              <ul>
+                <li><strong>68%</strong> des données dans \\([\\mu - \\sigma, \\mu + \\sigma]\\)</li>
+                <li><strong>95%</strong> des données dans \\([\\mu - 2\\sigma, \\mu + 2\\sigma]\\)</li>
+                <li><strong>99.7%</strong> des données dans \\([\\mu - 3\\sigma, \\mu + 3\\sigma]\\)</li>
+              </ul>
+
+              <p><strong>🔍 Applications :</strong></p>
+              <ul>
+                <li><strong>Détection d'anomalies</strong> : une valeur au-delà de 3σ est suspecte (probabilité < 0.3%)</li>
+                <li><strong>Intervalles de confiance</strong> : ±1.96σ contient 95% des données</li>
+                <li><strong>Contrôle qualité</strong> : les "6 sigma" en industrie</li>
+              </ul>
+
+              <p><strong>🤖 En IA :</strong></p>
+              <ul>
+                <li>Initialisation des poids : \\(W \\sim \\mathcal{N}(0, \\frac{1}{n})\\)</li>
+                <li>Bruit gaussien dans les VAE et diffusion models</li>
+                <li>Erreurs de régression supposées normales</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 5 : Règle 68-95-99.7",
+            content: `
+              <p>Les QI suivent une loi normale avec μ = 100 et σ = 15.</p>
+              <p>Quel pourcentage de la population a un QI entre 85 et 115 ?</p>
+              <p>(Indice : 85 = 100 - 15 = μ - σ)</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 68,
+            tolerance: 1,
+            explanation: "L'intervalle [85, 115] = [μ-σ, μ+σ]. Selon la règle, 68% des données sont dans cet intervalle.",
+            completesObjective: 3,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 6 : Détection d'anomalie",
+            content: `
+              <p>Une machine produit des pièces avec un diamètre moyen μ = 50mm et σ = 0.5mm.</p>
+              <p>Une pièce mesure 52mm. Combien d'écarts-types est-elle au-dessus de la moyenne ?</p>
+              <p>Z = (x - μ) / σ</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 4,
+            tolerance: 0,
+            explanation: "Z = (52 - 50) / 0.5 = 2 / 0.5 = 4. Cette pièce est à 4σ de la moyenne, c'est clairement une anomalie !",
+            completesObjective: 3,
+          },
+
+          // ===== SECTION 6: DISTRIBUTION DE POISSON =====
+          {
+            type: "mathematique",
+            icon: "⏱️",
+            title: "Distribution de Poisson : compter les événements rares",
+            content: `
+              <p>La <strong>distribution de Poisson</strong> modélise le nombre d'événements qui se produisent dans un intervalle de temps ou d'espace fixé.</p>
+
+              <p><strong>📐 Formule :</strong></p>
+              <p>$$P(X = k) = \\frac{\\lambda^k e^{-\\lambda}}{k!}$$</p>
+
+              <p><strong>📊 Paramètres :</strong></p>
+              <ul>
+                <li>\\(\\lambda\\) = nombre moyen d'événements</li>
+                <li>Espérance : \\(E[X] = \\lambda\\)</li>
+                <li>Variance : \\(Var(X) = \\lambda\\)</li>
+              </ul>
+
+              <p><strong>🎯 Exemples :</strong></p>
+              <ul>
+                <li>Nombre d'emails reçus par heure</li>
+                <li>Nombre de requêtes sur un serveur par seconde</li>
+                <li>Nombre de bugs trouvés par jour</li>
+                <li>Nombre de mutations dans un gène</li>
+              </ul>
+
+              <p><strong>💡 Propriété remarquable :</strong></p>
+              <p>Pour Poisson, E[X] = Var(X) = λ. Si vous observez que la moyenne ≈ variance, c'est peut-être une Poisson !</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 7 : Distribution de Poisson",
+            content: `
+              <p>Un serveur reçoit en moyenne λ = 5 requêtes par seconde.</p>
+              <p>Quelle est la variance du nombre de requêtes par seconde ?</p>
+              <p>(Rappel : pour Poisson, Var(X) = λ)</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 5,
+            tolerance: 0,
+            explanation: "Pour une distribution de Poisson, Var(X) = λ = 5",
+            completesObjective: 4,
+          },
+
+          // ===== SECTION 7: VISUALISATION PYTHON =====
+          {
+            type: "code",
+            icon: "🐍",
+            title: "Visualiser les distributions avec Python",
+            content: `
+              <p>Comparons visuellement les différentes distributions :</p>
+            `,
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+# 1. Distribution Uniforme
+ax1 = axes[0, 0]
+x_uniform = np.linspace(-0.5, 1.5, 1000)
+y_uniform = stats.uniform.pdf(x_uniform, 0, 1)
+ax1.plot(x_uniform, y_uniform, 'b-', linewidth=2)
+ax1.fill_between(x_uniform, y_uniform, alpha=0.3)
+ax1.set_title('Distribution Uniforme U(0, 1)', fontsize=12)
+ax1.set_xlabel('x')
+ax1.set_ylabel('Densité f(x)')
+ax1.grid(True, alpha=0.3)
+
+# 2. Distribution Binomiale
+ax2 = axes[0, 1]
+n, p = 20, 0.5
+x_binom = np.arange(0, n+1)
+y_binom = stats.binom.pmf(x_binom, n, p)
+ax2.bar(x_binom, y_binom, color='green', alpha=0.7)
+ax2.axvline(n*p, color='red', linestyle='--', label=f'E[X] = {n*p}')
+ax2.set_title(f'Distribution Binomiale B({n}, {p})', fontsize=12)
+ax2.set_xlabel('k (nombre de succès)')
+ax2.set_ylabel('P(X = k)')
+ax2.legend()
+ax2.grid(True, alpha=0.3)
+
+# 3. Distribution Normale
+ax3 = axes[1, 0]
+x_norm = np.linspace(-4, 4, 1000)
+for mu, sigma, color in [(0, 1, 'blue'), (0, 0.5, 'red'), (1, 1, 'green')]:
+    y_norm = stats.norm.pdf(x_norm, mu, sigma)
+    ax3.plot(x_norm, y_norm, color=color, linewidth=2,
+             label=f'μ={mu}, σ={sigma}')
+ax3.set_title('Distribution Normale', fontsize=12)
+ax3.set_xlabel('x')
+ax3.set_ylabel('Densité f(x)')
+ax3.legend()
+ax3.grid(True, alpha=0.3)
+
+# 4. Distribution de Poisson
+ax4 = axes[1, 1]
+for lam, color in [(2, 'blue'), (5, 'green'), (10, 'red')]:
+    x_pois = np.arange(0, 20)
+    y_pois = stats.poisson.pmf(x_pois, lam)
+    ax4.plot(x_pois, y_pois, 'o-', color=color, label=f'λ={lam}', markersize=6)
+ax4.set_title('Distribution de Poisson', fontsize=12)
+ax4.set_xlabel('k')
+ax4.set_ylabel('P(X = k)')
+ax4.legend()
+ax4.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('distributions.png', dpi=100, bbox_inches='tight')
+plt.show()
+
+print("📊 Résumé des distributions :")
+print("• Uniforme : toutes valeurs équiprobables")
+print("• Binomiale : nombre de succès sur n essais")
+print("• Normale : forme de cloche, théorème central limite")
+print("• Poisson : événements rares, E[X] = Var(X)")`,
+          },
+          {
+            type: "exercise-code",
+            icon: "💻",
+            title: "Exercice 8 : Simuler et comparer",
+            content: `
+              <p>Simulez 10000 lancers de 20 pièces et vérifiez que :</p>
+              <ul>
+                <li>La moyenne observée ≈ np = 10</li>
+                <li>La distribution ressemble à une binomiale</li>
+              </ul>
+            `,
+            starterCode: `import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(42)
+n_experiences = 10000
+n_pieces = 20
+p = 0.5
+
+# TODO: Simuler les lancers
+# Pour chaque expérience, compter le nombre de "piles" (succès)
+# Indice: np.random.binomial(n, p, size) génère des échantillons binomiaux
+
+resultats = np.random.binomial(___, ___, ___)  # Compléter
+
+# Calculer statistiques
+moyenne = ___
+variance = ___
+
+print(f"Moyenne observée : {moyenne:.2f}")
+print(f"Moyenne théorique (np) : {n_pieces * p}")
+print(f"Variance observée : {variance:.2f}")
+print(f"Variance théorique (np(1-p)) : {n_pieces * p * (1-p)}")`,
+            solution: `import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+np.random.seed(42)
+n_experiences = 10000
+n_pieces = 20
+p = 0.5
+
+# Simuler les lancers
+resultats = np.random.binomial(n_pieces, p, n_experiences)
+
+# Calculer statistiques
+moyenne = np.mean(resultats)
+variance = np.var(resultats)
+
+print(f"📊 Simulation de {n_experiences} expériences")
+print(f"   (chaque expérience = lancer {n_pieces} pièces)")
+print()
+print(f"Moyenne observée : {moyenne:.2f}")
+print(f"Moyenne théorique (np) : {n_pieces * p}")
+print()
+print(f"Variance observée : {variance:.2f}")
+print(f"Variance théorique (np(1-p)) : {n_pieces * p * (1-p)}")
+
+# Visualisation
+plt.figure(figsize=(10, 5))
+
+# Histogramme des résultats
+valeurs, counts = np.unique(resultats, return_counts=True)
+plt.bar(valeurs, counts/n_experiences, alpha=0.7, label='Simulé', color='steelblue')
+
+# Courbe théorique
+x = np.arange(0, n_pieces+1)
+y = stats.binom.pmf(x, n_pieces, p)
+plt.plot(x, y, 'ro-', label='Binomiale théorique', markersize=5)
+
+plt.xlabel('Nombre de piles')
+plt.ylabel('Probabilité')
+plt.title(f'Distribution du nombre de piles sur {n_pieces} lancers')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.savefig('binomial_simulation.png', dpi=100, bbox_inches='tight')
+plt.show()`,
+            expectedOutput: "Moyenne observée",
+            completesObjective: 5,
+          },
+
+          // ===== SECTION 8: QUIZ FINAL =====
+          {
+            type: "quiz",
+            icon: "🎯",
+            title: "Quiz final : Distributions",
+            question: "Pour initialiser les poids d'un réseau de neurones, on utilise souvent une distribution normale centrée en 0. Pourquoi pas une distribution uniforme sur un grand intervalle [-100, 100] ?",
+            options: [
+              "L'uniforme est plus lente à calculer",
+              "La normale concentre les valeurs près de 0, évitant des gradients qui explosent ou disparaissent",
+              "L'uniforme n'existe pas pour les nombres réels",
+              "C'est juste une convention arbitraire"
+            ],
+            correctAnswer: 1,
+            explanation: "La distribution normale avec σ petit concentre la majorité des poids près de 0, ce qui évite les problèmes de gradients explosifs (poids trop grands) ou évanescents (non-linéarités saturées). L'uniforme sur [-100, 100] donnerait des poids initiaux beaucoup trop grands !",
+          },
+        ],
+        prevModule: "probability.html",
+        nextModule: "random-variables.html",
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeModule(moduleConfig);
+      });
+    </script>
+  </body>
+</html>
