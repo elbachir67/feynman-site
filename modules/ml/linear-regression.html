@@ -5,21 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Régression Linéaire | IA4Ndada</title>
 
-    <!-- MathJax pour les formules mathématiques -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script
-      id="MathJax-script"
-      async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-    ></script>
-
-    <!-- Pyodide pour Python dans le navigateur -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 
     <link rel="stylesheet" href="../../styles/module.css" />
   </head>
   <body>
-    <!-- Navigation -->
     <nav class="nav">
       <div class="nav-container">
         <div class="nav-breadcrumb">
@@ -32,1025 +24,458 @@
         <div class="progress-indicator">
           <span id="progress-text">Progression: 0%</span>
           <div class="progress-bar">
-            <div
-              class="progress-fill"
-              id="progress-fill"
-              style="width: 0%"
-            ></div>
+            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
           </div>
         </div>
       </div>
     </nav>
 
-    <!-- Contenu principal -->
     <div class="container">
       <h1>📈 Régression Linéaire</h1>
-      <p class="subtitle">
-        Module 3.2 - Le premier algorithme d'apprentissage automatique
-      </p>
+      <p class="subtitle">Module 3.2 - Prédire des valeurs continues</p>
 
-      <!-- Objectifs -->
+      <div id="pyodide-status" class="pyodide-status">
+        <span class="status-loading">⏳ Chargement de Python...</span>
+      </div>
+
       <div class="objectives">
         <h2>🎯 Objectifs d'apprentissage</h2>
-        <ul id="objectives-list">
-          <!-- Les objectifs seront ajoutés dynamiquement -->
-        </ul>
+        <ul id="objectives-list"></ul>
       </div>
 
-      <!-- Contenu du module -->
-      <div id="module-content">
-        <!-- Le contenu sera ajouté dynamiquement -->
-      </div>
+      <div id="module-content"></div>
 
-      <!-- Quiz -->
-      <div class="quiz" id="module-quiz" style="display: none">
-        <div class="quiz-question" id="quiz-question"></div>
-        <div class="quiz-options" id="quiz-options"></div>
-        <div class="quiz-feedback" id="quiz-feedback"></div>
-      </div>
-
-      <!-- Checkpoint -->
       <div class="checkpoint">
         <h3>🎉 Checkpoint - Régression Linéaire</h3>
-        <p>
-          Félicitations ! Vous maîtrisez maintenant le premier et plus important
-          algorithme d'apprentissage automatique.
-        </p>
-        <button
-          class="checkpoint-btn"
-          id="checkpoint-btn"
-          onclick="completeCheckpoint()"
-        >
-          Marquer comme complété
+        <p>Vous maîtrisez maintenant le premier algorithme d'apprentissage automatique !</p>
+        <button class="checkpoint-btn" id="checkpoint-btn" onclick="completeCheckpoint()" disabled>
+          Valider le module
         </button>
       </div>
 
-      <!-- Navigation entre modules -->
       <div class="module-nav">
-        <a href="introduction.html" class="nav-link" id="prev-link"
-          >← Module précédent : Introduction ML</a
-        >
-        <a href="classification.html" class="nav-link" id="next-link"
-          >Module suivant : Classification →</a
-        >
+        <a href="introduction.html" class="nav-link">← Introduction ML</a>
+        <a href="classification.html" class="nav-link">Classification →</a>
       </div>
     </div>
 
     <script src="../../scripts/module-engine.js"></script>
     <script>
-      // Configuration du module Régression Linéaire
       const moduleConfig = {
         id: "ml-linear-regression",
         title: "Régression Linéaire",
-        category: "Machine Learning",
         objectives: [
-          "Comprendre le problème que résout la régression",
-          "Construire une fonction de coût depuis zéro",
-          "Dériver mathématiquement la solution optimale",
-          "Comprendre pourquoi cette solution est unique",
-          "Calculer manuellement sur un exemple concret",
-          "Implémenter l'algorithme en Python",
+          "Comprendre le problème de régression",
+          "Construire la fonction de coût MSE",
+          "Calculer la solution analytique",
+          "Implémenter et interpréter le modèle",
         ],
         content: [
+          // Section 1: Le problème
           {
             type: "concept",
             icon: "💡",
-            title: "Le problème fondamental : prédire des valeurs continues",
+            title: "Le problème : prédire des valeurs continues",
             content: `
-                        <p>La <strong>régression linéaire</strong> est le premier algorithme d'apprentissage automatique à maîtriser. Elle résout un problème simple mais fondamental : <strong>prédire une valeur numérique</strong> à partir d'autres variables.</p>
-                        
-                        <p><strong>🔑 Exemples concrets :</strong></p>
-                        <ul>
-                            <li>🏠 <strong>Immobilier</strong> : prédire le prix d'une maison selon sa surface</li>
-                            <li>📈 <strong>Finance</strong> : prédire le cours d'une action selon les indicateurs</li>
-                            <li>🌾 <strong>Agriculture</strong> : prédire le rendement selon la pluviométrie</li>
-                            <li>🎓 <strong>Éducation</strong> : prédire la note selon les heures d'étude</li>
-                        </ul>
-                        
-                        <p><strong>🎯 L'objectif :</strong></p>
-                        <p>Trouver une <strong>relation mathématique</strong> entre les variables d'entrée (features) et la variable de sortie (target).</p>
-                        
-                        <p><strong>📐 L'hypothèse de base :</strong></p>
-                        <p>Cette relation est <strong>linéaire</strong> : $$y = w_1x_1 + w_2x_2 + ... + w_nx_n + b$$</p>
-                        
-                        <p><strong>🤖 Pourquoi commencer par la régression linéaire ?</strong></p>
-                        <ul>
-                            <li>✅ <strong>Simple à comprendre</strong> : géométrie intuitive</li>
-                            <li>✅ <strong>Solution analytique</strong> : formule exacte</li>
-                            <li>✅ <strong>Rapide à calculer</strong> : pas d'itérations</li>
-                            <li>✅ <strong>Baseline parfaite</strong> : point de comparaison</li>
-                            <li>✅ <strong>Fondation</strong> : base de tous les autres algorithmes</li>
-                        </ul>
-                    `,
+              <p>La <strong>régression linéaire</strong> prédit une valeur numérique à partir de variables d'entrée.</p>
+
+              <p><strong>Exemples concrets :</strong></p>
+              <ul>
+                <li>🏠 Prix d'une maison selon sa surface</li>
+                <li>📈 Cours d'une action selon des indicateurs</li>
+                <li>🌾 Rendement agricole selon la pluviométrie</li>
+              </ul>
+
+              <p><strong>L'hypothèse de base :</strong></p>
+              <p>La relation est <strong>linéaire</strong> :</p>
+              <p style="text-align: center; font-size: 1.2em;">$$y = w_1x_1 + w_2x_2 + ... + w_nx_n + b$$</p>
+
+              <p>où :</p>
+              <ul>
+                <li><strong>w₁, w₂, ...</strong> : poids (importance de chaque variable)</li>
+                <li><strong>b</strong> : biais (valeur de base)</li>
+              </ul>
+            `,
           },
           {
-            type: "intuition",
-            icon: "🧠",
-            title: "L'analogie du tailleur expérimenté",
-            content: `
-                        <p>Imaginez un <strong>tailleur expérimenté</strong> qui doit estimer le prix d'un boubou :</p>
-                        
-                        <p><strong>🧵 Ses observations :</strong></p>
-                        <ul>
-                            <li>Plus le tissu est cher → prix plus élevé</li>
-                            <li>Plus le travail est complexe → prix plus élevé</li>
-                            <li>Plus l'expérience du tailleur → prix plus élevé</li>
-                        </ul>
-                        
-                        <p><strong>🧠 Son raisonnement intuitif :</strong></p>
-                        <p><em>"Le prix final, c'est un prix de base, plus un montant qui dépend de chaque facteur"</em></p>
-                        
-                        <p><strong>📐 En formule :</strong></p>
-                        <p>$$\\text{Prix} = \\text{Base} + \\text{Coeff}_1 \\times \\text{Qualité tissu} + \\text{Coeff}_2 \\times \\text{Complexité} + ...$$</p>
-                        
-                        <p><strong>💡 C'est exactement la régression linéaire !</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Base</strong> = biais (b)</li>
-                            <li>🔢 <strong>Coefficients</strong> = poids (w₁, w₂, ...)</li>
-                            <li>📊 <strong>Facteurs</strong> = features (x₁, x₂, ...)</li>
-                        </ul>
-                        
-                        <p><strong>🤖 L'IA fait pareil :</strong></p>
-                        <p>Elle observe des milliers d'exemples et trouve automatiquement les meilleurs coefficients !</p>
-                    `,
+            type: "quiz",
+            title: "Vérification - Régression vs Classification",
+            question: "Lequel de ces problèmes est un problème de RÉGRESSION ?",
+            options: [
+              "Prédire si un email est spam ou non",
+              "Prédire le prix d'une voiture d'occasion",
+              "Classifier une image comme chat ou chien",
+              "Détecter si une transaction est frauduleuse",
+            ],
+            correctAnswer: 1,
+            explanation: "Le prix est une valeur continue (150 000 FCFA, 2 500 000 FCFA...) → régression. Les autres sont des classifications binaires (spam/pas spam, chat/chien, fraude/légitime).",
           },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Problème concret : prix des terrains à Dakar",
-            content: `
-                        <p><strong>🏠 Données observées :</strong></p>
-                        
-                        <table style="margin: 1rem auto; text-align: center; border-collapse: collapse;">
-                            <tr style="background: #3498db; color: white;">
-                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Surface (m²)</th>
-                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Distance centre (km)</th>
-                                <th style="padding: 0.8rem; border: 1px solid #ddd;">Prix (millions FCFA)</th>
-                            </tr>
-                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">200</td><td style="padding: 0.5rem; border: 1px solid #ddd;">5</td><td style="padding: 0.5rem; border: 1px solid #ddd;">15</td></tr>
-                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">300</td><td style="padding: 0.5rem; border: 1px solid #ddd;">3</td><td style="padding: 0.5rem; border: 1px solid #ddd;">25</td></tr>
-                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">150</td><td style="padding: 0.5rem; border: 1px solid #ddd;">8</td><td style="padding: 0.5rem; border: 1px solid #ddd;">8</td></tr>
-                            <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">400</td><td style="padding: 0.5rem; border: 1px solid #ddd;">2</td><td style="padding: 0.5rem; border: 1px solid #ddd;">35</td></tr>
-                        </table>
-                        
-                        <p><strong>🎯 Question :</strong> Quel prix pour un terrain de 250m² à 4km du centre ?</p>
-                        
-                        <p><strong>📐 Modèle linéaire :</strong></p>
-                        <p>$$\\text{Prix} = w_1 \\times \\text{Surface} + w_2 \\times \\text{Distance} + b$$</p>
-                        
-                        <p><strong>🤔 Comment trouver w₁, w₂ et b ?</strong></p>
-                        <p>C'est exactement ce que va résoudre la régression linéaire automatiquement !</p>
-                        
-                        <p><strong>💡 Intuition :</strong></p>
-                        <ul>
-                            <li>w₁ > 0 : plus de surface → prix plus élevé</li>
-                            <li>w₂ < 0 : plus loin du centre → prix plus bas</li>
-                            <li>b : prix de base (terrain théorique de 0m² au centre)</li>
-                        </ul>
-                    `,
-          },
+          // Section 2: Fonction de coût
           {
             type: "mathematique",
             icon: "∑",
-            title: "Construction de la fonction de coût",
+            title: "La fonction de coût MSE",
             content: `
-                        <p><strong>🎯 Qu'est-ce qu'une "bonne" prédiction ?</strong></p>
-                        <p>Une prédiction est bonne si elle est <strong>proche de la réalité</strong>. Mais "proche", ça veut dire quoi mathématiquement ?</p>
-                        
-                        <p><strong>📊 Pour chaque exemple i :</strong></p>
-                        <ul>
-                            <li><strong>Valeur réelle :</strong> \\(y_i\\)</li>
-                            <li><strong>Valeur prédite :</strong> \\(\\hat{y}_i = \\vec{w}^T\\vec{x}_i + b\\)</li>
-                            <li><strong>Erreur :</strong> \\(e_i = y_i - \\hat{y}_i\\)</li>
-                        </ul>
-                        
-                        <p><strong>🤔 Comment mesurer l'erreur totale ?</strong></p>
-                        
-                        <div style="background: #ffebee; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                            <strong>❌ Option 1 : Somme des erreurs</strong><br>
-                            $$\\sum_{i=1}^{n} e_i = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)$$
-                            
-                            <strong>Problème fatal :</strong> Les erreurs + et - s'annulent !<br>
-                            Une droite très mauvaise pourrait avoir une erreur totale de 0.
-                        </div>
-                        
-                        <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                            <strong>🟡 Option 2 : Somme des valeurs absolues</strong><br>
-                            $$\\sum_{i=1}^{n} |e_i| = \\sum_{i=1}^{n} |y_i - \\hat{y}_i|$$
-                            
-                            ✓ Pas d'annulation<br>
-                            ❌ <strong>Problème :</strong> Pas dérivable en 0 (voir <a href="../math/derivatives.html">Module 1.4</a>)
-                        </div>
-                        
-                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                            <strong>✅ Option 3 : Somme des carrés (MSE)</strong><br>
-                            $$\\text{MSE} = \\frac{1}{n}\\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2$$
-                            
-                            ✓ Pas d'annulation (carré toujours ≥ 0)<br>
-                            ✓ Dérivable partout<br>
-                            ✓ Pénalise plus les grandes erreurs<br>
-                            ✓ Solution mathématique unique !
-                        </div>
-                        
-                        <p><strong>🔑 Fonction de coût finale :</strong></p>
-                        <p>$$J(\\vec{w}, b) = \\frac{1}{2n} \\sum_{i=1}^{n} (y_i - (\\vec{w}^T\\vec{x}_i + b))^2$$</p>
-                        <p><em>Le facteur 1/2 simplifie les calculs de dérivée</em></p>
-                    `,
+              <p><strong>Comment mesurer la qualité d'un modèle ?</strong></p>
+
+              <p>Pour chaque prédiction, on calcule l'erreur :</p>
+              <p style="text-align: center;">$$e_i = y_i - \\hat{y}_i = y_i - (\\vec{w}^T\\vec{x}_i + b)$$</p>
+
+              <p><strong>Pourquoi utiliser le carré des erreurs ?</strong></p>
+              <ul>
+                <li>❌ Somme simple : les erreurs +/- s'annulent</li>
+                <li>⚠️ Valeur absolue : non dérivable en 0</li>
+                <li>✅ Carré : toujours positif ET dérivable</li>
+              </ul>
+
+              <p><strong>MSE (Mean Squared Error) :</strong></p>
+              <p style="text-align: center; font-size: 1.1em; background: #e8f5e9; padding: 1rem; border-radius: 8px;">
+                $$MSE = \\frac{1}{n}\\sum_{i=1}^{n}(y_i - \\hat{y}_i)^2$$
+              </p>
+
+              <p><strong>Objectif :</strong> Trouver w et b qui minimisent le MSE.</p>
+            `,
           },
           {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice : construction manuelle de la fonction de coût",
+            type: "exercise",
+            title: "Calcul manuel du MSE",
+            exerciseType: "numeric",
             content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Avec nos données de terrains :</p>
-                        
-                        <table style="margin: 1rem auto; text-align: center;">
-                            <tr style="background: #3498db; color: white;">
-                                <th style="padding: 0.5rem;">Surface (x₁)</th>
-                                <th style="padding: 0.5rem;">Distance (x₂)</th>
-                                <th style="padding: 0.5rem;">Prix réel (y)</th>
-                            </tr>
-                            <tr><td>200</td><td>5</td><td>15</td></tr>
-                            <tr><td>300</td><td>3</td><td>25</td></tr>
-                        </table>
-                        
-                        <p><strong>📝 Supposons w₁ = 0.08, w₂ = -2, b = 5. Calculez :</strong></p>
-                        <ol>
-                            <li>Les prédictions ŷ₁ et ŷ₂</li>
-                            <li>Les erreurs e₁ et e₂</li>
-                            <li>La fonction de coût J</li>
-                            <li>Ces paramètres sont-ils bons ?</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('cost-function-exercise')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="cost-function-exercise" style="display: none;">
-                        <ol>
-                            <li><strong>Prédictions :</strong><br>
-                                ŷ₁ = 0.08×200 + (-2)×5 + 5 = 16 - 10 + 5 = 11<br>
-                                ŷ₂ = 0.08×300 + (-2)×3 + 5 = 24 - 6 + 5 = 23</li>
-                            <li><strong>Erreurs :</strong><br>
-                                e₁ = 15 - 11 = 4<br>
-                                e₂ = 25 - 23 = 2</li>
-                            <li><strong>Fonction de coût :</strong><br>
-                                J = (1/4) × (4² + 2²) = (1/4) × (16 + 4) = 5</li>
-                            <li><strong>Évaluation :</strong><br>
-                                Erreur moyenne ≈ 3 millions FCFA → assez bon mais peut être amélioré</li>
-                        </ol>
-                        </div>
-                    `,
+              <p>Un modèle prédit :</p>
+              <table style="border-collapse: collapse; margin: 1rem 0;">
+                <tr style="background: #f0f0f0;">
+                  <th style="padding: 0.5rem; border: 1px solid #ddd;">Réel (y)</th>
+                  <th style="padding: 0.5rem; border: 1px solid #ddd;">Prédit (ŷ)</th>
+                </tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">100</td><td style="padding: 0.5rem; border: 1px solid #ddd;">90</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">150</td><td style="padding: 0.5rem; border: 1px solid #ddd;">160</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">200</td><td style="padding: 0.5rem; border: 1px solid #ddd;">195</td></tr>
+              </table>
+              <p><strong>Calculez le MSE</strong></p>
+            `,
+            correctAnswer: 75,
+            tolerance: 0.1,
+            hint: "Erreurs : (100-90)²=100, (150-160)²=100, (200-195)²=25. MSE = moyenne.",
+            explanation: "MSE = (100 + 100 + 25) / 3 = 225 / 3 = 75",
           },
+          // Section 3: Solution analytique
           {
             type: "mathematique",
-            icon: "∑",
-            title: "Dérivation de la solution optimale",
+            icon: "📐",
+            title: "La solution analytique",
             content: `
-                        <p><strong>🎯 Trouvons les paramètres qui minimisent J :</strong></p>
-                        <p>Au minimum, le gradient s'annule (voir <a href="../math/gradients.html">Module 1.5</a>) :</p>
-                        <p>$$\\nabla J = \\vec{0}$$</p>
-                        
-                        <p><strong>📐 Calcul des dérivées partielles :</strong></p>
-                        
-                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                            <strong>Dérivée par rapport à w_j :</strong><br><br>
-                            
-                            $$\\frac{\\partial J}{\\partial w_j} = \\frac{1}{2n} \\sum_{i=1}^{n} 2(y_i - \\vec{w}^T\\vec{x}_i - b) \\cdot (-x_{ij})$$<br><br>
-                            
-                            $$= -\\frac{1}{n} \\sum_{i=1}^{n} x_{ij}(y_i - \\vec{w}^T\\vec{x}_i - b)$$<br><br>
-                            
-                            <strong>Dérivée par rapport à b :</strong><br><br>
-                            
-                            $$\\frac{\\partial J}{\\partial b} = -\\frac{1}{n} \\sum_{i=1}^{n} (y_i - \\vec{w}^T\\vec{x}_i - b)$$
-                        </div>
-                        
-                        <p><strong>🔧 Conditions d'optimalité (gradient = 0) :</strong></p>
-                        
-                        <div style="background: #e8f5e9; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                            <strong>Système d'équations normales :</strong><br><br>
-                            
-                            $$\\sum_{i=1}^{n} x_{ij}(y_i - \\vec{w}^T\\vec{x}_i - b) = 0 \\quad \\forall j$$<br><br>
-                            
-                            $$\\sum_{i=1}^{n} (y_i - \\vec{w}^T\\vec{x}_i - b) = 0$$<br><br>
-                            
-                            En notation matricielle :<br>
-                            $$X^T(\\vec{y} - X\\vec{w} - b\\vec{1}) = \\vec{0}$$<br>
-                            $$\\vec{1}^T(\\vec{y} - X\\vec{w} - b\\vec{1}) = 0$$
-                        </div>
-                        
-                        <p><strong>💡 Astuce :</strong> Si on ajoute une colonne de 1 à X pour le biais, on obtient :</p>
-                        <p>$$\\vec{w}^* = (X^TX)^{-1}X^T\\vec{y}$$</p>
-                        <p><em>C'est la formule des moindres carrés !</em></p>
-                    `,
+              <p>Pour minimiser le MSE, on cherche où le gradient s'annule :</p>
+              <p style="text-align: center;">$$\\nabla_{w,b} MSE = 0$$</p>
+
+              <p><strong>En notation matricielle :</strong></p>
+              <p>Si on ajoute une colonne de 1 à X pour le biais :</p>
+
+              <p style="text-align: center; font-size: 1.1em; background: #e3f2fd; padding: 1rem; border-radius: 8px;">
+                $$\\vec{w}^* = (X^TX)^{-1}X^T\\vec{y}$$
+              </p>
+
+              <p><strong>Conditions :</strong></p>
+              <ul>
+                <li>X<sup>T</sup>X doit être inversible</li>
+                <li>Plus d'exemples que de features (n > d)</li>
+                <li>Pas de features redondantes</li>
+              </ul>
+
+              <p><strong>Complexité :</strong> O(n×d² + d³) — rapide !</p>
+            `,
           },
           {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice : résolution manuelle du système",
-            content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Résolvons manuellement avec nos 4 points de terrains :</p>
-                        
-                        <p><strong>📐 Étape 1 : Calcul des moyennes</strong></p>
-                        <p>$$\\bar{x}_1 = \\frac{200+300+150+400}{4} = 262.5$$</p>
-                        <p>$$\\bar{x}_2 = \\frac{5+3+8+2}{4} = 4.5$$</p>
-                        <p>$$\\bar{y} = \\frac{15+25+8+35}{4} = 20.75$$</p>
-                        
-                        <p><strong>📝 Calculez :</strong></p>
-                        <ol>
-                            <li>Les écarts à la moyenne pour chaque variable</li>
-                            <li>Les covariances Cov(x₁,y) et Cov(x₂,y)</li>
-                            <li>Les variances Var(x₁) et Var(x₂)</li>
-                            <li>La covariance Cov(x₁,x₂)</li>
-                            <li>Les coefficients w₁ et w₂ (formule matricielle)</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('manual-regression-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="manual-regression-solution" style="display: none;">
-                        <ol>
-                            <li><strong>Écarts à la moyenne :</strong><br>
-                                Surface : [-62.5, 37.5, -112.5, 137.5]<br>
-                                Distance : [0.5, -1.5, 3.5, -2.5]<br>
-                                Prix : [-5.75, 4.25, -12.75, 14.25]</li>
-                            <li><strong>Covariances :</strong><br>
-                                Cov(x₁,y) = ((-62.5)×(-5.75) + 37.5×4.25 + (-112.5)×(-12.75) + 137.5×14.25)/4<br>
-                                = (359.375 + 159.375 + 1434.375 + 1959.375)/4 = 978.125<br><br>
-                                Cov(x₂,y) = (0.5×(-5.75) + (-1.5)×4.25 + 3.5×(-12.75) + (-2.5)×14.25)/4<br>
-                                = (-2.875 - 6.375 - 44.625 - 35.625)/4 = -22.375</li>
-                            <li><strong>Variances :</strong><br>
-                                Var(x₁) = (62.5² + 37.5² + 112.5² + 137.5²)/4 = 9843.75<br>
-                                Var(x₂) = (0.5² + 1.5² + 3.5² + 2.5²)/4 = 4.25</li>
-                            <li><strong>Covariance croisée :</strong><br>
-                                Cov(x₁,x₂) = ((-62.5)×0.5 + 37.5×(-1.5) + (-112.5)×3.5 + 137.5×(-2.5))/4<br>
-                                = (-31.25 - 56.25 - 393.75 - 343.75)/4 = -206.25</li>
-                            <li><strong>Coefficients (formule matricielle) :</strong><br>
-                                Matrice de covariance des X :<br>
-                                $$C = \\begin{bmatrix} 9843.75 & -206.25 \\\\ -206.25 & 4.25 \\end{bmatrix}$$<br>
-                                Vecteur covariances X-y : $$\\vec{c} = \\begin{bmatrix} 978.125 \\\\ -22.375 \\end{bmatrix}$$<br>
-                                Solution : $$\\vec{w} = C^{-1}\\vec{c} \\approx \\begin{bmatrix} 0.102 \\\\ -3.85 \\end{bmatrix}$$<br>
-                                Biais : $$b = \\bar{y} - \\vec{w}^T\\bar{\\vec{x}} \\approx 20.75 - (0.102×262.5 - 3.85×4.5) \\approx 4.6$$</li>
-                        </ol>
-                        <p><strong>🎯 Modèle final :</strong> Prix = 0.102×Surface - 3.85×Distance + 4.6</p>
-                        </div>
-                    `,
+            type: "quiz",
+            title: "Quiz - Solution analytique",
+            question: "Pourquoi utilise-t-on (X^T X)^{-1} X^T y plutôt que X^{-1} y directement ?",
+            options: [
+              "C'est plus rapide à calculer",
+              "X n'est généralement pas carrée, donc pas inversible",
+              "X^{-1} donnerait le même résultat",
+              "C'est une convention arbitraire",
+            ],
+            correctAnswer: 1,
+            explanation: "X a n lignes (exemples) et d colonnes (features). Comme n ≠ d généralement, X n'est pas carrée et donc pas inversible. X^T X est carrée (d×d) et peut être inversée.",
           },
-          {
-            type: "mathematique",
-            icon: "∑",
-            title: "Pourquoi cette solution est unique et optimale",
-            content: `
-                        <p><strong>🔍 Unicité de la solution :</strong></p>
-                        
-                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                            <strong>Théorème :</strong> Si la matrice \\(X^TX\\) est inversible, la solution des moindres carrés est unique.<br><br>
-                            
-                            <strong>Preuve géométrique :</strong><br>
-                            La fonction de coût \\(J(\\vec{w}, b)\\) forme un paraboloïde (bol) dans l'espace des paramètres.<br>
-                            Un bol n'a qu'UN SEUL point le plus bas !
-                        </div>
-                        
-                        <p><strong>📐 Condition d'inversibilité :</strong></p>
-                        <p>\\(X^TX\\) est inversible ⟺ les colonnes de X sont linéairement indépendantes</p>
-                        
-                        <p><strong>🔍 En pratique, cela signifie :</strong></p>
-                        <ul>
-                            <li>✅ Pas de features redondantes (ex: x₃ = 2×x₁)</li>
-                            <li>✅ Plus d'exemples que de features (n > d)</li>
-                            <li>✅ Features avec de la variabilité (pas toutes constantes)</li>
-                        </ul>
-                        
-                        <p><strong>⚠️ Cas dégénérés :</strong></p>
-                        <div style="background: #ffebee; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                            <strong>Si X^TX n'est pas inversible :</strong><br>
-                            • Infinité de solutions optimales<br>
-                            • Utiliser la pseudo-inverse : \\(\\vec{w}^* = (X^TX)^+X^T\\vec{y}\\)<br>
-                            • Ou ajouter de la régularisation : \\((X^TX + \\lambda I)^{-1}\\)
-                        </div>
-                        
-                        <p><strong>🎯 Optimalité globale :</strong></p>
-                        <p>La matrice Hessienne \\(H = X^TX\\) est semi-définie positive → minimum global garanti !</p>
-                    `,
-          },
+          // Section 4: Implémentation
           {
             type: "code",
             title: "Implémentation from scratch",
-            description:
-              "Implémentons la régression linéaire sans bibliothèques :",
+            description: "Implémentons la régression linéaire en Python :",
             code: `import numpy as np
 import matplotlib.pyplot as plt
 
-class RegressionLineaire:
-    """Régression linéaire implémentée from scratch"""
-    
-    def __init__(self):
-        self.w = None
-        self.b = None
-        self.cout_historique = []
-    
-    def entrainer(self, X, y):
-        """Entraîner le modèle avec la solution analytique"""
-        n, d = X.shape
-        
-        # Ajouter une colonne de 1 pour le biais
-        X_avec_biais = np.column_stack([X, np.ones(n)])
-        
-        # Solution des moindres carrés : (X^T X)^(-1) X^T y
-        try:
-            XTX = X_avec_biais.T @ X_avec_biais
-            XTy = X_avec_biais.T @ y
-            parametres = np.linalg.solve(XTX, XTy)
-            
-            self.w = parametres[:-1]  # Tous sauf le dernier
-            self.b = parametres[-1]   # Le dernier
-            
-            print("✅ Entraînement réussi !")
-            print(f"Poids : {self.w}")
-            print(f"Biais : {self.b:.3f}")
-            
-        except np.linalg.LinAlgError:
-            print("❌ Matrice non inversible - données dégénérées")
-    
-    def predire(self, X):
-        """Faire des prédictions"""
-        if self.w is None:
-            raise ValueError("Modèle non entraîné !")
-        return X @ self.w + self.b
-    
-    def evaluer(self, X, y):
-        """Évaluer les performances"""
-        y_pred = self.predire(X)
-        
-        # Métriques
-        mse = np.mean((y - y_pred) ** 2)
-        mae = np.mean(np.abs(y - y_pred))
-        
-        # R² (coefficient de détermination)
-        ss_res = np.sum((y - y_pred) ** 2)
-        ss_tot = np.sum((y - np.mean(y)) ** 2)
-        r2 = 1 - (ss_res / ss_tot)
-        
-        return {
-            'MSE': mse,
-            'RMSE': np.sqrt(mse),
-            'MAE': mae,
-            'R²': r2
-        }
-
-# Test avec nos données de terrains
-print("🏠 RÉGRESSION LINÉAIRE : PRIX DES TERRAINS DAKAR")
-print("=" * 50)
-
-# Données
+# Données : Prix de terrains (surface m², distance km, prix M FCFA)
 X = np.array([
-    [200, 5],   # Surface, Distance
+    [200, 5],
     [300, 3],
     [150, 8],
     [400, 2],
     [250, 6],
     [350, 4]
 ])
+y = np.array([15, 25, 8, 35, 18, 28])
 
-y = np.array([15, 25, 8, 35, 18, 28])  # Prix en millions FCFA
-
-print("📊 Données d'entraînement :")
+print("📊 DONNÉES : TERRAINS À DAKAR")
 print("Surface (m²) | Distance (km) | Prix (M FCFA)")
-print("-" * 40)
+print("-" * 45)
 for i in range(len(X)):
-    print(f"{X[i,0]:8.0f} | {X[i,1]:10.0f} | {y[i]:8.0f}")
+    print(f"    {X[i,0]:4d}     |      {X[i,1]:d}        |     {y[i]:2d}")
 
-# Entraînement
-modele = RegressionLineaire()
-modele.entrainer(X, y)
+# Régression linéaire analytique
+def regression_lineaire(X, y):
+    """Solution analytique : w = (X^T X)^(-1) X^T y"""
+    # Ajouter colonne de 1 pour le biais
+    n = len(X)
+    X_b = np.column_stack([X, np.ones(n)])
+
+    # Formule des moindres carrés
+    params = np.linalg.solve(X_b.T @ X_b, X_b.T @ y)
+
+    return params[:-1], params[-1]  # poids, biais
+
+# Entraîner
+w, b = regression_lineaire(X, y)
+print(f"\\n🤖 MODÈLE ENTRAÎNÉ")
+print(f"Prix = {w[0]:.4f} × Surface + {w[1]:.2f} × Distance + {b:.2f}")
+
+# Interprétation
+print(f"\\n📊 INTERPRÉTATION :")
+print(f"• +1 m² → +{w[0]*1000:.0f} FCFA")
+print(f"• +1 km du centre → {w[1]:.2f} M FCFA (diminution)")
+
+# Prédiction
+nouveau = np.array([[280, 5]])
+prix_predit = nouveau @ w + b
+print(f"\\n🎯 PRÉDICTION : Terrain 280m² à 5km → {prix_predit[0]:.1f} M FCFA")
 
 # Évaluation
-metriques = modele.evaluer(X, y)
-print(f"\\n📊 PERFORMANCE :")
-print(f"MSE : {metriques['MSE']:.2f}")
-print(f"RMSE : {metriques['RMSE']:.2f} millions FCFA")
-print(f"R² : {metriques['R²']:.3f} ({metriques['R²']*100:.1f}% de variance expliquée)")
-
-# Prédiction sur nouveau terrain
-nouveau_terrain = np.array([[250, 4]])  # 250m², 4km du centre
-prix_predit = modele.predire(nouveau_terrain)
-print(f"\\n🎯 PRÉDICTION :")
-print(f"Terrain 250m² à 4km → {prix_predit[0]:.1f} millions FCFA")`,
+y_pred = X @ w + b
+mse = np.mean((y - y_pred)**2)
+r2 = 1 - np.sum((y - y_pred)**2) / np.sum((y - np.mean(y))**2)
+print(f"\\n📈 PERFORMANCE : MSE={mse:.2f}, R²={r2:.3f}")`,
           },
           {
-            type: "code",
-            title: "Visualisation des résultats",
-            description: "Visualisons notre modèle et ses prédictions :",
-            code: `# Visualisation 3D des données et du modèle
-fig = plt.figure(figsize=(12, 9))
-ax = fig.add_subplot(111, projection='3d')
-
-# Points réels
-ax.scatter(X[:, 0], X[:, 1], y, c='red', s=100, alpha=0.8, label='Données réelles')
-
-# Surface du modèle
-surface_range = np.linspace(X[:, 0].min(), X[:, 0].max(), 20)
-distance_range = np.linspace(X[:, 1].min(), X[:, 1].max(), 20)
-Surface_grid, Distance_grid = np.meshgrid(surface_range, distance_range)
-
-# Prédictions sur la grille
-X_grid = np.column_stack([Surface_grid.ravel(), Distance_grid.ravel()])
-Prix_grid = modele.predire(X_grid).reshape(Surface_grid.shape)
-
-# Surface du modèle
-ax.plot_surface(Surface_grid, Distance_grid, Prix_grid, alpha=0.3, color='blue')
-
-ax.set_xlabel('Surface (m²)')
-ax.set_ylabel('Distance centre (km)')
-ax.set_zlabel('Prix (millions FCFA)')
-ax.set_title('Modèle de Régression Linéaire - Terrains Dakar')
-ax.legend()
-
-plt.show()
-
-# Analyse des résidus
-y_pred = modele.predire(X)
-residus = y - y_pred
-
-print("\\n🔍 ANALYSE DES RÉSIDUS :")
-print("Point | Réel | Prédit | Résidu")
-print("-" * 35)
-for i in range(len(y)):
-    print(f"{i+1:3d}   | {y[i]:4.1f} | {y_pred[i]:6.1f} | {residus[i]:6.1f}")
-
-# Graphique des résidus
-plt.figure(figsize=(10, 6))
-plt.scatter(y_pred, residus, alpha=0.7, s=100)
-plt.axhline(y=0, color='red', linestyle='--', alpha=0.8)
-plt.xlabel('Valeurs prédites')
-plt.ylabel('Résidus (réel - prédit)')
-plt.title('Analyse des Résidus')
-plt.grid(True, alpha=0.3)
-plt.show()
-
-print("\\n💡 Interprétation des résidus :")
-if np.std(residus) < 2:
-    print("✅ Résidus faibles et aléatoires → bon modèle")
-else:
-    print("⚠️ Résidus importants → modèle peut être amélioré")`,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice : régression multiple complète",
+            type: "exercise",
+            title: "Interprétation des coefficients",
+            exerciseType: "mcq",
             content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Prédisons les notes d'étudiants avec 3 variables :</p>
-                        
-                        <table style="margin: 1rem auto; text-align: center; font-size: 0.9rem;">
-                            <tr style="background: #3498db; color: white;">
-                                <th style="padding: 0.5rem;">Heures étude</th>
-                                <th style="padding: 0.5rem;">Heures sommeil</th>
-                                <th style="padding: 0.5rem;">Cours assistés (%)</th>
-                                <th style="padding: 0.5rem;">Note (/20)</th>
-                            </tr>
-                            <tr><td>10</td><td>8</td><td>90</td><td>16</td></tr>
-                            <tr><td>5</td><td>6</td><td>70</td><td>12</td></tr>
-                            <tr><td>15</td><td>7</td><td>95</td><td>18</td></tr>
-                            <tr><td>8</td><td>9</td><td>80</td><td>14</td></tr>
-                            <tr><td>12</td><td>8</td><td>85</td><td>15</td></tr>
-                        </table>
-                        
-                        <p><strong>📝 Questions :</strong></p>
-                        <ol>
-                            <li>Calculez les coefficients w₁, w₂, w₃ et b</li>
-                            <li>Interprétez chaque coefficient</li>
-                            <li>Prédisez la note pour : 9h étude, 7h sommeil, 88% présence</li>
-                            <li>Calculez le R² du modèle</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('multiple-regression-exercise')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="multiple-regression-exercise" style="display: none;">
-                        <p><strong>Résolution avec NumPy :</strong></p>
-                        <pre style="background: #f4f4f4; padding: 1rem; border-radius: 4px; font-size: 0.85rem;">
-X = [[10, 8, 90], [5, 6, 70], [15, 7, 95], [8, 9, 80], [12, 8, 85]]
-y = [16, 12, 18, 14, 15]
-X_avec_biais = [x + [1] for x in X]  # Ajouter colonne de 1
-
-# Solution : w = (X^T X)^(-1) X^T y
-# Résultat approximatif :
-w₁ ≈ 0.65  (heures étude)
-w₂ ≈ 0.23  (heures sommeil)  
-w₃ ≈ 0.08  (présence)
-b ≈ -2.1   (biais)
-</pre>
-                        <ol>
-                            <li><strong>Coefficients :</strong> w₁=0.65, w₂=0.23, w₃=0.08, b=-2.1</li>
-                            <li><strong>Interprétations :</strong><br>
-                                • +1h étude → +0.65 point<br>
-                                • +1h sommeil → +0.23 point<br>
-                                • +1% présence → +0.08 point<br>
-                                • Étude > Sommeil > Présence en importance</li>
-                            <li><strong>Prédiction :</strong><br>
-                                Note = 0.65×9 + 0.23×7 + 0.08×88 - 2.1<br>
-                                = 5.85 + 1.61 + 7.04 - 2.1 = 12.4/20</li>
-                            <li><strong>R² :</strong> Environ 0.85 (85% de variance expliquée)</li>
-                        </ol>
-                        </div>
-                    `,
+              <p>Un modèle prédit les ventes d'un magasin :</p>
+              <p><code>Ventes = 3.2 × Température + 1.5 × Publicité - 0.8 × Pluie + 500</code></p>
+              <p><strong>Que signifie le coefficient -0.8 pour la pluie ?</strong></p>
+            `,
+            options: [
+              "La pluie n'a pas d'effet sur les ventes",
+              "Chaque mm de pluie supplémentaire diminue les ventes de 0.8",
+              "Il pleut en moyenne 0.8 fois par jour",
+              "Les ventes augmentent de 0.8 quand il pleut",
+            ],
+            correctAnswer: 1,
+            explanation: "Un coefficient négatif signifie une relation inverse. Chaque unité supplémentaire de pluie diminue les ventes de 0.8 unités. C'est logique : les gens sortent moins quand il pleut.",
           },
+          // Section 5: Exercice code
+          {
+            type: "exercise-code",
+            title: "Calculez le R² d'un modèle",
+            content: `
+              <p>Le coefficient R² mesure la proportion de variance expliquée :</p>
+              <p style="text-align: center;">$$R^2 = 1 - \\frac{\\sum(y_i - \\hat{y}_i)^2}{\\sum(y_i - \\bar{y})^2}$$</p>
+              <p>Complétez le code pour calculer R² :</p>
+            `,
+            starterCode: `import numpy as np
+
+# Données
+y_reel = np.array([10, 15, 20, 25, 30])
+y_predit = np.array([12, 14, 19, 26, 29])
+
+# Calculer R²
+y_mean = np.mean(y_reel)
+
+# TODO: Calculer SS_res (somme des carrés des résidus)
+ss_res = np.sum((y_reel - y_predit) ** 2)
+
+# TODO: Calculer SS_tot (somme des carrés totaux)
+ss_tot = np.sum((y_reel - y_mean) ** 2)
+
+# TODO: Calculer R²
+r2 = 1 - (ss_res / ss_tot)
+
+print(f"SS_res = {ss_res}")
+print(f"SS_tot = {ss_tot}")
+print(f"R² = {r2:.4f}")
+print(f"\\nLe modèle explique {r2*100:.1f}% de la variance")`,
+            solution: `import numpy as np
+
+y_reel = np.array([10, 15, 20, 25, 30])
+y_predit = np.array([12, 14, 19, 26, 29])
+
+y_mean = np.mean(y_reel)
+ss_res = np.sum((y_reel - y_predit) ** 2)
+ss_tot = np.sum((y_reel - y_mean) ** 2)
+r2 = 1 - (ss_res / ss_tot)
+
+print(f"SS_res = {ss_res}")
+print(f"SS_tot = {ss_tot}")
+print(f"R² = {r2:.4f}")`,
+            expectedOutput: "R²",
+          },
+          // Section 6: Régularisation
           {
             type: "concept",
-            icon: "💡",
-            title: "Régularisation : contrôler la complexité",
+            icon: "⚖️",
+            title: "Régularisation : éviter l'overfitting",
             content: `
-                        <p><strong>🤔 Problème :</strong> Que faire si on a trop de features par rapport aux données ?</p>
-                        <p>Avec 1000 features et 100 exemples, le modèle peut "mémoriser" au lieu d'apprendre !</p>
-                        
-                        <p><strong>💡 Solution :</strong> Pénaliser les poids trop grands</p>
-                        
-                        <p><strong>🎯 Régularisation Ridge (L2) :</strong></p>
-                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                            $$J_{Ridge}(\\vec{w}, b) = \\frac{1}{2n} \\sum_{i=1}^{n} (y_i - \\vec{w}^T\\vec{x}_i - b)^2 + \\lambda ||\\vec{w}||_2^2$$<br><br>
-                            
-                            <strong>Solution modifiée :</strong><br>
-                            $$\\vec{w}^* = (X^TX + \\lambda I)^{-1}X^T\\vec{y}$$<br><br>
-                            
-                            <strong>Effet :</strong> λ > 0 garantit l'inversibilité et réduit les poids
-                        </div>
-                        
-                        <p><strong>🎯 Régularisation Lasso (L1) :</strong></p>
-                        <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                            $$J_{Lasso}(\\vec{w}, b) = \\frac{1}{2n} \\sum_{i=1}^{n} (y_i - \\vec{w}^T\\vec{x}_i - b)^2 + \\lambda ||\\vec{w}||_1$$<br><br>
-                            
-                            <strong>Effet spécial :</strong> Met certains poids à exactement 0<br>
-                            → Sélection automatique de features !<br><br>
-                            
-                            <strong>Pas de solution analytique</strong> → optimisation itérative
-                        </div>
-                        
-                        <p><strong>⚖️ Choix de λ :</strong></p>
-                        <ul>
-                            <li>λ = 0 : régression classique</li>
-                            <li>λ petit : peu de régularisation</li>
-                            <li>λ grand : forte régularisation (peut créer du biais)</li>
-                            <li>🎯 Optimal : validation croisée pour choisir λ</li>
-                        </ul>
-                    `,
+              <p><strong>Problème :</strong> Avec beaucoup de features, le modèle peut mémoriser au lieu d'apprendre.</p>
+
+              <p><strong>Solution :</strong> Pénaliser les poids trop grands.</p>
+
+              <p><strong>Ridge (L2) :</strong></p>
+              <p style="text-align: center;">$$J_{Ridge} = MSE + \\lambda \\sum w_i^2$$</p>
+              <p>Réduit tous les poids proportionnellement.</p>
+
+              <p><strong>Lasso (L1) :</strong></p>
+              <p style="text-align: center;">$$J_{Lasso} = MSE + \\lambda \\sum |w_i|$$</p>
+              <p>Met certains poids à exactement 0 → sélection de features.</p>
+
+              <p><strong>Choix de λ :</strong></p>
+              <ul>
+                <li>λ = 0 : pas de régularisation</li>
+                <li>λ petit : légère régularisation</li>
+                <li>λ grand : forte régularisation (peut sous-apprendre)</li>
+              </ul>
+            `,
           },
+          {
+            type: "quiz",
+            title: "Quiz - Régularisation",
+            question: "Vous avez un modèle avec 100 features mais seulement 50 exemples. Que risque-t-il de se passer ?",
+            options: [
+              "Le modèle sera trop simple (underfitting)",
+              "Le modèle mémorisera les données (overfitting)",
+              "Le modèle fonctionnera parfaitement",
+              "Impossible de calculer une solution",
+            ],
+            correctAnswer: 1,
+            explanation: "Plus de features que d'exemples = risque majeur d'overfitting. Le modèle peut trouver des combinaisons de features qui passent par tous les points. Solution : régularisation forte (Ridge/Lasso) ou réduction de features.",
+          },
+          // Section 7: Visualisation
           {
             type: "code",
-            title: "Comparaison avec/sans régularisation",
-            description: "Comparons les effets de la régularisation :",
-            code: `# Génération de données avec bruit
+            title: "Visualisation : underfitting vs overfitting",
+            description: "Comparons différents niveaux de complexité :",
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Données : relation parabolique avec bruit
 np.random.seed(42)
-n_samples = 50
-n_features = 8
+X = np.linspace(0, 10, 15)
+y_true = 0.5 * X**2 - 2*X + 3
+y = y_true + np.random.randn(15) * 2
 
-# Features corrélées (problème réaliste)
-X_base = np.random.randn(n_samples, 3)
-X_correlated = np.column_stack([
-    X_base,
-    X_base[:, 0] + 0.1 * np.random.randn(n_samples),  # Corrélée à x1
-    X_base[:, 1] + 0.1 * np.random.randn(n_samples),  # Corrélée à x2
-    X_base[:, 2] + 0.1 * np.random.randn(n_samples),  # Corrélée à x3
-    np.random.randn(n_samples),  # Indépendante
-    np.random.randn(n_samples)   # Indépendante
-])
-
-# Vraie relation (seulement 3 features importantes)
-y_true = 2*X_base[:, 0] + 1.5*X_base[:, 1] - 1*X_base[:, 2] + 5
-y_noisy = y_true + 0.5 * np.random.randn(n_samples)
-
-print("🧪 COMPARAISON RÉGULARISATION")
-print("=" * 40)
-print(f"Données : {n_samples} exemples, {n_features} features")
-print(f"Vraies features importantes : 3/{n_features}")
-
-# Modèle sans régularisation
-modele_normal = RegressionLineaire()
-modele_normal.entrainer(X_correlated, y_noisy)
-
-print(f"\\n📊 SANS RÉGULARISATION :")
-print(f"Poids : {modele_normal.w.round(3)}")
-print(f"Norme des poids : {np.linalg.norm(modele_normal.w):.3f}")
-
-# Simulation Ridge (ajout manuel de régularisation)
-def ridge_regression(X, y, lambda_reg):
-    """Régression Ridge manuelle"""
-    n, d = X.shape
-    X_avec_biais = np.column_stack([X, np.ones(n)])
-    
-    # Matrice de régularisation (ne pas régulariser le biais)
-    reg_matrix = lambda_reg * np.eye(d + 1)
-    reg_matrix[-1, -1] = 0  # Pas de régularisation sur le biais
-    
-    XTX_reg = X_avec_biais.T @ X_avec_biais + reg_matrix
-    XTy = X_avec_biais.T @ y
-    parametres = np.linalg.solve(XTX_reg, XTy)
-    
-    return parametres[:-1], parametres[-1]
-
-# Test avec différents λ
-lambdas = [0.1, 1.0, 10.0]
-print(f"\\n📊 AVEC RÉGULARISATION RIDGE :")
-
-for lam in lambdas:
-    w_ridge, b_ridge = ridge_regression(X_correlated, y_noisy, lam)
-    norme = np.linalg.norm(w_ridge)
-    print(f"λ={lam:4.1f} : Norme poids = {norme:.3f}")
-    print(f"         Poids = {w_ridge.round(3)}")
-
-print(f"\\n💡 Observation :")
-print(f"Plus λ augmente, plus les poids diminuent (régularisation)")`,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice : interprétation des coefficients",
-            content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Un modèle prédit les ventes d'un magasin avec :</p>
-                        <p><strong>Modèle :</strong> Ventes = 2.5×Publicité + 1.8×Température - 0.3×Pluie + 1000</p>
-                        
-                        <p><strong>📝 Questions :</strong></p>
-                        <ol>
-                            <li>Que signifie chaque coefficient ?</li>
-                            <li>Quelle variable a le plus d'impact ?</li>
-                            <li>Prédisez les ventes avec : 50€ pub, 25°C, 2mm pluie</li>
-                            <li>De combien augmentent les ventes si on double la publicité ?</li>
-                            <li>Ce modèle est-il cohérent avec la réalité ?</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('coefficient-interpretation-exercise')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="coefficient-interpretation-exercise" style="display: none;">
-                        <ol>
-                            <li><strong>Signification des coefficients :</strong><br>
-                                • 2.5 : +1€ de pub → +2.5 ventes<br>
-                                • 1.8 : +1°C → +1.8 ventes<br>
-                                • -0.3 : +1mm pluie → -0.3 ventes<br>
-                                • 1000 : ventes de base (sans pub, 0°C, pas de pluie)</li>
-                            <li><strong>Impact :</strong> Publicité (2.5) > Température (1.8) > Pluie (0.3)</li>
-                            <li><strong>Prédiction :</strong><br>
-                                Ventes = 2.5×50 + 1.8×25 - 0.3×2 + 1000<br>
-                                = 125 + 45 - 0.6 + 1000 = 1169.4 ventes</li>
-                            <li><strong>Doubler la pub :</strong><br>
-                                Δ Ventes = 2.5 × (100-50) = +125 ventes</li>
-                            <li><strong>Cohérence :</strong><br>
-                                ✅ Plus de pub → plus de ventes (logique)<br>
-                                ✅ Plus chaud → plus de ventes (boissons, glaces)<br>
-                                ✅ Plus de pluie → moins de ventes (gens restent chez eux)<br>
-                                ⚠️ Biais de 1000 semble élevé (à vérifier)</li>
-                        </ol>
-                        </div>
-                    `,
-          },
-          {
-            type: "concept",
-            icon: "💡",
-            title: "Hypothèses et limites de la régression linéaire",
-            content: `
-                        <p><strong>⚠️ La régression linéaire fait des hypothèses importantes :</strong></p>
-                        
-                        <p><strong>📐 1. Linéarité :</strong></p>
-                        <p>La relation entre X et y est linéaire</p>
-                        <ul>
-                            <li>✅ <strong>Bon :</strong> prix = surface × prix_m² + constante</li>
-                            <li>❌ <strong>Mauvais :</strong> croissance exponentielle, relations en U</li>
-                        </ul>
-                        
-                        <p><strong>📊 2. Indépendance des erreurs :</strong></p>
-                        <p>Les résidus sont indépendants entre eux</p>
-                        <ul>
-                            <li>✅ <strong>Bon :</strong> erreurs aléatoires</li>
-                            <li>❌ <strong>Mauvais :</strong> données temporelles avec tendance</li>
-                        </ul>
-                        
-                        <p><strong>📈 3. Homoscédasticité :</strong></p>
-                        <p>La variance des erreurs est constante</p>
-                        <ul>
-                            <li>✅ <strong>Bon :</strong> résidus dispersés uniformément</li>
-                            <li>❌ <strong>Mauvais :</strong> résidus en forme de cône</li>
-                        </ul>
-                        
-                        <p><strong>🔔 4. Normalité des erreurs :</strong></p>
-                        <p>Les résidus suivent une loi normale</p>
-                        <ul>
-                            <li>✅ <strong>Bon :</strong> histogramme des résidus en cloche</li>
-                            <li>❌ <strong>Mauvais :</strong> résidus asymétriques ou multimodaux</li>
-                        </ul>
-                        
-                        <p><strong>🔍 Comment vérifier ces hypothèses ?</strong></p>
-                        <ul>
-                            <li>📊 <strong>Graphiques de résidus</strong> : patterns révélateurs</li>
-                            <li>📈 <strong>Tests statistiques</strong> : Shapiro-Wilk, Breusch-Pagan</li>
-                            <li>🎯 <strong>Validation croisée</strong> : performance stable ?</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice : diagnostic d'un modèle",
-            content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Analysez ces 3 modèles de régression :</p>
-                        
-                        <p><strong>📊 Modèle A :</strong></p>
-                        <ul>
-                            <li>R² train = 0.95, R² test = 0.93</li>
-                            <li>Résidus : distribution normale, variance constante</li>
-                            <li>Coefficients : [2.1, -0.8, 1.5]</li>
-                        </ul>
-                        
-                        <p><strong>📊 Modèle B :</strong></p>
-                        <ul>
-                            <li>R² train = 0.99, R² test = 0.65</li>
-                            <li>Résidus : patterns en forme de U</li>
-                            <li>Coefficients : [15.2, -8.7, 22.1, -11.3, 9.8]</li>
-                        </ul>
-                        
-                        <p><strong>📊 Modèle C :</strong></p>
-                        <ul>
-                            <li>R² train = 0.45, R² test = 0.43</li>
-                            <li>Résidus : aléatoires mais variance élevée</li>
-                            <li>Coefficients : [0.2, 0.1]</li>
-                        </ul>
-                        
-                        <p><strong>📝 Pour chaque modèle, diagnostiquez :</strong></p>
-                        <ol>
-                            <li>Y a-t-il overfitting ou underfitting ?</li>
-                            <li>Les hypothèses sont-elles respectées ?</li>
-                            <li>Quelles améliorations proposer ?</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('model-diagnosis-exercise')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="model-diagnosis-exercise" style="display: none;">
-                        <ol>
-                            <li><strong>Diagnostics :</strong><br>
-                                <strong>Modèle A :</strong> ✅ Excellent ! Bon équilibre, hypothèses respectées<br>
-                                <strong>Modèle B :</strong> ❌ Overfitting sévère (0.99 vs 0.65), non-linéarité (résidus en U)<br>
-                                <strong>Modèle C :</strong> ❌ Underfitting (performances faibles partout)</li>
-                            <li><strong>Hypothèses :</strong><br>
-                                <strong>A :</strong> Toutes respectées<br>
-                                <strong>B :</strong> Linéarité violée (patterns dans résidus)<br>
-                                <strong>C :</strong> Probablement respectées mais modèle trop simple</li>
-                            <li><strong>Améliorations :</strong><br>
-                                <strong>A :</strong> Rien à changer, modèle optimal<br>
-                                <strong>B :</strong> Régularisation forte, features polynomiales, ou modèle non-linéaire<br>
-                                <strong>C :</strong> Plus de features, interactions, modèle plus complexe</li>
-                        </ol>
-                        </div>
-                    `,
-          },
-          {
-            type: "code",
-            title: "Régression polynomiale : capturer la non-linéarité",
-            description:
-              "Étendons la régression linéaire aux relations courbes :",
-            code: `# Données avec relation non-linéaire
-np.random.seed(42)
-x_nonlin = np.linspace(0, 4, 20)
-y_nonlin = 2*x_nonlin**2 - 3*x_nonlin + 1 + 0.5*np.random.randn(20)
-
-print("📈 RÉGRESSION POLYNOMIALE")
-print("=" * 40)
-
-def creer_features_polynomiales(x, degre):
-    """Créer features polynomiales jusqu'au degré donné"""
-    X_poly = np.column_stack([x**i for i in range(1, degre+1)])
-    return X_poly
-
-def regression_polynomiale(x, y, degre):
-    """Régression polynomiale de degré donné"""
-    X_poly = creer_features_polynomiales(x, degre)
-    
-    # Ajouter biais
-    X_avec_biais = np.column_stack([X_poly, np.ones(len(x))])
-    
-    # Solution des moindres carrés
-    parametres = np.linalg.solve(X_avec_biais.T @ X_avec_biais, 
-                                X_avec_biais.T @ y)
-    
-    return parametres[:-1], parametres[-1]  # poids, biais
-
-# Test différents degrés
-degres = [1, 2, 3, 5]
-for degre in degres:
-    w_poly, b_poly = regression_polynomiale(x_nonlin, y_nonlin, degre)
-    
-    # Prédictions
-    X_poly = creer_features_polynomiales(x_nonlin, degre)
-    y_pred = X_poly @ w_poly + b_poly
-    
-    # Métriques
-    mse = np.mean((y_nonlin - y_pred)**2)
-    r2 = 1 - np.sum((y_nonlin - y_pred)**2) / np.sum((y_nonlin - np.mean(y_nonlin))**2)
-    
-    print(f"\\nDegré {degre} :")
-    print(f"  Coefficients : {w_poly.round(3)}")
-    print(f"  MSE : {mse:.3f}")
-    print(f"  R² : {r2:.3f}")
+# Régression polynomiale de différents degrés
+def fit_polynomial(X, y, degree):
+    coeffs = np.polyfit(X, y, degree)
+    return coeffs
 
 # Visualisation
-plt.figure(figsize=(12, 8))
+fig, axes = plt.subplots(1, 3, figsize=(14, 4))
+X_plot = np.linspace(0, 10, 100)
+degrees = [1, 2, 10]
+titles = ['UNDERFITTING\\n(trop simple)', 'BON ÉQUILIBRE', 'OVERFITTING\\n(trop complexe)']
+colors = ['red', 'green', 'purple']
 
-# Points originaux
-plt.scatter(x_nonlin, y_nonlin, color='red', s=50, alpha=0.7, label='Données')
+for ax, deg, title, color in zip(axes, degrees, titles, colors):
+    # Données
+    ax.scatter(X, y, c='blue', s=50, label='Données', zorder=5)
 
-# Courbes pour chaque degré
-x_smooth = np.linspace(0, 4, 100)
-couleurs = ['blue', 'green', 'orange', 'purple']
+    # Modèle
+    coeffs = fit_polynomial(X, y, deg)
+    y_pred = np.polyval(coeffs, X_plot)
+    ax.plot(X_plot, y_pred, c=color, linewidth=2, label=f'Degré {deg}')
 
-for i, degre in enumerate(degres):
-    w_poly, b_poly = regression_polynomiale(x_nonlin, y_nonlin, degre)
-    X_smooth = creer_features_polynomiales(x_smooth, degre)
-    y_smooth = X_smooth @ w_poly + b_poly
-    
-    plt.plot(x_smooth, y_smooth, color=couleurs[i], linewidth=2, 
-             label=f'Degré {degre}')
+    # Vraie fonction
+    ax.plot(X_plot, 0.5*X_plot**2 - 2*X_plot + 3, 'g--', alpha=0.5, label='Vraie relation')
 
-plt.xlabel('x')
-plt.ylabel('y')
-plt.title('Régression Polynomiale - Différents Degrés')
-plt.legend()
-plt.grid(True, alpha=0.3)
+    # MSE
+    y_model = np.polyval(coeffs, X)
+    mse = np.mean((y - y_model)**2)
+    ax.set_title(f'{title}\\nMSE train = {mse:.1f}', fontsize=11)
+    ax.legend(fontsize=8)
+    ax.set_ylim(-5, 30)
+
+plt.tight_layout()
 plt.show()
 
-print("\\n💡 Observation :")
-print("Degré 2 capture bien la vraie relation (parabole)")
-print("Degrés élevés risquent l'overfitting")`,
+print("📊 ANALYSE :")
+print("• Degré 1 (droite) : ne capture pas la courbure")
+print("• Degré 2 : capture bien la vraie relation parabolique")
+print("• Degré 10 : passe par tous les points mais sera mauvais sur nouvelles données")`,
           },
           {
-            type: "warning",
-            icon: "⚠️",
-            title: "Régression linéaire : fondation de l'IA moderne",
+            type: "exercise",
+            title: "Diagnostic de modèle",
+            exerciseType: "mcq",
             content: `
-                        <p><strong>🧠 Pourquoi la régression linéaire est-elle si importante ?</strong></p>
-                        
-                        <p><strong>🏗️ Fondation théorique :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Optimisation convexe</strong> : un seul minimum global</li>
-                            <li>📊 <strong>Solution analytique</strong> : formule exacte sans itérations</li>
-                            <li>📈 <strong>Interprétabilité</strong> : coefficients ont un sens clair</li>
-                            <li>⚡ <strong>Rapidité</strong> : calcul instantané même sur gros datasets</li>
-                        </ul>
-                        
-                        <p><strong>🤖 Connexions avec l'IA avancée :</strong></p>
-                        <ul>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : chaque neurone fait une régression</li>
-                            <li>🎯 <strong>SVM</strong> : régression dans l'espace des features</li>
-                            <li>🌳 <strong>Random Forest</strong> : moyenne de régressions sur arbres</li>
-                            <li>📊 <strong>Deep Learning</strong> : composition de régressions linéaires + non-linéarités</li>
-                        </ul>
-                        
-                        <p><strong>🔧 Outils pratiques :</strong></p>
-                        <ul>
-                            <li>📋 <strong>Baseline</strong> : toujours commencer par une régression simple</li>
-                            <li>🔍 <strong>Feature importance</strong> : coefficients révèlent l'importance</li>
-                            <li>📈 <strong>Debugging</strong> : comprendre pourquoi un modèle complexe échoue</li>
-                            <li>⚖️ <strong>Régularisation</strong> : contrôler la complexité</li>
-                        </ul>
-                        
-                        <p><strong>💡 Points clés à retenir :</strong></p>
-                        <div style="background: #d1ecf1; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                            1. <strong>Simplicité ≠ Faiblesse</strong> : souvent la meilleure solution<br>
-                            2. <strong>Interprétabilité</strong> : comprendre > performance pure<br>
-                            3. <strong>Fondation solide</strong> : maîtriser avant d'aller plus loin<br>
-                            4. <strong>Diagnostic essentiel</strong> : vérifier les hypothèses<br>
-                            5. <strong>Régularisation</strong> : contrôler overfitting
-                        </div>
-                        
-                        <p><strong>🔮 Prochaine étape :</strong></p>
-                        <p>Maintenant que vous maîtrisez la régression, nous allons voir la <strong>classification</strong> - prédire des catégories au lieu de valeurs continues !</p>
-                    `,
+              <p>Un modèle de régression donne :</p>
+              <ul>
+                <li>MSE sur train : <strong>5</strong></li>
+                <li>MSE sur test : <strong>45</strong></li>
+              </ul>
+              <p><strong>Quel est le problème et que faire ?</strong></p>
+            `,
+            options: [
+              "Underfitting → augmenter la complexité du modèle",
+              "Overfitting → régulariser ou simplifier le modèle",
+              "Le modèle est bon, l'écart est normal",
+              "Problème de données → collecter plus de données de test",
+            ],
+            correctAnswer: 1,
+            explanation: "MSE train (5) très inférieur au MSE test (45) = overfitting classique. Le modèle a mémorisé l'entraînement. Solutions : régularisation L2/L1, réduire le nombre de features, ajouter plus de données d'entraînement.",
+          },
+          // Section 8: Récapitulatif
+          {
+            type: "warning",
+            icon: "🎯",
+            title: "Récapitulatif : la régression linéaire en 5 points",
+            content: `
+              <p><strong>1️⃣ Objectif</strong></p>
+              <p>Prédire une valeur continue y à partir de features X avec y = Xw + b</p>
+
+              <p><strong>2️⃣ Fonction de coût</strong></p>
+              <p>MSE = moyenne des erreurs au carré. On minimise pour trouver w et b optimaux.</p>
+
+              <p><strong>3️⃣ Solution analytique</strong></p>
+              <p>w* = (X<sup>T</sup>X)<sup>-1</sup>X<sup>T</sup>y — formule exacte, calcul direct.</p>
+
+              <p><strong>4️⃣ Interprétation</strong></p>
+              <p>Chaque coefficient w<sub>i</sub> indique l'impact de la feature i sur la prédiction.</p>
+
+              <p><strong>5️⃣ Régularisation</strong></p>
+              <p>Ridge (L2) et Lasso (L1) pour contrôler la complexité et éviter l'overfitting.</p>
+
+              <p style="background: #e3f2fd; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>💡 À retenir :</strong> La régression linéaire est la base de tout le ML. Maîtrisez-la avant d'aller plus loin !
+              </p>
+            `,
+          },
+          {
+            type: "quiz",
+            title: "Quiz final - Régression Linéaire",
+            question: "Vous entraînez une régression linéaire et obtenez R² = 0.95 sur le train et R² = 0.92 sur le test. Que concluez-vous ?",
+            options: [
+              "Le modèle est en overfitting sévère",
+              "Le modèle est excellent et généralise bien",
+              "Le modèle est en underfitting",
+              "Il faut ajouter plus de features",
+            ],
+            correctAnswer: 1,
+            explanation: "R² = 0.95 (train) et 0.92 (test) sont très proches et élevés. Le modèle explique ~93% de la variance et généralise bien (faible écart train/test). C'est un excellent modèle !",
           },
         ],
-        quiz: {
-          question:
-            "🤔 Que se passe-t-il si tous les points sont parfaitement alignés sur une droite ?",
-          options: [
-            "A) La régression échoue",
-            "B) Il y a une infinité de solutions",
-            "C) L'erreur J = 0 et la solution est exacte",
-            "D) Les coefficients deviennent infinis",
-          ],
-          correct: 2,
-          explanation:
-            "Si les points sont parfaitement alignés, la régression trouve LA droite qui passe exactement par tous les points. L'erreur J = 0 (aucune erreur !), et les formules donnent les paramètres exacts de cette droite. C'est le cas idéal où le modèle linéaire correspond parfaitement à la réalité.",
-        },
         prevModule: "introduction.html",
         nextModule: "classification.html",
       };
 
-      // Initialiser le module
       document.addEventListener("DOMContentLoaded", function () {
         initializeModule(moduleConfig);
       });

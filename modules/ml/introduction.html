@@ -32,11 +32,7 @@
         <div class="progress-indicator">
           <span id="progress-text">Progression: 0%</span>
           <div class="progress-bar">
-            <div
-              class="progress-fill"
-              id="progress-fill"
-              style="width: 0%"
-            ></div>
+            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
           </div>
         </div>
       </div>
@@ -45,419 +41,525 @@
     <!-- Contenu principal -->
     <div class="container">
       <h1>🤖 Introduction au Machine Learning</h1>
-      <p class="subtitle">Module 3.1 - Apprentissage Automatique</p>
+      <p class="subtitle">Module 3.1 - Qu'est-ce que l'apprentissage automatique ?</p>
+
+      <!-- Statut Pyodide -->
+      <div id="pyodide-status" class="pyodide-status">
+        <span class="status-loading">⏳ Chargement de Python...</span>
+      </div>
 
       <!-- Objectifs -->
       <div class="objectives">
         <h2>🎯 Objectifs d'apprentissage</h2>
-        <ul id="objectives-list">
-          <!-- Les objectifs seront ajoutés dynamiquement -->
-        </ul>
+        <ul id="objectives-list"></ul>
       </div>
 
       <!-- Contenu du module -->
-      <div id="module-content">
-        <!-- Le contenu sera ajouté dynamiquement -->
-      </div>
-
-      <!-- Quiz -->
-      <div class="quiz" id="module-quiz" style="display: none">
-        <div class="quiz-question" id="quiz-question"></div>
-        <div class="quiz-options" id="quiz-options"></div>
-        <div class="quiz-feedback" id="quiz-feedback"></div>
-      </div>
+      <div id="module-content"></div>
 
       <!-- Checkpoint -->
       <div class="checkpoint">
         <h3>🎉 Checkpoint - Introduction ML</h3>
-        <p>
-          Félicitations ! Vous comprenez maintenant les fondements conceptuels
-          du Machine Learning.
-        </p>
-        <button
-          class="checkpoint-btn"
-          id="checkpoint-btn"
-          onclick="completeCheckpoint()"
-        >
-          Marquer comme complété
+        <p>Vous maîtrisez maintenant les fondements du Machine Learning !</p>
+        <button class="checkpoint-btn" id="checkpoint-btn" onclick="completeCheckpoint()" disabled>
+          Valider le module
         </button>
       </div>
 
       <!-- Navigation entre modules -->
       <div class="module-nav">
-        <a href="../python/algorithms.html" class="nav-link" id="prev-link"
-          >← Module précédent : Algorithmes</a
-        >
-        <a href="linear-regression.html" class="nav-link" id="next-link"
-          >Module suivant : Régression Linéaire →</a
-        >
+        <a href="../math/maximum-likelihood.html" class="nav-link" id="prev-link">← Maximum de vraisemblance</a>
+        <a href="linear-regression.html" class="nav-link" id="next-link">Régression Linéaire →</a>
       </div>
     </div>
 
     <script src="../../scripts/module-engine.js"></script>
     <script>
-      // Configuration du module Introduction ML
       const moduleConfig = {
         id: "ml-introduction",
         title: "Introduction au Machine Learning",
-        category: "Machine Learning",
         objectives: [
           "Comprendre ce qu'est vraiment le Machine Learning",
-          "Distinguer les 3 types d'apprentissage automatique",
-          "Maîtriser les concepts de biais et variance",
-          "Comprendre les différents types d'erreurs en ML",
+          "Distinguer les 3 types d'apprentissage",
+          "Maîtriser le compromis biais-variance",
+          "Reconnaître surapprentissage et sous-apprentissage",
         ],
         content: [
+          // Section 1: C'est quoi le ML ?
           {
             type: "concept",
             icon: "💡",
             title: "Qu'est-ce que le Machine Learning ?",
             content: `
-                        <p>Le <strong>Machine Learning</strong> est l'art d'enseigner aux ordinateurs à <strong>apprendre des patterns</strong> dans les données, plutôt que de programmer explicitement chaque règle.</p>
-                        
-                        <p><strong>🔑 Révolution conceptuelle :</strong></p>
-                        <ul>
-                            <li>🖥️ <strong>Programmation classique</strong> : "Si température > 30°C, alors porter des vêtements légers"</li>
-                            <li>🤖 <strong>Machine Learning</strong> : "Voici 10 000 exemples de températures et vêtements portés. Trouve le pattern !"</li>
-                        </ul>
-                        
-                        <p><strong>🧠 Analogie de l'apprentissage humain :</strong></p>
-                        <p>Un enfant apprend à reconnaître un chien en voyant des centaines de chiens différents. Il développe intuitivement le concept de "chien" sans qu'on lui explique les règles précises.</p>
-                        
-                        <p><strong>🎯 Trois paradigmes d'apprentissage :</strong></p>
-                        <ul>
-                            <li>📚 <strong>Supervisé</strong> : apprendre avec un professeur (exemples étiquetés)</li>
-                            <li>🔍 <strong>Non-supervisé</strong> : découvrir des patterns cachés (pas d'étiquettes)</li>
-                            <li>🎮 <strong>Par renforcement</strong> : apprendre par essai-erreur avec récompenses</li>
-                        </ul>
-                    `,
+              <p>Le <strong>Machine Learning</strong> (ML) est l'art de faire apprendre des patterns aux ordinateurs <strong>à partir de données</strong>, plutôt que de programmer explicitement chaque règle.</p>
+
+              <p><strong>🔑 La révolution :</strong></p>
+              <table style="width:100%; border-collapse: collapse; margin: 1rem 0;">
+                <tr style="background: #f0f0f0;">
+                  <th style="padding: 0.5rem; border: 1px solid #ddd;">Approche</th>
+                  <th style="padding: 0.5rem; border: 1px solid #ddd;">Méthode</th>
+                </tr>
+                <tr>
+                  <td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>Programmation classique</strong></td>
+                  <td style="padding: 0.5rem; border: 1px solid #ddd;">Règles + Données → Résultat</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>Machine Learning</strong></td>
+                  <td style="padding: 0.5rem; border: 1px solid #ddd;">Données + Résultats → Règles (modèle)</td>
+                </tr>
+              </table>
+
+              <p><strong>Exemple concret :</strong></p>
+              <ul>
+                <li>🖥️ <strong>Classique</strong> : "Si email contient 'gratuit' ET majuscules > 50%, alors spam"</li>
+                <li>🤖 <strong>ML</strong> : "Voici 10 000 emails étiquetés spam/pas spam. Trouve les patterns toi-même !"</li>
+              </ul>
+            `,
           },
           {
-            type: "intuition",
-            icon: "🧠",
-            title: "Les trois types d'apprentissage expliqués simplement",
-            content: `
-                        <p><strong>🎓 Apprentissage Supervisé :</strong></p>
-                        <p>Comme un étudiant avec un professeur qui corrige ses copies. On montre à l'algorithme des exemples avec les bonnes réponses.</p>
-                        <p><strong>Exemple :</strong> "Voici 1000 emails. Ceux-ci sont des spams, ceux-là ne le sont pas. Maintenant, classe ce nouvel email !"</p>
-                        
-                        <p><strong>🔍 Apprentissage Non-Supervisé :</strong></p>
-                        <p>Comme un explorateur qui découvre des territoires inconnus. L'algorithme trouve des groupes ou patterns sans qu'on lui dise quoi chercher.</p>
-                        <p><strong>Exemple :</strong> "Voici les habitudes d'achat de 10 000 clients. Trouve des groupes de clients similaires !"</p>
-                        
-                        <p><strong>🎮 Apprentissage par Renforcement :</strong></p>
-                        <p>Comme apprendre à jouer aux échecs : on essaie des coups, on gagne ou perd, et on s'améliore progressivement.</p>
-                        <p><strong>Exemple :</strong> "Apprends à conduire une voiture autonome en essayant, en recevant des récompenses pour les bons comportements et des pénalités pour les mauvais."</p>
-                    `,
+            type: "quiz",
+            title: "Vérification - Définition du ML",
+            question: "Quelle est la différence fondamentale entre programmation classique et Machine Learning ?",
+            options: [
+              "Le ML est plus rapide que la programmation classique",
+              "En ML, on déduit les règles à partir des données, pas l'inverse",
+              "Le ML ne nécessite pas de données",
+              "La programmation classique est obsolète",
+            ],
+            correctAnswer: 1,
+            explanation: "En programmation classique, on écrit les règles explicitement. En ML, on fournit des données et des résultats attendus, et l'algorithme découvre les règles (patterns) automatiquement.",
           },
+          // Section 2: Les 3 types d'apprentissage
           {
             type: "concept",
-            icon: "💡",
-            title: "Le biais et la variance : concepts fondamentaux",
+            icon: "📚",
+            title: "Les trois types d'apprentissage",
             content: `
-                        <p><strong>🎯 Biais et variance</strong> sont deux sources d'erreur fondamentales en ML. Comprendre cette distinction est crucial pour créer de bons modèles.</p>
-                        
-                        <p><strong>🎯 Le Biais :</strong></p>
-                        <p>Le <strong>biais</strong> mesure à quel point nos prédictions sont systématiquement éloignées de la vérité, même avec beaucoup de données.</p>
-                        <p><strong>Analogie :</strong> Un archer qui vise toujours 10cm à droite de la cible. Ses tirs sont cohérents mais systématiquement décalés.</p>
-                        
-                        <p><strong>📊 La Variance :</strong></p>
-                        <p>La <strong>variance</strong> mesure à quel point nos prédictions changent quand on change légèrement les données d'entraînement.</p>
-                        <p><strong>Analogie :</strong> Un archer dont les flèches sont dispersées partout autour de la cible. Parfois proche, parfois loin, très imprévisible.</p>
-                        
-                        <p><strong>⚖️ Le compromis biais-variance :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Biais élevé, variance faible</strong> : modèle trop simple (sous-apprentissage)</li>
-                            <li>🎯 <strong>Biais faible, variance élevée</strong> : modèle trop complexe (surapprentissage)</li>
-                            <li>🎯 <strong>Objectif</strong> : équilibre optimal entre les deux</li>
-                        </ul>
-                    `,
+              <p><strong>1️⃣ Apprentissage Supervisé</strong> (avec professeur)</p>
+              <p>On fournit des exemples avec les réponses correctes (labels).</p>
+              <ul>
+                <li>📧 Classification d'emails : spam ou pas spam</li>
+                <li>🏠 Prédiction de prix immobilier</li>
+                <li>🏥 Diagnostic médical à partir de symptômes</li>
+              </ul>
+
+              <p><strong>2️⃣ Apprentissage Non-Supervisé</strong> (explorateur)</p>
+              <p>Pas de labels. L'algorithme découvre des structures cachées.</p>
+              <ul>
+                <li>👥 Segmentation de clients (groupes similaires)</li>
+                <li>🛒 Recommandations de produits</li>
+                <li>📉 Détection d'anomalies</li>
+              </ul>
+
+              <p><strong>3️⃣ Apprentissage par Renforcement</strong> (joueur)</p>
+              <p>L'agent apprend par essai-erreur avec des récompenses/punitions.</p>
+              <ul>
+                <li>🎮 IA pour jeux vidéo (AlphaGo)</li>
+                <li>🚗 Voitures autonomes</li>
+                <li>🤖 Robots qui apprennent à marcher</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            title: "Classification des problèmes ML",
+            exerciseType: "mcq",
+            content: `
+              <p>Une banque veut détecter automatiquement les transactions frauduleuses. Elle dispose d'un historique de transactions étiquetées "fraude" ou "légitime".</p>
+              <p><strong>Quel type d'apprentissage utiliser ?</strong></p>
+            `,
+            options: [
+              "Apprentissage non-supervisé (clustering)",
+              "Apprentissage par renforcement",
+              "Apprentissage supervisé (classification)",
+              "Aucun ML nécessaire, règles simples suffisent",
+            ],
+            correctAnswer: 2,
+            explanation: "C'est de l'apprentissage supervisé car on a des exemples étiquetés (fraude/légitime). Plus précisément, c'est une classification binaire. Le modèle apprendra les patterns des fraudes passées pour détecter les nouvelles.",
+          },
+          // Section 3: Biais et Variance
+          {
+            type: "concept",
+            icon: "🎯",
+            title: "Le compromis biais-variance",
+            content: `
+              <p>En ML, l'erreur de prédiction vient de deux sources principales :</p>
+
+              <p><strong>🎯 Le Biais</strong></p>
+              <p>Erreur due à des hypothèses trop simplistes du modèle.</p>
+              <p><em>Analogie :</em> Un archer qui vise toujours 10cm à droite. Consistent mais systématiquement faux.</p>
+
+              <p><strong>📊 La Variance</strong></p>
+              <p>Erreur due à une sensibilité excessive aux données d'entraînement.</p>
+              <p><em>Analogie :</em> Un archer dont les flèches sont dispersées partout. Imprévisible.</p>
+
+              <p><strong>⚖️ Le dilemme :</strong></p>
+              <ul>
+                <li>Modèle simple → Biais élevé, variance faible</li>
+                <li>Modèle complexe → Biais faible, variance élevée</li>
+                <li>🎯 Objectif : trouver le sweet spot !</li>
+              </ul>
+            `,
           },
           {
             type: "mathematique",
             icon: "∑",
-            title: "Formalisation mathématique du biais-variance",
+            title: "Formalisation mathématique",
             content: `
-                        <p><strong>📐 Décomposition mathématique de l'erreur :</strong></p>
-                        <p>Pour un modèle \\(\\hat{f}(x)\\) qui prédit une valeur \\(y\\), l'erreur totale se décompose en :</p>
-                        
-                        <p>$$\\text{Erreur} = \\text{Biais}^2 + \\text{Variance} + \\text{Bruit}$$</p>
-                        
-                        <p><strong>🔍 Détail de chaque composante :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• Biais² :</strong> $$\\text{Biais}^2 = (E[\\hat{f}(x)] - f(x))^2$$</li>
-                            <li style="margin-top: 0.5rem"><strong>• Variance :</strong> $$\\text{Variance} = E[(\\hat{f}(x) - E[\\hat{f}(x)])^2]$$</li>
-                            <li style="margin-top: 0.5rem"><strong>• Bruit :</strong> $$\\text{Bruit} = E[(y - f(x))^2]$$</li>
-                        </ul>
-                        
-                        <p><strong>🔑 Interprétation :</strong></p>
-                        <ul>
-                            <li>\\(f(x)\\) = vraie fonction (inconnue)</li>
-                            <li>\\(\\hat{f}(x)\\) = notre modèle</li>
-                            <li>\\(E[\\cdot]\\) = espérance (moyenne sur tous les datasets possibles)</li>
-                            <li>Le <strong>bruit</strong> est irréductible (erreur inhérente aux données)</li>
-                        </ul>
-                        
-                        <p><strong>🎯 Objectif d'optimisation :</strong></p>
-                        <p>Minimiser \\(\\text{Biais}^2 + \\text{Variance}\\) car le bruit est incompressible.</p>
-                    `,
+              <p>L'erreur totale de prédiction se décompose :</p>
+
+              <p style="text-align: center; font-size: 1.2em; margin: 1rem 0;">
+                $$\\text{Erreur} = \\text{Biais}^2 + \\text{Variance} + \\text{Bruit irréductible}$$
+              </p>
+
+              <p>Pour un modèle \\(\\hat{f}\\) prédisant la vraie fonction \\(f\\) :</p>
+
+              <ul>
+                <li><strong>Biais²</strong> : \\((E[\\hat{f}(x)] - f(x))^2\\) — écart moyen de nos prédictions</li>
+                <li><strong>Variance</strong> : \\(E[(\\hat{f}(x) - E[\\hat{f}(x)])^2]\\) — dispersion des prédictions</li>
+                <li><strong>Bruit</strong> : erreur inhérente aux données, impossible à réduire</li>
+              </ul>
+
+              <p><strong>🔑 Implication :</strong> On ne peut pas minimiser les deux simultanément. Il faut trouver un équilibre.</p>
+            `,
           },
+          {
+            type: "quiz",
+            title: "Quiz - Biais vs Variance",
+            question: "Un modèle de régression linéaire simple (une droite) pour prédire des données qui suivent une courbe complexe aura :",
+            options: [
+              "Biais faible, variance faible",
+              "Biais élevé, variance faible",
+              "Biais faible, variance élevée",
+              "Biais élevé, variance élevée",
+            ],
+            correctAnswer: 1,
+            explanation: "Une droite est trop simple pour capturer une courbe complexe → biais élevé (systématiquement à côté). Mais comme c'est un modèle simple avec peu de paramètres, il est stable → variance faible.",
+          },
+          // Section 4: Overfitting vs Underfitting
           {
             type: "concept",
-            icon: "💡",
-            title: "Types d'erreurs en Machine Learning",
-            content: `
-                        <p><strong>🎯 En ML, il existe plusieurs types d'erreurs qu'il faut comprendre :</strong></p>
-                        
-                        <p><strong>📊 1. Erreur d'entraînement (Training Error) :</strong></p>
-                        <p>Performance du modèle sur les données qu'il a vues pendant l'apprentissage.</p>
-                        <p><strong>Analogie :</strong> Notes d'un étudiant sur les exercices qu'il a déjà résolus en classe.</p>
-                        
-                        <p><strong>🧪 2. Erreur de validation (Validation Error) :</strong></p>
-                        <p>Performance sur des données non vues, utilisées pour ajuster le modèle.</p>
-                        <p><strong>Analogie :</strong> Notes sur des exercices similaires mais nouveaux pour vérifier la compréhension.</p>
-                        
-                        <p><strong>🎯 3. Erreur de test (Test Error) :</strong></p>
-                        <p>Performance finale sur des données complètement nouvelles, jamais utilisées.</p>
-                        <p><strong>Analogie :</strong> Note à l'examen final sur des sujets totalement inédits.</p>
-                        
-                        <p><strong>⚠️ Problèmes courants :</strong></p>
-                        <ul>
-                            <li>🔴 <strong>Surapprentissage</strong> : excellent en entraînement, mauvais en test</li>
-                            <li>🔵 <strong>Sous-apprentissage</strong> : mauvais partout, modèle trop simple</li>
-                            <li>🟡 <strong>Fuite de données</strong> : information du futur dans les données d'entraînement</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "mathematique",
-            icon: "∑",
-            title: "Métriques d'évaluation mathématiques",
-            content: `
-                        <p><strong>📏 Comment mesurer la performance d'un modèle ?</strong></p>
-                        
-                        <p><strong>🔢 Pour la régression (prédire des nombres) :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• Erreur Quadratique Moyenne (MSE) :</strong> $$\\text{MSE} = \\frac{1}{n} \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2$$</li>
-                            <li style="margin-top: 1rem"><strong>• Erreur Absolue Moyenne (MAE) :</strong> $$\\text{MAE} = \\frac{1}{n} \\sum_{i=1}^{n} |y_i - \\hat{y}_i|$$</li>
-                            <li style="margin-top: 1rem"><strong>• Coefficient de détermination (R²) :</strong> $$R^2 = 1 - \\frac{\\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2}{\\sum_{i=1}^{n} (y_i - \\bar{y})^2}$$</li>
-                        </ul>
-                        
-                        <p><strong>🎯 Pour la classification (prédire des catégories) :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• Précision :</strong> $$\\text{Précision} = \\frac{\\text{Vrais Positifs}}{\\text{Vrais Positifs + Faux Positifs}}$$</li>
-                            <li style="margin-top: 1rem"><strong>• Rappel :</strong> $$\\text{Rappel} = \\frac{\\text{Vrais Positifs}}{\\text{Vrais Positifs + Faux Négatifs}}$$</li>
-                            <li style="margin-top: 1rem"><strong>• F1-Score :</strong> $$F1 = 2 \\times \\frac{\\text{Précision} \\times \\text{Rappel}}{\\text{Précision} + \\text{Rappel}}$$</li>
-                        </ul>
-                        
-                        <p><strong>🔑 Interprétation :</strong></p>
-                        <ul>
-                            <li><strong>MSE</strong> : pénalise fortement les grosses erreurs</li>
-                            <li><strong>MAE</strong> : traite toutes les erreurs équitablement</li>
-                            <li><strong>R²</strong> : pourcentage de variance expliquée (0 = mauvais, 1 = parfait)</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "concept",
-            icon: "💡",
-            title: "Surapprentissage et sous-apprentissage",
-            content: `
-                        <p><strong>🎯 Deux problèmes opposés mais également dangereux :</strong></p>
-                        
-                        <p><strong>📈 Surapprentissage (Overfitting) :</strong></p>
-                        <p>Le modèle mémorise les données d'entraînement au lieu d'apprendre les vrais patterns.</p>
-                        <p><strong>Analogie :</strong> Un étudiant qui apprend par cœur les réponses aux exercices du livre, mais ne comprend pas les concepts. Il échoue sur de nouveaux problèmes.</p>
-                        <p><strong>Symptômes :</strong></p>
-                        <ul>
-                            <li>✅ Excellente performance sur les données d'entraînement</li>
-                            <li>❌ Mauvaise performance sur de nouvelles données</li>
-                            <li>📊 Grand écart entre erreur d'entraînement et erreur de test</li>
-                        </ul>
-                        
-                        <p><strong>📉 Sous-apprentissage (Underfitting) :</strong></p>
-                        <p>Le modèle est trop simple pour capturer les vrais patterns dans les données.</p>
-                        <p><strong>Analogie :</strong> Essayer d'expliquer l'économie sénégalaise avec une seule variable. C'est trop simpliste.</p>
-                        <p><strong>Symptômes :</strong></p>
-                        <ul>
-                            <li>❌ Mauvaise performance sur les données d'entraînement</li>
-                            <li>❌ Mauvaise performance sur de nouvelles données</li>
-                            <li>📊 Erreurs élevées partout</li>
-                        </ul>
-                        
-                        <p><strong>⚖️ L'équilibre parfait :</strong></p>
-                        <p>Un bon modèle capture les vrais patterns sans mémoriser le bruit. C'est l'art du Machine Learning !</p>
-                    `,
-          },
-          {
-            type: "mathematique",
-            icon: "∑",
-            title: "Courbes d'apprentissage et diagnostic",
-            content: `
-                        <p><strong>📈 Les courbes d'apprentissage révèlent la santé de votre modèle :</strong></p>
-                        
-                        <p><strong>🔍 Diagnostic par les courbes :</strong></p>
-                        
-                        <p><strong>1️⃣ Modèle équilibré (idéal) :</strong></p>
-                        <ul>
-                            <li>Erreur d'entraînement et de validation convergent vers une valeur faible</li>
-                            <li>Écart raisonnable entre les deux courbes</li>
-                        </ul>
-                        
-                        <p><strong>2️⃣ Surapprentissage :</strong></p>
-                        <ul>
-                            <li>Erreur d'entraînement continue de diminuer</li>
-                            <li>Erreur de validation augmente ou stagne</li>
-                            <li>Grand écart entre les deux courbes</li>
-                        </ul>
-                        
-                        <p><strong>3️⃣ Sous-apprentissage :</strong></p>
-                        <ul>
-                            <li>Les deux erreurs restent élevées</li>
-                            <li>Courbes plates, pas d'amélioration</li>
-                            <li>Écart faible mais performances médiocres</li>
-                        </ul>
-                        
-                        <p><strong>🔧 Solutions :</strong></p>
-                        <ul>
-                            <li><strong>Surapprentissage</strong> → Régularisation, plus de données, modèle plus simple</li>
-                            <li><strong>Sous-apprentissage</strong> → Modèle plus complexe, plus de features, moins de régularisation</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "concept",
-            icon: "💡",
-            title: "Validation croisée : tester la robustesse",
-            content: `
-                        <p><strong>🔄 La validation croisée</strong> teste si votre modèle fonctionne bien sur différents échantillons de données.</p>
-                        
-                        <p><strong>🎯 Principe de base :</strong></p>
-                        <p>Au lieu de diviser une seule fois en train/test, on fait plusieurs divisions différentes et on moyenne les résultats.</p>
-                        
-                        <p><strong>📊 Validation croisée k-fold :</strong></p>
-                        <ol>
-                            <li>Diviser les données en k parties égales</li>
-                            <li>Utiliser k-1 parties pour l'entraînement, 1 partie pour le test</li>
-                            <li>Répéter k fois en changeant la partie de test</li>
-                            <li>Moyenner les k résultats obtenus</li>
-                        </ol>
-                        
-                        <p><strong>💡 Avantages :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Robustesse</strong> : résultat moins dépendant d'une division particulière</li>
-                            <li>📊 <strong>Utilisation optimale</strong> : toutes les données servent à la fois pour train et test</li>
-                            <li>📈 <strong>Estimation fiable</strong> : variance de la performance</li>
-                        </ul>
-                        
-                        <p><strong>⚠️ Inconvénients :</strong></p>
-                        <ul>
-                            <li>⏰ <strong>Temps de calcul</strong> : k fois plus long</li>
-                            <li>💾 <strong>Mémoire</strong> : stockage de k modèles</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exemple simple : prédiction de prix",
-            description:
-              "Implémentons un modèle simple pour comprendre les concepts :",
-            code: `import numpy as np
-
-# Données simulées : prix du mil au Sénégal
-# Variables : mois (1-12), stock (tonnes), prix (FCFA/kg)
-np.random.seed(42)
-
-mois = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
-stock = np.array([5000, 4500, 4000, 3500, 3000, 2500, 2000, 2200, 2800, 3500, 4200, 4800])
-prix_reel = np.array([450, 460, 480, 520, 580, 650, 720, 680, 600, 520, 480, 460])
-
-print("📊 DONNÉES : PRIX DU MIL AU SÉNÉGAL")
-print("Mois | Stock (t) | Prix (FCFA/kg)")
-print("-" * 35)
-for i in range(12):
-    print(f"{mois[i]:4d} | {stock[i]:8d} | {prix_reel[i]:6d}")
-
-# Modèle linéaire simple : prix = a * stock + b
-def entrainer_modele_lineaire(x, y):
-    """Régression linéaire simple par moindres carrés"""
-    n = len(x)
-    x_mean = np.mean(x)
-    y_mean = np.mean(y)
-    
-    # Calcul des coefficients
-    numerateur = np.sum((x - x_mean) * (y - y_mean))
-    denominateur = np.sum((x - x_mean) ** 2)
-    a = numerateur / denominateur  # Pente
-    b = y_mean - a * x_mean        # Ordonnée à l'origine
-    
-    return a, b
-
-# Entraînement
-a, b = entrainer_modele_lineaire(stock, prix_reel)
-print(f"\\n🤖 MODÈLE ENTRAÎNÉ")
-print(f"Équation: prix = {a:.4f} * stock + {b:.1f}")
-print(f"Interprétation: {abs(a):.4f} FCFA de baisse par tonne de stock supplémentaire")
-
-# Prédictions
-prix_predit = a * stock + b
-
-# Évaluation
-mse = np.mean((prix_reel - prix_predit) ** 2)
-mae = np.mean(np.abs(prix_reel - prix_predit))
-r2 = 1 - np.sum((prix_reel - prix_predit) ** 2) / np.sum((prix_reel - np.mean(prix_reel)) ** 2)
-
-print(f"\\n📊 ÉVALUATION")
-print(f"MSE: {mse:.1f}")
-print(f"MAE: {mae:.1f} FCFA/kg")
-print(f"R²: {r2:.3f} ({r2*100:.1f}% de variance expliquée)")`,
-          },
-          {
-            type: "warning",
             icon: "⚠️",
-            title: "Points clés à retenir",
+            title: "Surapprentissage vs Sous-apprentissage",
             content: `
-                        <p><strong>🧠 Concepts fondamentaux du Machine Learning :</strong></p>
-                        
-                        <p><strong>🎯 1. Apprentissage = Généralisation :</strong></p>
-                        <p>L'objectif n'est pas de mémoriser les données d'entraînement, mais de découvrir des patterns qui fonctionnent sur de nouvelles données.</p>
-                        
-                        <p><strong>⚖️ 2. Compromis biais-variance :</strong></p>
-                        <p>Il faut trouver le bon équilibre entre un modèle trop simple (biais élevé) et trop complexe (variance élevée).</p>
-                        
-                        <p><strong>📊 3. Validation rigoureuse :</strong></p>
-                        <p>Toujours séparer entraînement/validation/test. Ne jamais optimiser sur les données de test !</p>
-                        
-                        <p><strong>🔍 4. Comprendre avant d'optimiser :</strong></p>
-                        <p>Analyser les données, visualiser les distributions, comprendre le problème métier avant de choisir l'algorithme.</p>
-                        
-                        <p><strong>💡 5. Simplicité d'abord :</strong></p>
-                        <p>Commencer par des modèles simples (régression linéaire) avant d'essayer des modèles complexes (deep learning).</p>
-                        
-                        <p><strong>🔮 Prochaine étape :</strong></p>
-                        <p>Maintenant que vous maîtrisez les concepts, nous allons plonger dans la <strong>régression linéaire</strong> - le premier algorithme ML à maîtriser absolument !</p>
-                    `,
+              <p><strong>📈 Surapprentissage (Overfitting)</strong></p>
+              <p>Le modèle mémorise les données au lieu d'apprendre les patterns.</p>
+              <ul>
+                <li>✅ Excellent sur données d'entraînement</li>
+                <li>❌ Mauvais sur nouvelles données</li>
+                <li>🔍 Symptôme : grand écart train/test</li>
+              </ul>
+              <p><em>Analogie :</em> Étudiant qui apprend par cœur les exercices du livre mais échoue à l'examen sur des problèmes différents.</p>
+
+              <p><strong>📉 Sous-apprentissage (Underfitting)</strong></p>
+              <p>Le modèle est trop simple pour capturer les patterns.</p>
+              <ul>
+                <li>❌ Mauvais sur données d'entraînement</li>
+                <li>❌ Mauvais sur nouvelles données</li>
+                <li>🔍 Symptôme : erreurs élevées partout</li>
+              </ul>
+              <p><em>Analogie :</em> Essayer d'expliquer l'économie mondiale avec une seule variable.</p>
+            `,
+          },
+          {
+            type: "code",
+            title: "Visualisation : Overfitting vs Underfitting",
+            description: "Observons les trois cas sur un jeu de données simple :",
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Données : fonction sinusoïdale avec bruit
+np.random.seed(42)
+X = np.linspace(0, 10, 20)
+y_true = np.sin(X)
+y = y_true + np.random.normal(0, 0.3, len(X))
+
+# Créer des modèles de complexité variable
+X_plot = np.linspace(0, 10, 100)
+
+fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+
+# 1. Underfitting (degré 1 - droite)
+coeffs1 = np.polyfit(X, y, 1)
+y_pred1 = np.polyval(coeffs1, X_plot)
+axes[0].scatter(X, y, c='blue', label='Données')
+axes[0].plot(X_plot, y_pred1, 'r-', linewidth=2, label='Modèle')
+axes[0].plot(X_plot, np.sin(X_plot), 'g--', alpha=0.5, label='Vraie fonction')
+axes[0].set_title('UNDERFITTING\\n(Modèle trop simple)', fontsize=11)
+axes[0].legend(fontsize=8)
+
+# 2. Bon équilibre (degré 4)
+coeffs4 = np.polyfit(X, y, 4)
+y_pred4 = np.polyval(coeffs4, X_plot)
+axes[1].scatter(X, y, c='blue', label='Données')
+axes[1].plot(X_plot, y_pred4, 'r-', linewidth=2, label='Modèle')
+axes[1].plot(X_plot, np.sin(X_plot), 'g--', alpha=0.5, label='Vraie fonction')
+axes[1].set_title('BON ÉQUILIBRE\\n(Complexité adaptée)', fontsize=11)
+axes[1].legend(fontsize=8)
+
+# 3. Overfitting (degré 15)
+coeffs15 = np.polyfit(X, y, 15)
+y_pred15 = np.polyval(coeffs15, X_plot)
+axes[2].scatter(X, y, c='blue', label='Données')
+axes[2].plot(X_plot, y_pred15, 'r-', linewidth=2, label='Modèle')
+axes[2].plot(X_plot, np.sin(X_plot), 'g--', alpha=0.5, label='Vraie fonction')
+axes[2].set_title('OVERFITTING\\n(Modèle trop complexe)', fontsize=11)
+axes[2].set_ylim(-2, 2)
+axes[2].legend(fontsize=8)
+
+plt.tight_layout()
+plt.show()
+
+print("📊 ANALYSE:")
+print("• UNDERFITTING: La droite ne capture pas la forme sinusoïdale")
+print("• BON ÉQUILIBRE: Le modèle suit la tendance sans le bruit")
+print("• OVERFITTING: Le modèle passe par tous les points, y compris le bruit!")`,
+          },
+          {
+            type: "exercise",
+            title: "Diagnostic d'un modèle",
+            exerciseType: "mcq",
+            content: `
+              <p>Vous entraînez un modèle et observez :</p>
+              <ul>
+                <li>Erreur sur données d'entraînement : <strong>2%</strong></li>
+                <li>Erreur sur données de test : <strong>25%</strong></li>
+              </ul>
+              <p><strong>Quel est le problème et que faire ?</strong></p>
+            `,
+            options: [
+              "Sous-apprentissage → utiliser un modèle plus complexe",
+              "Surapprentissage → régulariser ou simplifier le modèle",
+              "Le modèle est parfait, continuer ainsi",
+              "Problème de données → collecter plus de données de test",
+            ],
+            correctAnswer: 1,
+            explanation: "Grand écart (2% vs 25%) = surapprentissage classique. Le modèle mémorise l'entraînement. Solutions : régularisation (L1/L2), réduire la complexité, augmenter les données d'entraînement, ou utiliser le dropout.",
+          },
+          // Section 5: Métriques
+          {
+            type: "mathematique",
+            icon: "📊",
+            title: "Métriques d'évaluation",
+            content: `
+              <p><strong>Pour la régression</strong> (prédire des nombres) :</p>
+
+              <p><strong>MSE</strong> (Mean Squared Error) :</p>
+              <p style="text-align: center;">$$MSE = \\frac{1}{n}\\sum_{i=1}^{n}(y_i - \\hat{y}_i)^2$$</p>
+              <p>Pénalise fortement les grandes erreurs (à cause du carré).</p>
+
+              <p><strong>MAE</strong> (Mean Absolute Error) :</p>
+              <p style="text-align: center;">$$MAE = \\frac{1}{n}\\sum_{i=1}^{n}|y_i - \\hat{y}_i|$$</p>
+              <p>Toutes les erreurs ont le même poids.</p>
+
+              <p><strong>R²</strong> (Coefficient de détermination) :</p>
+              <p style="text-align: center;">$$R^2 = 1 - \\frac{\\sum(y_i - \\hat{y}_i)^2}{\\sum(y_i - \\bar{y})^2}$$</p>
+              <p>Proportion de variance expliquée. R² = 1 parfait, R² = 0 aussi bon que la moyenne.</p>
+            `,
+          },
+          {
+            type: "exercise",
+            title: "Calcul de MSE",
+            exerciseType: "numeric",
+            content: `
+              <p>Un modèle prédit les valeurs suivantes :</p>
+              <table style="border-collapse: collapse; margin: 1rem 0;">
+                <tr style="background: #f0f0f0;">
+                  <th style="padding: 0.5rem; border: 1px solid #ddd;">Réel (y)</th>
+                  <th style="padding: 0.5rem; border: 1px solid #ddd;">Prédit (ŷ)</th>
+                </tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">10</td><td style="padding: 0.5rem; border: 1px solid #ddd;">12</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">20</td><td style="padding: 0.5rem; border: 1px solid #ddd;">18</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">30</td><td style="padding: 0.5rem; border: 1px solid #ddd;">31</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #ddd;">40</td><td style="padding: 0.5rem; border: 1px solid #ddd;">37</td></tr>
+              </table>
+              <p><strong>Calculez le MSE</strong> (Mean Squared Error)</p>
+            `,
+            correctAnswer: 7.5,
+            tolerance: 0.1,
+            hint: "MSE = moyenne des (y - ŷ)². Erreurs : (10-12)²=4, (20-18)²=4, (30-31)²=1, (40-37)²=9",
+            explanation: "MSE = (4 + 4 + 1 + 9) / 4 = 18 / 4 = 7.5",
+          },
+          // Section 6: Validation croisée
+          {
+            type: "concept",
+            icon: "🔄",
+            title: "Validation croisée (Cross-Validation)",
+            content: `
+              <p>Comment savoir si notre modèle généralisera bien sur de nouvelles données ?</p>
+
+              <p><strong>❌ Problème du split simple :</strong></p>
+              <p>Si on divise 80% train / 20% test une seule fois, le résultat dépend du hasard de la division.</p>
+
+              <p><strong>✅ Solution : K-Fold Cross-Validation</strong></p>
+              <ol>
+                <li>Diviser les données en K parties égales (ex: K=5)</li>
+                <li>Pour chaque partie i :</li>
+                <ul>
+                  <li>Utiliser partie i comme test</li>
+                  <li>Utiliser les K-1 autres parties comme entraînement</li>
+                  <li>Mesurer la performance</li>
+                </ul>
+                <li>Moyenner les K scores obtenus</li>
+              </ol>
+
+              <p><strong>💡 Avantages :</strong></p>
+              <ul>
+                <li>Chaque donnée sert une fois pour le test</li>
+                <li>Estimation plus robuste de la performance</li>
+                <li>On obtient aussi l'écart-type (stabilité du modèle)</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise-code",
+            title: "Implémentez une validation croisée simple",
+            content: `
+              <p>Complétez le code pour implémenter une validation croisée 5-fold :</p>
+              <ul>
+                <li>Divisez les données en 5 parties</li>
+                <li>Pour chaque fold, calculez le MSE</li>
+                <li>Retournez la moyenne des MSE</li>
+              </ul>
+            `,
+            starterCode: `import numpy as np
+
+# Données
+np.random.seed(42)
+X = np.random.rand(100) * 10
+y = 2 * X + 1 + np.random.randn(100) * 2  # y = 2x + 1 + bruit
+
+def cross_validation_mse(X, y, k=5):
+    """Validation croisée k-fold pour régression linéaire simple"""
+    n = len(X)
+    fold_size = n // k
+    mse_scores = []
+
+    for i in range(k):
+        # Indices pour ce fold
+        test_start = i * fold_size
+        test_end = test_start + fold_size
+
+        # TODO: Séparer train et test
+        X_test = X[test_start:test_end]
+        y_test = y[test_start:test_end]
+        X_train = np.concatenate([X[:test_start], X[test_end:]])
+        y_train = np.concatenate([y[:test_start], y[test_end:]])
+
+        # TODO: Entraîner régression linéaire (y = ax + b)
+        # Formule: a = cov(X,y)/var(X), b = mean(y) - a*mean(X)
+        a = np.cov(X_train, y_train)[0,1] / np.var(X_train)
+        b = np.mean(y_train) - a * np.mean(X_train)
+
+        # TODO: Prédire et calculer MSE
+        y_pred = a * X_test + b
+        mse = np.mean((y_test - y_pred) ** 2)
+        mse_scores.append(mse)
+
+    return np.mean(mse_scores), np.std(mse_scores)
+
+# Exécuter
+mean_mse, std_mse = cross_validation_mse(X, y, k=5)
+print(f"MSE moyen: {mean_mse:.2f} (+/- {std_mse:.2f})")
+print(f"\\nInterprétation:")
+print(f"• Le modèle a une erreur moyenne de ~{mean_mse:.1f}")
+print(f"• L'écart-type de {std_mse:.1f} indique la stabilité")`,
+            solution: `import numpy as np
+
+# Données
+np.random.seed(42)
+X = np.random.rand(100) * 10
+y = 2 * X + 1 + np.random.randn(100) * 2
+
+def cross_validation_mse(X, y, k=5):
+    n = len(X)
+    fold_size = n // k
+    mse_scores = []
+
+    for i in range(k):
+        test_start = i * fold_size
+        test_end = test_start + fold_size
+
+        X_test = X[test_start:test_end]
+        y_test = y[test_start:test_end]
+        X_train = np.concatenate([X[:test_start], X[test_end:]])
+        y_train = np.concatenate([y[:test_start], y[test_end:]])
+
+        a = np.cov(X_train, y_train)[0,1] / np.var(X_train)
+        b = np.mean(y_train) - a * np.mean(X_train)
+
+        y_pred = a * X_test + b
+        mse = np.mean((y_test - y_pred) ** 2)
+        mse_scores.append(mse)
+
+    return np.mean(mse_scores), np.std(mse_scores)
+
+mean_mse, std_mse = cross_validation_mse(X, y, k=5)
+print(f"MSE moyen: {mean_mse:.2f} (+/- {std_mse:.2f})")`,
+            expectedOutput: "MSE moyen:",
+          },
+          // Section 7: Pipeline ML
+          {
+            type: "concept",
+            icon: "🔧",
+            title: "Pipeline d'un projet ML",
+            content: `
+              <p>Un projet ML suit généralement ces étapes :</p>
+
+              <p><strong>1️⃣ Comprendre le problème</strong></p>
+              <ul>
+                <li>Quel est l'objectif métier ?</li>
+                <li>Quelles métriques importent ?</li>
+                <li>Régression ou classification ?</li>
+              </ul>
+
+              <p><strong>2️⃣ Collecter et explorer les données</strong></p>
+              <ul>
+                <li>Analyse exploratoire (EDA)</li>
+                <li>Visualisations</li>
+                <li>Statistiques descriptives</li>
+              </ul>
+
+              <p><strong>3️⃣ Préparer les données</strong></p>
+              <ul>
+                <li>Nettoyage (valeurs manquantes, outliers)</li>
+                <li>Feature engineering</li>
+                <li>Normalisation/standardisation</li>
+              </ul>
+
+              <p><strong>4️⃣ Modélisation</strong></p>
+              <ul>
+                <li>Commencer simple (baseline)</li>
+                <li>Essayer plusieurs algorithmes</li>
+                <li>Optimiser les hyperparamètres</li>
+              </ul>
+
+              <p><strong>5️⃣ Évaluation et déploiement</strong></p>
+              <ul>
+                <li>Validation croisée</li>
+                <li>Test final</li>
+                <li>Mise en production</li>
+              </ul>
+            `,
+          },
+          {
+            type: "quiz",
+            title: "Quiz final - Concepts ML",
+            question: "Vous développez un modèle pour prédire si un client va résilier son abonnement. Après entraînement, votre modèle a 95% de précision sur le train mais 60% sur le test. Que devez-vous faire ?",
+            options: [
+              "Célébrer ! 95% c'est excellent",
+              "Ajouter plus de features pour améliorer le test",
+              "Régulariser le modèle ou réduire sa complexité",
+              "Collecter plus de données de test",
+            ],
+            correctAnswer: 2,
+            explanation: "95% train vs 60% test = surapprentissage évident. Le modèle mémorise. Solutions : régularisation (L1, L2, dropout), modèle plus simple, early stopping, ou data augmentation.",
           },
         ],
-        quiz: {
-          question:
-            "🤔 Un modèle a une erreur d'entraînement de 2% et une erreur de test de 15%. Quel est le problème ?",
-          options: [
-            "A) Sous-apprentissage - le modèle est trop simple",
-            "B) Surapprentissage - le modèle mémorise les données d'entraînement",
-            "C) Le modèle est parfait",
-            "D) Il faut plus de données d'entraînement",
-          ],
-          correct: 1,
-          explanation:
-            "Grand écart entre erreur d'entraînement (2%) et erreur de test (15%) = surapprentissage classique. Le modèle a mémorisé les données d'entraînement au lieu d'apprendre les vrais patterns généralisables.",
-        },
-        prevModule: "../python/algorithms.html",
+        prevModule: "../math/maximum-likelihood.html",
         nextModule: "linear-regression.html",
       };
 
-      // Initialiser le module
       document.addEventListener("DOMContentLoaded", function () {
         initializeModule(moduleConfig);
       });
