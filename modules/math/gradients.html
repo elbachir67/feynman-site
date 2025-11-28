@@ -42,7 +42,7 @@
     <!-- Contenu principal -->
     <div class="container">
       <h1>🏔️ Les Gradients</h1>
-      <p class="subtitle">Module 1.5 - Analyse multivariable pour l'IA</p>
+      <p class="subtitle">Module 1.5 - La boussole de l'IA pour trouver le chemin optimal</p>
 
       <!-- Objectifs -->
       <div class="objectives">
@@ -55,29 +55,6 @@
       <!-- Contenu du module -->
       <div id="module-content">
         <!-- Le contenu sera ajouté dynamiquement -->
-      </div>
-
-      <!-- Quiz -->
-      <div class="quiz" id="module-quiz" style="display: none">
-        <div class="quiz-question" id="quiz-question"></div>
-        <div class="quiz-options" id="quiz-options"></div>
-        <div class="quiz-feedback" id="quiz-feedback"></div>
-      </div>
-
-      <!-- Checkpoint -->
-      <div class="checkpoint">
-        <h3>🎉 Checkpoint - Les Gradients</h3>
-        <p>
-          Félicitations ! Vous comprenez maintenant comment l'IA trouve
-          automatiquement les meilleures solutions.
-        </p>
-        <button
-          class="checkpoint-btn"
-          id="checkpoint-btn"
-          onclick="completeCheckpoint()"
-        >
-          Marquer comme complété
-        </button>
       </div>
 
       <!-- Navigation entre modules -->
@@ -99,192 +76,571 @@
         title: "Les Gradients",
         category: "Mathématiques",
         objectives: [
-          "Comprendre les gradients comme extension des dérivées",
-          "Calculer des gradients de fonctions simples",
+          "Comprendre les dérivées partielles",
+          "Calculer le gradient d'une fonction à plusieurs variables",
           "Comprendre la descente de gradient",
-          "Voir le lien avec l'apprentissage automatique",
+          "Maîtriser le taux d'apprentissage",
+          "Implémenter la descente de gradient en Python",
+          "Visualiser l'optimisation en 3D",
         ],
         content: [
+          // ===== SECTION 1: DES DÉRIVÉES AUX GRADIENTS =====
           {
             type: "concept",
             icon: "💡",
-            title: "Concept fondamental",
+            title: "Des dérivées aux gradients",
             content: `
-                        <p>Le <strong>gradient</strong> est l'extension des dérivées aux fonctions de plusieurs variables. Si la dérivée indique la pente d'une courbe, le gradient indique la <strong>direction de la plus forte montée</strong> sur une surface.</p>
-                        <p><strong>🔑 Idée simple :</strong></p>
-                        <p>Imaginez une fonction qui dépend de deux variables : \\(f(x, y)\\). Le gradient nous dit dans quelle direction nous devons nous déplacer pour que la fonction augmente le plus rapidement.</p>
-                        <p><strong>📐 Notation :</strong></p>
-                        <p>$$\\nabla f = \\begin{bmatrix} \\frac{\\partial f}{\\partial x} \\\\ \\frac{\\partial f}{\\partial y} \\end{bmatrix}$$</p>
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Descente de gradient</strong> : algorithme d'optimisation fondamental</li>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : mise à jour des poids automatique</li>
-                            <li>📊 <strong>Machine Learning</strong> : minimisation des erreurs</li>
-                            <li>💬 <strong>LLMs</strong> : entraînement de modèles géants comme ChatGPT</li>
-                            <li>🎨 <strong>IA générative</strong> : amélioration continue des résultats</li>
-                        </ul>
-                    `,
+              <p>Dans le module précédent, nous avons vu les dérivées pour des fonctions d'<strong>une seule variable</strong>. Mais en IA, les modèles ont souvent <strong>des millions de paramètres</strong> !</p>
+
+              <p><strong>🎯 Le problème :</strong></p>
+              <p>Comment trouver la direction optimale quand on a plusieurs variables à ajuster simultanément ?</p>
+
+              <p><strong>💡 La solution : le gradient !</strong></p>
+              <p>Le <strong>gradient</strong> est un vecteur qui rassemble toutes les dérivées partielles d'une fonction. Il pointe vers la direction de la plus forte montée.</p>
+
+              <p><strong>📐 Notation :</strong></p>
+              <p>Pour une fonction \\(f(x, y)\\) :</p>
+              <p>$$\\nabla f = \\begin{bmatrix} \\frac{\\partial f}{\\partial x} \\\\ \\frac{\\partial f}{\\partial y} \\end{bmatrix}$$</p>
+
+              <p><strong>🔑 Point clé :</strong></p>
+              <ul>
+                <li>Le gradient est un <strong>vecteur</strong>, pas un nombre</li>
+                <li>Sa direction indique où la fonction augmente le plus vite</li>
+                <li>Sa norme (longueur) indique la "raideur" de la pente</li>
+              </ul>
+            `,
           },
           {
-            type: "intuition",
-            icon: "🧠",
-            title: "L'analogie de la montagne",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 1 : Comprendre le gradient",
             content: `
-                        <p>Imaginez que vous êtes <strong>perdu dans le brouillard</strong> sur une montagne et que vous voulez atteindre le sommet le plus rapidement possible :</p>
-                        <ul>
-                            <li>🏔️ <strong>La montagne</strong> = fonction \\(f(x, y)\\) (altitude en chaque point)</li>
-                            <li>📍 <strong>Votre position</strong> = point \\((x, y)\\)</li>
-                            <li>🧭 <strong>Le gradient</strong> = direction de la pente la plus raide vers le haut</li>
-                        </ul>
-                        <p><strong>🎯 Stratégie optimale :</strong></p>
-                        <ul>
-                            <li>👀 <strong>Regarder autour de vous</strong> : calculer le gradient</li>
-                            <li>🚶 <strong>Faire un pas</strong> dans la direction du gradient</li>
-                            <li>🔄 <strong>Répéter</strong> jusqu'à atteindre le sommet</li>
-                        </ul>
-                        <p><strong>💡 C'est exactement ce que fait l'IA :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Objectif</strong> : minimiser les erreurs (descendre vers le creux)</li>
-                            <li>🧭 <strong>Gradient</strong> : direction pour réduire l'erreur le plus vite</li>
-                            <li>🔄 <strong>Itération</strong> : amélioration continue automatique</li>
-                        </ul>
-                    `,
+              <p>Si le gradient d'une fonction au point \\((2, 3)\\) est \\(\\nabla f = [4, -2]\\), dans quelle direction la fonction augmente-t-elle le plus rapidement ?</p>
+            `,
+            exerciseType: "mcq",
+            options: [
+              "Dans la direction [4, -2] (vers la droite et vers le bas)",
+              "Dans la direction [-4, 2] (vers la gauche et vers le haut)",
+              "Dans la direction [2, 3] (vers le point lui-même)",
+              "La fonction n'augmente pas"
+            ],
+            correctAnswer: 0,
+            explanation: "Le gradient \\([4, -2]\\) pointe directement vers la direction de la plus forte montée. Ici, la fonction augmente le plus vite en allant vers la droite (\\(+4\\)) et vers le bas (\\(-2\\)).",
+            completesObjective: 0,
           },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Calcul manuel de gradients",
-            content: `
-                        <p><strong>Prenons une fonction simple à deux variables :</strong></p>
-                        <p>$$f(x, y) = x^2 + y^2$$</p>
-                        
-                        <p><strong>🔢 Calcul du gradient :</strong></p>
-                        <p><strong>Étape 1 :</strong> Dérivée partielle par rapport à \\(x\\)</p>
-                        <p>$$\\frac{\\partial f}{\\partial x} = \\frac{\\partial}{\\partial x}(x^2 + y^2) = 2x$$</p>
-                        
-                        <p><strong>Étape 2 :</strong> Dérivée partielle par rapport à \\(y\\)</p>
-                        <p>$$\\frac{\\partial f}{\\partial y} = \\frac{\\partial}{\\partial y}(x^2 + y^2) = 2y$$</p>
-                        
-                        <p><strong>Étape 3 :</strong> Assemblage du gradient</p>
-                        <p>$$\\nabla f = \\begin{bmatrix} 2x \\\\ 2y \\end{bmatrix}$$</p>
-                        
-                        <p><strong>📍 Exemple numérique :</strong> Au point \\((3, 4)\\)</p>
-                        <p>$$\\nabla f(3, 4) = \\begin{bmatrix} 2 \\times 3 \\\\ 2 \\times 4 \\end{bmatrix} = \\begin{bmatrix} 6 \\\\ 8 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>🔍 Interprétation :</strong> Au point \\((3, 4)\\), pour augmenter \\(f\\) le plus rapidement, il faut se déplacer dans la direction \\([6, 8]\\).</p>
-                    `,
-          },
+
+          // ===== SECTION 2: DÉRIVÉES PARTIELLES =====
           {
             type: "mathematique",
-            icon: "∑",
-            title: "Dérivées partielles",
+            icon: "∂",
+            title: "Les dérivées partielles",
             content: `
-                        <p>Les <strong>dérivées partielles</strong> sont les composantes du gradient. Pour une fonction \\(f(x, y)\\) :</p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• Dérivée partielle par rapport à \\(x\\) :</strong> $$\\frac{\\partial f}{\\partial x}$$ (on traite \\(y\\) comme une constante)</li>
-                            <li style="margin-top: 1rem"><strong>• Dérivée partielle par rapport à \\(y\\) :</strong> $$\\frac{\\partial f}{\\partial y}$$ (on traite \\(x\\) comme une constante)</li>
-                        </ul>
-                        <p><strong>🔑 Règles de calcul :</strong></p>
-                        <ul>
-                            <li>Mêmes règles que les dérivées ordinaires</li>
-                            <li>On "ignore" les autres variables (les traiter comme des constantes)</li>
-                            <li>Le gradient combine toutes les dérivées partielles</li>
-                        </ul>
-                        <p><strong>📐 Pour une fonction à \\(n\\) variables :</strong></p>
-                        <p>$$\\nabla f = \\begin{bmatrix} \\frac{\\partial f}{\\partial x_1} \\\\ \\frac{\\partial f}{\\partial x_2} \\\\ \\vdots \\\\ \\frac{\\partial f}{\\partial x_n} \\end{bmatrix}$$</p>
-                    `,
+              <p>Une <strong>dérivée partielle</strong> mesure comment une fonction varie quand on change <strong>une seule variable</strong>, en gardant les autres fixes.</p>
+
+              <p><strong>📝 Méthode de calcul :</strong></p>
+              <ol>
+                <li>Choisir la variable par rapport à laquelle on dérive</li>
+                <li>Traiter toutes les autres variables comme des <strong>constantes</strong></li>
+                <li>Appliquer les règles de dérivation habituelles</li>
+              </ol>
+
+              <p><strong>📐 Exemple détaillé :</strong></p>
+              <p>Soit \\(f(x, y) = x^2 + 3xy + y^2\\)</p>
+
+              <p><strong>Dérivée par rapport à \\(x\\)</strong> (on traite \\(y\\) comme une constante) :</p>
+              <p>$$\\frac{\\partial f}{\\partial x} = 2x + 3y + 0 = 2x + 3y$$</p>
+
+              <p><strong>Dérivée par rapport à \\(y\\)</strong> (on traite \\(x\\) comme une constante) :</p>
+              <p>$$\\frac{\\partial f}{\\partial y} = 0 + 3x + 2y = 3x + 2y$$</p>
+
+              <p><strong>Le gradient complet :</strong></p>
+              <p>$$\\nabla f = \\begin{bmatrix} 2x + 3y \\\\ 3x + 2y \\end{bmatrix}$$</p>
+            `,
           },
           {
-            type: "exemple",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 2 : Calculer une dérivée partielle",
+            content: `
+              <p>Soit \\(f(x, y) = 2x^2 + 5y\\).</p>
+              <p>Calculez \\(\\frac{\\partial f}{\\partial x}\\) (la dérivée partielle par rapport à \\(x\\)).</p>
+              <p><em>Quel est le coefficient devant \\(x\\) dans le résultat ?</em></p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 4,
+            tolerance: 0,
+            explanation: "On traite \\(y\\) comme une constante. La dérivée de \\(2x^2\\) est \\(4x\\), et la dérivée de \\(5y\\) (constante par rapport à \\(x\\)) est \\(0\\). Donc \\(\\frac{\\partial f}{\\partial x} = 4x\\).",
+            completesObjective: 0,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 3 : Calculer un gradient complet",
+            content: `
+              <p>Soit \\(f(x, y) = x^2 + y^2\\).</p>
+              <p>Calculez le gradient \\(\\nabla f\\) au point \\((3, 4)\\).</p>
+              <p><em>Quelle est la norme (longueur) du gradient ? Utilisez \\(||v|| = \\sqrt{v_x^2 + v_y^2}\\)</em></p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 10,
+            tolerance: 0.01,
+            explanation: "Le gradient est \\(\\nabla f = [2x, 2y]\\). Au point \\((3, 4)\\) : \\(\\nabla f = [6, 8]\\). La norme est \\(\\sqrt{6^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10\\).",
+            completesObjective: 1,
+          },
+
+          // ===== SECTION 3: LA DESCENTE DE GRADIENT =====
+          {
+            type: "concept",
+            icon: "📉",
+            title: "La descente de gradient : l'algorithme fondamental",
+            content: `
+              <p>La <strong>descente de gradient</strong> est l'algorithme le plus utilisé en IA pour optimiser les modèles.</p>
+
+              <p><strong>🎯 Objectif :</strong> Trouver les paramètres qui <strong>minimisent</strong> la fonction de coût.</p>
+
+              <p><strong>📋 Algorithme :</strong></p>
+              <ol>
+                <li>Partir d'un point initial (souvent aléatoire)</li>
+                <li>Calculer le gradient à ce point</li>
+                <li>Se déplacer dans la direction <strong>opposée</strong> au gradient</li>
+                <li>Répéter jusqu'à convergence</li>
+              </ol>
+
+              <p><strong>📐 Formule de mise à jour :</strong></p>
+              <p>$$\\theta_{new} = \\theta_{old} - \\alpha \\cdot \\nabla J(\\theta)$$</p>
+
+              <p><strong>🔑 Paramètres :</strong></p>
+              <ul>
+                <li>\\(\\theta\\) = les paramètres du modèle (un vecteur)</li>
+                <li>\\(\\alpha\\) = le <strong>taux d'apprentissage</strong> (learning rate)</li>
+                <li>\\(\\nabla J(\\theta)\\) = le gradient de la fonction de coût</li>
+              </ul>
+
+              <p><strong>💡 Pourquoi le signe moins ?</strong></p>
+              <p>Le gradient pointe vers la montée. Pour descendre (minimiser), on va dans le sens opposé !</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 4 : Une étape de descente de gradient",
+            content: `
+              <p>On a les paramètres \\(\\theta = [2, 3]\\) et le gradient \\(\\nabla J = [4, -2]\\).</p>
+              <p>Avec un taux d'apprentissage \\(\\alpha = 0.5\\), calculez les nouveaux paramètres.</p>
+              <p><em>Quelle est la première composante de \\(\\theta_{new}\\) ?</em></p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0,
+            tolerance: 0.01,
+            explanation: "\\(\\theta_{new} = [2, 3] - 0.5 \\times [4, -2] = [2 - 2, 3 + 1] = [0, 4]\\). La première composante est donc 0.",
+            completesObjective: 2,
+          },
+
+          // ===== SECTION 4: LE TAUX D'APPRENTISSAGE =====
+          {
+            type: "concept",
+            icon: "⚙️",
+            title: "Le taux d'apprentissage : un paramètre crucial",
+            content: `
+              <p>Le <strong>taux d'apprentissage</strong> (\\(\\alpha\\)) contrôle la taille des pas qu'on fait à chaque itération.</p>
+
+              <p><strong>⚠️ Les risques :</strong></p>
+
+              <p><strong>Si \\(\\alpha\\) est trop petit :</strong></p>
+              <ul>
+                <li>Les pas sont minuscules</li>
+                <li>La convergence est très lente</li>
+                <li>On peut rester bloqué dans un minimum local</li>
+              </ul>
+
+              <p><strong>Si \\(\\alpha\\) est trop grand :</strong></p>
+              <ul>
+                <li>Les pas sont trop grands</li>
+                <li>On peut "sauter" par-dessus le minimum</li>
+                <li>L'algorithme peut diverger (exploser) !</li>
+              </ul>
+
+              <p><strong>🎯 Valeurs typiques :</strong></p>
+              <ul>
+                <li>\\(\\alpha = 0.001\\) à \\(0.1\\) sont courants</li>
+                <li>On commence souvent par \\(\\alpha = 0.01\\)</li>
+                <li>On peut diminuer \\(\\alpha\\) au fil de l'entraînement</li>
+              </ul>
+
+              <p><strong>💡 Conseil pratique :</strong> Si votre modèle "explose" (valeurs NaN ou très grandes), réduisez le taux d'apprentissage !</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 5 : Impact du taux d'apprentissage",
+            content: `
+              <p>On minimise \\(f(x) = x^2\\) avec la descente de gradient. On part de \\(x = 10\\).</p>
+              <p>La dérivée est \\(f'(x) = 2x\\), donc au point initial \\(f'(10) = 20\\).</p>
+              <p>Avec \\(\\alpha = 0.1\\), quelle est la valeur de \\(x\\) après une itération ?</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 8,
+            tolerance: 0.01,
+            explanation: "\\(x_{new} = x - \\alpha \\cdot f'(x) = 10 - 0.1 \\times 20 = 10 - 2 = 8\\). On s'est rapproché du minimum (\\(x = 0\\)).",
+            completesObjective: 3,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 6 : Taux d'apprentissage trop grand",
+            content: `
+              <p>Même situation : \\(f(x) = x^2\\), \\(x = 10\\), \\(f'(10) = 20\\).</p>
+              <p>Mais cette fois avec \\(\\alpha = 0.6\\). Quelle est la valeur de \\(x\\) après une itération ?</p>
+              <p><em>Observez : on s'éloigne du minimum !</em></p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: -2,
+            tolerance: 0.01,
+            explanation: "\\(x_{new} = 10 - 0.6 \\times 20 = 10 - 12 = -2\\). On a sauté de l'autre côté du minimum ! Avec un \\(\\alpha\\) encore plus grand, l'algorithme divergerait.",
+            completesObjective: 3,
+          },
+
+          // ===== SECTION 5: VISUALISATION PYTHON =====
+          {
+            type: "code",
+            icon: "🐍",
+            title: "Visualiser la descente de gradient en 2D",
+            content: `
+              <p>Ce code montre la descente de gradient sur une fonction à deux variables :</p>
+            `,
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Fonction à minimiser : f(x,y) = x² + y²
+def f(x, y):
+    return x**2 + y**2
+
+# Gradient : ∇f = [2x, 2y]
+def gradient(x, y):
+    return np.array([2*x, 2*y])
+
+# Paramètres
+alpha = 0.1  # Taux d'apprentissage
+n_iterations = 20
+start = np.array([4.0, 3.0])  # Point de départ
+
+# Descente de gradient
+path = [start.copy()]
+point = start.copy()
+
+for i in range(n_iterations):
+    grad = gradient(point[0], point[1])
+    point = point - alpha * grad
+    path.append(point.copy())
+
+path = np.array(path)
+
+# Visualisation
+fig, ax = plt.subplots(figsize=(10, 8))
+
+# Contours de la fonction
+x = np.linspace(-5, 5, 100)
+y = np.linspace(-5, 5, 100)
+X, Y = np.meshgrid(x, y)
+Z = f(X, Y)
+
+contours = ax.contour(X, Y, Z, levels=20, cmap='coolwarm')
+ax.clabel(contours, inline=True, fontsize=8)
+
+# Chemin de la descente
+ax.plot(path[:, 0], path[:, 1], 'go-', linewidth=2, markersize=8, label='Chemin de descente')
+ax.scatter(path[0, 0], path[0, 1], color='red', s=200, zorder=5, label='Départ')
+ax.scatter(path[-1, 0], path[-1, 1], color='blue', s=200, zorder=5, marker='*', label='Arrivée')
+ax.scatter(0, 0, color='purple', s=300, marker='x', linewidths=3, label='Minimum global')
+
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_title(f'Descente de gradient sur f(x,y) = x² + y²\\nα = {alpha}, {n_iterations} itérations')
+ax.legend()
+ax.grid(True, alpha=0.3)
+ax.set_aspect('equal')
+
+plt.tight_layout()
+plt.savefig('gradient_2d.png', dpi=100, bbox_inches='tight')
+plt.show()
+
+print(f"🎯 Point de départ : ({path[0, 0]:.2f}, {path[0, 1]:.2f})")
+print(f"📍 Point d'arrivée : ({path[-1, 0]:.4f}, {path[-1, 1]:.4f})")
+print(f"📉 Valeur finale : f = {f(path[-1, 0], path[-1, 1]):.6f}")`,
+          },
+          {
+            type: "exercise-code",
             icon: "💻",
-            title: "Exercice pratique : calculs manuels",
+            title: "Exercice 7 : Implémenter la descente de gradient",
             content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Calculez les gradients des fonctions suivantes :</p>
-                        
-                        <ol>
-                            <li>\\(f(x, y) = 3x^2 + 2y\\)</li>
-                            <li>\\(g(x, y) = x^2 + y^2 + xy\\)</li>
-                            <li>\\(h(x, y) = 2x^3 + y^2 - 4xy\\)</li>
-                            <li>Pour \\(f(x, y) = x^2 + y^2\\), calculez \\(\\nabla f(1, 2)\\)</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('gradients-exercise-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="gradients-exercise-solution" style="display: none;">
-                        <ol>
-                            <li>\\(\\nabla f = \\begin{bmatrix} 6x \\\\ 2 \\end{bmatrix}\\)</li>
-                            <li>\\(\\nabla g = \\begin{bmatrix} 2x + y \\\\ 2y + x \\end{bmatrix}\\)</li>
-                            <li>\\(\\nabla h = \\begin{bmatrix} 6x^2 - 4y \\\\ 2y - 4x \\end{bmatrix}\\)</li>
-                            <li>\\(\\nabla f = \\begin{bmatrix} 2x \\\\ 2y \\end{bmatrix}\\), donc \\(\\nabla f(1, 2) = \\begin{bmatrix} 2 \\\\ 4 \\end{bmatrix}\\)<br>
-                                <strong>Interprétation :</strong> Au point \\((1, 2)\\), la direction de plus forte croissance est \\([2, 4]\\).</li>
-                        </ol>
-                        </div>
-                    `,
+              <p>Implémentez la descente de gradient pour minimiser \\(f(x, y) = (x-2)^2 + (y-1)^2\\).</p>
+              <p>Le minimum est en \\((2, 1)\\). Partez de \\((0, 0)\\) et vérifiez la convergence.</p>
+            `,
+            starterCode: `import numpy as np
+
+# Fonction à minimiser : f(x,y) = (x-2)² + (y-1)²
+# Le minimum est en (2, 1) où f = 0
+
+# TODO: Calculer le gradient de f
+# Rappel : gradient = [dérivée par rapport à x, dérivée par rapport à y]
+def gradient(x, y):
+    df_dx = ___  # Dérivée de (x-2)² + (y-1)² par rapport à x
+    df_dy = ___  # Dérivée de (x-2)² + (y-1)² par rapport à y
+    return np.array([df_dx, df_dy])
+
+# Paramètres
+alpha = 0.1
+n_iterations = 50
+x, y = 0.0, 0.0  # Point de départ
+
+# TODO: Boucle de descente de gradient
+for i in range(n_iterations):
+    grad = gradient(x, y)
+    x = ___  # Mise à jour de x
+    y = ___  # Mise à jour de y
+
+print(f"Position finale : ({x:.4f}, {y:.4f})")
+print(f"Position attendue : (2.0, 1.0)")`,
+            solution: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Fonction à minimiser : f(x,y) = (x-2)² + (y-1)²
+def f(x, y):
+    return (x-2)**2 + (y-1)**2
+
+# Gradient de f
+def gradient(x, y):
+    df_dx = 2*(x-2)  # Dérivée de (x-2)² par rapport à x
+    df_dy = 2*(y-1)  # Dérivée de (y-1)² par rapport à y
+    return np.array([df_dx, df_dy])
+
+# Paramètres
+alpha = 0.1
+n_iterations = 50
+x, y = 0.0, 0.0  # Point de départ
+
+# Historique pour visualisation
+history = [(x, y)]
+
+# Boucle de descente de gradient
+for i in range(n_iterations):
+    grad = gradient(x, y)
+    x = x - alpha * grad[0]  # Mise à jour de x
+    y = y - alpha * grad[1]  # Mise à jour de y
+    history.append((x, y))
+
+print(f"Position finale : ({x:.4f}, {y:.4f})")
+print(f"Position attendue : (2.0, 1.0)")
+print(f"Erreur : {np.sqrt((x-2)**2 + (y-1)**2):.6f}")
+
+# Visualisation
+history = np.array(history)
+fig, ax = plt.subplots(figsize=(8, 8))
+
+# Contours
+xg = np.linspace(-1, 4, 100)
+yg = np.linspace(-1, 3, 100)
+X, Y = np.meshgrid(xg, yg)
+Z = f(X, Y)
+ax.contour(X, Y, Z, levels=15, cmap='coolwarm')
+
+# Chemin
+ax.plot(history[:, 0], history[:, 1], 'go-', markersize=6, label='Chemin')
+ax.scatter(0, 0, color='red', s=150, zorder=5, label='Départ (0,0)')
+ax.scatter(2, 1, color='purple', s=200, marker='*', zorder=5, label='Minimum (2,1)')
+
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_title('Descente de gradient vers (2, 1)')
+ax.legend()
+ax.grid(True, alpha=0.3)
+ax.set_aspect('equal')
+plt.tight_layout()
+plt.savefig('gradient_exercise.png', dpi=100, bbox_inches='tight')
+plt.show()`,
+            expectedOutput: "Position finale : (1.99",
+            completesObjective: 4,
+          },
+
+          // ===== SECTION 6: SURFACE 3D =====
+          {
+            type: "code",
+            icon: "🎨",
+            title: "Visualisation 3D de la surface d'erreur",
+            content: `
+              <p>Cette visualisation en 3D montre comment l'algorithme "descend" sur la surface de la fonction de coût :</p>
+            `,
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Fonction : f(x,y) = x² + y²
+def f(x, y):
+    return x**2 + y**2
+
+def gradient(x, y):
+    return np.array([2*x, 2*y])
+
+# Descente de gradient
+alpha = 0.15
+start = np.array([4.0, 3.0])
+point = start.copy()
+path = [start.copy()]
+
+for _ in range(25):
+    point = point - alpha * gradient(point[0], point[1])
+    path.append(point.copy())
+path = np.array(path)
+
+# Création de la figure 3D
+fig = plt.figure(figsize=(12, 5))
+
+# Vue 3D
+ax1 = fig.add_subplot(121, projection='3d')
+x = np.linspace(-5, 5, 50)
+y = np.linspace(-5, 5, 50)
+X, Y = np.meshgrid(x, y)
+Z = f(X, Y)
+
+ax1.plot_surface(X, Y, Z, cmap='coolwarm', alpha=0.7, edgecolor='none')
+ax1.plot(path[:, 0], path[:, 1], f(path[:, 0], path[:, 1]),
+         'ko-', linewidth=2, markersize=5, label='Descente')
+ax1.scatter(path[0, 0], path[0, 1], f(path[0, 0], path[0, 1]),
+            color='red', s=100, label='Départ')
+ax1.scatter(0, 0, 0, color='green', s=200, marker='*', label='Minimum')
+
+ax1.set_xlabel('x')
+ax1.set_ylabel('y')
+ax1.set_zlabel('f(x,y)')
+ax1.set_title('Vue 3D de la descente de gradient')
+ax1.legend()
+
+# Vue de dessus (contours)
+ax2 = fig.add_subplot(122)
+contours = ax2.contourf(X, Y, Z, levels=20, cmap='coolwarm', alpha=0.8)
+plt.colorbar(contours, ax=ax2, label='f(x,y)')
+ax2.plot(path[:, 0], path[:, 1], 'ko-', linewidth=2, markersize=5)
+ax2.scatter(path[0, 0], path[0, 1], color='red', s=100, zorder=5, label='Départ')
+ax2.scatter(0, 0, color='green', s=200, marker='*', zorder=5, label='Minimum')
+ax2.set_xlabel('x')
+ax2.set_ylabel('y')
+ax2.set_title('Vue de dessus (lignes de niveau)')
+ax2.legend()
+ax2.set_aspect('equal')
+
+plt.tight_layout()
+plt.savefig('gradient_3d.png', dpi=100, bbox_inches='tight')
+plt.show()
+
+print("🏔️ La surface 3D représente la fonction de coût")
+print("📉 L'algorithme descend naturellement vers le minimum (point vert)")`,
           },
           {
-            type: "exemple",
+            type: "exercise-code",
             icon: "💻",
-            title: "La descente de gradient",
+            title: "Exercice 8 : Comparer différents taux d'apprentissage",
             content: `
-                        <p><strong>🎯 Algorithme fondamental de l'IA :</strong></p>
-                        <p>Pour <strong>minimiser</strong> une fonction (réduire l'erreur), on utilise la descente de gradient :</p>
-                        
-                        <p><strong>📋 Algorithme :</strong></p>
-                        <ol>
-                            <li><strong>Partir</strong> d'un point initial \\((x_0, y_0)\\)</li>
-                            <li><strong>Calculer</strong> le gradient \\(\\nabla f(x, y)\\)</li>
-                            <li><strong>Se déplacer</strong> dans la direction opposée : \\((x, y) \\leftarrow (x, y) - \\alpha \\nabla f(x, y)\\)</li>
-                            <li><strong>Répéter</strong> jusqu'à convergence</li>
-                        </ol>
-                        
-                        <p><strong>🔑 Paramètres :</strong></p>
-                        <ul>
-                            <li>\\(\\alpha\\) = <strong>taux d'apprentissage</strong> (taille du pas)</li>
-                            <li><strong>Direction opposée</strong> car on veut descendre (minimiser)</li>
-                        </ul>
-                        
-                        <p><strong>📝 Exemple :</strong> Minimiser \\(f(x, y) = x^2 + y^2\\)</p>
-                        <ul>
-                            <li><strong>Gradient :</strong> \\(\\nabla f = \\begin{bmatrix} 2x \\\\ 2y \\end{bmatrix}\\)</li>
-                            <li><strong>Mise à jour :</strong> \\(\\begin{bmatrix} x \\\\ y \\end{bmatrix} \\leftarrow \\begin{bmatrix} x \\\\ y \\end{bmatrix} - \\alpha \\begin{bmatrix} 2x \\\\ 2y \\end{bmatrix}\\)</li>
-                            <li><strong>Résultat :</strong> Convergence vers \\((0, 0)\\) = minimum global</li>
-                        </ul>
-                    `,
+              <p>Comparez l'effet de différents taux d'apprentissage sur la convergence.</p>
+              <p>Observez comment un \\(\\alpha\\) trop grand fait "rebondir" l'algorithme.</p>
+            `,
+            starterCode: `import numpy as np
+import matplotlib.pyplot as plt
+
+def f(x):
+    return x**2
+
+def gradient(x):
+    return 2*x
+
+# TODO: Tester 3 taux d'apprentissage différents
+alphas = [0.1, 0.5, 0.9]  # Petit, moyen, grand
+colors = ['green', 'blue', 'red']
+x_start = 4.0
+n_iterations = 20
+
+plt.figure(figsize=(10, 6))
+
+for alpha, color in zip(alphas, colors):
+    x = x_start
+    history = [x]
+
+    # TODO: Implémenter la descente de gradient
+    for i in range(n_iterations):
+        x = ___  # Formule de mise à jour
+        history.append(x)
+
+    plt.plot(history, 'o-', color=color, label=f'α = {alpha}')
+
+plt.axhline(y=0, color='black', linestyle='--', label='Minimum (x=0)')
+plt.xlabel('Itération')
+plt.ylabel('Valeur de x')
+plt.title('Effet du taux d apprentissage')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()`,
+            solution: `import numpy as np
+import matplotlib.pyplot as plt
+
+def f(x):
+    return x**2
+
+def gradient(x):
+    return 2*x
+
+# Tester 3 taux d'apprentissage différents
+alphas = [0.1, 0.5, 0.9]
+colors = ['green', 'blue', 'red']
+x_start = 4.0
+n_iterations = 20
+
+plt.figure(figsize=(10, 6))
+
+for alpha, color in zip(alphas, colors):
+    x = x_start
+    history = [x]
+
+    for i in range(n_iterations):
+        x = x - alpha * gradient(x)  # Formule de mise à jour
+        history.append(x)
+
+    plt.plot(history, 'o-', color=color, label=f'α = {alpha}', linewidth=2, markersize=4)
+
+plt.axhline(y=0, color='black', linestyle='--', label='Minimum (x=0)')
+plt.xlabel('Itération')
+plt.ylabel('Valeur de x')
+plt.title('Effet du taux d\\'apprentissage sur la convergence')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.ylim(-5, 5)
+plt.tight_layout()
+plt.savefig('learning_rates.png', dpi=100, bbox_inches='tight')
+plt.show()
+
+print("📊 Observations :")
+print("• α = 0.1 (vert) : Convergence lente mais stable")
+print("• α = 0.5 (bleu) : Convergence rapide et stable")
+print("• α = 0.9 (rouge) : Oscillations ! Presque trop grand")`,
+            expectedOutput: "Observations",
+            completesObjective: 5,
           },
+
+          // ===== SECTION 7: QUIZ FINAL =====
           {
-            type: "warning",
-            icon: "⚠️",
-            title: "Pourquoi les gradients sont-ils le cœur de l'IA ?",
-            content: `
-                        <p><strong>🧠 Les gradients permettent l'apprentissage automatique :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Optimisation automatique</strong> : l'IA trouve les meilleures solutions seule</li>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : mise à jour de millions de paramètres</li>
-                            <li>📊 <strong>Machine Learning</strong> : minimisation des erreurs de prédiction</li>
-                            <li>💬 <strong>LLMs (ChatGPT)</strong> : entraînement sur des milliards de paramètres</li>
-                            <li>🎨 <strong>IA générative</strong> : amélioration continue des créations</li>
-                        </ul>
-                        <p><strong>💡 Point clé :</strong> Sans les gradients, l'IA moderne n'existerait pas ! Ils permettent aux machines d'apprendre automatiquement en "descendant" vers les meilleures solutions.</p>
-                        <p><strong>🔮 Prochaine étape :</strong> Nous verrons comment les probabilités permettent à l'IA de gérer l'incertitude et de prendre des décisions intelligentes !</p>
-                    `,
+            type: "quiz",
+            icon: "🎯",
+            title: "Quiz final : Les gradients",
+            question: "Dans l'entraînement d'un réseau de neurones avec des millions de paramètres, que représente le gradient ?",
+            options: [
+              "Un nombre unique indiquant l'erreur totale",
+              "Un vecteur avec autant de composantes que de paramètres, indiquant comment ajuster chacun",
+              "La valeur finale des poids après entraînement",
+              "Le nombre d'itérations nécessaires pour converger"
+            ],
+            correctAnswer: 1,
+            explanation: "Le gradient est un VECTEUR qui contient une dérivée partielle pour chaque paramètre du modèle. Si on a 1 million de paramètres, le gradient a 1 million de composantes ! Chaque composante indique comment ajuster le paramètre correspondant pour réduire l'erreur.",
           },
         ],
-        quiz: {
-          question:
-            "🤔 Si le gradient d'une fonction au point (2, 3) est [4, -6], dans quelle direction faut-il se déplacer pour MINIMISER la fonction ?",
-          options: [
-            "A) Direction [4, -6]",
-            "B) Direction [-4, 6]",
-            "C) Direction [6, 4]",
-            "D) Rester sur place",
-          ],
-          correct: 1,
-          explanation:
-            "Pour minimiser, on va dans la direction OPPOSÉE au gradient. Si le gradient est [4, -6], on se déplace dans la direction [-4, 6] pour descendre vers le minimum.",
-        },
         prevModule: "derivatives.html",
         nextModule: "probability.html",
       };

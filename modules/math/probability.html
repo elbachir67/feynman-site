@@ -42,9 +42,7 @@
     <!-- Contenu principal -->
     <div class="container">
       <h1>🎲 Les Probabilités</h1>
-      <p class="subtitle">
-        Module 1.6 - Mathématiques de l'incertitude pour l'IA
-      </p>
+      <p class="subtitle">Module 1.6 - Comment l'IA gère l'incertitude</p>
 
       <!-- Objectifs -->
       <div class="objectives">
@@ -59,35 +57,13 @@
         <!-- Le contenu sera ajouté dynamiquement -->
       </div>
 
-      <!-- Quiz -->
-      <div class="quiz" id="module-quiz" style="display: none">
-        <div class="quiz-question" id="quiz-question"></div>
-        <div class="quiz-options" id="quiz-options"></div>
-        <div class="quiz-feedback" id="quiz-feedback"></div>
-      </div>
-
-      <!-- Checkpoint -->
-      <div class="checkpoint">
-        <h3>🎉 Checkpoint - Les Probabilités</h3>
-        <p>
-          Félicitations ! Vous comprenez maintenant comment l'IA gère
-          l'incertitude et prend des décisions intelligentes.
-        </p>
-        <button
-          class="checkpoint-btn"
-          id="checkpoint-btn"
-          onclick="completeCheckpoint()"
-        >
-          Marquer comme complété
-        </button>
-      </div>
-
       <!-- Navigation entre modules -->
       <div class="module-nav">
         <a href="gradients.html" class="nav-link" id="prev-link"
           >← Module précédent : Gradients</a
         >
         <a href="statistics.html" class="nav-link" id="next-link"
+          >Module suivant : Statistiques →</a
         >
       </div>
     </div>
@@ -100,297 +76,497 @@
         title: "Les Probabilités",
         category: "Mathématiques",
         objectives: [
-          "Comprendre les probabilités comme mesure de l'incertitude",
+          "Comprendre ce qu'est une probabilité",
           "Calculer des probabilités simples",
-          "Maîtriser les règles de base (addition, multiplication)",
-          "Comprendre l'importance en IA et prise de décision",
+          "Appliquer les règles de probabilité (addition, multiplication)",
+          "Comprendre la probabilité conditionnelle et Bayes",
+          "Calculer l'espérance et la variance",
+          "Simuler des probabilités avec Python",
         ],
         content: [
+          // ===== SECTION 1: INTRODUCTION AUX PROBABILITÉS =====
           {
             type: "concept",
             icon: "💡",
-            title: "Concept fondamental",
+            title: "Qu'est-ce qu'une probabilité ?",
             content: `
-                        <p>Les <strong>probabilités</strong> mesurent la <strong>chance qu'un événement se produise</strong>. C'est un nombre entre 0 et 1 qui quantifie notre incertitude.</p>
-                        <p><strong>🔑 Idée simple :</strong></p>
-                        <ul>
-                            <li><strong>Probabilité = 0</strong> → événement impossible (0%)</li>
-                            <li><strong>Probabilité = 0.5</strong> → événement équiprobable (50%)</li>
-                            <li><strong>Probabilité = 1</strong> → événement certain (100%)</li>
-                        </ul>
-                        <p><strong>📐 Notation :</strong></p>
-                        <p>$$P(A) = \\text{probabilité que l'événement A se produise}$$</p>
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Prédictions</strong> : "Il y a 85% de chance que ce soit un chat"</li>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : sorties probabilistes</li>
-                            <li>💬 <strong>LLMs</strong> : probabilité du prochain mot</li>
-                            <li>🎮 <strong>IA de jeux</strong> : évaluer les coups possibles</li>
-                            <li>🚗 <strong>Voitures autonomes</strong> : gérer l'incertitude sur la route</li>
-                        </ul>
-                    `,
+              <p>Une <strong>probabilité</strong> est un nombre entre 0 et 1 qui mesure la <strong>chance qu'un événement se produise</strong>.</p>
+
+              <p><strong>🎯 Pourquoi c'est important en IA ?</strong></p>
+              <p>L'IA travaille dans un monde <strong>incertain</strong>. Elle ne peut jamais être sûre à 100%. Les probabilités lui permettent de :</p>
+              <ul>
+                <li>Quantifier son incertitude : "Je suis sûr à 95% que c'est un chat"</li>
+                <li>Prendre des décisions rationnelles malgré l'incertitude</li>
+                <li>Générer du texte (LLMs) : chaque mot a une probabilité</li>
+              </ul>
+
+              <p><strong>📐 Notation et valeurs :</strong></p>
+              <p>$$P(A) = \\text{probabilité que l'événement A se produise}$$</p>
+              <ul>
+                <li>\\(P(A) = 0\\) → événement <strong>impossible</strong></li>
+                <li>\\(P(A) = 0.5\\) → événement <strong>équiprobable</strong> (50%)</li>
+                <li>\\(P(A) = 1\\) → événement <strong>certain</strong></li>
+              </ul>
+
+              <p><strong>🔑 Formule de base :</strong></p>
+              <p>$$P(A) = \\frac{\\text{nombre de cas favorables}}{\\text{nombre de cas possibles}}$$</p>
+            `,
           },
           {
-            type: "intuition",
-            icon: "🧠",
-            title: "L'analogie de la météo",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 1 : Probabilité d'un dé",
             content: `
-                        <p>Imaginez que vous regardez la <strong>météo</strong> avant de sortir :</p>
-                        <ul>
-                            <li>☀️ <strong>"0% de chance de pluie"</strong> → vous sortez sans parapluie</li>
-                            <li>🌦️ <strong>"50% de chance de pluie"</strong> → vous hésitez, peut-être un parapluie</li>
-                            <li>🌧️ <strong>"90% de chance de pluie"</strong> → vous prenez définitivement un parapluie</li>
-                        </ul>
-                        <p><strong>🎯 C'est exactement ce que fait l'IA :</strong></p>
-                        <ul>
-                            <li>🤖 <strong>Elle évalue</strong> les probabilités de différents scénarios</li>
-                            <li>🧠 <strong>Elle prend des décisions</strong> basées sur ces probabilités</li>
-                            <li>⚖️ <strong>Elle gère l'incertitude</strong> de manière rationnelle</li>
-                        </ul>
-                        <p><strong>💡 Exemple concret :</strong></p>
-                        <p>Une IA de reconnaissance d'images dit : "Je suis sûr à 95% que c'est un chien, 4% que c'est un chat, 1% que c'est autre chose". Elle choisit "chien" car c'est le plus probable !</p>
-                    `,
+              <p>On lance un dé à 6 faces équilibré. Quelle est la probabilité d'obtenir un 6 ?</p>
+              <p>Exprimez votre réponse sous forme décimale (arrondie à 2 décimales).</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0.17,
+            tolerance: 0.01,
+            explanation: "Il y a 1 cas favorable (obtenir 6) sur 6 cas possibles. Donc P(6) = 1/6 ≈ 0.167",
+            completesObjective: 0,
           },
           {
-            type: "exemple",
-            icon: "💻",
-            title: "Calculs de probabilités simples",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 2 : Probabilité d'un nombre pair",
             content: `
-                        <p><strong>🎲 Exemple 1 : Lancer de dé</strong></p>
-                        <p>Un dé a 6 faces. Quelle est la probabilité d'obtenir un 4 ?</p>
-                        <p>$$P(\\text{obtenir 4}) = \\frac{\\text{nombre de cas favorables}}{\\text{nombre de cas possibles}} = \\frac{1}{6} \\approx 0.167$$</p>
-                        
-                        <p><strong>🪙 Exemple 2 : Lancer de pièce</strong></p>
-                        <p>Probabilité d'obtenir "pile" ?</p>
-                        <p>$$P(\\text{pile}) = \\frac{1}{2} = 0.5$$</p>
-                        
-                        <p><strong>🃏 Exemple 3 : Tirage de carte</strong></p>
-                        <p>Dans un jeu de 52 cartes, probabilité de tirer un as ?</p>
-                        <p>$$P(\\text{as}) = \\frac{4}{52} = \\frac{1}{13} \\approx 0.077$$</p>
-                        
-                        <p><strong>🔍 Interprétation :</strong> Plus le nombre est proche de 1, plus l'événement est probable !</p>
-                    `,
+              <p>Toujours avec un dé à 6 faces. Quelle est la probabilité d'obtenir un nombre <strong>pair</strong> (2, 4 ou 6) ?</p>
+              <p>Exprimez votre réponse sous forme décimale.</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0.5,
+            tolerance: 0.01,
+            explanation: "Il y a 3 cas favorables (2, 4, 6) sur 6 cas possibles. Donc P(pair) = 3/6 = 0.5 = 50%",
+            completesObjective: 1,
           },
+
+          // ===== SECTION 2: RÈGLES DE PROBABILITÉ =====
           {
             type: "mathematique",
             icon: "∑",
-            title: "Règles fondamentales",
+            title: "Les règles fondamentales",
             content: `
-                        <p><strong>📋 Règles de base des probabilités :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• Règle de l'addition (OU) :</strong> $$P(A \\text{ ou } B) = P(A) + P(B) - P(A \\text{ et } B)$$</li>
-                            <li style="margin-top: 1rem"><strong>• Règle de la multiplication (ET) :</strong> $$P(A \\text{ et } B) = P(A) \\times P(B|A)$$</li>
-                            <li style="margin-top: 1rem"><strong>• Événements indépendants :</strong> $$P(A \\text{ et } B) = P(A) \\times P(B)$$</li>
-                            <li style="margin-top: 1rem"><strong>• Probabilité totale :</strong> $$\\sum_{\\text{tous événements}} P(\\text{événement}) = 1$$</li>
-                        </ul>
-                        <p><strong>🔑 Concepts importants :</strong></p>
-                        <ul>
-                            <li><strong>Événements mutuellement exclusifs</strong> : ne peuvent pas arriver en même temps</li>
-                            <li><strong>Événements indépendants</strong> : l'un n'influence pas l'autre</li>
-                            <li><strong>Probabilité conditionnelle</strong> : P(B|A) = probabilité de B sachant que A s'est produit</li>
-                        </ul>
-                    `,
+              <p>Voici les règles essentielles pour calculer des probabilités :</p>
+
+              <p><strong>📋 Règle 1 : Complémentaire</strong></p>
+              <p>$$P(\\text{non } A) = 1 - P(A)$$</p>
+              <p>Exemple : Si P(pluie) = 0.3, alors P(pas de pluie) = 0.7</p>
+
+              <p><strong>📋 Règle 2 : Addition (OU)</strong></p>
+              <p>$$P(A \\text{ ou } B) = P(A) + P(B) - P(A \\text{ et } B)$$</p>
+              <p>On soustrait l'intersection pour ne pas compter deux fois !</p>
+
+              <p><strong>📋 Règle 3 : Multiplication (ET) - cas indépendant</strong></p>
+              <p>Si A et B sont <strong>indépendants</strong> (l'un n'influence pas l'autre) :</p>
+              <p>$$P(A \\text{ et } B) = P(A) \\times P(B)$$</p>
+
+              <p><strong>📋 Règle 4 : Somme totale</strong></p>
+              <p>La somme des probabilités de tous les événements possibles = 1</p>
+              <p>$$\\sum_{\\text{tous événements}} P(\\text{événement}) = 1$$</p>
+            `,
           },
           {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice pratique : calculs manuels",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 3 : Règle du complémentaire",
             content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Dans une classe de 30 élèves :</p>
-                        <ul>
-                            <li>15 élèves aiment les maths</li>
-                            <li>12 élèves aiment la physique</li>
-                            <li>5 élèves aiment les deux</li>
-                        </ul>
-                        
-                        <p><strong>📝 Calculez :</strong></p>
-                        <ol>
-                            <li>P(aime les maths) = ?</li>
-                            <li>P(aime la physique) = ?</li>
-                            <li>P(aime les maths ET la physique) = ?</li>
-                            <li>P(aime les maths OU la physique) = ?</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('probability-exercise-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="probability-exercise-solution" style="display: none;">
-                        <ol>
-                            <li>P(maths) = 15/30 = 0.5 (50%)</li>
-                            <li>P(physique) = 12/30 = 0.4 (40%)</li>
-                            <li>P(maths ET physique) = 5/30 ≈ 0.167 (16.7%)</li>
-                            <li>P(maths OU physique) = P(maths) + P(physique) - P(maths ET physique)<br>
-                                = 0.5 + 0.4 - 0.167 = 0.733 (73.3%)<br>
-                                <strong>Vérification :</strong> 15 + 12 - 5 = 22 élèves, donc 22/30 ≈ 0.733 ✓</li>
-                        </ol>
-                        </div>
-                    `,
+              <p>Un modèle d'IA prédit qu'il y a 85% de chance qu'un email soit un spam.</p>
+              <p>Quelle est la probabilité que l'email ne soit <strong>pas</strong> un spam ?</p>
+              <p>Répondez en pourcentage (juste le nombre, sans le symbole %).</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 15,
+            tolerance: 0,
+            explanation: "P(pas spam) = 1 - P(spam) = 1 - 0.85 = 0.15 = 15%",
+            completesObjective: 2,
           },
           {
-            type: "exemple",
-            icon: "💻",
-            title: "Probabilités conditionnelles",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 4 : Événements indépendants",
             content: `
-                        <p><strong>🎯 Concept clé pour l'IA :</strong></p>
-                        <p>La <strong>probabilité conditionnelle</strong> P(B|A) = "probabilité de B sachant que A s'est produit"</p>
-                        
-                        <p><strong>📝 Exemple médical :</strong></p>
-                        <ul>
-                            <li>P(malade) = 1% (1% de la population est malade)</li>
-                            <li>P(test positif | malade) = 95% (le test détecte 95% des malades)</li>
-                            <li>P(test positif | pas malade) = 5% (5% de faux positifs)</li>
-                        </ul>
-                        
-                        <p><strong>🤔 Question :</strong> Si le test est positif, quelle est la probabilité d'être vraiment malade ?</p>
-                        
-                        <p><strong>🧮 Théorème de Bayes :</strong></p>
-                        <p>$$P(\\text{malade | test positif}) = \\frac{P(\\text{test positif | malade}) \\times P(\\text{malade})}{P(\\text{test positif})}$$</p>
-                        
-                        <p><strong>💡 Résultat surprenant :</strong> Environ 16% seulement ! Pourquoi ? Parce que la maladie est rare (1%), donc la plupart des tests positifs sont des faux positifs.</p>
-                        
-                        <p><strong>🤖 En IA :</strong> C'est exactement ce calcul que font les systèmes de diagnostic automatique !</p>
-                    `,
+              <p>On lance une pièce (P(pile) = 0.5) et un dé (P(6) = 1/6 ≈ 0.167).</p>
+              <p>Quelle est la probabilité d'obtenir pile ET un 6 ?</p>
+              <p>Les deux événements sont indépendants. Arrondissez à 2 décimales.</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0.08,
+            tolerance: 0.01,
+            explanation: "P(pile ET 6) = P(pile) × P(6) = 0.5 × (1/6) = 0.5 × 0.167 ≈ 0.083",
+            completesObjective: 2,
+          },
+
+          // ===== SECTION 3: PROBABILITÉ CONDITIONNELLE =====
+          {
+            type: "concept",
+            icon: "🔗",
+            title: "Probabilité conditionnelle",
+            content: `
+              <p>La <strong>probabilité conditionnelle</strong> P(B|A) est la probabilité de B <strong>sachant que</strong> A s'est déjà produit.</p>
+
+              <p><strong>📐 Formule :</strong></p>
+              <p>$$P(B|A) = \\frac{P(A \\text{ et } B)}{P(A)}$$</p>
+
+              <p><strong>🎯 Exemple concret :</strong></p>
+              <p>Dans une classe de 100 étudiants :</p>
+              <ul>
+                <li>60 aiment les maths</li>
+                <li>40 aiment la programmation</li>
+                <li>30 aiment les deux</li>
+              </ul>
+
+              <p><strong>Question :</strong> Si un étudiant aime les maths, quelle est la probabilité qu'il aime aussi la programmation ?</p>
+
+              <p>$$P(\\text{prog}|\\text{maths}) = \\frac{P(\\text{maths et prog})}{P(\\text{maths})} = \\frac{30/100}{60/100} = \\frac{30}{60} = 0.5$$</p>
+
+              <p><strong>🤖 En IA :</strong> Les LLMs utilisent exactement cela ! P(mot suivant | mots précédents)</p>
+            `,
           },
           {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice : probabilités conditionnelles",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 5 : Probabilité conditionnelle",
             content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Dans une entreprise tech :</p>
-                        <ul>
-                            <li>60% des employés sont développeurs</li>
-                            <li>40% des employés sont designers</li>
-                            <li>80% des développeurs utilisent Python</li>
-                            <li>30% des designers utilisent Python</li>
-                        </ul>
-                        
-                        <p><strong>📝 Questions :</strong></p>
-                        <ol>
-                            <li>Quelle est la probabilité qu'un employé choisi au hasard utilise Python ?</li>
-                            <li>Si on sait qu'un employé utilise Python, quelle est la probabilité qu'il soit développeur ?</li>
-                            <li>Si on sait qu'un employé n'utilise pas Python, quelle est la probabilité qu'il soit designer ?</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('conditional-probability-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="conditional-probability-solution" style="display: none;">
-                        <ol>
-                            <li><strong>P(Python) :</strong><br>
-                                P(Python) = P(Python|Dev) × P(Dev) + P(Python|Designer) × P(Designer)<br>
-                                = 0.8 × 0.6 + 0.3 × 0.4 = 0.48 + 0.12 = 0.6 (60%)</li>
-                            <li><strong>P(Dev|Python) :</strong><br>
-                                P(Dev|Python) = P(Python|Dev) × P(Dev) / P(Python)<br>
-                                = (0.8 × 0.6) / 0.6 = 0.48 / 0.6 = 0.8 (80%)</li>
-                            <li><strong>P(Designer|¬Python) :</strong><br>
-                                P(¬Python) = 1 - 0.6 = 0.4<br>
-                                P(¬Python|Designer) = 1 - 0.3 = 0.7<br>
-                                P(Designer|¬Python) = (0.7 × 0.4) / 0.4 = 0.7 (70%)</li>
-                        </ol>
-                        </div>
-                    `,
+              <p>Dans une entreprise de 200 employés :</p>
+              <ul>
+                <li>120 utilisent Python</li>
+                <li>80 travaillent en IA</li>
+                <li>60 utilisent Python ET travaillent en IA</li>
+              </ul>
+              <p>Si un employé utilise Python, quelle est la probabilité qu'il travaille en IA ?</p>
+              <p>Répondez sous forme décimale.</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0.5,
+            tolerance: 0.01,
+            explanation: "P(IA|Python) = P(Python et IA) / P(Python) = (60/200) / (120/200) = 60/120 = 0.5",
+            completesObjective: 3,
+          },
+
+          // ===== SECTION 4: THÉORÈME DE BAYES =====
+          {
+            type: "mathematique",
+            icon: "🧮",
+            title: "Le théorème de Bayes",
+            content: `
+              <p>Le <strong>théorème de Bayes</strong> permet d'inverser une probabilité conditionnelle. C'est fondamental en IA pour mettre à jour nos croyances avec de nouvelles données.</p>
+
+              <p><strong>📐 Formule :</strong></p>
+              <p>$$P(A|B) = \\frac{P(B|A) \\times P(A)}{P(B)}$$</p>
+
+              <p><strong>🔍 Décryptage :</strong></p>
+              <ul>
+                <li>\\(P(A)\\) = probabilité <strong>a priori</strong> (avant d'avoir l'info B)</li>
+                <li>\\(P(A|B)\\) = probabilité <strong>a posteriori</strong> (après avoir observé B)</li>
+                <li>\\(P(B|A)\\) = <strong>vraisemblance</strong> (chance d'observer B si A est vrai)</li>
+              </ul>
+
+              <p><strong>🏥 Exemple médical :</strong></p>
+              <ul>
+                <li>1% de la population a une maladie : P(malade) = 0.01</li>
+                <li>Le test détecte 95% des malades : P(positif|malade) = 0.95</li>
+                <li>Le test a 5% de faux positifs : P(positif|sain) = 0.05</li>
+              </ul>
+
+              <p><strong>Question :</strong> Si le test est positif, quelle est la chance d'être vraiment malade ?</p>
+
+              <p>$$P(\\text{malade}|\\text{positif}) = \\frac{0.95 \\times 0.01}{0.95 \\times 0.01 + 0.05 \\times 0.99} ≈ 0.16$$</p>
+
+              <p><strong>💡 Surprise :</strong> Seulement 16% ! La maladie est rare, donc la plupart des tests positifs sont des faux positifs.</p>
+            `,
           },
           {
-            type: "warning",
-            icon: "⚠️",
-            title: "Pourquoi les probabilités sont-elles cruciales en IA ?",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 6 : Appliquer Bayes",
             content: `
-                        <p><strong>🧠 Les probabilités permettent à l'IA de gérer l'incertitude :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Prédictions intelligentes</strong> : "85% de chance que ce soit un spam"</li>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : sorties probabilistes pour chaque classe</li>
-                            <li>💬 <strong>LLMs (ChatGPT)</strong> : probabilité de chaque mot suivant</li>
-                            <li>🎮 <strong>IA de jeux</strong> : évaluer les coups avec incertitude</li>
-                            <li>🚗 <strong>Voitures autonomes</strong> : "90% de chance qu'un piéton traverse"</li>
-                            <li>📊 <strong>Recommandations</strong> : "Vous aimerez probablement ce film"</li>
-                        </ul>
-                        <p><strong>💡 Point clé :</strong> Sans probabilités, l'IA ne pourrait pas prendre de décisions intelligentes dans un monde incertain. Elles permettent de quantifier et gérer l'incertitude de manière rationnelle.</p>
-                        <p><strong>🔮 Prochaine étape :</strong> Nous verrons comment programmer ces concepts en Python pour créer des systèmes intelligents !</p>
-                    `,
+              <p>Un filtre anti-spam a les caractéristiques suivantes :</p>
+              <ul>
+                <li>10% des emails reçus sont des spams : P(spam) = 0.10</li>
+                <li>90% des spams contiennent le mot "gratuit" : P(gratuit|spam) = 0.90</li>
+                <li>5% des emails normaux contiennent "gratuit" : P(gratuit|normal) = 0.05</li>
+              </ul>
+              <p>Si un email contient "gratuit", quelle est la probabilité que ce soit un spam ?</p>
+              <p>Arrondissez à 2 décimales.</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 0.67,
+            tolerance: 0.02,
+            explanation: "P(gratuit) = P(gratuit|spam)×P(spam) + P(gratuit|normal)×P(normal) = 0.90×0.10 + 0.05×0.90 = 0.135. Donc P(spam|gratuit) = (0.90 × 0.10) / 0.135 = 0.09/0.135 ≈ 0.67",
+            completesObjective: 3,
+          },
+
+          // ===== SECTION 5: ESPÉRANCE ET VARIANCE =====
+          {
+            type: "mathematique",
+            icon: "📊",
+            title: "Espérance : la valeur moyenne attendue",
+            content: `
+              <p>L'<strong>espérance</strong> E[X] d'une variable aléatoire est la valeur "moyenne" qu'on s'attend à obtenir sur le long terme.</p>
+
+              <p><strong>📐 Formule :</strong></p>
+              <p>$$E[X] = \\sum_{i} x_i \\times P(X = x_i)$$</p>
+
+              <p><strong>🎲 Exemple : Lancer de dé</strong></p>
+              <p>$$E[X] = 1 \\times \\frac{1}{6} + 2 \\times \\frac{1}{6} + 3 \\times \\frac{1}{6} + 4 \\times \\frac{1}{6} + 5 \\times \\frac{1}{6} + 6 \\times \\frac{1}{6}$$</p>
+              <p>$$E[X] = \\frac{1+2+3+4+5+6}{6} = \\frac{21}{6} = 3.5$$</p>
+
+              <p><strong>💡 Interprétation :</strong> En moyenne, sur beaucoup de lancers, on obtient 3.5 points par lancer.</p>
+
+              <p><strong>🤖 En IA :</strong></p>
+              <ul>
+                <li>L'espérance du gain prédit par un modèle de trading</li>
+                <li>Le nombre moyen de mots générés par un LLM</li>
+                <li>Le score moyen d'une stratégie de jeu</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 7 : Calculer une espérance",
+            content: `
+              <p>Un jeu de hasard a les résultats suivants :</p>
+              <ul>
+                <li>50% de chance de perdre 1€</li>
+                <li>30% de chance de gagner 2€</li>
+                <li>20% de chance de gagner 5€</li>
+              </ul>
+              <p>Quelle est l'espérance de gain (en euros) ?</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 1.1,
+            tolerance: 0.01,
+            explanation: "E[X] = (-1)×0.5 + 2×0.3 + 5×0.2 = -0.5 + 0.6 + 1.0 = 1.1€. En moyenne, on gagne 1.10€ par partie.",
+            completesObjective: 4,
           },
           {
             type: "mathematique",
-            icon: "∑",
-            title: "Variables aléatoires et espérance",
+            icon: "📏",
+            title: "Variance : mesurer la dispersion",
             content: `
-                        <p><strong>🤔 Qu'est-ce qu'une variable aléatoire ?</strong></p>
-                        <p>Une <strong>variable aléatoire</strong> X est une fonction qui associe un nombre à chaque résultat possible d'une expérience. C'est comme une \"machine\" qui transforme des événements en nombres.</p>
-                        
-                        <p><strong>🎯 Exemple concret :</strong></p>
-                        <p>Lancer un dé :</p>
-                        <ul>
-                            <li>🎲 <strong>Événements</strong> : {⚀, ⚁, ⚂, ⚃, ⚄, ⚅}</li>
-                            <li>🔢 <strong>Variable X</strong> : \"nombre de points\" → {1, 2, 3, 4, 5, 6}</li>
-                            <li>📊 <strong>Probabilités</strong> : P(X = k) = 1/6 pour k ∈ {1,2,3,4,5,6}</li>
-                        </ul>
-                        
-                        <p><strong>📐 Espérance mathématique E[X] :</strong></p>
-                        <p>L'<strong>espérance</strong> est la \"valeur moyenne\" qu'on s'attend à obtenir sur le long terme.</p>
-                        <p>$$E[X] = \\sum_{i} x_i \\cdot P(X = x_i)$$</p>
-                        
-                        <p><strong>🔍 Décryptage :</strong></p>
-                        <ul>
-                            <li>\\(x_i\\) = <strong>valeurs possibles</strong> de la variable</li>
-                            <li>\\(P(X = x_i)\\) = <strong>probabilité</strong> de chaque valeur</li>
-                            <li>\\(E[X]\\) = <strong>moyenne pondérée</strong> par les probabilités</li>
-                        </ul>
-                        
-                        <p><strong>📝 Exemple du dé :</strong></p>
-                        <p>$$E[X] = 1 \\times \\frac{1}{6} + 2 \\times \\frac{1}{6} + 3 \\times \\frac{1}{6} + 4 \\times \\frac{1}{6} + 5 \\times \\frac{1}{6} + 6 \\times \\frac{1}{6}$$</p>
-                        <p>$$E[X] = \\frac{1+2+3+4+5+6}{6} = \\frac{21}{6} = 3.5$$</p>
-                        
-                        <p><strong>💡 Interprétation :</strong> En moyenne, on s'attend à obtenir 3.5 points par lancer (même si on ne peut jamais obtenir exactement 3.5 !)</p>
-                    `,
+              <p>La <strong>variance</strong> mesure à quel point les valeurs sont "dispersées" autour de l'espérance.</p>
+
+              <p><strong>📐 Formule :</strong></p>
+              <p>$$\\text{Var}(X) = E[(X - E[X])^2] = E[X^2] - (E[X])^2$$</p>
+
+              <p><strong>📏 Écart-type :</strong></p>
+              <p>$$\\sigma = \\sqrt{\\text{Var}(X)}$$</p>
+              <p>L'écart-type est dans la même unité que X, donc plus facile à interpréter.</p>
+
+              <p><strong>🔍 Interprétation :</strong></p>
+              <ul>
+                <li>Variance <strong>faible</strong> → valeurs proches de la moyenne → prédictions stables</li>
+                <li>Variance <strong>élevée</strong> → valeurs dispersées → prédictions incertaines</li>
+              </ul>
+
+              <p><strong>🤖 En IA :</strong></p>
+              <ul>
+                <li>Un modèle avec haute variance donne des prédictions très différentes</li>
+                <li>On cherche souvent à minimiser la variance des erreurs</li>
+                <li>Le compromis biais-variance est fondamental en ML</li>
+              </ul>
+            `,
           },
           {
-            type: "mathematique",
-            icon: "∑",
-            title: "Variance : mesure de la dispersion",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 8 : Calculer une variance",
             content: `
-                        <p><strong>🤔 Qu'est-ce que la variance ?</strong></p>
-                        <p>La <strong>variance</strong> Var(X) mesure à quel point les valeurs d'une variable aléatoire sont \"dispersées\" autour de leur espérance. C'est la \"variabilité\" des résultats.</p>
-                        
-                        <p><strong>📐 Formule de la variance :</strong></p>
-                        <p>$$\\text{Var}(X) = E[(X - E[X])^2] = E[X^2] - (E[X])^2$$</p>
-                        
-                        <p><strong>🔍 Décryptage :</strong></p>
-                        <ul>
-                            <li>\\((X - E[X])^2\\) = <strong>carré de l'écart</strong> à la moyenne</li>
-                            <li>\\(E[(X - E[X])^2]\\) = <strong>espérance des carrés d'écarts</strong></li>
-                            <li>\\(E[X^2] - (E[X])^2\\) = <strong>formule alternative</strong> (plus pratique)</li>
-                        </ul>
-                        
-                        <p><strong>📊 Écart-type σ :</strong></p>
-                        <p>$$\\sigma = \\sqrt{\\text{Var}(X)}$$</p>
-                        <p>L'écart-type a l'avantage d'être dans la même unité que X.</p>
-                        
-                        <p><strong>📝 Exemple du dé :</strong></p>
-                        <p>On a E[X] = 3.5. Calculons E[X²] :</p>
-                        <p>$$E[X^2] = 1^2 \\times \\frac{1}{6} + 2^2 \\times \\frac{1}{6} + ... + 6^2 \\times \\frac{1}{6} = \\frac{1+4+9+16+25+36}{6} = \\frac{91}{6} ≈ 15.17$$</p>
-                        <p>$$\\text{Var}(X) = 15.17 - (3.5)^2 = 15.17 - 12.25 = 2.92$$</p>
-                        <p>$$\\sigma = \\sqrt{2.92} ≈ 1.71$$</p>
-                        
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>📊 <strong>Mesure d'incertitude</strong> : variance élevée = prédictions peu fiables</li>
-                            <li>🎯 <strong>Optimisation</strong> : minimiser la variance des erreurs</li>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : initialisation des poids avec bonne variance</li>
-                        </ul>
-                    `,
+              <p>Une variable X peut prendre les valeurs suivantes :</p>
+              <ul>
+                <li>X = 0 avec probabilité 0.5</li>
+                <li>X = 4 avec probabilité 0.5</li>
+              </ul>
+              <p>Calculez d'abord E[X], puis la variance Var(X).</p>
+              <p>Quelle est la variance ?</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 4,
+            tolerance: 0.01,
+            explanation: "E[X] = 0×0.5 + 4×0.5 = 2. E[X²] = 0²×0.5 + 4²×0.5 = 8. Var(X) = E[X²] - (E[X])² = 8 - 4 = 4",
+            completesObjective: 4,
+          },
+
+          // ===== SECTION 6: SIMULATION PYTHON =====
+          {
+            type: "code",
+            icon: "🐍",
+            title: "Simuler des probabilités avec Python",
+            content: `
+              <p>Vérifions la loi des grands nombres : plus on répète une expérience, plus la moyenne observée se rapproche de l'espérance théorique.</p>
+            `,
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Simuler des lancers de dé
+np.random.seed(42)
+n_lancers = 10000
+lancers = np.random.randint(1, 7, n_lancers)  # 1 à 6
+
+# Calculer la moyenne cumulée
+moyennes_cumulees = np.cumsum(lancers) / np.arange(1, n_lancers + 1)
+
+# Espérance théorique
+esperance_theorique = 3.5
+
+# Visualisation
+plt.figure(figsize=(12, 5))
+
+# Graphique 1 : Convergence vers l'espérance
+plt.subplot(1, 2, 1)
+plt.plot(moyennes_cumulees, 'b-', alpha=0.7, label='Moyenne observée')
+plt.axhline(y=esperance_theorique, color='r', linestyle='--',
+            linewidth=2, label=f'E[X] = {esperance_theorique}')
+plt.xlabel('Nombre de lancers')
+plt.ylabel('Moyenne')
+plt.title('Loi des grands nombres')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Graphique 2 : Distribution des résultats
+plt.subplot(1, 2, 2)
+valeurs, counts = np.unique(lancers, return_counts=True)
+frequences = counts / n_lancers
+plt.bar(valeurs, frequences, color='steelblue', alpha=0.7, label='Observé')
+plt.axhline(y=1/6, color='r', linestyle='--', label='Théorique (1/6)')
+plt.xlabel('Valeur du dé')
+plt.ylabel('Fréquence')
+plt.title('Distribution des résultats')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('probability_simulation.png', dpi=100, bbox_inches='tight')
+plt.show()
+
+print(f"📊 Statistiques sur {n_lancers} lancers :")
+print(f"• Moyenne observée : {np.mean(lancers):.4f}")
+print(f"• Espérance théorique : {esperance_theorique}")
+print(f"• Écart : {abs(np.mean(lancers) - esperance_theorique):.4f}")`,
+          },
+          {
+            type: "exercise-code",
+            icon: "💻",
+            title: "Exercice 9 : Simuler le théorème de Bayes",
+            content: `
+              <p>Simulez le problème du test médical :</p>
+              <ul>
+                <li>1% de malades dans la population</li>
+                <li>95% de détection (vrais positifs)</li>
+                <li>5% de faux positifs</li>
+              </ul>
+              <p>Vérifiez que parmi les tests positifs, environ 16% sont vraiment malades.</p>
+            `,
+            starterCode: `import numpy as np
+
+np.random.seed(42)
+n_personnes = 100000
+
+# TODO: Simuler la population
+# 1. Générer le statut malade/sain pour chaque personne
+#    (1% de chance d'être malade)
+malades = np.random.random(n_personnes) < ___  # Compléter
+
+# 2. Simuler les résultats des tests
+# Pour les malades : 95% de tests positifs
+# Pour les sains : 5% de tests positifs
+tests_positifs = np.where(
+    malades,
+    np.random.random(n_personnes) < ___,  # Si malade
+    np.random.random(n_personnes) < ___   # Si sain
+)
+
+# 3. Calculer P(malade | test positif)
+# = nombre de (malades ET positifs) / nombre de positifs
+nb_positifs = ___
+nb_vrais_positifs = ___  # malades ET test positif
+p_malade_si_positif = ___
+
+print(f"Nombre de tests positifs : {nb_positifs}")
+print(f"P(malade | test positif) = {p_malade_si_positif:.2%}")`,
+            solution: `import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(42)
+n_personnes = 100000
+
+# Simuler la population
+# 1% de chance d'être malade
+malades = np.random.random(n_personnes) < 0.01
+
+# Simuler les résultats des tests
+# Pour les malades : 95% de tests positifs
+# Pour les sains : 5% de tests positifs
+tests_positifs = np.where(
+    malades,
+    np.random.random(n_personnes) < 0.95,  # Si malade
+    np.random.random(n_personnes) < 0.05   # Si sain
+)
+
+# Calculer les différentes catégories
+vrais_positifs = malades & tests_positifs
+faux_positifs = ~malades & tests_positifs
+vrais_negatifs = ~malades & ~tests_positifs
+faux_negatifs = malades & ~tests_positifs
+
+# P(malade | test positif)
+nb_positifs = np.sum(tests_positifs)
+nb_vrais_positifs = np.sum(vrais_positifs)
+p_malade_si_positif = nb_vrais_positifs / nb_positifs
+
+print(f"📊 Simulation sur {n_personnes} personnes")
+print(f"\\n🏥 Population :")
+print(f"• Malades : {np.sum(malades)} ({np.mean(malades):.2%})")
+print(f"• Sains : {np.sum(~malades)}")
+print(f"\\n🔬 Résultats des tests :")
+print(f"• Tests positifs : {nb_positifs}")
+print(f"• Vrais positifs : {nb_vrais_positifs}")
+print(f"• Faux positifs : {np.sum(faux_positifs)}")
+print(f"\\n📈 P(malade | test positif) = {p_malade_si_positif:.2%}")
+print(f"Valeur théorique ≈ 16%")
+
+# Visualisation
+fig, ax = plt.subplots(figsize=(8, 6))
+categories = ['Vrais positifs\\n(malades détectés)',
+              'Faux positifs\\n(sains mal diagnostiqués)',
+              'Vrais négatifs\\n(sains corrects)',
+              'Faux négatifs\\n(malades manqués)']
+valeurs = [np.sum(vrais_positifs), np.sum(faux_positifs),
+           np.sum(vrais_negatifs), np.sum(faux_negatifs)]
+colors = ['green', 'red', 'lightgreen', 'orange']
+
+bars = ax.bar(categories, valeurs, color=colors)
+ax.set_ylabel('Nombre de personnes')
+ax.set_title('Matrice de confusion du test médical')
+for bar, val in zip(bars, valeurs):
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 100,
+            str(val), ha='center', va='bottom', fontsize=10)
+plt.xticks(rotation=15, ha='right')
+plt.tight_layout()
+plt.savefig('bayes_simulation.png', dpi=100, bbox_inches='tight')
+plt.show()`,
+            expectedOutput: "P(malade | test positif)",
+            completesObjective: 5,
+          },
+
+          // ===== SECTION 7: QUIZ FINAL =====
+          {
+            type: "quiz",
+            icon: "🎯",
+            title: "Quiz final : Les probabilités",
+            question: "Un LLM génère le prochain mot en choisissant parmi des milliers de mots possibles. Comment utilise-t-il les probabilités ?",
+            options: [
+              "Il choisit toujours le mot avec P = 1",
+              "Il attribue une probabilité à chaque mot possible et échantillonne selon cette distribution",
+              "Il choisit un mot au hasard avec probabilité uniforme",
+              "Il n'utilise pas de probabilités, juste des règles de grammaire"
+            ],
+            correctAnswer: 1,
+            explanation: "Les LLMs calculent une distribution de probabilité sur tous les mots possibles (P(mot|contexte)) et échantillonnent selon cette distribution. Le paramètre 'température' contrôle la dispersion : température basse = choix presque déterministe du mot le plus probable, température haute = plus de créativité/aléatoire.",
           },
         ],
-        quiz: {
-          question:
-            "🤔 Si P(A) = 0.3 et P(B) = 0.4, et que A et B sont indépendants, quelle est P(A et B) ?",
-          options: ["A) 0.7", "B) 0.12", "C) 0.1", "D) 0.35"],
-          correct: 1,
-          explanation:
-            "Pour des événements indépendants : P(A et B) = P(A) × P(B) = 0.3 × 0.4 = 0.12. L'indépendance signifie que l'un n'influence pas l'autre.",
-        },
         prevModule: "gradients.html",
         nextModule: "statistics.html",
       };

@@ -42,7 +42,7 @@
     <!-- Contenu principal -->
     <div class="container">
       <h1>📊 Les Statistiques</h1>
-      <p class="subtitle">Module 1.7 - Analyse de données pour l'IA</p>
+      <p class="subtitle">Module 1.7 - Comprendre et analyser les données</p>
 
       <!-- Objectifs -->
       <div class="objectives">
@@ -55,29 +55,6 @@
       <!-- Contenu du module -->
       <div id="module-content">
         <!-- Le contenu sera ajouté dynamiquement -->
-      </div>
-
-      <!-- Quiz -->
-      <div class="quiz" id="module-quiz" style="display: none">
-        <div class="quiz-question" id="quiz-question"></div>
-        <div class="quiz-options" id="quiz-options"></div>
-        <div class="quiz-feedback" id="quiz-feedback"></div>
-      </div>
-
-      <!-- Checkpoint -->
-      <div class="checkpoint">
-        <h3>🎉 Checkpoint - Les Statistiques</h3>
-        <p>
-          Félicitations ! Vous savez maintenant analyser et comprendre les
-          données comme un data scientist.
-        </p>
-        <button
-          class="checkpoint-btn"
-          id="checkpoint-btn"
-          onclick="completeCheckpoint()"
-        >
-          Marquer comme complété
-        </button>
       </div>
 
       <!-- Navigation entre modules -->
@@ -99,588 +76,523 @@
         title: "Les Statistiques",
         category: "Mathématiques",
         objectives: [
-          "Comprendre les mesures de tendance centrale (moyenne, médiane, mode)",
-          "Maîtriser les mesures de dispersion (variance, écart-type)",
-          "Découvrir les distributions importantes (normale, uniforme)",
-          "Appliquer ces concepts à l'analyse de données pour l'IA",
+          "Calculer les mesures de tendance centrale (moyenne, médiane, mode)",
+          "Calculer les mesures de dispersion (variance, écart-type)",
+          "Comprendre la distribution normale et la règle 68-95-99.7",
+          "Appliquer la normalisation des données",
+          "Détecter les outliers avec les statistiques",
+          "Analyser des données avec Python",
         ],
         content: [
+          // ===== SECTION 1: INTRODUCTION =====
           {
             type: "concept",
             icon: "💡",
-            title: "Concept fondamental",
+            title: "Pourquoi les statistiques en IA ?",
             content: `
-                        <p>Les <strong>statistiques</strong> nous permettent de <strong>résumer et comprendre</strong> de grandes quantités de données. C'est l'art de transformer des milliers de nombres en quelques informations utiles.</p>
-                        <p><strong>🔑 Idée simple :</strong></p>
-                        <p>Imaginez que vous avez les notes de 1000 étudiants. Au lieu de regarder les 1000 nombres, les statistiques vous donnent :</p>
-                        <ul>
-                            <li>📊 <strong>Moyenne</strong> : note typique (ex: 14/20)</li>
-                            <li>📈 <strong>Médiane</strong> : note du milieu (50% au-dessus, 50% en-dessous)</li>
-                            <li>📉 <strong>Écart-type</strong> : à quel point les notes varient</li>
-                        </ul>
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>📊 <strong>Analyse de données</strong> : comprendre les patterns cachés</li>
-                            <li>🧠 <strong>Machine Learning</strong> : normalisation et préparation des données</li>
-                            <li>📈 <strong>Évaluation de modèles</strong> : mesurer les performances</li>
-                            <li>🎯 <strong>Détection d'anomalies</strong> : identifier les valeurs aberrantes</li>
-                            <li>📋 <strong>A/B Testing</strong> : comparer différentes versions d'IA</li>
-                        </ul>
-                    `,
+              <p>Les <strong>statistiques</strong> nous permettent de <strong>résumer et comprendre</strong> de grandes quantités de données. C'est la première étape avant tout projet d'IA.</p>
+
+              <p><strong>🎯 En IA, les statistiques servent à :</strong></p>
+              <ul>
+                <li><strong>Explorer les données</strong> : comprendre ce qu'on a avant de modéliser</li>
+                <li><strong>Préparer les données</strong> : normaliser, standardiser, nettoyer</li>
+                <li><strong>Évaluer les modèles</strong> : précision, erreur moyenne, variance</li>
+                <li><strong>Détecter les anomalies</strong> : valeurs aberrantes (outliers)</li>
+              </ul>
+
+              <p><strong>📊 Les deux grandes familles :</strong></p>
+              <ul>
+                <li><strong>Tendance centrale</strong> : où sont concentrées les données ? (moyenne, médiane)</li>
+                <li><strong>Dispersion</strong> : à quel point les données varient ? (écart-type, variance)</li>
+              </ul>
+            `,
           },
-          {
-            type: "intuition",
-            icon: "🧠",
-            title: "L'analogie de la classe d'école",
-            content: `
-                        <p>Imaginez que vous êtes <strong>directeur d'école</strong> et que vous voulez comprendre le niveau de vos élèves :</p>
-                        <p><strong>📚 Données brutes :</strong> 30 notes d'élèves</p>
-                        <p>[12, 15, 8, 18, 14, 16, 11, 13, 17, 9, 15, 14, 12, 16, 10, 13, 15, 14, 11, 17, 13, 12, 16, 14, 15, 9, 18, 13, 14, 15]</p>
-                        
-                        <p><strong>🤔 Questions importantes :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>"Quel est le niveau général ?"</strong> → Moyenne</li>
-                            <li>📊 <strong>"Y a-t-il beaucoup de différences ?"</strong> → Écart-type</li>
-                            <li>📈 <strong>"Quelle est la note médiane ?"</strong> → Médiane</li>
-                            <li>🔍 <strong>"Y a-t-il des élèves exceptionnels ?"</strong> → Valeurs extrêmes</li>
-                        </ul>
-                        
-                        <p><strong>💡 C'est exactement ce que fait l'IA :</strong></p>
-                        <ul>
-                            <li>📊 <strong>Elle analyse</strong> des millions de données</li>
-                            <li>🧠 <strong>Elle trouve</strong> les patterns importants</li>
-                            <li>🎯 <strong>Elle prend</strong> des décisions basées sur ces statistiques</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Mesures de tendance centrale",
-            content: `
-                        <p><strong>🎯 Les trois mesures principales :</strong></p>
-                        
-                        <p><strong>📊 1. Moyenne (μ) :</strong></p>
-                        <p>$$\\mu = \\frac{1}{n} \\sum_{i=1}^{n} x_i = \\frac{x_1 + x_2 + ... + x_n}{n}$$</p>
-                        <p><strong>Exemple :</strong> Notes [10, 12, 14, 16, 18] → Moyenne = (10+12+14+16+18)/5 = 14</p>
-                        
-                        <p><strong>📈 2. Médiane :</strong></p>
-                        <p>Valeur du milieu quand on trie les données par ordre croissant</p>
-                        <p><strong>Exemple :</strong> [10, 12, 14, 16, 18] → Médiane = 14 (valeur centrale)</p>
-                        
-                        <p><strong>📉 3. Mode :</strong></p>
-                        <p>Valeur qui apparaît le plus souvent</p>
-                        <p><strong>Exemple :</strong> [10, 12, 14, 14, 14, 16, 18] → Mode = 14 (apparaît 3 fois)</p>
-                        
-                        <p><strong>🔍 Quand utiliser quoi ?</strong></p>
-                        <ul>
-                            <li><strong>Moyenne</strong> : données normalement distribuées</li>
-                            <li><strong>Médiane</strong> : données avec des valeurs extrêmes</li>
-                            <li><strong>Mode</strong> : données catégorielles ou avec pics</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Mesures de dispersion",
-            content: `
-                        <p><strong>🎯 Comment mesurer la "variabilité" des données :</strong></p>
-                        
-                        <p><strong>📏 1. Étendue (Range) :</strong></p>
-                        <p>$$\\text{Étendue} = \\text{Max} - \\text{Min}$$</p>
-                        <p><strong>Exemple :</strong> [10, 12, 14, 16, 18] → Étendue = 18 - 10 = 8</p>
-                        
-                        <p><strong>📊 2. Variance (σ²) :</strong></p>
-                        <p>$$\\sigma^2 = \\frac{1}{n} \\sum_{i=1}^{n} (x_i - \\mu)^2$$</p>
-                        <p><strong>Idée :</strong> Moyenne des carrés des écarts à la moyenne</p>
-                        
-                        <p><strong>📈 3. Écart-type (σ) :</strong></p>
-                        <p>$$\\sigma = \\sqrt{\\sigma^2}$$</p>
-                        <p><strong>Avantage :</strong> Même unité que les données originales</p>
-                        
-                        <p><strong>💡 Interprétation :</strong></p>
-                        <ul>
-                            <li><strong>Écart-type faible</strong> → données concentrées autour de la moyenne</li>
-                            <li><strong>Écart-type élevé</strong> → données très dispersées</li>
-                            <li><strong>Règle des 68-95-99.7</strong> : 68% des données dans ±1σ, 95% dans ±2σ</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice pratique : calculs manuels",
-            content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Voici les âges de 10 employés d'une startup IA :</p>
-                        <p><strong>Données :</strong> [23, 25, 27, 24, 26, 28, 25, 24, 26, 27]</p>
-                        
-                        <p><strong>📝 Calculez :</strong></p>
-                        <ol>
-                            <li>La moyenne</li>
-                            <li>La médiane</li>
-                            <li>Le mode</li>
-                            <li>L'étendue</li>
-                            <li>La variance</li>
-                            <li>L'écart-type</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('statistics-exercise-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="statistics-exercise-solution" style="display: none;">
-                        <ol>
-                            <li><strong>Moyenne :</strong> (23+25+27+24+26+28+25+24+26+27)/10 = 255/10 = 25.5 ans</li>
-                            <li><strong>Médiane :</strong> Données triées [23,24,24,25,25,26,26,27,27,28] → (25+26)/2 = 25.5 ans</li>
-                            <li><strong>Mode :</strong> 24, 25, 26, 27 (chacun apparaît 2 fois) → distribution multimodale</li>
-                            <li><strong>Étendue :</strong> 28 - 23 = 5 ans</li>
-                            <li><strong>Variance :</strong> 
-                                <br>Écarts à la moyenne : [-2.5, -0.5, 1.5, -1.5, 0.5, 2.5, -0.5, -1.5, 0.5, 1.5]
-                                <br>Carrés : [6.25, 0.25, 2.25, 2.25, 0.25, 6.25, 0.25, 2.25, 0.25, 2.25]
-                                <br>Variance = 22.5/10 = 2.25</li>
-                            <li><strong>Écart-type :</strong> √2.25 = 1.5 ans</li>
-                        </ol>
-                        </div>
-                    `,
-          },
+
+          // ===== SECTION 2: MOYENNE =====
           {
             type: "mathematique",
-            icon: "∑",
-            title: "Distribution normale (Gaussienne)",
+            icon: "📊",
+            title: "La moyenne : le centre de gravité",
             content: `
-                        <p><strong>🤔 Qu'est-ce qu'une "distribution" ?</strong></p>
-                        <p>Une <strong>distribution</strong> décrit comment les valeurs sont réparties dans un ensemble de données. C'est comme un "portrait" de vos données !</p>
-                        
-                        <p><strong>📊 Exemple concret :</strong></p>
-                        <p>Imaginez les tailles de 1000 personnes :</p>
-                        <ul>
-                            <li>🔹 <strong>Peu de gens</strong> très petits (1m50)</li>
-                            <li>🔸 <strong>Beaucoup de gens</strong> de taille moyenne (1m70)</li>
-                            <li>🔹 <strong>Peu de gens</strong> très grands (1m90)</li>
-                        </ul>
-                        
-                        <p><strong>🔔 Distribution normale = "courbe en cloche"</strong></p>
-                        <p>La plupart des valeurs sont au centre, peu aux extrêmes. C'est le pattern le plus fréquent dans la nature !</p>
-                        
-                        <p><strong>📐 Formule mathématique :</strong></p>
-                        <p>$$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{1}{2}\\left(\\frac{x-\\mu}{\\sigma}\\right)^2}$$</p>
-                        
-                        <p><strong>🔍 Décryptage de la formule :</strong></p>
-                        <ul>
-                            <li>\\(\\mu\\) = <strong>moyenne</strong> (centre de la cloche)</li>
-                            <li>\\(\\sigma\\) = <strong>écart-type</strong> (largeur de la cloche)</li>
-                            <li>\\(\\frac{1}{\\sigma\\sqrt{2\\pi}}\\) = <strong>facteur de normalisation</strong> (pour que l'aire totale = 1)</li>
-                            <li>\\(e^{-\\frac{1}{2}\\left(\\frac{x-\\mu}{\\sigma}\\right)^2}\\) = <strong>forme de cloche</strong> (décroissance exponentielle)</li>
-                        </ul>
-                        
-                        <p><strong>💡 Pourquoi "normale" ?</strong></p>
-                        <p>Parce que c'est la distribution la plus "normale" (fréquente) qu'on observe : tailles, poids, notes d'examen, erreurs de mesure...</p>
-                        
-                        <p><strong>🔑 Propriétés importantes :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• Forme de cloche</strong> : symétrique autour de la moyenne</li>
-                            <li style="margin-top: 0.5rem"><strong>• Paramètres :</strong> μ (moyenne) et σ (écart-type)</li>
-                            <li style="margin-top: 0.5rem"><strong>• Règle 68-95-99.7 :</strong></li>
-                            <ul style="margin-left: 1rem; margin-top: 0.5rem">
-                                <li>68% des données dans [μ-σ, μ+σ]</li>
-                                <li>95% des données dans [μ-2σ, μ+2σ]</li>
-                                <li>99.7% des données dans [μ-3σ, μ+3σ]</li>
-                            </ul>
-                        </ul>
-                        <p><strong>🤖 Pourquoi importante en IA ?</strong></p>
-                        <ul>
-                            <li><strong>Théorème central limite</strong> : beaucoup de phénomènes suivent cette loi</li>
-                            <li><strong>Initialisation des réseaux</strong> : poids aléatoires gaussiens</li>
-                            <li><strong>Bruit dans les données</strong> : souvent modélisé comme gaussien</li>
-                            <li><strong>Tests statistiques</strong> : base de nombreux tests</li>
-                        </ul>
-                    `,
+              <p>La <strong>moyenne</strong> (ou espérance empirique) est la somme des valeurs divisée par leur nombre.</p>
+
+              <p><strong>📐 Formule :</strong></p>
+              <p>$$\\bar{x} = \\frac{1}{n} \\sum_{i=1}^{n} x_i = \\frac{x_1 + x_2 + ... + x_n}{n}$$</p>
+
+              <p><strong>📝 Exemple :</strong></p>
+              <p>Notes de 5 étudiants : [12, 15, 14, 16, 13]</p>
+              <p>$$\\bar{x} = \\frac{12 + 15 + 14 + 16 + 13}{5} = \\frac{70}{5} = 14$$</p>
+
+              <p><strong>🔑 Propriétés :</strong></p>
+              <ul>
+                <li>Sensible aux valeurs extrêmes (outliers)</li>
+                <li>La somme des écarts à la moyenne = 0</li>
+                <li>Minimise la somme des carrés des écarts</li>
+              </ul>
+            `,
           },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 1 : Calculer une moyenne",
+            content: `
+              <p>Un modèle d'IA a obtenu les scores suivants sur 5 tests :</p>
+              <p>[85, 90, 78, 92, 80]</p>
+              <p>Quelle est la moyenne des scores ?</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 85,
+            tolerance: 0,
+            explanation: "Moyenne = (85 + 90 + 78 + 92 + 80) / 5 = 425 / 5 = 85",
+            completesObjective: 0,
+          },
+
+          // ===== SECTION 3: MÉDIANE =====
           {
             type: "mathematique",
-            icon: "∑",
-            title: "Autres distributions importantes",
+            icon: "📈",
+            title: "La médiane : la valeur du milieu",
             content: `
-                        <p><strong>🎲 La distribution normale n'est pas la seule ! Voici d'autres distributions cruciales en IA :</strong></p>
-                        
-                        <p><strong>📊 1. Distribution uniforme :</strong></p>
-                        <p>$$f(x) = \\begin{cases} \\frac{1}{b-a} & \\text{si } a \\leq x \\leq b \\\\ 0 & \\text{sinon} \\end{cases}$$</p>
-                        <p><strong>Intuition :</strong> Toutes les valeurs ont la même probabilité (dé équilibré)</p>
-                        
-                        <p><strong>📈 2. Distribution exponentielle :</strong></p>
-                        <p>$$f(x) = \\lambda e^{-\\lambda x} \\text{ pour } x \\geq 0$$</p>
-                        <p><strong>Intuition :</strong> Temps d'attente (ex: temps entre deux emails)</p>
-                        
-                        <p><strong>🎯 3. Distribution de Bernoulli :</strong></p>
-                        <p>$$P(X = 1) = p, \\quad P(X = 0) = 1-p$$</p>
-                        <p><strong>Intuition :</strong> Succès/échec (pile ou face, spam/pas spam)</p>
-                        
-                        <p><strong>📊 4. Distribution binomiale :</strong></p>
-                        <p>$$P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$$</p>
-                        <p><strong>Intuition :</strong> Nombre de succès sur n essais (ex: 7 piles sur 10 lancers)</p>
-                        
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li><strong>Uniforme</strong> : initialisation aléatoire des poids</li>
-                            <li><strong>Exponentielle</strong> : modélisation des temps d'événements</li>
-                            <li><strong>Bernoulli</strong> : classification binaire (oui/non)</li>
-                            <li><strong>Binomiale</strong> : comptage d'événements discrets</li>
-                        </ul>
-                    `,
+              <p>La <strong>médiane</strong> est la valeur qui sépare les données en deux : 50% au-dessus, 50% en-dessous.</p>
+
+              <p><strong>📋 Méthode :</strong></p>
+              <ol>
+                <li>Trier les données par ordre croissant</li>
+                <li>Si n est impair : la médiane est la valeur centrale</li>
+                <li>Si n est pair : la médiane est la moyenne des deux valeurs centrales</li>
+              </ol>
+
+              <p><strong>📝 Exemples :</strong></p>
+              <p><strong>n impair :</strong> [3, 5, <strong>7</strong>, 9, 11] → Médiane = 7</p>
+              <p><strong>n pair :</strong> [3, 5, <strong>7, 9</strong>, 11, 13] → Médiane = (7+9)/2 = 8</p>
+
+              <p><strong>🔑 Avantage :</strong></p>
+              <p>La médiane est <strong>robuste aux outliers</strong>. Même avec une valeur extrême, elle reste stable.</p>
+              <p>Exemple : [10, 12, 14, 16, 1000] → Moyenne = 210.4, Médiane = 14</p>
+            `,
           },
           {
-            type: "warning",
-            icon: "⚠️",
-            title: "Pourquoi les statistiques sont-elles cruciales en IA ?",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 2 : Calculer une médiane",
             content: `
-                        <p><strong>📊 Les statistiques sont le langage de l'IA :</strong></p>
-                        <ul>
-                            <li>📈 <strong>Préparation des données</strong> : normalisation, standardisation</li>
-                            <li>🧠 <strong>Évaluation des modèles</strong> : précision, rappel, F1-score</li>
-                            <li>🎯 <strong>Détection d'anomalies</strong> : identifier les valeurs aberrantes</li>
-                            <li>📊 <strong>A/B Testing</strong> : comparer les performances de différents modèles</li>
-                            <li>🔍 <strong>Analyse exploratoire</strong> : comprendre les données avant modélisation</li>
-                            <li>📋 <strong>Validation statistique</strong> : s'assurer que les résultats sont significatifs</li>
-                        </ul>
-                        <p><strong>💡 Point clé :</strong> Sans statistiques, impossible de comprendre si un modèle d'IA fonctionne vraiment ou s'il a juste eu de la chance !</p>
-                        <p><strong>🔮 Prochaine étape :</strong> Maintenant que nous maîtrisons les mathématiques, passons à Python pour mettre tout cela en pratique !</p>
-                    `,
+              <p>Voici les temps de réponse (en ms) d'un serveur IA :</p>
+              <p>[120, 95, 150, 88, 200, 110, 130]</p>
+              <p>Quelle est la médiane ? (Triez d'abord !)</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 120,
+            tolerance: 0,
+            explanation: "Données triées : [88, 95, 110, 120, 130, 150, 200]. n=7 (impair), donc la médiane est la 4ème valeur = 120.",
+            completesObjective: 0,
           },
+
+          // ===== SECTION 4: VARIANCE ET ÉCART-TYPE =====
+          {
+            type: "mathematique",
+            icon: "📉",
+            title: "Variance et écart-type : mesurer la dispersion",
+            content: `
+              <p>Ces mesures indiquent <strong>à quel point les données sont dispersées</strong> autour de la moyenne.</p>
+
+              <p><strong>📐 Variance :</strong></p>
+              <p>$$\\sigma^2 = \\frac{1}{n} \\sum_{i=1}^{n} (x_i - \\bar{x})^2$$</p>
+              <p>C'est la moyenne des carrés des écarts à la moyenne.</p>
+
+              <p><strong>📐 Écart-type :</strong></p>
+              <p>$$\\sigma = \\sqrt{\\sigma^2}$$</p>
+              <p>Avantage : même unité que les données originales.</p>
+
+              <p><strong>📝 Exemple :</strong></p>
+              <p>Données : [2, 4, 4, 4, 6] → Moyenne = 4</p>
+              <p>Écarts : [-2, 0, 0, 0, 2]</p>
+              <p>Carrés : [4, 0, 0, 0, 4]</p>
+              <p>Variance = (4+0+0+0+4)/5 = 1.6</p>
+              <p>Écart-type = √1.6 ≈ 1.26</p>
+
+              <p><strong>🔍 Interprétation :</strong></p>
+              <ul>
+                <li>σ petit → données concentrées autour de la moyenne</li>
+                <li>σ grand → données très dispersées</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 3 : Calculer une variance",
+            content: `
+              <p>Données : [10, 20, 30, 40, 50]</p>
+              <p>La moyenne est 30.</p>
+              <p>Calculez la variance.</p>
+              <p><em>Rappel : Variance = moyenne des (écarts à la moyenne)²</em></p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 200,
+            tolerance: 0,
+            explanation: "Écarts : [-20, -10, 0, 10, 20]. Carrés : [400, 100, 0, 100, 400]. Variance = (400+100+0+100+400)/5 = 1000/5 = 200.",
+            completesObjective: 1,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 4 : Écart-type",
+            content: `
+              <p>Si la variance d'un dataset est 64, quel est l'écart-type ?</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 8,
+            tolerance: 0,
+            explanation: "Écart-type = √variance = √64 = 8",
+            completesObjective: 1,
+          },
+
+          // ===== SECTION 5: DISTRIBUTION NORMALE =====
           {
             type: "concept",
-            icon: "💡",
-            title:
-              "Maximum de vraisemblance : trouver les meilleurs paramètres",
+            icon: "🔔",
+            title: "La distribution normale (Gaussienne)",
             content: `
-                        <p><strong>🤔 Qu'est-ce que le maximum de vraisemblance ?</strong></p>
-                        <p>Le <strong>maximum de vraisemblance</strong> (Maximum Likelihood Estimation - MLE) est une méthode pour trouver les "meilleurs" paramètres d'un modèle statistique. C'est comme chercher les réglages qui rendent nos observations les plus probables.</p>
-                        
-                        <p><strong>🎯 Analogie simple :</strong></p>
-                        <p>Imaginez que vous êtes <strong>détective</strong> et que vous trouvez des indices :</p>
-                        <ul>
-                            <li>🔍 <strong>Observations</strong> : empreintes de taille 42, cheveux bruns, 1m80</li>
-                            <li>🤔 <strong>Question</strong> : quel suspect correspond le mieux à ces indices ?</li>
-                            <li>🎯 <strong>MLE</strong> : choisir le suspect qui rend ces observations les plus vraisemblables</li>
-                        </ul>
-                        
-                        <p><strong>📊 En statistiques :</strong></p>
-                        <ul>
-                            <li>📈 <strong>Données observées</strong> : nos échantillons</li>
-                            <li>🎛️ <strong>Paramètres</strong> : moyenne μ, écart-type σ d'une distribution</li>
-                            <li>🎯 <strong>Objectif</strong> : trouver μ et σ qui rendent nos données les plus probables</li>
-                        </ul>
-                        
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : optimiser les poids pour minimiser l'erreur</li>
-                            <li>📊 <strong>Régression</strong> : trouver la meilleure droite qui passe par les points</li>
-                            <li>🎯 <strong>Classification</strong> : paramètres optimaux pour séparer les classes</li>
-                            <li>💬 <strong>NLP</strong> : probabilités des mots dans les modèles de langage</li>
-                        </ul>
-                    `,
+              <p>La <strong>distribution normale</strong> est la distribution la plus importante en statistiques. Elle a une forme de "cloche".</p>
+
+              <p><strong>🔑 Caractéristiques :</strong></p>
+              <ul>
+                <li>Symétrique autour de la moyenne μ</li>
+                <li>La moyenne = médiane = mode</li>
+                <li>Définie par deux paramètres : μ (moyenne) et σ (écart-type)</li>
+              </ul>
+
+              <p><strong>📐 Règle 68-95-99.7 :</strong></p>
+              <p>Pour une distribution normale :</p>
+              <ul>
+                <li><strong>68%</strong> des données dans [μ - σ, μ + σ]</li>
+                <li><strong>95%</strong> des données dans [μ - 2σ, μ + 2σ]</li>
+                <li><strong>99.7%</strong> des données dans [μ - 3σ, μ + 3σ]</li>
+              </ul>
+
+              <p><strong>🤖 En IA :</strong></p>
+              <ul>
+                <li>Initialisation des poids des réseaux de neurones</li>
+                <li>Bruit dans les données souvent modélisé comme gaussien</li>
+                <li>Détection d'anomalies : les valeurs au-delà de 3σ sont suspectes</li>
+              </ul>
+            `,
           },
           {
-            type: "mathematique",
-            icon: "∑",
-            title: "Formalisation du maximum de vraisemblance",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 5 : Appliquer la règle 68-95-99.7",
             content: `
-                        <p><strong>📐 Définition mathématique :</strong></p>
-                        <p>Soit un échantillon de données \\(x_1, x_2, ..., x_n\\) et un modèle avec paramètre \\(\\theta\\).</p>
-                        
-                        <p><strong>🔍 Fonction de vraisemblance :</strong></p>
-                        <p>$$L(\\theta) = P(x_1, x_2, ..., x_n | \\theta) = \\prod_{i=1}^{n} P(x_i | \\theta)$$</p>
-                        
-                        <p><strong>🎯 Objectif :</strong> Trouver \\(\\hat{\\theta}\\) qui maximise \\(L(\\theta)\\)</p>
-                        <p>$$\\hat{\\theta} = \\arg\\max_{\\theta} L(\\theta)$$</p>
-                        
-                        <p><strong>📊 Log-vraisemblance (plus pratique) :</strong></p>
-                        <p>$$\\ell(\\theta) = \\log L(\\theta) = \\sum_{i=1}^{n} \\log P(x_i | \\theta)$$</p>
-                        
-                        <p><strong>💡 Pourquoi le logarithme ?</strong></p>
-                        <ul>
-                            <li>🔢 <strong>Produit → Somme</strong> : plus facile à calculer</li>
-                            <li>📈 <strong>Stabilité numérique</strong> : évite les très petits nombres</li>
-                            <li>🎯 <strong>Même maximum</strong> : log est une fonction croissante</li>
-                        </ul>
-                        
-                        <p><strong>🔧 Méthode de résolution :</strong></p>
-                        <p>$$\\frac{d\\ell(\\theta)}{d\\theta} = 0 \\quad \\text{(dérivée = 0 au maximum)}$$</p>
-                    `,
+              <p>Les scores d'un test suivent une distribution normale avec :</p>
+              <ul>
+                <li>Moyenne μ = 100</li>
+                <li>Écart-type σ = 15</li>
+              </ul>
+              <p>Dans quel intervalle se trouvent environ 95% des scores ?</p>
+              <p><em>Donnez la borne inférieure de l'intervalle.</em></p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 70,
+            tolerance: 0,
+            explanation: "95% des données sont dans [μ - 2σ, μ + 2σ] = [100 - 30, 100 + 30] = [70, 130]. La borne inférieure est 70.",
+            completesObjective: 2,
+          },
+
+          // ===== SECTION 6: NORMALISATION =====
+          {
+            type: "concept",
+            icon: "⚖️",
+            title: "Normalisation des données",
+            content: `
+              <p>La <strong>normalisation</strong> transforme les données pour qu'elles aient des propriétés statistiques standards. C'est essentiel en ML !</p>
+
+              <p><strong>📐 Z-score (Standardisation) :</strong></p>
+              <p>$$z = \\frac{x - \\mu}{\\sigma}$$</p>
+              <p>Résultat : moyenne = 0, écart-type = 1</p>
+
+              <p><strong>📐 Min-Max Scaling :</strong></p>
+              <p>$$x_{norm} = \\frac{x - x_{min}}{x_{max} - x_{min}}$$</p>
+              <p>Résultat : valeurs entre 0 et 1</p>
+
+              <p><strong>🎯 Pourquoi normaliser en ML ?</strong></p>
+              <ul>
+                <li>Les features ont des échelles différentes (âge: 0-100, salaire: 0-10M)</li>
+                <li>Sans normalisation, les grandes valeurs dominent l'apprentissage</li>
+                <li>La descente de gradient converge plus vite</li>
+              </ul>
+            `,
           },
           {
-            type: "exemple",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 6 : Calculer un Z-score",
+            content: `
+              <p>Un dataset a μ = 50 et σ = 10.</p>
+              <p>Calculez le Z-score d'une valeur x = 65.</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 1.5,
+            tolerance: 0.01,
+            explanation: "Z = (x - μ) / σ = (65 - 50) / 10 = 15 / 10 = 1.5. Cette valeur est à 1.5 écart-types au-dessus de la moyenne.",
+            completesObjective: 3,
+          },
+
+          // ===== SECTION 7: DÉTECTION D'OUTLIERS =====
+          {
+            type: "concept",
+            icon: "🔍",
+            title: "Détection des outliers",
+            content: `
+              <p>Les <strong>outliers</strong> (valeurs aberrantes) sont des points qui s'écartent significativement du reste des données.</p>
+
+              <p><strong>📋 Méthode IQR (Interquartile Range) :</strong></p>
+              <ol>
+                <li>Calculer Q1 (25ème percentile) et Q3 (75ème percentile)</li>
+                <li>IQR = Q3 - Q1</li>
+                <li>Outliers : valeurs < Q1 - 1.5×IQR ou > Q3 + 1.5×IQR</li>
+              </ol>
+
+              <p><strong>📋 Méthode Z-score :</strong></p>
+              <p>Une valeur avec |Z| > 3 est généralement considérée comme un outlier.</p>
+
+              <p><strong>🤖 En IA :</strong></p>
+              <ul>
+                <li>Les outliers peuvent fausser l'entraînement des modèles</li>
+                <li>Parfois les outliers SONT ce qu'on cherche (fraude, anomalies)</li>
+                <li>Décision : supprimer, transformer, ou garder ?</li>
+              </ul>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 7 : Identifier un outlier",
+            content: `
+              <p>Un dataset a μ = 100 et σ = 20.</p>
+              <p>Une valeur x = 180 est-elle un outlier selon la règle du Z-score (|Z| > 3) ?</p>
+              <p>Calculez le Z-score et répondez : entrez 1 pour Oui (outlier), 0 pour Non.</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 1,
+            tolerance: 0,
+            explanation: "Z = (180 - 100) / 20 = 80 / 20 = 4. Comme |4| > 3, c'est un outlier. Réponse : 1 (Oui).",
+            completesObjective: 4,
+          },
+
+          // ===== SECTION 8: VISUALISATION PYTHON =====
+          {
+            type: "code",
+            icon: "🐍",
+            title: "Statistiques descriptives avec Python",
+            content: `
+              <p>Calculons toutes les statistiques d'un dataset avec NumPy :</p>
+            `,
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Dataset exemple : scores d'un modèle sur 100 tests
+np.random.seed(42)
+scores = np.random.normal(loc=75, scale=10, size=100)  # moyenne=75, écart-type=10
+
+# Statistiques descriptives
+print("📊 STATISTIQUES DESCRIPTIVES")
+print("=" * 40)
+print(f"Nombre de valeurs : {len(scores)}")
+print(f"Minimum : {np.min(scores):.2f}")
+print(f"Maximum : {np.max(scores):.2f}")
+print(f"Étendue : {np.max(scores) - np.min(scores):.2f}")
+print()
+print("📍 Tendance centrale :")
+print(f"  Moyenne : {np.mean(scores):.2f}")
+print(f"  Médiane : {np.median(scores):.2f}")
+print()
+print("📉 Dispersion :")
+print(f"  Variance : {np.var(scores):.2f}")
+print(f"  Écart-type : {np.std(scores):.2f}")
+print()
+print("📊 Quartiles :")
+print(f"  Q1 (25%) : {np.percentile(scores, 25):.2f}")
+print(f"  Q2 (50%) : {np.percentile(scores, 50):.2f}")
+print(f"  Q3 (75%) : {np.percentile(scores, 75):.2f}")
+
+# Visualisation
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# Histogramme
+axes[0].hist(scores, bins=15, color='steelblue', alpha=0.7, edgecolor='white')
+axes[0].axvline(np.mean(scores), color='red', linestyle='--', linewidth=2, label=f'Moyenne = {np.mean(scores):.1f}')
+axes[0].axvline(np.median(scores), color='green', linestyle='--', linewidth=2, label=f'Médiane = {np.median(scores):.1f}')
+axes[0].set_xlabel('Score')
+axes[0].set_ylabel('Fréquence')
+axes[0].set_title('Distribution des scores')
+axes[0].legend()
+
+# Boxplot
+bp = axes[1].boxplot(scores, vert=True, patch_artist=True)
+bp['boxes'][0].set_facecolor('lightblue')
+axes[1].set_ylabel('Score')
+axes[1].set_title('Boxplot (Boîte à moustaches)')
+axes[1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('statistics_descriptive.png', dpi=100, bbox_inches='tight')
+plt.show()`,
+          },
+          {
+            type: "exercise-code",
             icon: "💻",
-            title: "Exemple concret : estimation de la moyenne",
+            title: "Exercice 8 : Normaliser des données",
             content: `
-                        <p><strong>📝 Problème :</strong> Estimer la taille moyenne des Sénégalais</p>
-                        <p><strong>Données :</strong> Échantillon de 5 personnes : [1.65, 1.72, 1.68, 1.75, 1.70] mètres</p>
-                        
-                        <p><strong>🎯 Hypothèse :</strong> Les tailles suivent une loi normale \\(N(\\mu, \\sigma^2)\\)</p>
-                        <p><strong>Question :</strong> Quelle valeur de \\(\\mu\\) rend ces observations les plus vraisemblables ?</p>
-                        
-                        <p><strong>📐 Fonction de vraisemblance :</strong></p>
-                        <p>$$L(\\mu) = \\prod_{i=1}^{5} \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{(x_i-\\mu)^2}{2\\sigma^2}}$$</p>
-                        
-                        <p><strong>📊 Log-vraisemblance :</strong></p>
-                        <p>$$\\ell(\\mu) = -\\frac{5}{2}\\log(2\\pi\\sigma^2) - \\frac{1}{2\\sigma^2}\\sum_{i=1}^{5}(x_i-\\mu)^2$$</p>
-                        
-                        <p><strong>🔧 Dérivation :</strong></p>
-                        <p>$$\\frac{d\\ell}{d\\mu} = \\frac{1}{\\sigma^2}\\sum_{i=1}^{5}(x_i-\\mu) = 0$$</p>
-                        
-                        <p><strong>✅ Solution :</strong></p>
-                        <p>$$\\hat{\\mu} = \\frac{1}{5}\\sum_{i=1}^{5}x_i = \\frac{1.65+1.72+1.68+1.75+1.70}{5} = 1.70 \\text{ m}$$</p>
-                        
-                        <p><strong>💡 Résultat :</strong> Le MLE de la moyenne est... la moyenne arithmétique ! C'est logique : c'est la valeur qui minimise les écarts quadratiques.</p>
-                    `,
+              <p>Implémentez la normalisation Z-score et Min-Max sur un dataset.</p>
+              <p>Vérifiez que le Z-score donne bien μ=0 et σ=1.</p>
+            `,
+            starterCode: `import numpy as np
+
+# Données brutes
+data = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+
+# Statistiques originales
+print(f"Données originales : {data}")
+print(f"Moyenne : {np.mean(data):.2f}")
+print(f"Écart-type : {np.std(data):.2f}")
+
+# TODO: Normalisation Z-score
+# z = (x - moyenne) / écart_type
+mean = ___
+std = ___
+z_scores = ___
+
+print(f"\\nZ-scores : {z_scores}")
+print(f"Moyenne Z-scores : {np.mean(z_scores):.2f}")
+print(f"Écart-type Z-scores : {np.std(z_scores):.2f}")
+
+# TODO: Normalisation Min-Max
+# x_norm = (x - min) / (max - min)
+min_val = ___
+max_val = ___
+min_max_norm = ___
+
+print(f"\\nMin-Max normalisé : {min_max_norm}")
+print(f"Min : {np.min(min_max_norm):.2f}")
+print(f"Max : {np.max(min_max_norm):.2f}")`,
+            solution: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Données brutes
+data = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+
+# Statistiques originales
+print(f"Données originales : {data}")
+print(f"Moyenne : {np.mean(data):.2f}")
+print(f"Écart-type : {np.std(data):.2f}")
+
+# Normalisation Z-score
+mean = np.mean(data)
+std = np.std(data)
+z_scores = (data - mean) / std
+
+print(f"\\nZ-scores : {np.round(z_scores, 2)}")
+print(f"Moyenne Z-scores : {np.mean(z_scores):.6f} (≈ 0)")
+print(f"Écart-type Z-scores : {np.std(z_scores):.6f} (≈ 1)")
+
+# Normalisation Min-Max
+min_val = np.min(data)
+max_val = np.max(data)
+min_max_norm = (data - min_val) / (max_val - min_val)
+
+print(f"\\nMin-Max normalisé : {np.round(min_max_norm, 2)}")
+print(f"Min : {np.min(min_max_norm):.2f}")
+print(f"Max : {np.max(min_max_norm):.2f}")
+
+# Visualisation
+fig, axes = plt.subplots(1, 3, figsize=(14, 4))
+
+axes[0].bar(range(len(data)), data, color='steelblue')
+axes[0].set_title('Données originales')
+axes[0].set_xlabel('Index')
+axes[0].set_ylabel('Valeur')
+
+axes[1].bar(range(len(z_scores)), z_scores, color='coral')
+axes[1].axhline(y=0, color='black', linestyle='--')
+axes[1].set_title('Z-scores (μ=0, σ=1)')
+axes[1].set_xlabel('Index')
+axes[1].set_ylabel('Z-score')
+
+axes[2].bar(range(len(min_max_norm)), min_max_norm, color='lightgreen')
+axes[2].set_title('Min-Max (0 à 1)')
+axes[2].set_xlabel('Index')
+axes[2].set_ylabel('Valeur normalisée')
+
+plt.tight_layout()
+plt.savefig('normalization.png', dpi=100, bbox_inches='tight')
+plt.show()`,
+            expectedOutput: "Moyenne Z-scores : 0.00",
+            completesObjective: 5,
           },
+
+          // ===== SECTION 9: CORRÉLATION =====
           {
             type: "concept",
-            icon: "💡",
-            title:
-              "Tests d'hypothèses : prendre des décisions avec incertitude",
+            icon: "🔗",
+            title: "Corrélation : mesurer les relations",
             content: `
-                        <p><strong>🤔 Qu'est-ce qu'un test d'hypothèse ?</strong></p>
-                        <p>Un <strong>test d'hypothèse</strong> nous aide à décider si une affirmation sur nos données est vraie ou fausse, en tenant compte de l'incertitude.</p>
-                        
-                        <p><strong>⚖️ Analogie juridique :</strong></p>
-                        <ul>
-                            <li>👨‍⚖️ <strong>Tribunal</strong> : nous devons juger une affirmation</li>
-                            <li>📋 <strong>Hypothèse nulle H₀</strong> : "l'accusé est innocent" (statu quo)</li>
-                            <li>🔍 <strong>Hypothèse alternative H₁</strong> : "l'accusé est coupable" (ce qu'on veut prouver)</li>
-                            <li>📊 <strong>Preuves</strong> : nos données statistiques</li>
-                            <li>⚖️ <strong>Verdict</strong> : rejeter ou ne pas rejeter H₀</li>
-                        </ul>
-                        
-                        <p><strong>🎯 Exemple concret :</strong></p>
-                        <p><strong>Question :</strong> "Le nouveau médicament est-il efficace ?"</p>
-                        <ul>
-                            <li>H₀ : "Le médicament n'a aucun effet" (efficacité = 0)</li>
-                            <li>H₁ : "Le médicament est efficace" (efficacité > 0)</li>
-                            <li>📊 <strong>Test</strong> : comparer les résultats avec/sans médicament</li>
-                        </ul>
-                        
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>A/B Testing</strong> : "Le nouveau modèle est-il meilleur ?"</li>
-                            <li>📊 <strong>Significativité</strong> : "Cette amélioration est-elle réelle ?"</li>
-                            <li>🔍 <strong>Détection d'anomalies</strong> : "Cette valeur est-elle normale ?"</li>
-                            <li>📈 <strong>Validation de modèles</strong> : "Les performances sont-elles significatives ?"</li>
-                        </ul>
-                    `,
+              <p>La <strong>corrélation</strong> mesure la force et la direction de la relation linéaire entre deux variables.</p>
+
+              <p><strong>📐 Coefficient de corrélation de Pearson :</strong></p>
+              <p>$$r = \\frac{\\sum (x_i - \\bar{x})(y_i - \\bar{y})}{\\sqrt{\\sum(x_i - \\bar{x})^2} \\sqrt{\\sum(y_i - \\bar{y})^2}}$$</p>
+
+              <p><strong>📊 Interprétation :</strong></p>
+              <ul>
+                <li>r = +1 : corrélation positive parfaite</li>
+                <li>r = -1 : corrélation négative parfaite</li>
+                <li>r = 0 : pas de corrélation linéaire</li>
+                <li>|r| > 0.7 : corrélation forte</li>
+                <li>0.3 < |r| < 0.7 : corrélation modérée</li>
+                <li>|r| < 0.3 : corrélation faible</li>
+              </ul>
+
+              <p><strong>⚠️ ATTENTION :</strong></p>
+              <p><strong>Corrélation ≠ Causalité !</strong></p>
+              <p>Deux variables peuvent être corrélées sans que l'une cause l'autre.</p>
+              <p>Exemple classique : ventes de glaces et noyades sont corrélées (la chaleur cause les deux).</p>
+            `,
           },
           {
-            type: "mathematique",
-            icon: "∑",
-            title: "Formalisation des tests d'hypothèses",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 9 : Interpréter une corrélation",
             content: `
-                        <p><strong>📋 Étapes d'un test d'hypothèse :</strong></p>
-                        
-                        <p><strong>1️⃣ Formulation des hypothèses :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• H₀</strong> : hypothèse nulle (statu quo)</li>
-                            <li><strong>• H₁</strong> : hypothèse alternative (ce qu'on veut prouver)</li>
-                        </ul>
-                        
-                        <p><strong>2️⃣ Choix du seuil de significativité α :</strong></p>
-                        <p>Généralement α = 0.05 (5% de risque d'erreur)</p>
-                        
-                        <p><strong>3️⃣ Calcul de la statistique de test :</strong></p>
-                        <p>Exemple pour test de moyenne : $$t = \\frac{\\bar{x} - \\mu_0}{s/\\sqrt{n}}$$</p>
-                        
-                        <p><strong>4️⃣ Calcul de la p-valeur :</strong></p>
-                        <p>Probabilité d'observer une statistique aussi extrême si H₀ est vraie</p>
-                        
-                        <p><strong>5️⃣ Décision :</strong></p>
-                        <ul>
-                            <li>Si p-valeur < α : <strong>rejeter H₀</strong> (résultat significatif)</li>
-                            <li>Si p-valeur ≥ α : <strong>ne pas rejeter H₀</strong> (pas assez de preuves)</li>
-                        </ul>
-                        
-                        <p><strong>⚠️ Types d'erreurs :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• Erreur de Type I</strong> : rejeter H₀ alors qu'elle est vraie (faux positif)</li>
-                            <li><strong>• Erreur de Type II</strong> : ne pas rejeter H₀ alors qu'elle est fausse (faux négatif)</li>
-                        </ul>
-                        
-                        <p><strong>🎯 Puissance du test :</strong></p>
-                        <p>$$\\text{Puissance} = 1 - P(\\text{Erreur Type II}) = P(\\text{rejeter } H_0 | H_1 \\text{ vraie})$$</p>
-                    `,
+              <p>Une étude montre que la corrélation entre le nombre d'heures d'entraînement d'un modèle et sa précision est r = 0.85.</p>
+              <p>Comment qualifieriez-vous cette corrélation ?</p>
+            `,
+            exerciseType: "mcq",
+            options: [
+              "Corrélation faible et positive",
+              "Corrélation modérée et négative",
+              "Corrélation forte et positive",
+              "Pas de corrélation"
+            ],
+            correctAnswer: 2,
+            explanation: "r = 0.85 est positif (relation positive) et |0.85| > 0.7, donc c'est une corrélation forte. Plus d'entraînement → meilleure précision.",
+            completesObjective: 5,
           },
+
+          // ===== SECTION 10: QUIZ FINAL =====
           {
-            type: "concept",
-            icon: "💡",
-            title: "Intervalles de confiance : quantifier l'incertitude",
-            content: `
-                        <p><strong>🤔 Qu'est-ce qu'un intervalle de confiance ?</strong></p>
-                        <p>Un <strong>intervalle de confiance</strong> nous donne une fourchette de valeurs plausibles pour un paramètre, avec un niveau de certitude donné.</p>
-                        
-                        <p><strong>🎯 Analogie météorologique :</strong></p>
-                        <p>Au lieu de dire "Il fera 25°C demain", le météorologue dit :</p>
-                        <p><strong>"Je suis sûr à 95% qu'il fera entre 23°C et 27°C"</strong></p>
-                        <ul>
-                            <li>📊 <strong>[23°C, 27°C]</strong> = intervalle de confiance</li>
-                            <li>🎯 <strong>95%</strong> = niveau de confiance</li>
-                            <li>💡 <strong>Interprétation</strong> : si on répète la prédiction 100 fois, 95 fois la vraie température sera dans l'intervalle</li>
-                        </ul>
-                        
-                        <p><strong>📐 Construction générale :</strong></p>
-                        <p>$$\\text{IC}_{1-\\alpha} = [\\hat{\\theta} - \\text{marge d'erreur}, \\hat{\\theta} + \\text{marge d'erreur}]$$</p>
-                        
-                        <p><strong>🔍 Facteurs influençant la largeur :</strong></p>
-                        <ul>
-                            <li>📊 <strong>Taille d'échantillon</strong> : plus grand échantillon → intervalle plus étroit</li>
-                            <li>📈 <strong>Variabilité des données</strong> : plus de variabilité → intervalle plus large</li>
-                            <li>🎯 <strong>Niveau de confiance</strong> : plus de confiance → intervalle plus large</li>
-                        </ul>
-                        
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>📊 <strong>Évaluation de modèles</strong> : "Précision entre 85% et 92%"</li>
-                            <li>🎯 <strong>Prédictions</strong> : "Prix entre 450 et 550 FCFA"</li>
-                            <li>📈 <strong>A/B Testing</strong> : "Amélioration entre 2% et 8%"</li>
-                            <li>🔍 <strong>Incertitude quantifiée</strong> : ne pas juste donner un chiffre, mais une fourchette</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title:
-              "Exemple pratique : intervalle de confiance pour une moyenne",
-            content: `
-                        <p><strong>📝 Problème :</strong> Estimer le temps moyen de trajet Dakar-Thiès</p>
-                        <p><strong>Données :</strong> 10 trajets chronométrés : [85, 92, 88, 95, 87, 90, 93, 86, 91, 89] minutes</p>
-                        
-                        <p><strong>🔢 Calculs préliminaires :</strong></p>
-                        <ul>
-                            <li>Moyenne : \\(\\bar{x} = 89.6\\) minutes</li>
-                            <li>Écart-type : \\(s = 3.24\\) minutes</li>
-                            <li>Taille : \\(n = 10\\)</li>
-                        </ul>
-                        
-                        <p><strong>📐 Intervalle de confiance à 95% :</strong></p>
-                        <p>$$\\text{IC}_{95\\%} = \\bar{x} \\pm t_{0.025,9} \\times \\frac{s}{\\sqrt{n}}$$</p>
-                        
-                        <p><strong>🔍 Détail du calcul :</strong></p>
-                        <ul>
-                            <li>\\(t_{0.025,9} = 2.262\\) (table de Student, 9 degrés de liberté)</li>
-                            <li>Erreur standard : \\(\\frac{s}{\\sqrt{n}} = \\frac{3.24}{\\sqrt{10}} = 1.024\\)</li>
-                            <li>Marge d'erreur : \\(2.262 \\times 1.024 = 2.32\\)</li>
-                        </ul>
-                        
-                        <p><strong>✅ Résultat :</strong></p>
-                        <p>$$\\text{IC}_{95\\%} = [89.6 - 2.32, 89.6 + 2.32] = [87.3, 91.9] \\text{ minutes}$$</p>
-                        
-                        <p><strong>💡 Interprétation :</strong></p>
-                        <p>"Nous sommes confiants à 95% que le temps moyen de trajet Dakar-Thiès est entre 87.3 et 91.9 minutes."</p>
-                        
-                        <p><strong>🎯 Applications pratiques :</strong></p>
-                        <ul>
-                            <li>🚌 <strong>Transport</strong> : planification des horaires</li>
-                            <li>📱 <strong>Apps de navigation</strong> : estimation des temps de trajet</li>
-                            <li>🏢 <strong>Logistique</strong> : optimisation des livraisons</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "concept",
-            icon: "💡",
-            title: "Corrélation vs Causalité : ne pas confondre !",
-            content: `
-                        <p><strong>⚠️ L'erreur la plus dangereuse en analyse de données !</strong></p>
-                        <p>La <strong>corrélation</strong> mesure si deux variables évoluent ensemble. La <strong>causalité</strong> signifie que l'une cause l'autre. Ce n'est PAS la même chose !</p>
-                        
-                        <p><strong>🍦 Exemple classique :</strong></p>
-                        <p><strong>Observation :</strong> Plus il fait chaud, plus on vend de glaces ET plus il y a de noyades</p>
-                        <ul>
-                            <li>📊 <strong>Corrélation</strong> : ventes de glaces ↔ noyades (forte corrélation positive)</li>
-                            <li>❌ <strong>Conclusion erronée</strong> : "Les glaces causent les noyades !"</li>
-                            <li>✅ <strong>Vraie cause</strong> : la chaleur cause les deux (variable confondante)</li>
-                        </ul>
-                        
-                        <p><strong>🇸🇳 Exemple sénégalais :</strong></p>
-                        <p><strong>Observation :</strong> Dans les villages, plus il y a d'antennes de téléphone, plus il y a d'écoles</p>
-                        <ul>
-                            <li>📊 <strong>Corrélation</strong> : antennes ↔ écoles (positive)</li>
-                            <li>❌ <strong>Conclusion erronée</strong> : "Les antennes créent des écoles !"</li>
-                            <li>✅ <strong>Vraie cause</strong> : le développement économique cause les deux</li>
-                        </ul>
-                        
-                        <p><strong>🔍 Comment identifier la causalité ?</strong></p>
-                        <ul>
-                            <li>🧪 <strong>Expériences contrôlées</strong> : manipuler une variable, observer l'effet</li>
-                            <li>⏰ <strong>Temporalité</strong> : la cause doit précéder l'effet</li>
-                            <li>🔗 <strong>Mécanisme plausible</strong> : expliquer comment A cause B</li>
-                            <li>📊 <strong>Variables confondantes</strong> : éliminer les autres explications</li>
-                        </ul>
-                        
-                        <p><strong>🤖 Danger en IA :</strong></p>
-                        <ul>
-                            <li>⚠️ <strong>Biais algorithmiques</strong> : modèles qui apprennent des corrélations fallacieuses</li>
-                            <li>🎯 <strong>Prédictions erronées</strong> : généralisation impossible</li>
-                            <li>📊 <strong>Décisions injustes</strong> : discrimination basée sur des corrélations</li>
-                        </ul>
-                        
-                        <p><strong>💡 Règle d'or :</strong> "Corrélation n'implique pas causalité" - à répéter 1000 fois !</p>
-                    `,
-          },
-          {
-            type: "warning",
-            icon: "⚠️",
-            title:
-              "Statistiques en IA : les fondations de la science des données",
-            content: `
-                        <p><strong>🧠 Les statistiques sont l'ADN de l'IA moderne :</strong></p>
-                        
-                        <p><strong>🎯 Maximum de vraisemblance :</strong></p>
-                        <ul>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : optimisation des poids</li>
-                            <li>📊 <strong>Régression</strong> : trouver la meilleure droite</li>
-                            <li>💬 <strong>NLP</strong> : probabilités des mots dans les LLMs</li>
-                        </ul>
-                        
-                        <p><strong>🔬 Tests d'hypothèses :</strong></p>
-                        <ul>
-                            <li>📈 <strong>A/B Testing</strong> : "Ce nouveau modèle est-il vraiment meilleur ?"</li>
-                            <li>🎯 <strong>Significativité</strong> : éviter les conclusions hâtives</li>
-                            <li>⚖️ <strong>Prise de décision</strong> : quantifier l'incertitude</li>
-                        </ul>
-                        
-                        <p><strong>📊 Intervalles de confiance :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Prédictions honnêtes</strong> : "Entre 85% et 92% de précision"</li>
-                            <li>📈 <strong>Évaluation de modèles</strong> : ne pas juste donner un chiffre</li>
-                            <li>🔍 <strong>Incertitude quantifiée</strong> : essentiel pour les décisions critiques</li>
-                        </ul>
-                        
-                        <p><strong>⚠️ Corrélation vs Causalité :</strong></p>
-                        <ul>
-                            <li>🚫 <strong>Éviter les biais</strong> : ne pas confondre association et causation</li>
-                            <li>🎯 <strong>Modèles robustes</strong> : comprendre les vraies relations</li>
-                            <li>⚖️ <strong>IA éthique</strong> : éviter les discriminations algorithmiques</li>
-                        </ul>
-                        
-                        <p><strong>💡 Point clé :</strong> Les statistiques ne sont pas juste des calculs - elles nous apprennent à <strong>penser rigoureusement</strong> avec les données et à <strong>quantifier l'incertitude</strong>. C'est la différence entre une IA qui "marche par hasard" et une IA scientifiquement fondée !</p>
-                        
-                        <p><strong>🔮 Prochaine étape :</strong> Python pour mettre en pratique tous ces concepts statistiques !</p>
-                    `,
+            type: "quiz",
+            icon: "🎯",
+            title: "Quiz final : Les statistiques",
+            question: "En machine learning, pourquoi normalise-t-on souvent les features avant l'entraînement ?",
+            options: [
+              "Pour rendre les données plus jolies visuellement",
+              "Pour que toutes les features aient la même importance relative et que la descente de gradient converge mieux",
+              "Pour supprimer les outliers automatiquement",
+              "Pour augmenter artificiellement le nombre de données"
+            ],
+            correctAnswer: 1,
+            explanation: "Sans normalisation, une feature avec des valeurs de 0-1000000 dominerait une feature de 0-1. La normalisation met toutes les features à la même échelle, ce qui permet à la descente de gradient de converger plus rapidement et uniformément.",
           },
         ],
-        quiz: {
-          question:
-            "🤔 Si un dataset a une moyenne de 100 et un écart-type de 15, dans quel intervalle se trouvent environ 95% des données (règle 68-95-99.7) ?",
-          options: [
-            "A) [85, 115]",
-            "B) [70, 130]",
-            "C) [55, 145]",
-            "D) [100, 115]",
-          ],
-          correct: 1,
-          explanation:
-            "Selon la règle 68-95-99.7, 95% des données se trouvent dans l'intervalle [μ-2σ, μ+2σ] = [100-2×15, 100+2×15] = [70, 130].",
-        },
         prevModule: "probability.html",
         nextModule: "../python/basics.html",
       };

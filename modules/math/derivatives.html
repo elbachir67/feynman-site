@@ -42,7 +42,7 @@
     <!-- Contenu principal -->
     <div class="container">
       <h1>📈 Les Dérivées</h1>
-      <p class="subtitle">Module 1.4 - Analyse pour l'IA</p>
+      <p class="subtitle">Module 1.4 - Le cœur de l'optimisation en IA</p>
 
       <!-- Objectifs -->
       <div class="objectives">
@@ -55,29 +55,6 @@
       <!-- Contenu du module -->
       <div id="module-content">
         <!-- Le contenu sera ajouté dynamiquement -->
-      </div>
-
-      <!-- Quiz -->
-      <div class="quiz" id="module-quiz" style="display: none">
-        <div class="quiz-question" id="quiz-question"></div>
-        <div class="quiz-options" id="quiz-options"></div>
-        <div class="quiz-feedback" id="quiz-feedback"></div>
-      </div>
-
-      <!-- Checkpoint -->
-      <div class="checkpoint">
-        <h3>🎉 Checkpoint - Les Dérivées</h3>
-        <p>
-          Félicitations ! Vous maîtrisez maintenant les dérivées, fondement de
-          l'optimisation en IA.
-        </p>
-        <button
-          class="checkpoint-btn"
-          id="checkpoint-btn"
-          onclick="completeCheckpoint()"
-        >
-          Marquer comme complété
-        </button>
       </div>
 
       <!-- Navigation entre modules -->
@@ -99,191 +76,451 @@
         title: "Les Dérivées",
         category: "Mathématiques",
         objectives: [
-          "Comprendre intuitivement ce qu'est une dérivée",
-          "Calculer des dérivées simples à la main",
-          "Maîtriser les règles de dérivation",
+          "Comprendre ce qu'est une dérivée et son interprétation géométrique",
+          "Calculer des dérivées avec les règles de base",
+          "Appliquer la règle de la chaîne",
+          "Trouver les extremums d'une fonction",
           "Comprendre le lien avec l'optimisation en IA",
+          "Visualiser les dérivées avec Python",
         ],
         content: [
+          // ===== SECTION 1: CONCEPT DE DÉRIVÉE =====
           {
             type: "concept",
             icon: "💡",
-            title: "Concept fondamental",
+            title: "Qu'est-ce qu'une dérivée ?",
             content: `
-                        <p>La <strong>dérivée</strong> d'une fonction mesure à quelle vitesse cette fonction change en un point donné. C'est la <strong>pente de la courbe</strong> en ce point.</p>
-                        <p><strong>🔑 Définition intuitive :</strong></p>
-                        <p>Si on prend deux points très proches sur une courbe et qu'on trace la droite qui les relie, la <strong>pente de cette droite</strong> nous donne la dérivée.</p>
-                        <p>$$\\text{Pente} = \\frac{\\text{Variation verticale}}{\\text{Variation horizontale}} = \\frac{\\Delta y}{\\Delta x}$$</p>
-                        <p><strong>💡 Interprétation :</strong></p>
-                        <ul>
-                            <li>Si \\(f'(x) > 0\\) : la fonction <strong>monte</strong> (pente positive)</li>
-                            <li>Si \\(f'(x) < 0\\) : la fonction <strong>descend</strong> (pente négative)</li>
-                            <li>Si \\(f'(x) = 0\\) : la fonction est <strong>plate</strong> (sommet ou creux)</li>
-                        </ul>
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Optimisation</strong> : trouver les minima des fonctions de coût</li>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : algorithme de rétropropagation</li>
-                            <li>📊 <strong>Machine Learning</strong> : descente de gradient pour l'apprentissage</li>
-                            <li>💬 <strong>LLMs</strong> : optimisation des paramètres (milliards !)</li>
-                        </ul>
-                    `,
+              <p>La <strong>dérivée</strong> mesure le <strong>taux de variation instantané</strong> d'une fonction. C'est la pente de la courbe en un point donné.</p>
+
+              <p><strong>🎯 Pourquoi c'est important en IA ?</strong></p>
+              <p>En IA, on cherche à <strong>minimiser une fonction d'erreur</strong>. La dérivée nous dit dans quelle direction et de combien modifier nos paramètres pour réduire cette erreur. Sans dérivées, pas d'apprentissage automatique !</p>
+
+              <p><strong>📐 Définition formelle :</strong></p>
+              <p>$$f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}$$</p>
+
+              <p><strong>🔍 Interprétation :</strong></p>
+              <ul>
+                <li>On prend deux points très proches sur la courbe</li>
+                <li>On calcule la pente de la droite qui les relie</li>
+                <li>Quand les points sont infiniment proches, on obtient la dérivée</li>
+              </ul>
+
+              <p><strong>📊 Signification du signe :</strong></p>
+              <ul>
+                <li>\\(f'(x) > 0\\) → la fonction <strong>monte</strong> (croissante)</li>
+                <li>\\(f'(x) < 0\\) → la fonction <strong>descend</strong> (décroissante)</li>
+                <li>\\(f'(x) = 0\\) → la fonction est <strong>plate</strong> (extremum potentiel)</li>
+              </ul>
+            `,
           },
           {
-            type: "intuition",
-            icon: "🧠",
-            title: "L'analogie de la voiture",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 1 : Comprendre le signe de la dérivée",
             content: `
-                        <p>Imaginez que vous conduisez sur une route vallonnée et que vous regardez votre <strong>compteur de vitesse</strong> :</p>
-                        <ul>
-                            <li>🚗 <strong>Position</strong> = fonction \\(f(x)\\) (où vous êtes)</li>
-                            <li>⚡ <strong>Vitesse</strong> = dérivée \\(f'(x)\\) (à quelle vitesse vous bougez)</li>
-                        </ul>
-                        <p><strong>🏔️ Sur une montée :</strong></p>
-                        <ul>
-                            <li>📈 <strong>Vitesse positive</strong> : vous montez (\\(f'(x) > 0\\))</li>
-                            <li>🔺 <strong>Plus c'est raide</strong>, plus la vitesse est grande</li>
-                        </ul>
-                        <p><strong>🏔️ Sur une descente :</strong></p>
-                        <ul>
-                            <li>📉 <strong>Vitesse négative</strong> : vous descendez (\\(f'(x) < 0\\))</li>
-                            <li>🔻 <strong>Plus c'est raide</strong>, plus la vitesse est négative</li>
-                        </ul>
-                        <p><strong>🎯 Au sommet ou au creux :</strong></p>
-                        <ul>
-                            <li>⏸️ <strong>Vitesse nulle</strong> : vous ne montez ni ne descendez (\\(f'(x) = 0\\))</li>
-                        </ul>
-                        <p><strong>💡 C'est exactement ce que fait l'IA :</strong> elle cherche les "creux" (minima) pour optimiser ses performances !</p>
-                    `,
+              <p>Une fonction \\(f\\) a une dérivée \\(f'(2) = -3\\) au point \\(x = 2\\).</p>
+              <p>Que peut-on dire de la fonction au voisinage de ce point ?</p>
+            `,
+            exerciseType: "mcq",
+            options: [
+              "La fonction est croissante (monte)",
+              "La fonction est décroissante (descend)",
+              "La fonction a un maximum",
+              "La fonction a un minimum"
+            ],
+            correctAnswer: 1,
+            explanation: "Puisque \\(f'(2) = -3 < 0\\), la dérivée est négative. Cela signifie que la fonction est décroissante au point \\(x = 2\\) : elle descend. La pente -3 indique qu'elle descend assez rapidement.",
+            completesObjective: 0,
           },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Calculs manuels de dérivées",
-            content: `
-                        <p><strong>🔢 Règles de base :</strong></p>
-                        <ul>
-                            <li><strong>Constante :</strong> \\((c)' = 0\\)</li>
-                            <li><strong>Puissance :</strong> \\((x^n)' = n \\cdot x^{n-1}\\)</li>
-                            <li><strong>Somme :</strong> \\((f + g)' = f' + g'\\)</li>
-                            <li><strong>Produit :</strong> \\((f \\cdot g)' = f' \\cdot g + f \\cdot g'\\)</li>
-                        </ul>
-                        
-                        <p><strong>📝 Exemples concrets :</strong></p>
-                        
-                        <p><strong>1. Fonction simple :</strong> \\(f(x) = x^2\\)</p>
-                        <p>$$f'(x) = 2x^{2-1} = 2x$$</p>
-                        
-                        <p><strong>2. Fonction polynomiale :</strong> \\(f(x) = 3x^2 + 2x + 1\\)</p>
-                        <p>$$f'(x) = 3 \\cdot 2x + 2 \\cdot 1 + 0 = 6x + 2$$</p>
-                        
-                        <p><strong>3. Fonction plus complexe :</strong> \\(f(x) = x^3 - 4x^2 + 5x - 2\\)</p>
-                        <p>$$f'(x) = 3x^2 - 8x + 5$$</p>
-                        
-                        <p><strong>🎯 Interprétation :</strong> La dérivée nous dit si la fonction monte (\\(f'(x) > 0\\)) ou descend (\\(f'(x) < 0\\)) en chaque point.</p>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice pratique : calculs manuels",
-            content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Calculez les dérivées des fonctions suivantes :</p>
-                        
-                        <ol>
-                            <li>\\(f(x) = 5x^3\\)</li>
-                            <li>\\(g(x) = 2x^2 + 3x - 7\\)</li>
-                            <li>\\(h(x) = x^4 - 2x^3 + x\\)</li>
-                            <li>Pour \\(f(x) = x^2\\), calculez \\(f'(2)\\) et interprétez le résultat</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('derivatives-exercise-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="derivatives-exercise-solution" style="display: none;">
-                        <ol>
-                            <li>\\(f'(x) = 5 \\cdot 3x^2 = 15x^2\\)</li>
-                            <li>\\(g'(x) = 2 \\cdot 2x + 3 - 0 = 4x + 3\\)</li>
-                            <li>\\(h'(x) = 4x^3 - 6x^2 + 1\\)</li>
-                            <li>\\(f'(x) = 2x\\), donc \\(f'(2) = 4\\). <br>
-                                <strong>Interprétation :</strong> Au point \\(x = 2\\), la fonction \\(f(x) = x^2\\) croît avec une pente de 4. Si on se déplace légèrement vers la droite, la fonction augmente 4 fois plus vite que le déplacement.</li>
-                        </ol>
-                        </div>
-                    `,
-          },
+
+          // ===== SECTION 2: RÈGLES DE DÉRIVATION =====
           {
             type: "mathematique",
             icon: "∑",
-            title: "Règles de dérivation importantes",
+            title: "Les règles de dérivation de base",
             content: `
-                        <p><strong>📋 Règles essentielles :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• Règle de la puissance :</strong> $$\\frac{d}{dx}[x^n] = nx^{n-1}$$</li>
-                            <li style="margin-top: 1rem"><strong>• Règle de la somme :</strong> $$\\frac{d}{dx}[f(x) + g(x)] = f'(x) + g'(x)$$</li>
-                            <li style="margin-top: 1rem"><strong>• Règle du produit :</strong> $$\\frac{d}{dx}[f(x) \\cdot g(x)] = f'(x) \\cdot g(x) + f(x) \\cdot g'(x)$$</li>
-                            <li style="margin-top: 1rem"><strong>• Règle de la chaîne :</strong> $$\\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x)$$</li>
-                        </ul>
-                        <p><strong>🔑 Dérivées usuelles :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li>• \\((\\sin x)' = \\cos x\\)</li>
-                            <li>• \\((\\cos x)' = -\\sin x\\)</li>
-                            <li>• \\((e^x)' = e^x\\)</li>
-                            <li>• \\((\\ln x)' = \\frac{1}{x}\\)</li>
-                        </ul>
-                    `,
+              <p>Voici les règles essentielles pour calculer les dérivées :</p>
+
+              <p><strong>📋 Règles fondamentales :</strong></p>
+              <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                <tr style="background: rgba(0,0,0,0.05);">
+                  <th style="padding: 0.5rem; text-align: left; border-bottom: 2px solid var(--accent);">Fonction</th>
+                  <th style="padding: 0.5rem; text-align: left; border-bottom: 2px solid var(--accent);">Dérivée</th>
+                </tr>
+                <tr><td style="padding: 0.5rem;">Constante : \\(c\\)</td><td style="padding: 0.5rem;">\\(0\\)</td></tr>
+                <tr style="background: rgba(0,0,0,0.02);"><td style="padding: 0.5rem;">Puissance : \\(x^n\\)</td><td style="padding: 0.5rem;">\\(nx^{n-1}\\)</td></tr>
+                <tr><td style="padding: 0.5rem;">Somme : \\(f + g\\)</td><td style="padding: 0.5rem;">\\(f' + g'\\)</td></tr>
+                <tr style="background: rgba(0,0,0,0.02);"><td style="padding: 0.5rem;">Produit par constante : \\(cf\\)</td><td style="padding: 0.5rem;">\\(cf'\\)</td></tr>
+                <tr><td style="padding: 0.5rem;">Exponentielle : \\(e^x\\)</td><td style="padding: 0.5rem;">\\(e^x\\)</td></tr>
+                <tr style="background: rgba(0,0,0,0.02);"><td style="padding: 0.5rem;">Logarithme : \\(\\ln(x)\\)</td><td style="padding: 0.5rem;">\\(\\frac{1}{x}\\)</td></tr>
+              </table>
+
+              <p><strong>📝 Exemples :</strong></p>
+              <ul>
+                <li>\\((x^3)' = 3x^2\\) (règle de la puissance avec \\(n=3\\))</li>
+                <li>\\((5x^2)' = 5 \\cdot 2x = 10x\\) (constante × puissance)</li>
+                <li>\\((x^2 + 3x)' = 2x + 3\\) (somme de dérivées)</li>
+              </ul>
+            `,
           },
           {
-            type: "exemple",
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 2 : Dérivée d'un polynôme simple",
+            content: `
+              <p>Calculez la dérivée de \\(f(x) = 4x^3\\).</p>
+              <p>Appliquez la règle : \\((cx^n)' = c \\cdot n \\cdot x^{n-1}\\)</p>
+              <p><em>Donnez le coefficient devant \\(x^2\\) (un nombre entier) :</em></p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 12,
+            tolerance: 0,
+            explanation: "\\(f'(x) = 4 \\cdot 3 \\cdot x^{3-1} = 12x^2\\). Le coefficient est donc 12.",
+            completesObjective: 1,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 3 : Dérivée d'une somme",
+            content: `
+              <p>Soit \\(g(x) = 2x^3 - 5x^2 + 3x - 7\\).</p>
+              <p>Calculez \\(g'(x)\\), puis évaluez \\(g'(1)\\).</p>
+              <p><em>Quelle est la valeur de \\(g'(1)\\) ?</em></p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: -1,
+            tolerance: 0,
+            explanation: "\\(g'(x) = 6x^2 - 10x + 3\\). Donc \\(g'(1) = 6(1)^2 - 10(1) + 3 = 6 - 10 + 3 = -1\\).",
+            completesObjective: 1,
+          },
+
+          // ===== SECTION 3: RÈGLE DE LA CHAÎNE =====
+          {
+            type: "mathematique",
+            icon: "🔗",
+            title: "La règle de la chaîne",
+            content: `
+              <p>La <strong>règle de la chaîne</strong> permet de dériver des fonctions composées. C'est la règle la plus importante en deep learning !</p>
+
+              <p><strong>📐 Formule :</strong></p>
+              <p>Si \\(h(x) = f(g(x))\\), alors :</p>
+              <p>$$h'(x) = f'(g(x)) \\cdot g'(x)$$</p>
+
+              <p><strong>🎯 En IA :</strong> Cette règle est la base de la <strong>rétropropagation</strong> (backpropagation). Quand un réseau de neurones a plusieurs couches, on utilise la règle de la chaîne pour calculer comment l'erreur se propage à travers chaque couche.</p>
+
+              <p><strong>📝 Exemple détaillé :</strong></p>
+              <p>Soit \\(h(x) = (3x + 2)^4\\)</p>
+              <ul>
+                <li>Fonction extérieure : \\(f(u) = u^4\\) → \\(f'(u) = 4u^3\\)</li>
+                <li>Fonction intérieure : \\(g(x) = 3x + 2\\) → \\(g'(x) = 3\\)</li>
+                <li>Résultat : \\(h'(x) = 4(3x+2)^3 \\cdot 3 = 12(3x+2)^3\\)</li>
+              </ul>
+
+              <p><strong>💡 Astuce :</strong> Pensez "dériver l'extérieur, garder l'intérieur, multiplier par la dérivée de l'intérieur".</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 4 : Appliquer la règle de la chaîne",
+            content: `
+              <p>Soit \\(f(x) = (2x + 1)^3\\).</p>
+              <p>Calculez \\(f'(x)\\) en utilisant la règle de la chaîne.</p>
+              <p><em>Quel est le coefficient devant \\((2x+1)^2\\) dans \\(f'(x)\\) ?</em></p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 6,
+            tolerance: 0,
+            explanation: "On pose \\(u = 2x + 1\\), donc \\(f = u^3\\).<br>• Dérivée de l'extérieur : \\(3u^2 = 3(2x+1)^2\\)<br>• Dérivée de l'intérieur : \\(u' = 2\\)<br>• Résultat : \\(f'(x) = 3(2x+1)^2 \\cdot 2 = 6(2x+1)^2\\)",
+            completesObjective: 2,
+          },
+
+          // ===== SECTION 4: EXTREMUMS =====
+          {
+            type: "concept",
+            icon: "🏔️",
+            title: "Trouver les extremums (minima et maxima)",
+            content: `
+              <p>Un <strong>extremum</strong> est un point où la fonction atteint un maximum ou un minimum local. C'est exactement ce qu'on cherche en optimisation !</p>
+
+              <p><strong>🔑 Condition nécessaire :</strong></p>
+              <p>En un extremum, la dérivée s'annule : \\(f'(x) = 0\\)</p>
+
+              <p><strong>📋 Méthode pour trouver les extremums :</strong></p>
+              <ol>
+                <li>Calculer la dérivée \\(f'(x)\\)</li>
+                <li>Résoudre \\(f'(x) = 0\\) pour trouver les points critiques</li>
+                <li>Étudier le signe de \\(f'(x)\\) autour de ces points</li>
+              </ol>
+
+              <p><strong>📊 Déterminer la nature de l'extremum :</strong></p>
+              <ul>
+                <li>Si \\(f'\\) passe de + à − : c'est un <strong>maximum</strong></li>
+                <li>Si \\(f'\\) passe de − à + : c'est un <strong>minimum</strong></li>
+              </ul>
+
+              <p><strong>🤖 En IA :</strong> On cherche le <strong>minimum</strong> de la fonction de coût. Quand \\(f'(x) = 0\\) avec \\(f'\\) passant de − à +, on a trouvé une solution optimale !</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 5 : Trouver un extremum",
+            content: `
+              <p>Soit \\(f(x) = x^2 - 6x + 5\\).</p>
+              <p>1. Calculez \\(f'(x)\\)</p>
+              <p>2. Trouvez le point critique en résolvant \\(f'(x) = 0\\)</p>
+              <p><em>En quelle valeur de \\(x\\) la fonction atteint-elle son extremum ?</em></p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 3,
+            tolerance: 0,
+            explanation: "\\(f'(x) = 2x - 6\\). On résout \\(2x - 6 = 0\\), donc \\(x = 3\\). C'est un minimum car le coefficient de \\(x^2\\) est positif (parabole tournée vers le haut).",
+            completesObjective: 3,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 6 : Nature d'un extremum",
+            content: `
+              <p>Pour la fonction \\(f(x) = x^2 - 6x + 5\\), on a trouvé un point critique en \\(x = 3\\).</p>
+              <p>Quelle est la valeur de \\(f(3)\\), c'est-à-dire la valeur minimale de la fonction ?</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: -4,
+            tolerance: 0,
+            explanation: "\\(f(3) = (3)^2 - 6(3) + 5 = 9 - 18 + 5 = -4\\). Le minimum de la fonction est donc -4, atteint en \\(x = 3\\).",
+            completesObjective: 3,
+          },
+
+          // ===== SECTION 5: APPLICATION EN IA =====
+          {
+            type: "concept",
+            icon: "🤖",
+            title: "Les dérivées au cœur de l'apprentissage automatique",
+            content: `
+              <p>En IA, on utilise les dérivées pour <strong>optimiser automatiquement</strong> les paramètres d'un modèle.</p>
+
+              <p><strong>🎯 Le problème d'optimisation en IA :</strong></p>
+              <ul>
+                <li>On a une <strong>fonction de coût</strong> \\(J(\\theta)\\) qui mesure l'erreur du modèle</li>
+                <li>On veut trouver les paramètres \\(\\theta\\) qui minimisent cette erreur</li>
+                <li>La dérivée \\(J'(\\theta)\\) nous dit comment modifier \\(\\theta\\) pour réduire l'erreur</li>
+              </ul>
+
+              <p><strong>📉 La descente de gradient :</strong></p>
+              <p>$$\\theta_{nouveau} = \\theta_{ancien} - \\alpha \\cdot J'(\\theta)$$</p>
+              <ul>
+                <li>\\(\\alpha\\) = taux d'apprentissage (taille du pas)</li>
+                <li>Le signe − car on va dans le sens <strong>opposé</strong> au gradient pour descendre</li>
+              </ul>
+
+              <p><strong>💡 Exemple concret :</strong></p>
+              <p>Si \\(J'(\\theta) = 10\\) (positif), cela signifie que \\(J\\) augmente quand \\(\\theta\\) augmente. Pour minimiser \\(J\\), on doit donc <strong>diminuer</strong> \\(\\theta\\).</p>
+            `,
+          },
+          {
+            type: "exercise",
+            icon: "✏️",
+            title: "Exercice 7 : Mise à jour des paramètres",
+            content: `
+              <p>Un modèle a un paramètre \\(\\theta = 5\\). La dérivée de la fonction de coût vaut \\(J'(5) = 2\\).</p>
+              <p>Avec un taux d'apprentissage \\(\\alpha = 0.5\\), calculez la nouvelle valeur de \\(\\theta\\) après une étape de descente de gradient.</p>
+              <p>Formule : \\(\\theta_{new} = \\theta - \\alpha \\cdot J'(\\theta)\\)</p>
+            `,
+            exerciseType: "numeric",
+            correctAnswer: 4,
+            tolerance: 0.01,
+            explanation: "\\(\\theta_{new} = 5 - 0.5 \\times 2 = 5 - 1 = 4\\). Le paramètre diminue car la dérivée était positive (on descend dans la direction opposée au gradient).",
+            completesObjective: 4,
+          },
+
+          // ===== SECTION 6: VISUALISATION PYTHON =====
+          {
+            type: "code",
+            icon: "🐍",
+            title: "Visualiser une fonction et sa dérivée avec Python",
+            content: `
+              <p>Ce code trace une fonction et sa dérivée pour visualiser le lien entre les deux :</p>
+            `,
+            code: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Définir la fonction f(x) = x^3 - 3x^2 + 2
+def f(x):
+    return x**3 - 3*x**2 + 2
+
+# Définir la dérivée f'(x) = 3x^2 - 6x
+def f_prime(x):
+    return 3*x**2 - 6*x
+
+# Créer les points
+x = np.linspace(-1, 3.5, 200)
+y = f(x)
+y_prime = f_prime(x)
+
+# Créer le graphique
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Graphique de f(x)
+ax1.plot(x, y, 'b-', linewidth=2, label="f(x) = x³ - 3x² + 2")
+ax1.axhline(y=0, color='k', linewidth=0.5)
+ax1.axvline(x=0, color='k', linewidth=0.5)
+ax1.scatter([0, 2], [f(0), f(2)], color='red', s=100, zorder=5)
+ax1.annotate('Maximum\\nlocal', (0, f(0)), textcoords="offset points",
+             xytext=(15, 10), fontsize=10)
+ax1.annotate('Minimum\\nlocal', (2, f(2)), textcoords="offset points",
+             xytext=(15, 10), fontsize=10)
+ax1.set_xlabel('x')
+ax1.set_ylabel('f(x)')
+ax1.set_title('La fonction f(x)')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# Graphique de f'(x)
+ax2.plot(x, y_prime, 'r-', linewidth=2, label="f'(x) = 3x² - 6x")
+ax2.axhline(y=0, color='k', linewidth=0.5)
+ax2.axvline(x=0, color='k', linewidth=0.5)
+ax2.fill_between(x, y_prime, 0, where=(y_prime > 0),
+                  color='green', alpha=0.3, label='f croissante')
+ax2.fill_between(x, y_prime, 0, where=(y_prime < 0),
+                  color='red', alpha=0.3, label='f décroissante')
+ax2.scatter([0, 2], [0, 0], color='purple', s=100, zorder=5)
+ax2.set_xlabel('x')
+ax2.set_ylabel("f'(x)")
+ax2.set_title("La dérivée f'(x)")
+ax2.legend()
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('derivative_plot.png', dpi=100, bbox_inches='tight')
+plt.show()
+
+print("📊 Observations :")
+print("• Quand f'(x) > 0 (zone verte), f(x) monte")
+print("• Quand f'(x) < 0 (zone rouge), f(x) descend")
+print("• Quand f'(x) = 0 (points violets), f(x) a un extremum")`,
+          },
+          {
+            type: "exercise-code",
             icon: "💻",
-            title: "Trouver les extremums",
+            title: "Exercice 8 : Visualiser la descente de gradient",
             content: `
-                        <p><strong>🎯 Application pratique : optimisation</strong></p>
-                        <p>Pour trouver les <strong>minima et maxima</strong> d'une fonction :</p>
-                        <ol>
-                            <li><strong>Calculer</strong> la dérivée \\(f'(x)\\)</li>
-                            <li><strong>Résoudre</strong> \\(f'(x) = 0\\)</li>
-                            <li><strong>Analyser</strong> le signe de \\(f'(x)\\) autour des solutions</li>
-                        </ol>
-                        
-                        <p><strong>📝 Exemple :</strong> \\(f(x) = x^2 - 4x + 3\\)</p>
-                        <p><strong>Étape 1 :</strong> \\(f'(x) = 2x - 4\\)</p>
-                        <p><strong>Étape 2 :</strong> \\(2x - 4 = 0 \\Rightarrow x = 2\\)</p>
-                        <p><strong>Étape 3 :</strong></p>
-                        <ul>
-                            <li>Pour \\(x < 2\\) : \\(f'(x) < 0\\) (fonction décroissante)</li>
-                            <li>Pour \\(x > 2\\) : \\(f'(x) > 0\\) (fonction croissante)</li>
-                            <li><strong>Conclusion :</strong> \\(x = 2\\) est un minimum</li>
-                        </ul>
-                        <p><strong>🤖 En IA :</strong> C'est exactement ce processus que les algorithmes d'optimisation utilisent pour minimiser les erreurs !</p>
-                    `,
+              <p>Complétez le code pour simuler la descente de gradient sur la fonction \\(f(x) = x^2\\).</p>
+              <p>Le minimum est en \\(x = 0\\). Partez de \\(x = 4\\) et observez la convergence.</p>
+            `,
+            starterCode: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Fonction à minimiser : f(x) = x^2
+def f(x):
+    return x**2
+
+# Dérivée : f'(x) = 2x
+def f_prime(x):
+    return 2*x
+
+# Paramètres de la descente de gradient
+x = 4.0              # Point de départ
+alpha = 0.3          # Taux d'apprentissage
+n_iterations = 15    # Nombre d'itérations
+
+# Historique pour le graphique
+history_x = [x]
+history_f = [f(x)]
+
+# TODO: Boucle de descente de gradient
+# Pour chaque itération :
+#   1. Calculer la dérivée au point actuel
+#   2. Mettre à jour x selon la formule : x = x - alpha * dérivée
+#   3. Sauvegarder x et f(x) dans les historiques
+for i in range(n_iterations):
+    derivative = ___  # Calculer f'(x)
+    x = ___           # Mettre à jour x
+    history_x.append(x)
+    history_f.append(f(x))
+
+# Affichage
+print(f"Position finale : x = {x:.6f}")
+print(f"Valeur minimale : f(x) = {f(x):.6f}")`,
+            solution: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Fonction à minimiser : f(x) = x^2
+def f(x):
+    return x**2
+
+# Dérivée : f'(x) = 2x
+def f_prime(x):
+    return 2*x
+
+# Paramètres de la descente de gradient
+x = 4.0              # Point de départ
+alpha = 0.3          # Taux d'apprentissage
+n_iterations = 15    # Nombre d'itérations
+
+# Historique pour le graphique
+history_x = [x]
+history_f = [f(x)]
+
+# Boucle de descente de gradient
+for i in range(n_iterations):
+    derivative = f_prime(x)      # Calculer f'(x)
+    x = x - alpha * derivative   # Mettre à jour x
+    history_x.append(x)
+    history_f.append(f(x))
+
+# Affichage
+print(f"Position finale : x = {x:.6f}")
+print(f"Valeur minimale : f(x) = {f(x):.6f}")
+
+# Graphique de la convergence
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Courbe de f avec les points de descente
+x_curve = np.linspace(-5, 5, 100)
+ax1.plot(x_curve, f(x_curve), 'b-', linewidth=2, label='f(x) = x²')
+ax1.scatter(history_x, history_f, c=range(len(history_x)), cmap='Reds',
+            s=100, zorder=5, edgecolors='black')
+ax1.plot(history_x, history_f, 'r--', alpha=0.5)
+ax1.set_xlabel('x')
+ax1.set_ylabel('f(x)')
+ax1.set_title('Descente de gradient sur f(x) = x²')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# Évolution de x au fil des itérations
+ax2.plot(range(len(history_x)), history_x, 'go-', linewidth=2, markersize=8)
+ax2.axhline(y=0, color='r', linestyle='--', label='Minimum (x=0)')
+ax2.set_xlabel('Itération')
+ax2.set_ylabel('Valeur de x')
+ax2.set_title('Convergence vers le minimum')
+ax2.legend()
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('gradient_descent.png', dpi=100, bbox_inches='tight')
+plt.show()`,
+            expectedOutput: "Position finale : x = 0.000",
+            completesObjective: 5,
           },
+
+          // ===== SECTION 7: QUIZ FINAL =====
           {
-            type: "warning",
-            icon: "⚠️",
-            title: "Pourquoi les dérivées sont-elles cruciales en IA ?",
-            content: `
-                        <p><strong>🧠 Les dérivées sont le cœur de l'apprentissage automatique :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Descente de gradient</strong> : algorithme fondamental pour minimiser les erreurs</li>
-                            <li>🧠 <strong>Rétropropagation</strong> : comment les réseaux de neurones apprennent</li>
-                            <li>📊 <strong>Optimisation</strong> : trouver les meilleurs paramètres automatiquement</li>
-                            <li>💬 <strong>LLMs (ChatGPT)</strong> : optimisation de milliards de paramètres</li>
-                            <li>🎨 <strong>IA générative</strong> : amélioration continue des résultats</li>
-                        </ul>
-                        <p><strong>💡 Point clé :</strong> Sans les dérivées, l'IA moderne n'existerait pas ! Elles permettent aux machines d'apprendre automatiquement en "descendant" vers les meilleures solutions.</p>
-                        <p><strong>🔮 Dans la suite :</strong> Nous verrons comment généraliser ce concept aux fonctions de plusieurs variables avec les gradients !</p>
-                    `,
+            type: "quiz",
+            icon: "🎯",
+            title: "Quiz final : Les dérivées",
+            question: "En apprentissage automatique, pourquoi utilise-t-on le signe MOINS dans la formule de mise à jour θ = θ - α·∇J(θ) ?",
+            options: [
+              "Pour accélérer le calcul",
+              "Pour aller dans la direction opposée au gradient et ainsi minimiser la fonction de coût",
+              "Parce que les poids sont toujours négatifs",
+              "C'est une convention arbitraire"
+            ],
+            correctAnswer: 1,
+            explanation: "Le gradient pointe vers la direction de la plus forte MONTÉE. Pour MINIMISER la fonction de coût, on doit aller dans la direction OPPOSÉE, d'où le signe moins. C'est le principe fondamental de la descente de gradient !",
           },
         ],
-        quiz: {
-          question: "🤔 Quelle est la dérivée de f(x) = 3x² + 2x - 5 ?",
-          options: ["A) 6x + 2", "B) 3x + 2", "C) 6x - 5", "D) 3x² + 2"],
-          correct: 0,
-          explanation:
-            "En appliquant les règles : (3x²)' = 6x, (2x)' = 2, (-5)' = 0. Donc f'(x) = 6x + 2.",
-        },
         prevModule: "eigenvalues.html",
         nextModule: "gradients.html",
       };
