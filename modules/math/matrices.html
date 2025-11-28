@@ -1,569 +1,476 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Les Matrices | IA4Ndada</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les Matrices | IA4Ndada</title>
 
-    <!-- MathJax pour les formules mathématiques -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script
-      id="MathJax-script"
-      async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-    ></script>
-
-    <!-- Pyodide pour Python dans le navigateur -->
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
-
-    <link rel="stylesheet" href="../../styles/module.css" />
-  </head>
-  <body>
-    <!-- Navigation -->
-    <nav class="nav">
-      <div class="nav-container">
-        <div class="nav-breadcrumb">
-          <a href="../../index.html">🏠 Accueil</a>
-          <span>›</span>
-          <span>🧮 Mathématiques</span>
-          <span>›</span>
-          <span>Les Matrices</span>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+  <link rel="stylesheet" href="../../styles/module.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <div class="nav-breadcrumb">
+        <a href="../../index.html">Accueil</a>
+        <span>›</span>
+        <span>Maths</span>
+        <span>›</span>
+        <span>Matrices</span>
+      </div>
+      <div class="progress-indicator">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
         </div>
-        <div class="progress-indicator">
-          <span id="progress-text">Progression: 0%</span>
-          <div class="progress-bar">
-            <div
-              class="progress-fill"
-              id="progress-fill"
-              style="width: 0%"
-            ></div>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Contenu principal -->
-    <div class="container">
-      <h1>🔢 Les Matrices</h1>
-      <p class="subtitle">Module 1.2 - Algèbre Linéaire pour l'IA</p>
-
-      <!-- Objectifs -->
-      <div class="objectives">
-        <h2>🎯 Objectifs d'apprentissage</h2>
-        <ul id="objectives-list">
-          <!-- Les objectifs seront ajoutés dynamiquement -->
-        </ul>
-      </div>
-
-      <!-- Contenu du module -->
-      <div id="module-content">
-        <!-- Le contenu sera ajouté dynamiquement -->
-      </div>
-
-      <!-- Quiz -->
-      <div class="quiz" id="module-quiz" style="display: none">
-        <div class="quiz-question" id="quiz-question"></div>
-        <div class="quiz-options" id="quiz-options"></div>
-        <div class="quiz-feedback" id="quiz-feedback"></div>
-      </div>
-
-      <!-- Checkpoint -->
-      <div class="checkpoint">
-        <h3>🎉 Checkpoint - Les Matrices</h3>
-        <p>
-          Félicitations ! Vous maîtrisez maintenant les transformations
-          matricielles essentielles pour l'IA.
-        </p>
-        <button
-          class="checkpoint-btn"
-          id="checkpoint-btn"
-          onclick="completeCheckpoint()"
-        >
-          Marquer comme complété
-        </button>
-      </div>
-
-      <!-- Navigation entre modules -->
-      <div class="module-nav">
-        <a href="vectors.html" class="nav-link" id="prev-link"
-          >← Module précédent : Vecteurs</a
-        >
-        <a href="eigenvalues.html" class="nav-link" id="next-link"
-          >Module suivant : Valeurs propres →</a
-        >
+        <span id="progress-text">0%</span>
+        <span id="pyodide-status"><span class="status-loading">Chargement Python...</span></span>
       </div>
     </div>
+  </nav>
 
-    <script src="../../scripts/module-engine.js"></script>
-    <script>
-      // Configuration du module Matrices
-      const moduleConfig = {
-        id: "math-matrices",
-        title: "Les Matrices",
-        category: "Mathématiques",
-        objectives: [
-          "Comprendre les matrices comme tableaux de nombres organisés",
-          "Manipuler les matrices en Python avec NumPy",
-          "Maîtriser le produit matriciel",
-          "Comprendre les transformations linéaires",
-        ],
-        content: [
-          {
-            type: "concept",
-            icon: "💡",
-            title: "Concept fondamental",
-            content: `
-                        <p>Une <strong>matrice</strong> est un tableau rectangulaire de nombres organisés en lignes et colonnes. C'est une extension naturelle des vecteurs qui permet de représenter et manipuler des transformations linéaires.</p>
-                        <p>Une matrice, c'est simplement <strong>un tableau de nombres</strong> :</p>
-                        $$A = \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}$$
-                        <p><strong>Exemples concrets :</strong></p>
-                        <ul>
-                            <li>🤖 <strong>Données d'entraînement</strong> : lignes = exemples, colonnes = caractéristiques</li>
-                            <li>🖼️ <strong>Images pour l'IA</strong> : chaque pixel devient un nombre dans une matrice</li>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : les connexions sont stockées dans des matrices</li>
-                            <li>💬 <strong>Traitement du langage</strong> : relations entre mots dans des matrices</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "intuition",
-            icon: "🧠",
-            title: "L'analogie du GPS et des coordonnées",
-            content: `
-                        <p>Imaginez que vous utilisez un <strong>GPS</strong> pour convertir votre position :</p>
-                        <p>📍 <strong>Position actuelle</strong> : [3 km à l'est, 4 km au nord] du centre-ville</p>
-                        <p>🎯 <strong>Nouvelle position</strong> après avoir tourné et bougé : [5 km à l'est, 2 km au nord]</p>
-                        
-                        <p>Le GPS applique des <strong>règles de transformation</strong> :</p>
-                        <ul>
-                            <li>📐 <strong>Nouvelle position Est</strong> = 0.6 × ancienne_est + 0.8 × ancienne_nord</li>
-                            <li>📐 <strong>Nouvelle position Nord</strong> = -0.8 × ancienne_est + 0.6 × ancienne_nord</li>
-                        </ul>
-                        
-                        <p>Ces règles forment une matrice de transformation :</p>
-                        $$\\begin{bmatrix} 0.6 & 0.8 \\\\ -0.8 & 0.6 \\end{bmatrix}$$
-                        
-                        <p><strong>💡 C'est exactement ce que fait une matrice :</strong></p>
-                        <ul>
-                            <li>🎯 Elle prend vos <strong>coordonnées actuelles</strong> (vecteur d'entrée)</li>
-                            <li>🔄 Elle applique une <strong>transformation géométrique</strong> (rotation, étirement, etc.)</li>
-                            <li>📍 Elle vous donne vos <strong>nouvelles coordonnées</strong> (vecteur de sortie)</li>
-                        </ul>
-                        
-                        <p><strong>🌟 Applications concrètes :</strong> rotation d'images, animations 3D, transformations en réalité virtuelle !</p>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Calculs manuels avec les matrices",
-            content: `
-                        <p><strong>Prenons deux matrices 2×2 :</strong></p>
-                        <p>$$A = \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix} \\quad B = \\begin{bmatrix} 5 & 6 \\\\ 7 & 8 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>🔢 Addition (élément par élément) :</strong></p>
-                        <p>$$A + B = \\begin{bmatrix} 1+5 & 2+6 \\\\ 3+7 & 4+8 \\end{bmatrix} = \\begin{bmatrix} 6 & 8 \\\\ 10 & 12 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>🔢 Multiplication par un scalaire :</strong></p>
-                        <p>$$3 \\times A = \\begin{bmatrix} 3 \\times 1 & 3 \\times 2 \\\\ 3 \\times 3 & 3 \\times 4 \\end{bmatrix} = \\begin{bmatrix} 3 & 6 \\\\ 9 & 12 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>🔢 Produit matriciel (plus complexe) :</strong></p>
-                        <p>$$A \\times B = \\begin{bmatrix} 1 \\times 5 + 2 \\times 7 & 1 \\times 6 + 2 \\times 8 \\\\ 3 \\times 5 + 4 \\times 7 & 3 \\times 6 + 4 \\times 8 \\end{bmatrix} = \\begin{bmatrix} 19 & 22 \\\\ 43 & 50 \\end{bmatrix}$$</p>
-                    `,
-          },
-          {
-            type: "mathematique",
-            icon: "∑",
-            title: "Le produit matriciel",
-            content: `
-                        <p>Le <strong>produit matriciel</strong> \\(C = A \\times B\\) est l'opération la plus importante en algèbre linéaire :</p>
-                        <ul>
-                            <li><strong>• Règle de calcul :</strong> $$c_{ij} = \\sum_{k=1}^{n} a_{ik} \\times b_{kj}$$</li>
-                            <li style="margin-top: 0.5rem"><strong>• Condition :</strong> Nombre de colonnes de \\(A\\) = Nombre de lignes de \\(B\\)</li>
-                            <li style="margin-top: 0.5rem"><strong>• Dimensions :</strong> Si \\(A\\) est \\(m \\times n\\) et \\(B\\) est \\(n \\times p\\), alors \\(C\\) est \\(m \\times p\\)</li>
-                        </ul>
-                        <p><strong>🔑 Interprétation :</strong> Le produit matriciel permet de composer des transformations linéaires. C'est l'outil mathématique pour appliquer une transformation représentée par une matrice à un vecteur.</p>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Transformation d'un vecteur par une matrice",
-            content: `
-                        <p><strong>Appliquons une matrice à un vecteur :</strong></p>
-                        <p>Soit le vecteur $$\\vec{v} = \\begin{bmatrix} 2 \\\\ 1 \\end{bmatrix}$$ et la matrice $$R = \\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>🔢 Calcul du produit \\(R \\times \\vec{v}\\) :</strong></p>
-                        <p>$$R \\times \\vec{v} = \\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\end{bmatrix} \\times \\begin{bmatrix} 2 \\\\ 1 \\end{bmatrix}$$</p>
-                        
-                        <p>$$= \\begin{bmatrix} 0 \\times 2 + (-1) \\times 1 \\\\ 1 \\times 2 + 0 \\times 1 \\end{bmatrix} = \\begin{bmatrix} -1 \\\\ 2 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>🔍 Interprétation géométrique :</strong></p>
-                        <ul>
-                            <li><strong>Avant</strong> : point (2, 1) - 2 à droite, 1 vers le haut</li>
-                            <li><strong>Après</strong> : point (-1, 2) - 1 à gauche, 2 vers le haut</li>
-                            <li><strong>Effet</strong> : rotation de 90° dans le sens anti-horaire !</li>
-                        </ul>
-                        
-                        <p><strong>💡 La matrice "encode" la transformation à appliquer !</strong></p>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice pratique : calculs manuels",
-            content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Soient les matrices $$A = \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}$$, $$B = \\begin{bmatrix} 5 & 6 \\\\ 7 & 8 \\end{bmatrix}$$ et le vecteur $$\\vec{v} = \\begin{bmatrix} 2 \\\\ 1 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>📝 Calculez à la main :</strong></p>
-                        <ol>
-                            <li>$$A + B = ?$$</li>
-                            <li>$$2 \\times A = ?$$</li>
-                            <li>$$A \\times \\vec{v} = ?$$</li>
-                            <li>$$A \\times B = ?$$</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('matrices-exercise-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="matrices-exercise-solution" style="display: none;">
-                        <ol>
-                            <li>$$A + B = \\begin{bmatrix} 1+5 & 2+6 \\\\ 3+7 & 4+8 \\end{bmatrix} = \\begin{bmatrix} 6 & 8 \\\\ 10 & 12 \\end{bmatrix}$$</li>
-                            <li>$$2 \\times A = \\begin{bmatrix} 2 & 4 \\\\ 6 & 8 \\end{bmatrix}$$</li>
-                            <li>$$A \\times \\vec{v} = \\begin{bmatrix} 1 \\times 2 + 2 \\times 1 \\\\ 3 \\times 2 + 4 \\times 1 \\end{bmatrix} = \\begin{bmatrix} 4 \\\\ 10 \\end{bmatrix}$$</li>
-                            <li>$$A \\times B = \\begin{bmatrix} 1 \\times 5 + 2 \\times 7 & 1 \\times 6 + 2 \\times 8 \\\\ 3 \\times 5 + 4 \\times 7 & 3 \\times 6 + 4 \\times 8 \\end{bmatrix} = \\begin{bmatrix} 19 & 22 \\\\ 43 & 50 \\end{bmatrix}$$</li>
-                        </ol>
-                        </div>
-                    `,
-          },
-          {
-            type: "warning",
-            icon: "⚠️",
-            title: "Puissance des matrices",
-            content: `
-                        <p><strong>Les matrices permettent des calculs efficaces et élégants :</strong></p>
-                        <ul>
-                            <li>🤖 <strong>Machine Learning</strong> : traiter des milliers d'exemples simultanément</li>
-                            <li>🧠 <strong>Deep Learning</strong> : calculs parallèles massifs dans les GPU</li>
-                            <li>💬 <strong>LLMs (ChatGPT)</strong> : matrices géantes pour comprendre le langage</li>
-                            <li>🎯 <strong>Recommandations</strong> : matrices pour trouver des utilisateurs similaires</li>
-                            <li>🖼️ <strong>Vision par ordinateur</strong> : reconnaissance d'objets dans les images</li>
-                        </ul>
-                        <p><strong>💡 Point clé :</strong> Les matrices permettent de représenter des transformations complexes de manière compacte et de les appliquer efficacement à de nombreux vecteurs simultanément.</p>
-                    `,
-          },
-          {
-            type: "concept",
-            icon: "💡",
-            title: 'Le déterminant : mesure du "volume"',
-            content: `
-                        <p><strong>🤔 Qu'est-ce que le déterminant ?</strong></p>
-                        <p>Le <strong>déterminant</strong> d'une matrice mesure à quel point cette matrice \"étire\" ou \"compresse\" l'espace. C'est comme mesurer si une transformation agrandit ou rétrécit les objets.</p>
-                        
-                        <p><strong>🎯 Intuition simple :</strong></p>
-                        <p>Imaginez un carré de côté 1. Après transformation par une matrice :</p>
-                        <ul>
-                            <li>🔍 <strong>|det| < 1</strong> : le carré devient plus petit (compression)</li>
-                            <li>🔍 <strong>|det| = 1</strong> : le carré garde la même aire (rotation pure)</li>
-                            <li>🔍 <strong>|det| > 1</strong> : le carré devient plus grand (expansion)</li>
-                            <li>🔍 <strong>det = 0</strong> : le carré devient une ligne (perte de dimension !)</li>
-                        </ul>
-                        
-                        <p><strong>📐 Formule pour une matrice 2×2 :</strong></p>
-                        <p>$$\\det\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix} = ad - bc$$</p>
-                        
-                        <p><strong>🔍 Interprétation géométrique :</strong></p>
-                        <p>Le déterminant donne l'aire du parallélogramme formé par les vecteurs colonnes de la matrice.</p>
-                        
-                        <p><strong>🤖 Pourquoi important en IA ?</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Inversibilité</strong> : det ≠ 0 ⟺ matrice inversible</li>
-                            <li>🧠 <strong>Stabilité numérique</strong> : détecter les matrices \"dangereuses\"</li>
-                            <li>📊 <strong>Analyse de données</strong> : mesurer la \"qualité\" des transformations</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Calcul de déterminants",
-            content: `
-                        <p><strong>📝 Exemple 1 : Matrice 2×2</strong></p>
-                        <p>$$A = \\begin{bmatrix} 3 & 1 \\\\ 2 & 4 \\end{bmatrix}$$</p>
-                        <p>$$\\det(A) = 3 \\times 4 - 1 \\times 2 = 12 - 2 = 10$$</p>
-                        <p><strong>Interprétation :</strong> Cette matrice multiplie les aires par 10 !</p>
-                        
-                        <p><strong>📝 Exemple 2 : Matrice singulière</strong></p>
-                        <p>$$B = \\begin{bmatrix} 2 & 4 \\\\ 1 & 2 \\end{bmatrix}$$</p>
-                        <p>$$\\det(B) = 2 \\times 2 - 4 \\times 1 = 4 - 4 = 0$$</p>
-                        <p><strong>⚠️ Problème :</strong> Cette matrice \"écrase\" tout sur une ligne ! Elle n'est pas inversible.</p>
-                        
-                        <p><strong>📐 Pour une matrice 3×3 :</strong></p>
-                        <p>$$\\det\\begin{bmatrix} a & b & c \\\\ d & e & f \\\\ g & h & i \\end{bmatrix} = a(ei - fh) - b(di - fg) + c(dh - eg)$$</p>
-                        <p><strong>💡 Astuce :</strong> Développement par la première ligne (règle de Sarrus)</p>
-                    `,
-          },
-          {
-            type: "concept",
-            icon: "💡",
-            title: "L'inverse d'une matrice : \"défaire\" la transformation",
-            content: `
-                        <p><strong>🤔 Qu'est-ce que l'inverse d'une matrice ?</strong></p>
-                        <p>L'<strong>inverse</strong> d'une matrice A (noté A⁻¹) est la matrice qui \"annule\" l'effet de A. C'est comme avoir la transformation inverse.</p>
-                        
-                        <p><strong>🎯 Analogie simple :</strong></p>
-                        <p>Si A \"tourne de 90°\", alors A⁻¹ \"tourne de -90°\" pour revenir à l'original :</p>
-                        <p>$$A \\times A^{-1} = I \\quad \\text{(matrice identité)}$$</p>
-                        
-                        <p><strong>📐 Formule pour une matrice 2×2 :</strong></p>
-                        <p>$$A^{-1} = \\frac{1}{\\det(A)} \\begin{bmatrix} d & -b \\\\ -c & a \\end{bmatrix} \\quad \\text{si } A = \\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}$$</p>
-                        
-                        <p><strong>⚠️ Condition cruciale :</strong></p>
-                        <p>Une matrice n'a d'inverse que si <strong>det(A) ≠ 0</strong> !</p>
-                        
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>🎯 <strong>Résolution de systèmes</strong> : Ax = b ⟹ x = A⁻¹b</li>
-                            <li>🧠 <strong>Régression linéaire</strong> : calcul des coefficients optimaux</li>
-                            <li>📊 <strong>Analyse de données</strong> : \"défaire\" des transformations</li>
-                            <li>🔍 <strong>Décodage</strong> : retrouver les données originales</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Calcul d'inverse",
-            content: `
-                        <p><strong>📝 Exemple pratique :</strong></p>
-                        <p>Calculons l'inverse de $$A = \\begin{bmatrix} 3 & 1 \\\\ 2 & 4 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>Étape 1 :</strong> Vérifier que det(A) ≠ 0</p>
-                        <p>$$\\det(A) = 3 \\times 4 - 1 \\times 2 = 10 ≠ 0$$ ✓</p>
-                        
-                        <p><strong>Étape 2 :</strong> Appliquer la formule</p>
-                        <p>$$A^{-1} = \\frac{1}{10} \\begin{bmatrix} 4 & -1 \\\\ -2 & 3 \\end{bmatrix} = \\begin{bmatrix} 0.4 & -0.1 \\\\ -0.2 & 0.3 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>Étape 3 :</strong> Vérification</p>
-                        <p>$$A \\times A^{-1} = \\begin{bmatrix} 3 & 1 \\\\ 2 & 4 \\end{bmatrix} \\begin{bmatrix} 0.4 & -0.1 \\\\ -0.2 & 0.3 \\end{bmatrix} = \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix}$$ ✓</p>
-                        
-                        <p><strong>💡 Interprétation :</strong> A⁻¹ \"défait\" exactement ce que A fait !</p>
-                    `,
-          },
-          {
-            type: "concept",
-            icon: "💡",
-            title: "Le rang d'une matrice : dimension de l'information",
-            content: `
-                        <p><strong>🤔 Qu'est-ce que le rang ?</strong></p>
-                        <p>Le <strong>rang</strong> d'une matrice mesure combien de "directions vraiment différentes" elle contient. C'est comme compter les informations uniques et non redondantes.</p>
-                        
-                        <p><strong>🎯 Analogie des témoins :</strong></p>
-                        <p>Imaginez 5 témoins d'un accident qui donnent leur version :</p>
-                        <ul>
-                            <li>👥 <strong>Rang 5</strong> : chaque témoin raconte quelque chose de différent → 5 infos uniques</li>
-                            <li>👥 <strong>Rang 3</strong> : 2 témoins répètent exactement ce que dit un autre → seulement 3 infos uniques</li>
-                            <li>👥 <strong>Rang 1</strong> : tous disent exactement la même chose → 1 seule info</li>
-                        </ul>
-                        
-                        <p><strong>📐 En termes mathématiques :</strong></p>
-                        <p>Le rang compte les <strong>lignes (ou colonnes) qui apportent une information nouvelle</strong>.</p>
-                        
-                        <p><strong>🔍 Dépendance linéaire expliquée simplement :</strong></p>
-                        <p>Deux lignes sont <strong>"dépendantes"</strong> si l'une peut être obtenue en multipliant l'autre par un nombre :</p>
-                        <ul>
-                            <li>✅ <strong>Indépendantes</strong> : [1, 2] et [3, 1] → directions différentes</li>
-                            <li>❌ <strong>Dépendantes</strong> : [1, 2] et [2, 4] → la 2ème = 2 × la 1ère</li>
-                        </ul>
-                        
-                        <p><strong>💡 Intuition :</strong> Si vous pouvez "deviner" une ligne à partir des autres, elle n'apporte pas d'information nouvelle !</p>
-                        
-                        <p><strong>🔍 Propriétés importantes :</strong></p>
-                        <ul>
-                            <li><strong>rang(A) ≤ min(nombre de lignes, nombre de colonnes)</strong></li>
-                            <li><strong>rang(A) = maximum possible</strong> ⟺ aucune redondance (information maximale)</li>
-                            <li><strong>rang(A) < maximum</strong> ⟺ il y a de la redondance (information perdue)</li>
-                        </ul>
-                        
-                        <p><strong>🤖 Pourquoi crucial en IA ?</strong></p>
-                        <ul>
-                            <li>📊 <strong>Compression de données</strong> : éliminer les informations redondantes</li>
-                            <li>🧠 <strong>Détection de patterns</strong> : trouver les vraies dimensions importantes</li>
-                            <li>🎯 <strong>Compression</strong> : stocker moins d'information sans perte</li>
-                            <li>🔍 <strong>Diagnostic</strong> : détecter si un système a assez d'informations uniques</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice complet : propriétés matricielles",
-            content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Soit la matrice $$A = \\begin{bmatrix} 2 & 1 \\\\ 4 & 3 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>📝 Calculez :</strong></p>
-                        <ol>
-                            <li>Le déterminant de A</li>
-                            <li>L'inverse de A (si elle existe)</li>
-                            <li>Le rang de A</li>
-                            <li>Vérifiez que A × A⁻¹ = I</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('matrices-complete-exercise-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="matrices-complete-exercise-solution" style="display: none;">
-                        <ol>
-                            <li><strong>Déterminant :</strong><br>
-                                det(A) = 2 × 3 - 1 × 4 = 6 - 4 = 2</li>
-                            <li><strong>Inverse :</strong><br>
-                                Comme det(A) = 2 ≠ 0, A est inversible<br>
-                                $$A^{-1} = \\frac{1}{2} \\begin{bmatrix} 3 & -1 \\\\ -4 & 2 \\end{bmatrix} = \\begin{bmatrix} 1.5 & -0.5 \\\\ -2 & 1 \\end{bmatrix}$$</li>
-                            <li><strong>Rang :</strong><br>
-                                Comme det(A) ≠ 0, les lignes sont indépendantes → rang(A) = 2</li>
-                            <li><strong>Vérification :</strong><br>
-                                $$A \\times A^{-1} = \\begin{bmatrix} 2 & 1 \\\\ 4 & 3 \\end{bmatrix} \\begin{bmatrix} 1.5 & -0.5 \\\\ -2 & 1 \\end{bmatrix} = \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix}$$ ✓</li>
-                        </ol>
-                        </div>
-                    `,
-          },
-          {
-            type: "concept",
-            icon: "💡",
-            title: 'Le transposé : "retourner" la matrice',
-            content: `
-                        <p><strong>🤔 Qu'est-ce que le transposé ?</strong></p>
-                        <p>Le <strong>transposé</strong> d'une matrice A (noté A^T) s'obtient en \"retournant\" la matrice : les lignes deviennent des colonnes et vice versa.</p>
-                        
-                        <p><strong>🎯 Analogie simple :</strong></p>
-                        <p>Imaginez un tableau de données :</p>
-                        <ul>
-                            <li>📊 <strong>Original</strong> : lignes = étudiants, colonnes = matières</li>
-                            <li>🔄 <strong>Transposé</strong> : lignes = matières, colonnes = étudiants</li>
-                        </ul>
-                        <p>C'est comme \"faire pivoter\" le tableau de 90° !</p>
-                        
-                        <p><strong>📐 Définition mathématique :</strong></p>
-                        <p>Si \\(A = [a_{ij}]\\), alors \\(A^T = [a_{ji}]\\)</p>
-                        <p>L'élément en position (i,j) dans A devient l'élément en position (j,i) dans A^T</p>
-                        
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>📊 <strong>Réorganisation de données</strong> : changer la perspective d'analyse</li>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : calculs de rétropropagation</li>
-                            <li>🔍 <strong>Matrices de covariance</strong> : toujours symétriques (A = A^T)</li>
-                            <li>📈 <strong>Optimisation</strong> : calculs de gradients matriciels</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Calcul de transposés",
-            content: `
-                        <p><strong>📝 Exemple 1 : Matrice 2×3</strong></p>
-                        <p>$$A = \\begin{bmatrix} 1 & 2 & 3 \\\\ 4 & 5 & 6 \\end{bmatrix}_{2 \\times 3}$$</p>
-                        <p>$$A^T = \\begin{bmatrix} 1 & 4 \\\\ 2 & 5 \\\\ 3 & 6 \\end{bmatrix}_{3 \\times 2}$$</p>
-                        <p><strong>🔍 Observation :</strong> Une matrice 2×3 devient 3×2 après transposition</p>
-                        
-                        <p><strong>📝 Exemple 2 : Matrice carrée</strong></p>
-                        <p>$$B = \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}$$</p>
-                        <p>$$B^T = \\begin{bmatrix} 1 & 3 \\\\ 2 & 4 \\end{bmatrix}$$</p>
-                        <p><strong>💡 Astuce :</strong> Les éléments diagonaux (1 et 4) ne bougent pas !</p>
-                        
-                        <p><strong>📝 Exemple 3 : Vecteur colonne → vecteur ligne</strong></p>
-                        <p>$$\\vec{v} = \\begin{bmatrix} 2 \\\\ 3 \\\\ 5 \\end{bmatrix}_{3 \\times 1} \\quad \\Rightarrow \\quad \\vec{v}^T = \\begin{bmatrix} 2 & 3 & 5 \\end{bmatrix}_{1 \\times 3}$$</p>
-                        <p><strong>🎯 Usage courant :</strong> Transformer un vecteur colonne en vecteur ligne pour les calculs</p>
-                    `,
-          },
-          {
-            type: "mathematique",
-            icon: "∑",
-            title: "Propriétés du transposé",
-            content: `
-                        <p><strong>🔑 Propriétés importantes du transposé :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• Double transposition :</strong> $$(A^T)^T = A$$</li>
-                            <li style="margin-top: 0.5rem"><strong>• Transposé d'une somme :</strong> $$(A + B)^T = A^T + B^T$$</li>
-                            <li style="margin-top: 0.5rem"><strong>• Transposé d'un produit :</strong> $$(AB)^T = B^T A^T$$ ⚠️ <em>Ordre inversé !</em></li>
-                            <li style="margin-top: 0.5rem"><strong>• Transposé d'un scalaire :</strong> $$(\\lambda A)^T = \\lambda A^T$$</li>
-                            <li style="margin-top: 0.5rem"><strong>• Transposé de l'inverse :</strong> $$(A^{-1})^T = (A^T)^{-1}$$</li>
-                        </ul>
-                        
-                        <p><strong>🎯 Types de matrices spéciales :</strong></p>
-                        <ul>
-                            <li><strong>• Matrice symétrique :</strong> \\(A = A^T\\) (symétrique par rapport à la diagonale)</li>
-                            <li><strong>• Matrice antisymétrique :</strong> \\(A = -A^T\\) (diagonale nulle)</li>
-                            <li><strong>• Matrice orthogonale :</strong> \\(A^T A = I\\) (très importante en IA !)</li>
-                        </ul>
-                        
-                        <p><strong>💡 Propriété cruciale pour l'IA :</strong></p>
-                        <p>Le produit \\(A^T A\\) est toujours symétrique et semi-définie positive. C'est la base de nombreux algorithmes d'optimisation !</p>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice : propriétés du transposé",
-            content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Soient les matrices $$A = \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}$$ et $$B = \\begin{bmatrix} 5 & 6 \\\\ 7 & 8 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>📝 Calculez et vérifiez :</strong></p>
-                        <ol>
-                            <li>\\(A^T\\) et \\(B^T\\)</li>
-                            <li>\\((A + B)^T\\) et \\(A^T + B^T\\) (sont-ils égaux ?)</li>
-                            <li>\\((AB)^T\\) et \\(B^T A^T\\) (sont-ils égaux ?)</li>
-                            <li>\\(A^T A\\) (est-ce symétrique ?)</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('transpose-exercise-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="transpose-exercise-solution" style="display: none;">
-                        <ol>
-                            <li><strong>Transposés :</strong><br>
-                                $$A^T = \\begin{bmatrix} 1 & 3 \\\\ 2 & 4 \\end{bmatrix}, \\quad B^T = \\begin{bmatrix} 5 & 7 \\\\ 6 & 8 \\end{bmatrix}$$</li>
-                            <li><strong>Propriété de la somme :</strong><br>
-                                $$A + B = \\begin{bmatrix} 6 & 8 \\\\ 10 & 12 \\end{bmatrix} \\Rightarrow (A + B)^T = \\begin{bmatrix} 6 & 10 \\\\ 8 & 12 \\end{bmatrix}$$<br>
-                                $$A^T + B^T = \\begin{bmatrix} 1 & 3 \\\\ 2 & 4 \\end{bmatrix} + \\begin{bmatrix} 5 & 7 \\\\ 6 & 8 \\end{bmatrix} = \\begin{bmatrix} 6 & 10 \\\\ 8 & 12 \\end{bmatrix}$$ ✓</li>
-                            <li><strong>Propriété du produit :</strong><br>
-                                $$AB = \\begin{bmatrix} 19 & 22 \\\\ 43 & 50 \\end{bmatrix} \\Rightarrow (AB)^T = \\begin{bmatrix} 19 & 43 \\\\ 22 & 50 \\end{bmatrix}$$<br>
-                                $$B^T A^T = \\begin{bmatrix} 5 & 7 \\\\ 6 & 8 \\end{bmatrix} \\begin{bmatrix} 1 & 3 \\\\ 2 & 4 \\end{bmatrix} = \\begin{bmatrix} 19 & 43 \\\\ 22 & 50 \\end{bmatrix}$$ ✓</li>
-                            <li><strong>Symétrie de A^T A :</strong><br>
-                                $$A^T A = \\begin{bmatrix} 1 & 3 \\\\ 2 & 4 \\end{bmatrix} \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix} = \\begin{bmatrix} 10 & 14 \\\\ 14 & 20 \\end{bmatrix}$$<br>
-                                C'est bien symétrique ! (élément (1,2) = élément (2,1) = 14)</li>
-                        </ol>
-                        </div>
-                    `,
-          },
-        ],
-        quiz: {
-          question:
-            "🤔 Que se passe-t-il quand on multiplie une matrice 3×2 par une matrice 2×4 ?",
-          options: [
-            "A) C'est impossible",
-            "B) On obtient une matrice 3×4",
-            "C) On obtient une matrice 2×2",
-            "D) On obtient une matrice 6×8",
-          ],
-          correct: 1,
-          explanation:
-            "Le produit d'une matrice 3×2 par une matrice 2×4 donne une matrice 3×4. La règle : (m×n) × (n×p) = (m×p). Le nombre de colonnes de la première doit égaler le nombre de lignes de la seconde.",
-        },
-        prevModule: "vectors.html",
-        nextModule: "eigenvalues.html",
-      };
+  <div class="container">
+    <h1>Les Matrices</h1>
+    <p class="subtitle">Module 1.2 — Transformer les vecteurs</p>
 
-      // Initialiser le module
-      document.addEventListener("DOMContentLoaded", function () {
-        initializeModule(moduleConfig);
-      });
-    </script>
-  </body>
+    <div class="objectives">
+      <h2>Ce que vous allez apprendre</h2>
+      <ul id="objectives-list"></ul>
+    </div>
+
+    <div id="module-content"></div>
+
+    <div class="checkpoint">
+      <h3>Checkpoint</h3>
+      <p>Complétez tous les exercices pour valider ce module</p>
+      <button class="checkpoint-btn" id="checkpoint-btn" onclick="completeCheckpoint()" disabled>
+        Valider le module
+      </button>
+    </div>
+
+    <div class="module-nav">
+      <a href="vectors.html" class="nav-link">← Vecteurs</a>
+      <a href="eigenvalues.html" class="nav-link">Valeurs propres →</a>
+    </div>
+  </div>
+
+  <script src="../../scripts/module-engine.js"></script>
+  <script>
+const moduleConfig = {
+  id: "math-matrices",
+  title: "Les Matrices",
+  category: "Mathématiques",
+  objectives: [
+    "Comprendre ce qu'est une matrice et ses dimensions",
+    "Savoir multiplier des matrices",
+    "Transformer un vecteur avec une matrice",
+    "Calculer un déterminant"
+  ],
+  content: [
+    // ========== SECTION 1: POURQUOI ==========
+    {
+      type: "concept",
+      icon: "🎯",
+      title: "Pourquoi les matrices ?",
+      content: `
+        <p><strong>Une matrice transforme des vecteurs.</strong></p>
+        <p>Vous avez un vecteur (une liste de nombres). Une matrice peut le <strong>tourner</strong>, l'<strong>étirer</strong>, le <strong>projeter</strong>.</p>
+        <p><strong>Une matrice, c'est un tableau de nombres :</strong></p>
+        <p style="text-align: center; font-size: 1.1rem;">
+          $$A = \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}$$
+        </p>
+        <p>Cette matrice a <strong>2 lignes</strong> et <strong>2 colonnes</strong>. On dit qu'elle est de taille 2×2.</p>
+        <p><strong>En IA, les matrices sont partout :</strong></p>
+        <ul>
+          <li>Les poids d'un réseau de neurones</li>
+          <li>Les données d'entraînement (lignes = exemples, colonnes = caractéristiques)</li>
+          <li>Les transformations d'images</li>
+        </ul>
+      `
+    },
+
+    // ========== SECTION 2: QUIZ DIMENSIONS ==========
+    {
+      type: "quiz",
+      title: "Vérification",
+      question: "Une matrice 3×2 a combien d'éléments au total ?",
+      options: ["5", "6", "32", "23"],
+      correct: 1,
+      explanation: "3 lignes × 2 colonnes = 6 éléments.",
+      completesObjective: 0
+    },
+
+    // ========== SECTION 3: ADDITION ==========
+    {
+      type: "mathematique",
+      icon: "➕",
+      title: "Addition de matrices",
+      content: `
+        <p>Comme pour les vecteurs, on additionne <strong>élément par élément</strong>.</p>
+        <p><strong>Condition :</strong> les deux matrices doivent avoir la même taille.</p>
+        <p style="text-align: center;">
+          $$\\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix} + \\begin{bmatrix} 5 & 6 \\\\ 7 & 8 \\end{bmatrix} = \\begin{bmatrix} 6 & 8 \\\\ 10 & 12 \\end{bmatrix}$$
+        </p>
+      `
+    },
+
+    // ========== SECTION 4: EXERCICE ADDITION ==========
+    {
+      type: "exercise",
+      title: "Calculez l'addition",
+      exerciseType: "numeric",
+      question: `
+        <p>Calculez l'élément en <strong>bas à droite</strong> du résultat :</p>
+        <p style="text-align: center;">
+          $$\\begin{bmatrix} 2 & 3 \\\\ 4 & 5 \\end{bmatrix} + \\begin{bmatrix} 1 & 1 \\\\ 1 & 2 \\end{bmatrix} = \\begin{bmatrix} ? & ? \\\\ ? & ? \\end{bmatrix}$$
+        </p>
+      `,
+      answer: 7,
+      tolerance: 0,
+      explanation: "5 + 2 = 7. Le résultat complet est [[3,4],[5,7]].",
+      hint: "L'élément bas-droite : 5 + 2"
+    },
+
+    // ========== SECTION 5: PRODUIT MATRICIEL ==========
+    {
+      type: "mathematique",
+      icon: "✖️",
+      title: "Le produit matriciel",
+      content: `
+        <p><strong>C'est l'opération la plus importante.</strong> Elle est différente de l'addition !</p>
+        <p>Pour multiplier A × B :</p>
+        <ol>
+          <li>Chaque élément du résultat est un <strong>produit scalaire</strong></li>
+          <li>Ligne de A · Colonne de B</li>
+        </ol>
+        <p><strong>Exemple :</strong></p>
+        <p style="text-align: center;">
+          $$\\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix} \\times \\begin{bmatrix} 5 & 6 \\\\ 7 & 8 \\end{bmatrix}$$
+        </p>
+        <p>Élément (1,1) : ligne 1 · colonne 1 = 1×5 + 2×7 = <strong>19</strong></p>
+        <p>Élément (1,2) : ligne 1 · colonne 2 = 1×6 + 2×8 = <strong>22</strong></p>
+        <p>Élément (2,1) : ligne 2 · colonne 1 = 3×5 + 4×7 = <strong>43</strong></p>
+        <p>Élément (2,2) : ligne 2 · colonne 2 = 3×6 + 4×8 = <strong>50</strong></p>
+        <p style="text-align: center;">
+          $$= \\begin{bmatrix} 19 & 22 \\\\ 43 & 50 \\end{bmatrix}$$
+        </p>
+      `
+    },
+
+    // ========== SECTION 6: EXERCICE PRODUIT ==========
+    {
+      type: "exercise",
+      title: "Calculez le produit",
+      exerciseType: "numeric",
+      question: `
+        <p>Calculez l'élément <strong>(1,1)</strong> (en haut à gauche) du produit :</p>
+        <p style="text-align: center;">
+          $$\\begin{bmatrix} 2 & 1 \\\\ 0 & 3 \\end{bmatrix} \\times \\begin{bmatrix} 4 & 0 \\\\ 1 & 2 \\end{bmatrix} = ?$$
+        </p>
+        <p><em>Rappel : ligne 1 · colonne 1</em></p>
+      `,
+      answer: 9,
+      tolerance: 0,
+      explanation: "2×4 + 1×1 = 8 + 1 = 9",
+      hint: "Ligne 1 de A = [2, 1], Colonne 1 de B = [4, 1]. Produit scalaire !",
+      completesObjective: 1
+    },
+
+    // ========== SECTION 7: RÈGLE DES DIMENSIONS ==========
+    {
+      type: "concept",
+      icon: "📐",
+      title: "Règle des dimensions",
+      content: `
+        <p><strong>Quand peut-on multiplier A × B ?</strong></p>
+        <p>Seulement si : <strong>colonnes de A = lignes de B</strong></p>
+        <p style="text-align: center; font-size: 1.1rem;">
+          $$(m \\times \\boxed{n}) \\times (\\boxed{n} \\times p) = (m \\times p)$$
+        </p>
+        <p><strong>Exemples :</strong></p>
+        <ul>
+          <li>✅ (2×<strong>3</strong>) × (<strong>3</strong>×4) → résultat 2×4</li>
+          <li>✅ (5×<strong>2</strong>) × (<strong>2</strong>×2) → résultat 5×2</li>
+          <li>❌ (2×3) × (2×4) → impossible ! (3 ≠ 2)</li>
+        </ul>
+        <p><strong>Attention :</strong> A×B ≠ B×A en général !</p>
+      `
+    },
+
+    // ========== SECTION 8: CODE PYTHON ==========
+    {
+      type: "code",
+      title: "Matrices en Python avec NumPy",
+      description: "NumPy rend les calculs matriciels simples :",
+      code: `import numpy as np
+
+# Créer des matrices
+A = np.array([[1, 2],
+              [3, 4]])
+B = np.array([[5, 6],
+              [7, 8]])
+
+print("Matrice A:")
+print(A)
+print("\\nMatrice B:")
+print(B)
+
+# Addition
+print("\\nA + B =")
+print(A + B)
+
+# Produit matriciel (ATTENTION: @ ou np.dot, PAS *)
+print("\\nA × B =")
+print(A @ B)  # ou np.dot(A, B)
+
+# Dimensions
+print(f"\\nDimensions de A: {A.shape}")`
+    },
+
+    // ========== SECTION 9: TRANSFORMATION VECTEUR ==========
+    {
+      type: "mathematique",
+      icon: "🔄",
+      title: "Transformer un vecteur",
+      content: `
+        <p><strong>L'application principale :</strong> multiplier une matrice par un vecteur.</p>
+        <p style="text-align: center;">
+          $$\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix} \\times \\begin{bmatrix} x \\\\ y \\end{bmatrix} = \\begin{bmatrix} ax + by \\\\ cx + dy \\end{bmatrix}$$
+        </p>
+        <p><strong>Exemple : rotation de 90°</strong></p>
+        <p style="text-align: center;">
+          $$\\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\end{bmatrix} \\times \\begin{bmatrix} 3 \\\\ 0 \\end{bmatrix} = \\begin{bmatrix} 0 \\\\ 3 \\end{bmatrix}$$
+        </p>
+        <p>Le point (3, 0) devient (0, 3) → rotation de 90° !</p>
+      `
+    },
+
+    // ========== SECTION 10: EXERCICE TRANSFORMATION ==========
+    {
+      type: "exercise",
+      title: "Transformez le vecteur",
+      exerciseType: "numeric",
+      question: `
+        <p>Calculez la <strong>première composante</strong> du vecteur transformé :</p>
+        <p style="text-align: center;">
+          $$\\begin{bmatrix} 2 & 1 \\\\ 0 & 3 \\end{bmatrix} \\times \\begin{bmatrix} 4 \\\\ 2 \\end{bmatrix} = \\begin{bmatrix} ? \\\\ ? \\end{bmatrix}$$
+        </p>
+      `,
+      answer: 10,
+      tolerance: 0,
+      explanation: "2×4 + 1×2 = 8 + 2 = 10. Le résultat complet est [10, 6].",
+      hint: "Première composante = 2×4 + 1×2",
+      completesObjective: 2
+    },
+
+    // ========== SECTION 11: CODE TRANSFORMATION ==========
+    {
+      type: "code",
+      title: "Visualiser une transformation",
+      description: "Voyons comment une matrice transforme des vecteurs :",
+      code: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Matrice de transformation (étirement + rotation)
+M = np.array([[2, -0.5],
+              [0.5, 1]])
+
+# Points originaux (carré)
+points = np.array([[0, 1, 1, 0, 0],
+                   [0, 0, 1, 1, 0]])
+
+# Points transformés
+transformed = M @ points
+
+# Visualisation
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+
+ax1.plot(points[0], points[1], 'b-o', linewidth=2, markersize=8)
+ax1.set_xlim(-1, 3)
+ax1.set_ylim(-1, 3)
+ax1.set_aspect('equal')
+ax1.grid(True, alpha=0.3)
+ax1.set_title('Original')
+ax1.axhline(y=0, color='k', linewidth=0.5)
+ax1.axvline(x=0, color='k', linewidth=0.5)
+
+ax2.plot(transformed[0], transformed[1], 'r-o', linewidth=2, markersize=8)
+ax2.set_xlim(-1, 3)
+ax2.set_ylim(-1, 3)
+ax2.set_aspect('equal')
+ax2.grid(True, alpha=0.3)
+ax2.set_title('Après transformation')
+ax2.axhline(y=0, color='k', linewidth=0.5)
+ax2.axvline(x=0, color='k', linewidth=0.5)
+
+plt.tight_layout()
+plt.show()`
+    },
+
+    // ========== SECTION 12: DÉTERMINANT ==========
+    {
+      type: "mathematique",
+      icon: "📊",
+      title: "Le déterminant",
+      content: `
+        <p><strong>Le déterminant mesure "l'effet" d'une matrice.</strong></p>
+        <p>Pour une matrice 2×2 :</p>
+        <p style="text-align: center;">
+          $$\\det\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix} = ad - bc$$
+        </p>
+        <p><strong>Interprétation :</strong></p>
+        <ul>
+          <li><strong>|det| > 1</strong> : la matrice agrandit</li>
+          <li><strong>|det| = 1</strong> : la matrice conserve les aires (ex: rotation)</li>
+          <li><strong>|det| < 1</strong> : la matrice rétrécit</li>
+          <li><strong>det = 0</strong> : la matrice "écrase" tout sur une ligne (pas d'inverse !)</li>
+        </ul>
+        <p><strong>Exemple :</strong></p>
+        <p style="text-align: center;">
+          $$\\det\\begin{bmatrix} 3 & 1 \\\\ 2 & 4 \\end{bmatrix} = 3 \\times 4 - 1 \\times 2 = 12 - 2 = 10$$
+        </p>
+      `
+    },
+
+    // ========== SECTION 13: EXERCICE DÉTERMINANT ==========
+    {
+      type: "exercise",
+      title: "Calculez le déterminant",
+      exerciseType: "numeric",
+      question: `
+        <p>Calculez :</p>
+        <p style="text-align: center; font-size: 1.1rem;">
+          $$\\det\\begin{bmatrix} 5 & 2 \\\\ 3 & 4 \\end{bmatrix} = ?$$
+        </p>
+      `,
+      answer: 14,
+      tolerance: 0,
+      explanation: "5×4 - 2×3 = 20 - 6 = 14",
+      hint: "Formule : ad - bc",
+      completesObjective: 3
+    },
+
+    // ========== SECTION 14: MATRICE IDENTITÉ ET INVERSE ==========
+    {
+      type: "concept",
+      icon: "🔁",
+      title: "Identité et inverse",
+      content: `
+        <p><strong>La matrice identité I</strong> ne change rien :</p>
+        <p style="text-align: center;">
+          $$I = \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix} \\quad \\text{car} \\quad A \\times I = I \\times A = A$$
+        </p>
+        <p><strong>L'inverse A⁻¹</strong> "annule" l'effet de A :</p>
+        <p style="text-align: center;">
+          $$A \\times A^{-1} = I$$
+        </p>
+        <p><strong>Formule pour 2×2</strong> (si det ≠ 0) :</p>
+        <p style="text-align: center;">
+          $$\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}^{-1} = \\frac{1}{ad-bc}\\begin{bmatrix} d & -b \\\\ -c & a \\end{bmatrix}$$
+        </p>
+        <p><strong>Important :</strong> Une matrice n'a d'inverse que si det ≠ 0.</p>
+      `
+    },
+
+    // ========== SECTION 15: CODE OPERATIONS ==========
+    {
+      type: "code",
+      title: "Déterminant et inverse en Python",
+      description: "NumPy calcule tout pour nous :",
+      code: `import numpy as np
+
+A = np.array([[5, 2],
+              [3, 4]])
+
+# Déterminant
+det_A = np.linalg.det(A)
+print(f"det(A) = {det_A}")
+
+# Inverse
+A_inv = np.linalg.inv(A)
+print(f"\\nA⁻¹ =")
+print(A_inv)
+
+# Vérification : A × A⁻¹ = I
+print(f"\\nA × A⁻¹ =")
+print(np.round(A @ A_inv, 10))  # round pour éviter erreurs numériques
+
+# Identité
+I = np.eye(2)
+print(f"\\nMatrice identité I =")
+print(I)`
+    },
+
+    // ========== SECTION 16: EXERCICE CODE ==========
+    {
+      type: "exercise-code",
+      title: "Défi : créez et transformez",
+      instruction: `
+        <p>Créez une matrice <code>M</code> de taille 2×2 et un vecteur <code>v</code> de taille 2.</p>
+        <p>Calculez le produit <code>M @ v</code> et affichez le résultat.</p>
+      `,
+      starterCode: `import numpy as np
+
+# Créez une matrice 2×2
+M = np.array([[___, ___],
+              [___, ___]])
+
+# Créez un vecteur de taille 2
+v = np.array([___, ___])
+
+# Calculez et affichez M × v
+result = M @ v
+print(result)`,
+      validate: `
+try:
+    M.shape == (2, 2) and v.shape == (2,) and result.shape == (2,)
+except:
+    False
+      `,
+      successMessage: "Vous savez transformer des vecteurs avec des matrices !",
+      errorMessage: "Vérifiez que M est 2×2 et v est de taille 2."
+    },
+
+    // ========== SECTION 17: QUIZ FINAL ==========
+    {
+      type: "quiz",
+      title: "Quiz final",
+      question: "Si det(A) = 0, que peut-on dire ?",
+      options: [
+        "A est la matrice identité",
+        "A n'a pas d'inverse",
+        "A est une rotation",
+        "A × A = A"
+      ],
+      correct: 1,
+      explanation: "Une matrice avec det = 0 est dite 'singulière' et n'a pas d'inverse. Elle 'écrase' l'espace sur une dimension inférieure.",
+      wrongExplanation: "Relisez la section sur le déterminant. det = 0 signifie que la matrice perd de l'information."
+    },
+
+    // ========== SECTION 18: SYNTHÈSE ==========
+    {
+      type: "application",
+      icon: "🚀",
+      title: "Ce que vous savez maintenant",
+      content: `
+        <p><strong>Vous maîtrisez les matrices :</strong></p>
+        <ul>
+          <li>✅ <strong>Créer</strong> une matrice : tableau m×n de nombres</li>
+          <li>✅ <strong>Additionner</strong> : élément par élément (même taille)</li>
+          <li>✅ <strong>Multiplier</strong> : ligne · colonne (colonnes A = lignes B)</li>
+          <li>✅ <strong>Transformer</strong> un vecteur : M × v</li>
+          <li>✅ <strong>Déterminant</strong> : ad - bc (mesure l'effet)</li>
+          <li>✅ <strong>Inverse</strong> : "défait" la transformation (si det ≠ 0)</li>
+        </ul>
+        <p><strong>Prochaine étape :</strong> Les valeurs propres révèlent les "directions privilégiées" d'une matrice. C'est la clé de la réduction de dimension en IA.</p>
+      `
+    }
+  ]
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+  initializeModule(moduleConfig);
+});
+  </script>
+</body>
 </html>
