@@ -1,355 +1,393 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Les Vecteurs | Plateforme d'Apprentissage IA</title>
-    <title>Les Vecteurs | IA4Ndada</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les Vecteurs | IA4Ndada</title>
 
-    <!-- MathJax pour les formules mathématiques -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script
-      id="MathJax-script"
-      async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-    ></script>
-
-    <!-- Pyodide pour Python dans le navigateur -->
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
-
-    <link rel="stylesheet" href="../../styles/module.css" />
-  </head>
-  <body>
-    <!-- Navigation -->
-    <nav class="nav">
-      <div class="nav-container">
-        <div class="nav-breadcrumb">
-          <a href="../../index.html">🏠 Accueil</a>
-          <span>›</span>
-          <span>🧮 Mathématiques</span>
-          <span>›</span>
-          <span>Les Vecteurs</span>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+  <link rel="stylesheet" href="../../styles/module.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <div class="nav-breadcrumb">
+        <a href="../../index.html">Accueil</a>
+        <span>›</span>
+        <span>Maths</span>
+        <span>›</span>
+        <span>Vecteurs</span>
+      </div>
+      <div class="progress-indicator">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
         </div>
-        <div class="progress-indicator">
-          <span id="progress-text">Progression: 0%</span>
-          <div class="progress-bar">
-            <div
-              class="progress-fill"
-              id="progress-fill"
-              style="width: 0%"
-            ></div>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Contenu principal -->
-    <div class="container">
-      <h1>📐 Les Vecteurs</h1>
-      <p class="subtitle">Module 1.1 - Algèbre Linéaire pour l'IA</p>
-
-      <!-- Objectifs -->
-      <div class="objectives">
-        <h2>🎯 Objectifs d'apprentissage</h2>
-        <ul id="objectives-list">
-          <!-- Les objectifs seront ajoutés dynamiquement -->
-        </ul>
-      </div>
-
-      <!-- Contenu du module -->
-      <div id="module-content">
-        <!-- Le contenu sera ajouté dynamiquement -->
-      </div>
-
-      <!-- Quiz -->
-      <div class="quiz" id="module-quiz" style="display: none">
-        <div class="quiz-question" id="quiz-question"></div>
-        <div class="quiz-options" id="quiz-options"></div>
-        <div class="quiz-feedback" id="quiz-feedback"></div>
-      </div>
-
-      <!-- Checkpoint -->
-      <div class="checkpoint">
-        <h3>🎉 Checkpoint - Les Vecteurs</h3>
-        <p>
-          Félicitations ! Vous maîtrisez maintenant les concepts fondamentaux
-          des vecteurs pour l'IA.
-        </p>
-        <button
-          class="checkpoint-btn"
-          id="checkpoint-btn"
-          onclick="completeCheckpoint()"
-        >
-          Marquer comme complété
-        </button>
-      </div>
-
-      <!-- Navigation entre modules -->
-      <div class="module-nav">
-        <a href="#" class="nav-link disabled" id="prev-link"
-          >← Module précédent</a
-        >
-        <a href="matrices.html" class="nav-link" id="next-link"
-          >Module suivant : Matrices →</a
-        >
+        <span id="progress-text">0%</span>
+        <span id="pyodide-status"><span class="status-loading">Chargement Python...</span></span>
       </div>
     </div>
+  </nav>
 
-    <script src="../../scripts/module-engine.js"></script>
-    <script>
-      // Configuration du module Vecteurs
-      const moduleConfig = {
-        id: "math-vectors",
-        title: "Les Vecteurs",
-        category: "Mathématiques",
-        objectives: [
-          "Comprendre intuitivement ce qu'est un vecteur",
-          "Manipuler les vecteurs en Python avec NumPy",
-          "Effectuer des opérations de base sur les vecteurs",
-          "Visualiser des vecteurs dans l'espace",
-        ],
-        content: [
-          {
-            type: "concept",
-            icon: "💡",
-            title: "Concept fondamental",
-            content: `
-                        <p>Un <strong>vecteur</strong> est un objet mathématique caractérisé par une <strong>magnitude</strong> (longueur) et une <strong>direction</strong>. En algèbre linéaire, les vecteurs peuvent être représentés comme des listes ordonnées de nombres réels, appelés composantes ou coordonnées.</p>
-                        <p>Un vecteur, c'est simplement <strong>une liste de nombres</strong> : $$\\vec{v} = \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix}$$</p>
-                        <p><strong>Exemples concrets :</strong></p>
-                        <ul>
-                            <li>📍 <strong>Position</strong> : [3, 4] = 3 unités à droite, 4 unités vers le haut</li>
-                            <li>🏃 <strong>Vitesse</strong> : [5, -2] = 5 m/s vers l'est, 2 m/s vers le sud</li>
-                            <li>🌡️ <strong>Mesures</strong> : [25, 60] = température 25°C, humidité 60%</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "intuition",
-            icon: "🧠",
-            title: "L'analogie du déplacement",
-            content: `
-                        <p>Imaginez que vous devez expliquer à quelqu'un comment se rendre d'un point A à un point B dans une ville organisée en quadrillage :</p>
-                        <p>📍 <strong>"Avancez de 3 blocs vers le nord, puis 4 blocs vers l'est"</strong></p>
-                        <p>Ces instructions forment un vecteur : <strong>[3, 4]</strong> !</p>
-                        <ul>
-                            <li>🎯 <strong>Direction</strong> : nord et est</li>
-                            <li>📏 <strong>Magnitude</strong> : 3 blocs et 4 blocs</li>
-                            <li>🧭 <strong>Résultat unique</strong> : ces 2 nombres définissent exactement le déplacement</li>
-                        </ul>
-                        <p><strong>C'est exactement ce qu'est un vecteur :</strong> une direction et une magnitude ! Cette représentation simple permet de décrire des déplacements, des forces, des vitesses, et bien plus encore.</p>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Calculs manuels avec les vecteurs",
-            content: `
-                        <p><strong>Prenons deux vecteurs :</strong></p>
-                        <ul>
-                            <li>$$\\vec{u} = \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix}$$ (déplacement : 3 à droite, 4 vers le haut)</li>
-                            <li>$$\\vec{v} = \\begin{bmatrix} 1 \\\\ 2 \\end{bmatrix}$$ (déplacement : 1 à droite, 2 vers le haut)</li>
-                        </ul>
-                        
-                        <p><strong>🔢 Addition :</strong></p>
-                        <p>$$\\vec{u} + \\vec{v} = \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix} + \\begin{bmatrix} 1 \\\\ 2 \\end{bmatrix} = \\begin{bmatrix} 3+1 \\\\ 4+2 \\end{bmatrix} = \\begin{bmatrix} 4 \\\\ 6 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>🔢 Multiplication par un scalaire :</strong></p>
-                        <p>$$2 \\times \\vec{u} = 2 \\times \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix} = \\begin{bmatrix} 2 \\times 3 \\\\ 2 \\times 4 \\end{bmatrix} = \\begin{bmatrix} 6 \\\\ 8 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>🔢 Norme (longueur) :</strong></p>
-                        <p>$$||\\vec{u}|| = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$$</p>
-                        
-                        <p><strong>🔢 Produit scalaire :</strong></p>
-                        <p>$$\\vec{u} \\cdot \\vec{v} = 3 \\times 1 + 4 \\times 2 = 3 + 8 = 11$$</p>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice pratique : calculs manuels",
-            content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Soient les vecteurs $$\\vec{u} = \\begin{bmatrix} 2 \\\\ 3 \\end{bmatrix}$$ et $$\\vec{v} = \\begin{bmatrix} 4 \\\\ 1 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>📝 Calculez à la main :</strong></p>
-                        <ol>
-                            <li>$$\\vec{u} + \\vec{v} = ?$$</li>
-                            <li>$$3 \\times \\vec{u} = ?$$</li>
-                            <li>$$||\\vec{u}|| = ?$$ (norme de u)</li>
-                            <li>$$\\vec{u} \\cdot \\vec{v} = ?$$ (produit scalaire)</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('vectors-exercise-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="vectors-exercise-solution" style="display: none;">
-                        <ol>
-                            <li>$$\\vec{u} + \\vec{v} = \\begin{bmatrix} 2+4 \\\\ 3+1 \\end{bmatrix} = \\begin{bmatrix} 6 \\\\ 4 \\end{bmatrix}$$</li>
-                            <li>$$3 \\times \\vec{u} = \\begin{bmatrix} 3 \\times 2 \\\\ 3 \\times 3 \\end{bmatrix} = \\begin{bmatrix} 6 \\\\ 9 \\end{bmatrix}$$</li>
-                            <li>$$||\\vec{u}|| = \\sqrt{2^2 + 3^2} = \\sqrt{4 + 9} = \\sqrt{13} \\approx 3.61$$</li>
-                            <li>$$\\vec{u} \\cdot \\vec{v} = 2 \\times 4 + 3 \\times 1 = 8 + 3 = 11$$</li>
-                        </ol>
-                        </div>
-                    `,
-          },
-          {
-            type: "mathematique",
-            icon: "∑",
-            title: "Opérations mathématiques sur les vecteurs",
-            content: `
-                        <p>Pour deux vecteurs \\(\\vec{u}\\) et \\(\\vec{v}\\) de dimension \\(n\\) :</p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• Addition :</strong> $$\\vec{u} + \\vec{v} = \\begin{bmatrix} u_1 + v_1 \\\\ u_2 + v_2 \\\\ \\vdots \\\\ u_n + v_n \\end{bmatrix}$$</li>
-                            <li style="margin-top: 1rem"><strong>• Multiplication scalaire :</strong> $$\\lambda \\vec{v} = \\begin{bmatrix} \\lambda v_1 \\\\ \\lambda v_2 \\\\ \\vdots \\\\ \\lambda v_n \\end{bmatrix}$$</li>
-                            <li style="margin-top: 1rem"><strong>• Produit scalaire :</strong> $$\\vec{u} \\cdot \\vec{v} = \\sum_{i=1}^{n} u_i v_i$$</li>
-                            <li style="margin-top: 1rem"><strong>• Norme :</strong> $$||\\vec{v}|| = \\sqrt{\\sum_{i=1}^{n} v_i^2}$$</li>
-                        </ul>
-                        <p><strong>🔑 Interprétation :</strong> La norme mesure la "longueur" du vecteur, le produit scalaire indique à quel point deux vecteurs pointent dans la même direction.</p>
-                        <ul>
-                            <li><strong>Norme</strong> : mesure la "longueur" du vecteur</li>
-                            <li><strong>Produit scalaire</strong> : indique si deux vecteurs pointent dans des directions similaires</li>
-                            <li><strong>Produit scalaire = 0</strong> : vecteurs perpendiculaires</li>
-                            <li><strong>Produit scalaire > 0</strong> : vecteurs dans des directions similaires</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "warning",
-            icon: "⚠️",
-            title: "Applications des vecteurs",
-            content: `
-                        <p><strong>Les vecteurs sont omniprésents en science et technologie :</strong></p>
-                        <ul>
-                            <li>🤖 <strong>Intelligence artificielle</strong> : tout devient des vecteurs de nombres</li>
-                            <li>🧠 <strong>Deep Learning</strong> : les réseaux manipulent des millions de vecteurs</li>
-                            <li>💬 <strong>ChatGPT & LLMs</strong> : chaque mot est transformé en vecteur</li>
-                            <li>🎵 <strong>Recommandations</strong> : Spotify compare vos goûts (vecteurs) avec d'autres</li>
-                            <li>🔍 <strong>Recherche</strong> : Google trouve des documents similaires grâce aux vecteurs</li>
-                        </ul>
-                        <p><strong>💡 Point clé :</strong> Les vecteurs permettent de représenter et manipuler mathématiquement des quantités qui ont à la fois une magnitude et une direction.</p>
-                    `,
-          },
-          {
-            type: "mathematique",
-            icon: "∑",
-            title: "Géométrie des vecteurs : angles et orthogonalité",
-            content: `
-                        <p><strong>🤔 Comment mesurer l'angle entre deux vecteurs ?</strong></p>
-                        <p>L'angle entre deux vecteurs révèle s'ils pointent dans des directions similaires ou opposées. C'est crucial pour comprendre les relations dans les données !</p>
-                        
-                        <p><strong>📐 Formule de l'angle :</strong></p>
-                        <p>$$\\cos(\\theta) = \\frac{\\vec{u} \\cdot \\vec{v}}{||\\vec{u}|| \\times ||\\vec{v}||}$$</p>
-                        
-                        <p><strong>🔍 Décryptage de la formule :</strong></p>
-                        <ul>
-                            <li>\\(\\vec{u} \\cdot \\vec{v}\\) = <strong>produit scalaire</strong> (mesure la \"projection\")</li>
-                            <li>\\(||\\vec{u}|| \\times ||\\vec{v}||\\) = <strong>produit des normes</strong> (normalisation)</li>
-                            <li>\\(\\cos(\\theta)\\) = <strong>cosinus de l'angle</strong> entre -1 et 1</li>
-                        </ul>
-                        
-                        <p><strong>🎯 Interprétation intuitive :</strong></p>
-                        <ul style="list-style: none; padding-left: 0">
-                            <li><strong>• cos(θ) = 1</strong> → θ = 0° → vecteurs identiques</li>
-                            <li><strong>• cos(θ) = 0</strong> → θ = 90° → vecteurs perpendiculaires</li>
-                            <li><strong>• cos(θ) = -1</strong> → θ = 180° → vecteurs opposés</li>
-                        </ul>
-                        
-                        <p><strong>🔑 Orthogonalité :</strong></p>
-                        <p>Deux vecteurs sont <strong>orthogonaux</strong> (perpendiculaires) si \\(\\vec{u} \\cdot \\vec{v} = 0\\)</p>
-                        
-                        <p><strong>🤖 Applications en IA :</strong></p>
-                        <ul>
-                            <li>📊 <strong>Similarité</strong> : mesurer la ressemblance entre données</li>
-                            <li>🔍 <strong>Recherche</strong> : trouver des documents similaires</li>
-                            <li>🎵 <strong>Recommandations</strong> : \"vos goûts sont à 85% similaires\"</li>
-                            <li>🧠 <strong>Réseaux de neurones</strong> : optimisation par directions orthogonales</li>
-                        </ul>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Calcul d'angles et similarité",
-            content: `
-                        <p><strong>📝 Exemple concret :</strong></p>
-                        <p>Deux utilisateurs ont noté des films (sur 5) :</p>
-                        <ul>
-                            <li>👤 <strong>Alice</strong> : [5, 3, 1, 4, 2] (Action, Comédie, Romance, Sci-Fi, Horreur)</li>
-                            <li>👤 <strong>Bob</strong> : [4, 4, 2, 5, 1]</li>
-                        </ul>
-                        
-                        <p><strong>🎯 Question :</strong> Leurs goûts sont-ils similaires ?</p>
-                        
-                        <p><strong>Étape 1 :</strong> Produit scalaire</p>
-                        <p>$$\\vec{Alice} \\cdot \\vec{Bob} = 5×4 + 3×4 + 1×2 + 4×5 + 2×1 = 20 + 12 + 2 + 20 + 2 = 56$$</p>
-                        
-                        <p><strong>Étape 2 :</strong> Normes</p>
-                        <p>$$||\\vec{Alice}|| = \\sqrt{5^2 + 3^2 + 1^2 + 4^2 + 2^2} = \\sqrt{55} ≈ 7.42$$</p>
-                        <p>$$||\\vec{Bob}|| = \\sqrt{4^2 + 4^2 + 2^2 + 5^2 + 1^2} = \\sqrt{62} ≈ 7.87$$</p>
-                        
-                        <p><strong>Étape 3 :</strong> Similarité cosinus</p>
-                        <p>$$\\cos(\\theta) = \\frac{56}{7.42 × 7.87} ≈ \\frac{56}{58.4} ≈ 0.96$$</p>
-                        
-                        <p><strong>🎉 Résultat :</strong> cos(θ) ≈ 0.96 → θ ≈ 16° → <strong>Goûts très similaires !</strong></p>
-                        
-                        <p><strong>💡 C'est exactement ce que font les systèmes de recommandation !</strong></p>
-                    `,
-          },
-          {
-            type: "exemple",
-            icon: "💻",
-            title: "Exercice : géométrie vectorielle",
-            content: `
-                        <p><strong>🎯 Exercice à résoudre :</strong></p>
-                        <p>Soient les vecteurs $$\\vec{u} = \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix}$$ et $$\\vec{v} = \\begin{bmatrix} -4 \\\\ 3 \\end{bmatrix}$$</p>
-                        
-                        <p><strong>📝 Calculez :</strong></p>
-                        <ol>
-                            <li>Le produit scalaire \\(\\vec{u} \\cdot \\vec{v}\\)</li>
-                            <li>Les normes \\(||\\vec{u}||\\) et \\(||\\vec{v}||\\)</li>
-                            <li>L'angle θ entre les deux vecteurs</li>
-                            <li>Ces vecteurs sont-ils orthogonaux ?</li>
-                        </ol>
-                        
-                        <p><strong>✅ Solutions :</strong></p>
-                        <button class="btn btn-copy" onclick="toggleSolution('vectors-geometry-solution')" style="margin-bottom: 1rem;">
-                            👁️ Voir la solution
-                        </button>
-                        <div id="vectors-geometry-solution" style="display: none;">
-                        <ol>
-                            <li><strong>Produit scalaire :</strong><br>
-                                \\(\\vec{u} \\cdot \\vec{v} = 3 × (-4) + 4 × 3 = -12 + 12 = 0\\)</li>
-                            <li><strong>Normes :</strong><br>
-                                \\(||\\vec{u}|| = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = 5\\)<br>
-                                \\(||\\vec{v}|| = \\sqrt{(-4)^2 + 3^2} = \\sqrt{16 + 9} = 5\\)</li>
-                            <li><strong>Angle :</strong><br>
-                                \\(\\cos(\\theta) = \\frac{0}{5 × 5} = 0\\)<br>
-                                Donc θ = 90°</li>
-                            <li><strong>Orthogonalité :</strong><br>
-                                Oui ! Car \\(\\vec{u} \\cdot \\vec{v} = 0\\) → vecteurs perpendiculaires</li>
-                        </ol>
-                        <p><strong>💡 Observation :</strong> Ces vecteurs ont la même longueur (5) et sont perpendiculaires. C'est un cas parfait d'orthogonalité !</p>
-                        </div>
-                    `,
-          },
-        ],
-        quiz: {
-          question: "🤔 Quelle est la norme du vecteur [3, 4] ?",
-          options: ["A) 7", "B) 5", "C) 12", "D) 25"],
-          correct: 1,
-          explanation:
-            "La norme est √(3² + 4²) = √(9 + 16) = √25 = 5. C'est la longueur du vecteur dans l'espace.",
-        },
-        prevModule: "#",
-        nextModule: "matrices.html",
-      };
+  <div class="container">
+    <h1>Les Vecteurs</h1>
+    <p class="subtitle">Module 1.1 — Les fondations de l'IA</p>
 
-      // Initialiser le module
-      document.addEventListener("DOMContentLoaded", function () {
-        initializeModule(moduleConfig);
-      });
-    </script>
-  </body>
+    <div class="objectives">
+      <h2>Ce que vous allez apprendre</h2>
+      <ul id="objectives-list"></ul>
+    </div>
+
+    <div id="module-content"></div>
+
+    <div class="checkpoint">
+      <h3>Checkpoint</h3>
+      <p>Complétez tous les exercices pour valider ce module</p>
+      <button class="checkpoint-btn" id="checkpoint-btn" onclick="completeCheckpoint()" disabled>
+        Valider le module
+      </button>
+    </div>
+
+    <div class="module-nav">
+      <a href="#" class="nav-link disabled">← Début du parcours</a>
+      <a href="matrices.html" class="nav-link">Matrices →</a>
+    </div>
+  </div>
+
+  <script src="../../scripts/module-engine.js"></script>
+  <script>
+const moduleConfig = {
+  id: "math-vectors",
+  title: "Les Vecteurs",
+  category: "Mathématiques",
+  objectives: [
+    "Comprendre ce qu'est un vecteur et pourquoi c'est utile",
+    "Savoir additionner des vecteurs et multiplier par un scalaire",
+    "Calculer la norme et le produit scalaire",
+    "Manipuler des vecteurs en Python avec NumPy"
+  ],
+  content: [
+    // ========== SECTION 1: POURQUOI ==========
+    {
+      type: "concept",
+      icon: "🎯",
+      title: "Pourquoi les vecteurs ?",
+      content: `
+        <p><strong>En IA, tout est vecteur.</strong></p>
+        <p>Quand ChatGPT lit une phrase, il la transforme en vecteur. Quand Spotify recommande une chanson, il compare des vecteurs. Quand une voiture autonome détecte un piéton, elle utilise des vecteurs.</p>
+        <p><strong>Un vecteur, c'est simplement une liste de nombres :</strong></p>
+        <p style="text-align: center; font-size: 1.2rem;">$$\\vec{v} = [3, 4]$$</p>
+        <p>Ces deux nombres peuvent représenter :</p>
+        <ul>
+          <li>Une position : 3 mètres à droite, 4 mètres en haut</li>
+          <li>Des caractéristiques : 3 ans d'expérience, 4 projets réalisés</li>
+          <li>Des mesures : température 3°C, humidité 4%</li>
+        </ul>
+        <p>L'important : <strong>on peut faire des calculs</strong> avec ces listes de nombres.</p>
+      `
+    },
+
+    // ========== SECTION 2: QUIZ COMPREHENSION 1 ==========
+    {
+      type: "quiz",
+      title: "Vérification",
+      question: "Un vecteur [5, 2, 8] contient combien de nombres ?",
+      options: ["2", "3", "5", "8"],
+      correct: 1,
+      explanation: "Ce vecteur a 3 composantes : 5, 2 et 8. On dit qu'il est de dimension 3.",
+      completesObjective: 0
+    },
+
+    // ========== SECTION 3: ADDITION ==========
+    {
+      type: "mathematique",
+      icon: "➕",
+      title: "Additionner deux vecteurs",
+      content: `
+        <p>Pour additionner deux vecteurs, on additionne <strong>composante par composante</strong> :</p>
+        <p style="text-align: center;">
+          $$\\vec{u} + \\vec{v} = [u_1 + v_1, \\; u_2 + v_2]$$
+        </p>
+        <p><strong>Exemple :</strong></p>
+        <p style="text-align: center;">
+          $$[3, 4] + [1, 2] = [3+1, \\; 4+2] = [4, 6]$$
+        </p>
+        <p><strong>C'est comme combiner deux déplacements :</strong> si je fais 3 pas à droite puis 1 pas à droite, j'ai fait 4 pas à droite au total.</p>
+      `
+    },
+
+    // ========== SECTION 4: EXERCICE ADDITION ==========
+    {
+      type: "exercise",
+      title: "Calculez l'addition",
+      exerciseType: "numeric",
+      question: `
+        <p>Calculez la <strong>première composante</strong> du résultat :</p>
+        <p style="text-align: center; font-size: 1.1rem;">$$[7, 3] + [2, 5] = [?, ?]$$</p>
+        <p>Entrez la valeur de la première composante :</p>
+      `,
+      answer: 9,
+      tolerance: 0,
+      explanation: "7 + 2 = 9. Le résultat complet est [9, 8].",
+      hint: "Additionnez les premières composantes : 7 + 2",
+      completesObjective: 1
+    },
+
+    // ========== SECTION 5: MULTIPLICATION SCALAIRE ==========
+    {
+      type: "mathematique",
+      icon: "✖️",
+      title: "Multiplier par un nombre (scalaire)",
+      content: `
+        <p>Pour multiplier un vecteur par un nombre, on multiplie <strong>chaque composante</strong> :</p>
+        <p style="text-align: center;">
+          $$k \\times \\vec{v} = [k \\times v_1, \\; k \\times v_2]$$
+        </p>
+        <p><strong>Exemple :</strong></p>
+        <p style="text-align: center;">
+          $$3 \\times [2, 4] = [3 \\times 2, \\; 3 \\times 4] = [6, 12]$$
+        </p>
+        <p><strong>Interprétation :</strong> on "étire" le vecteur. Multiplier par 3 rend le vecteur 3 fois plus long.</p>
+      `
+    },
+
+    // ========== SECTION 6: EXERCICE SCALAIRE ==========
+    {
+      type: "exercise",
+      title: "Calculez la multiplication",
+      exerciseType: "numeric",
+      question: `
+        <p>Calculez la <strong>deuxième composante</strong> du résultat :</p>
+        <p style="text-align: center; font-size: 1.1rem;">$$4 \\times [3, 5] = [?, ?]$$</p>
+        <p>Entrez la valeur de la deuxième composante :</p>
+      `,
+      answer: 20,
+      tolerance: 0,
+      explanation: "4 × 5 = 20. Le résultat complet est [12, 20]."
+    },
+
+    // ========== SECTION 7: CODE PYTHON OPERATIONS ==========
+    {
+      type: "code",
+      title: "Vecteurs en Python avec NumPy",
+      description: "NumPy permet de manipuler les vecteurs facilement. Exécutez ce code :",
+      code: `import numpy as np
+
+# Créer des vecteurs
+u = np.array([3, 4])
+v = np.array([1, 2])
+
+print("Vecteur u:", u)
+print("Vecteur v:", v)
+
+# Addition
+print("\\nu + v =", u + v)
+
+# Multiplication par un scalaire
+print("3 × u =", 3 * u)
+
+# Soustraction
+print("u - v =", u - v)`
+    },
+
+    // ========== SECTION 8: NORME ==========
+    {
+      type: "mathematique",
+      icon: "📏",
+      title: "La norme : mesurer la longueur",
+      content: `
+        <p>La <strong>norme</strong> d'un vecteur mesure sa "longueur". C'est le théorème de Pythagore !</p>
+        <p style="text-align: center;">
+          $$||\\vec{v}|| = \\sqrt{v_1^2 + v_2^2}$$
+        </p>
+        <p><strong>Exemple avec [3, 4] :</strong></p>
+        <p style="text-align: center;">
+          $$||[3,4]|| = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$$
+        </p>
+        <p><strong>En IA, la norme mesure "l'intensité" d'un signal.</strong> Un vecteur de grande norme représente quelque chose de fort, important.</p>
+      `
+    },
+
+    // ========== SECTION 9: EXERCICE NORME ==========
+    {
+      type: "exercise",
+      title: "Calculez la norme",
+      exerciseType: "numeric",
+      question: `
+        <p>Quelle est la norme du vecteur <strong>[6, 8]</strong> ?</p>
+        <p style="text-align: center; font-size: 1.1rem;">$$||[6, 8]|| = \\sqrt{6^2 + 8^2} = ?$$</p>
+      `,
+      answer: 10,
+      tolerance: 0.01,
+      explanation: "√(36 + 64) = √100 = 10",
+      hint: "Calculez 6² + 8² d'abord, puis prenez la racine carrée.",
+      completesObjective: 2
+    },
+
+    // ========== SECTION 10: PRODUIT SCALAIRE ==========
+    {
+      type: "mathematique",
+      icon: "⋅",
+      title: "Le produit scalaire : mesurer la similarité",
+      content: `
+        <p>Le <strong>produit scalaire</strong> (dot product) mesure à quel point deux vecteurs "pointent dans la même direction".</p>
+        <p style="text-align: center;">
+          $$\\vec{u} \\cdot \\vec{v} = u_1 \\times v_1 + u_2 \\times v_2$$
+        </p>
+        <p><strong>Exemple :</strong></p>
+        <p style="text-align: center;">
+          $$[3, 4] \\cdot [1, 2] = 3 \\times 1 + 4 \\times 2 = 3 + 8 = 11$$
+        </p>
+        <p><strong>Interprétation :</strong></p>
+        <ul>
+          <li><strong>Produit scalaire > 0</strong> : vecteurs dans des directions similaires</li>
+          <li><strong>Produit scalaire = 0</strong> : vecteurs perpendiculaires (orthogonaux)</li>
+          <li><strong>Produit scalaire < 0</strong> : vecteurs dans des directions opposées</li>
+        </ul>
+        <p><strong>En IA :</strong> c'est LA mesure de similarité. Spotify l'utilise pour comparer vos goûts avec ceux d'autres utilisateurs !</p>
+      `
+    },
+
+    // ========== SECTION 11: EXERCICE PRODUIT SCALAIRE ==========
+    {
+      type: "exercise",
+      title: "Calculez le produit scalaire",
+      exerciseType: "numeric",
+      question: `
+        <p>Calculez le produit scalaire :</p>
+        <p style="text-align: center; font-size: 1.1rem;">$$[2, 5] \\cdot [3, 4] = ?$$</p>
+      `,
+      answer: 26,
+      tolerance: 0,
+      explanation: "2×3 + 5×4 = 6 + 20 = 26",
+      hint: "Multipliez composante par composante, puis additionnez."
+    },
+
+    // ========== SECTION 12: CODE NORME ET PRODUIT ==========
+    {
+      type: "code",
+      title: "Norme et produit scalaire en Python",
+      description: "NumPy a des fonctions pour tout calculer rapidement :",
+      code: `import numpy as np
+
+u = np.array([3, 4])
+v = np.array([1, 2])
+
+# Norme (longueur)
+norme_u = np.linalg.norm(u)
+print(f"Norme de u = {norme_u}")
+
+# Produit scalaire
+produit = np.dot(u, v)
+print(f"u · v = {produit}")
+
+# Vérification : u·u = ||u||²
+print(f"\\nu · u = {np.dot(u, u)}")
+print(f"||u||² = {norme_u**2}")`
+    },
+
+    // ========== SECTION 13: VISUALISATION ==========
+    {
+      type: "code",
+      title: "Visualiser des vecteurs",
+      description: "Un graphique vaut mille formules. Exécutez pour voir les vecteurs :",
+      code: `import numpy as np
+import matplotlib.pyplot as plt
+
+# Vecteurs à visualiser
+u = np.array([3, 4])
+v = np.array([1, 2])
+somme = u + v
+
+# Créer le graphique
+fig, ax = plt.subplots(figsize=(8, 6))
+
+# Dessiner les vecteurs comme des flèches
+ax.quiver(0, 0, u[0], u[1], angles='xy', scale_units='xy', scale=1,
+          color='blue', width=0.02, label=f'u = {list(u)}')
+ax.quiver(0, 0, v[0], v[1], angles='xy', scale_units='xy', scale=1,
+          color='red', width=0.02, label=f'v = {list(v)}')
+ax.quiver(0, 0, somme[0], somme[1], angles='xy', scale_units='xy', scale=1,
+          color='green', width=0.02, label=f'u+v = {list(somme)}')
+
+# Configurer le graphique
+ax.set_xlim(-1, 7)
+ax.set_ylim(-1, 8)
+ax.set_aspect('equal')
+ax.grid(True, alpha=0.3)
+ax.axhline(y=0, color='k', linewidth=0.5)
+ax.axvline(x=0, color='k', linewidth=0.5)
+ax.legend()
+ax.set_title('Addition de vecteurs')
+plt.show()`
+    },
+
+    // ========== SECTION 14: EXERCICE CODE ==========
+    {
+      type: "exercise-code",
+      title: "Défi : créez votre vecteur",
+      instruction: `
+        <p>Créez un vecteur <code>w</code> de 3 composantes et calculez sa norme.</p>
+        <p>Votre code doit afficher un nombre (la norme).</p>
+      `,
+      starterCode: `import numpy as np
+
+# Créez un vecteur w avec 3 composantes
+w = np.array([___])  # Remplacez ___ par vos valeurs
+
+# Calculez et affichez la norme
+norme = np.linalg.norm(w)
+print(norme)`,
+      validate: `
+try:
+    'w' in dir() and len(w) == 3 and norme > 0
+except:
+    False
+      `,
+      successMessage: "Vous savez créer et manipuler des vecteurs en Python !",
+      errorMessage: "Vérifiez que w a bien 3 composantes.",
+      completesObjective: 3
+    },
+
+    // ========== SECTION 15: QUIZ FINAL ==========
+    {
+      type: "quiz",
+      title: "Quiz final",
+      question: "Si le produit scalaire de deux vecteurs est 0, que peut-on dire ?",
+      options: [
+        "Les vecteurs sont identiques",
+        "Les vecteurs sont perpendiculaires",
+        "Les vecteurs sont de même longueur",
+        "Les vecteurs sont nuls"
+      ],
+      correct: 1,
+      explanation: "Quand u·v = 0, les vecteurs sont orthogonaux (perpendiculaires). C'est un concept fondamental en IA !",
+      wrongExplanation: "Relisez la section sur le produit scalaire. Un produit scalaire nul signifie que les vecteurs forment un angle de 90°."
+    },
+
+    // ========== SECTION 16: SYNTHESE ==========
+    {
+      type: "application",
+      icon: "🚀",
+      title: "Ce que vous savez maintenant",
+      content: `
+        <p><strong>Vous maîtrisez les vecteurs :</strong></p>
+        <ul>
+          <li>✅ <strong>Créer</strong> un vecteur : une liste de nombres [a, b, c]</li>
+          <li>✅ <strong>Additionner</strong> : composante par composante</li>
+          <li>✅ <strong>Multiplier</strong> par un scalaire : chaque composante</li>
+          <li>✅ <strong>Norme</strong> : √(a² + b² + ...) — la longueur</li>
+          <li>✅ <strong>Produit scalaire</strong> : a₁b₁ + a₂b₂ + ... — la similarité</li>
+        </ul>
+        <p><strong>Prochaine étape :</strong> Les matrices permettent de transformer des vecteurs. C'est ce qui fait "tourner", "étirer", et "projeter" les données en IA.</p>
+      `
+    }
+  ]
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+  initializeModule(moduleConfig);
+});
+  </script>
+</body>
 </html>
