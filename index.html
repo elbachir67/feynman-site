@@ -573,7 +573,7 @@
         >
           <span class="module-icon">🧮</span>
           <h3 class="module-title">Mathématiques</h3>
-          <p class="module-count">7 modules</p>
+          <p class="module-count">10 modules</p>
           <ul class="module-list">
             <li>Vecteurs et matrices</li>
             <li>Dérivées et gradients</li>
@@ -674,8 +674,17 @@
             <a href="modules/math/probability.html" class="nav-module-link math"
               >🎲 Probabilités</a
             >
+            <a href="modules/math/distributions.html" class="nav-module-link math"
+              >📈 Distributions</a
+            >
+            <a href="modules/math/random-variables.html" class="nav-module-link math"
+              >🎰 Variables aléatoires</a
+            >
             <a href="modules/math/statistics.html" class="nav-module-link math"
               >📊 Statistiques</a
+            >
+            <a href="modules/math/maximum-likelihood.html" class="nav-module-link math"
+              >🎯 Maximum de vraisemblance</a
             >
           </div>
         </div>
@@ -833,8 +842,26 @@
                 <span class="module-status">À faire</span>
               </li>
               <li class="module-item">
+                <a href="modules/math/distributions.html" class="module-name"
+                  >Distributions : formes de l'aléatoire</a
+                >
+                <span class="module-status">À faire</span>
+              </li>
+              <li class="module-item">
+                <a href="modules/math/random-variables.html" class="module-name"
+                  >Variables aléatoires : formaliser l'incertitude</a
+                >
+                <span class="module-status">À faire</span>
+              </li>
+              <li class="module-item">
                 <a href="modules/math/statistics.html" class="module-name"
                   >Statistiques : analyser les données</a
+                >
+                <span class="module-status">À faire</span>
+              </li>
+              <li class="module-item">
+                <a href="modules/math/maximum-likelihood.html" class="module-name"
+                  >Maximum de vraisemblance : le pont vers le ML</a
                 >
                 <span class="module-status">À faire</span>
               </li>
@@ -1124,7 +1151,7 @@
 
       // Gestion de la progression globale
       function updateGlobalProgress() {
-        const totalModules = 25;
+        const totalModules = 28;
         let completedModules = 0;
 
         // Compter les modules complétés depuis localStorage

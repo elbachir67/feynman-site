@@ -42,10 +42,44 @@ class ModuleEngine {
   initializeModule(config) {
     this.currentModule = config;
     this.loadProgress();
+    this.ensureUnlockedSectionsConsistency();
     this.renderObjectives();
     this.renderContent();
     this.updateProgressBar();
     this.checkCompletionStatus();
+  }
+
+  // S'assurer que les sections non-bloquantes sont bien débloquées après une section complétée
+  ensureUnlockedSectionsConsistency() {
+    // Parcourir les sections complétées et s'assurer que tout ce qui suit est bien débloqué
+    for (let i = 0; i < this.currentModule.content.length; i++) {
+      const section = this.currentModule.content[i];
+
+      // Si cette section est complétée et bloquante, débloquer la chaîne suivante
+      if (this.completedSections.has(i) && this.isBlockingSection(section.type)) {
+        let nextIndex = i + 1;
+        while (nextIndex < this.currentModule.content.length) {
+          this.unlockedSections.add(nextIndex);
+          const nextSection = this.currentModule.content[nextIndex];
+          if (this.isBlockingSection(nextSection.type)) {
+            break;
+          }
+          nextIndex++;
+        }
+      }
+
+      // Section 0 est toujours débloquée, et les non-bloquantes au début aussi
+      if (i === 0 || this.unlockedSections.has(i)) {
+        if (!this.isBlockingSection(section.type)) {
+          // Débloquer la suivante si c'est non-bloquant
+          if (i + 1 < this.currentModule.content.length) {
+            this.unlockedSections.add(i + 1);
+          }
+        }
+      }
+    }
+
+    this.saveProgress();
   }
 
   // Charger la progression depuis localStorage
@@ -515,27 +549,43 @@ class ModuleEngine {
     }
   }
 
-  // Débloquer la section suivante
+  // Débloquer la section suivante et continuer pour les sections non-bloquantes
   unlockNextSection(currentIndex) {
-    const nextIndex = currentIndex + 1;
-    if (nextIndex < this.currentModule.content.length) {
+    let nextIndex = currentIndex + 1;
+    let firstUnlockedIndex = nextIndex;
+
+    // Débloquer en chaîne toutes les sections non-bloquantes consécutives
+    while (nextIndex < this.currentModule.content.length) {
       this.unlockedSections.add(nextIndex);
 
-      const nextSection = document.getElementById(`section-${nextIndex}`);
-      if (nextSection) {
-        nextSection.classList.remove("locked");
-        const lockOverlay = nextSection.querySelector(".lock-overlay");
+      const nextSectionElement = document.getElementById(`section-${nextIndex}`);
+      if (nextSectionElement) {
+        nextSectionElement.classList.remove("locked");
+        const lockOverlay = nextSectionElement.querySelector(".lock-overlay");
         if (lockOverlay) {
           lockOverlay.remove();
         }
-        // Scroll vers la section débloquée
-        setTimeout(() => {
-          nextSection.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 300);
       }
 
-      this.saveProgress();
+      // Si c'est une section bloquante, on s'arrête après l'avoir débloquée
+      const nextSectionConfig = this.currentModule.content[nextIndex];
+      if (this.isBlockingSection(nextSectionConfig.type)) {
+        break;
+      }
+
+      // Sinon on continue à débloquer
+      nextIndex++;
     }
+
+    // Scroll vers la première section débloquée
+    const firstUnlockedElement = document.getElementById(`section-${firstUnlockedIndex}`);
+    if (firstUnlockedElement) {
+      setTimeout(() => {
+        firstUnlockedElement.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+    }
+
+    this.saveProgress();
   }
 
   // Compter les sections bloquantes (exercices)
